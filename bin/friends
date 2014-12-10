@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "friends/extrovert"
+
+Friends::Extrovert.start(ARGV)
