@@ -1,4 +1,4 @@
-require "friends/version"
+require "friends/extrovert"
 
 module Friends
 end

@@ -12,7 +12,3 @@
 *.o
 *.a
 mkmf.log
-bin/bundler
-bin/overcommit
-bin/rake
-bin/thor
