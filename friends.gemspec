@@ -25,4 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "overcommit"
+  spec.add_development_dependency "reek"
+  spec.add_development_dependency "rubocop"
 end
