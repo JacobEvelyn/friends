@@ -1,6 +1,7 @@
 # Introvert is the internal handler for the friends script.
 
 require "friends/friend"
+require "friends/friends_error"
 
 module Friends
   class Introvert
@@ -19,7 +20,12 @@ module Friends
 
     # Add a friend and write out the new friends file.
     # @param name [String] the name of the friend to add
+    # @raise [FriendsError] when a friend with that name is already in the file
     def add(name:)
+      if friend_with_exact_name(name)
+        raise FriendsError, "Friend named #{name} already exists"
+      end
+
       friends << Friend.new(name: name)
       clean # Write a cleaned file.
     end
@@ -82,17 +88,31 @@ module Friends
       end
     end
 
+    # @param name [String] the name of the friend to search for
+    # @return [Friend] the friend whose name exactly matches the argument
+    # @raise [FriendsError] if more than one friend has the given name
+    def friend_with_exact_name(name)
+      results = friends.select { |friend| friend.name == name }
+
+      case results.size
+      when 0 then nil
+      when 1 then results.first
+      else raise FriendsError, "More than one friend named #{name}"
+      end
+    end
+
+    # @param name [String] the name of the friends to search for
+    # @return [Array] a list of all friends that match the given name
+    def friends_with_similar_name(name)
+      friends.select { |friend| friend.name.match(name) }
+    end
+
     # Raise an error that a line in the friends file is malformed.
     # @param expected [String] the expected contents of the line
     # @param line_num [Integer] the line number
+    # @raise [FriendsError] with a constructed message
     def bad_line(expected, line_num)
-      error "Expected \"#{expected}\" on line #{line_num}"
-    end
-
-    # Output the given message to STDERR and exit the program.
-    # @param message [String] the error message to output
-    def error(message)
-      abort "Error: #{message}"
+      raise FriendsError, "Expected \"#{expected}\" on line #{line_num}"
     end
   end
 end
