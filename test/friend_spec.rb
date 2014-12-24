@@ -1,11 +1,9 @@
 require_relative "helper"
 
 describe Friends::Friend do
-  describe "#name" do
+  describe "#new" do
     subject { Friends::Friend.new(name: "Jacob") }
 
-    it "returns name" do
-      subject.name.must_equal "Jacob"
-    end
+    it { subject.name.must_equal "Jacob" }
   end
 end

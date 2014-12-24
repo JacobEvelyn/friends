@@ -2,9 +2,30 @@ require_relative "helper"
 
 describe Friends::Introvert do
   let(:filename) { "test/tmp/friends.md" }
-  let(:introvert) { Friends::Introvert.new(filename: filename) }
+  let(:args) { { filename: filename } }
+  let(:introvert) { Friends::Introvert.new(args) }
   let(:friend_names) { ["George Washington Carver", "Betsy Ross"] }
   let(:friends) { friend_names.map { |name| Friends::Friend.new(name: name) } }
+
+  describe "#new" do
+    it "accepts all arguments" do
+      args.merge!(verbose: true)
+      introvert # Build a new introvert.
+
+      # Check passed values.
+      introvert.filename.must_equal filename
+      introvert.verbose.must_equal true
+    end
+
+    it "has sane defaults" do
+      args.clear # Pass no arguments to the initializer.
+      introvert # Build a new introvert.
+
+      # Check default values.
+      introvert.filename.must_equal Friends::Introvert::DEFAULT_FILENAME
+      introvert.verbose.must_equal false
+    end
+  end
 
   describe "#clean" do
     subject { introvert.clean }
