@@ -17,6 +17,13 @@ module Friends
     attr_reader :filename
     attr_reader :verbose
 
+    # Add a friend and write out the new friends file.
+    # @param name [String] the name of the friend to add
+    def add(name:)
+      friends << Friend.new(name: name)
+      clean # Write a cleaned file.
+    end
+
     # Write out the friends file with cleaned/sorted data.
     def clean
       names = friends.sort_by(&:name).map do |friend|
