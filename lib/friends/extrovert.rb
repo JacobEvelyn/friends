@@ -8,15 +8,16 @@ require "thor"
 module Friends
   class Extrovert < Thor
     class_option :verbose, type: :boolean
+    class_option :file, type: :string
 
     desc "clean", "Clean your friends.md file"
     def clean
-      Introvert.new.clean
+      Introvert.new(options).clean
     end
 
     desc "list", "List all friends"
     def list
-      Introvert.new.list
+      puts Introvert.new(options).list
     end
   end
 end
