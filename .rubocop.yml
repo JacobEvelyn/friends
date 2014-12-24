@@ -5,11 +5,6 @@ Alias:
   Enabled: false
 
 AllCops:
-  Exclude:
-    - "vendor/**/*"
-    - "spec/dummy/**/*"
-    - "db/schema.rb"
-    - "db/migrate/**/*"
   RunRailsCops: false
 
 AmbiguousOperator:

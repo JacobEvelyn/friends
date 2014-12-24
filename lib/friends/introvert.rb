@@ -5,10 +5,24 @@ require "friends/friend"
 module Friends
   class Introvert
     FRIENDS_HEADER = "### Friends:"
+    DEFAULT_FILENAME = "friends.md"
+    FRIEND_PREFIX = "- "
+
+    # @param filename [String] the name of the friends Markdown file
+    def initialize(filename: DEFAULT_FILENAME, verbose: false)
+      @filename = filename
+      @verbose = verbose
+    end
+
+    attr_reader :filename
+    attr_reader :verbose
 
     # Write out the friends file with cleaned/sorted data.
     def clean
-      names = friends.sort_by(&:name).map { |friend| "- #{friend.name}" }
+      names = friends.sort_by(&:name).map do |friend|
+        "#{FRIEND_PREFIX}#{friend.name}"
+      end
+
       File.open(filename, "w") do |file|
         file.puts(FRIENDS_HEADER)
         names.each { |name| file.puts(name) }
@@ -17,15 +31,10 @@ module Friends
 
     # List all friends in the friends file.
     def list
-      puts friends.map(&:name)
+      friends.map(&:name)
     end
 
     private
-
-    # @return [String] the name of the friends.md file
-    def filename
-      "friends.md"
-    end
 
     # @return [Array] the list of all Friends
     def friends
