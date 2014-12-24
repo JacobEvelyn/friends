@@ -21,8 +21,9 @@ Spend time with the people you care about. Introvert-tested. Extrovert-approved.
 5. Create a new Pull Request
 
 **Make sure your changes have appropriate tests (`rake test`) and
-conform to the Rubocop style specified. We use overcommit to enforce
-good code.**
+conform to the Rubocop style specified. We use
+[overcommit](https://github.com/causes/overcommit) to enforce good
+code.**
 
 ## License
 
