@@ -12,6 +12,11 @@ Spend time with the people you care about. Introvert-tested. Extrovert-approved.
 
     $ friends --help
 
+## Documentation
+
+In case you're really interested, we have
+[documentation](http://www.rubydoc.info/JacobEvelyn/friends).
+
 ## Contributing
 
 1. Fork it (https://github.com/JacobEvelyn/friends/fork)
