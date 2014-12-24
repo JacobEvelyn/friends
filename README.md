@@ -1,6 +1,5 @@
 [![Code Climate](https://codeclimate.com/github/JacobEvelyn/friends/badges/gpa.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Test Coverage](https://codeclimate.com/github/JacobEvelyn/friends/badges/coverage.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg)](https://travis-ci.org/JacobEvelyn/friends)
 
-
 # Friends
 
 Spend time with the people you care about. Introvert-tested. Extrovert-approved.
@@ -12,21 +11,6 @@ Spend time with the people you care about. Introvert-tested. Extrovert-approved.
 ## Usage
 
     $ friends --help
-
-## Todo:
-
-- [ ] Comment everything
-- [ ] Add tests
-- [ ] Set up tests on CI server
-- [ ] Analyze code with Code Climate
-- [X] Basic read-write functionality for friends.txt
-- [ ] Specify new file location
-- [ ] Add friend functionality
-- [ ] Read friend activity functionality
-- [ ] Add friend activity functionality
-- [ ] Friend name conflict resolution engine
-- [ ] Auto-updating functionality
-
 
 ## Contributing
 
