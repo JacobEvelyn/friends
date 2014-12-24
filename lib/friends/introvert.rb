@@ -6,6 +6,22 @@ module Friends
   class Introvert
     FRIENDS_HEADER = "### Friends:"
 
+    # Write out the friends file with cleaned/sorted data.
+    def clean
+      names = friends.sort_by(&:name).map { |friend| "- #{friend.name}" }
+      File.open(filename, "w") do |file|
+        file.puts(FRIENDS_HEADER)
+        names.each { |name| file.puts(name) }
+      end
+    end
+
+    # List all friends in the friends file.
+    def list
+      puts friends.map(&:name)
+    end
+
+    private
+
     # @return [String] the name of the friends.md file
     def filename
       "friends.md"
@@ -50,17 +66,6 @@ module Friends
       end
     end
 
-    # Write out the friends file with cleaned/sorted data.
-    def clean
-      names = friends.sort_by(&:name).map { |friend| "- #{friend.name}" }
-      File.open(filename, "w") do |file|
-        file.puts(FRIENDS_HEADER)
-        names.each { |name| file.puts(name) }
-      end
-    end
-
-    private
-
     # Raise an error that a line in the friends file is malformed.
     # @param expected [String] the expected contents of the line
     # @param line_num [Integer] the line number
@@ -68,9 +73,10 @@ module Friends
       error "Expected \"#{expected}\" on line #{line_num}"
     end
 
-    # Output the given message and exit the program.
+    # Output the given message to STDERR and exit the program.
+    # @param message [String] the error message to output
     def error(message)
-      Gossip.error(message)
+      abort "Error: #{message}"
     end
   end
 end

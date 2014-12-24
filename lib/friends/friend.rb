@@ -2,6 +2,7 @@
 
 module Friends
   class Friend
+    # @param name [String] the name of the friend
     def initialize(name:)
       @name = name
     end

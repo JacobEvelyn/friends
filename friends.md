@@ -1,3 +1,4 @@
 ### Friends:
-- Ben Yavitt
-- Zane
+- George Washington
+- Grace Hopper
+- Marie Curie
