@@ -1,0 +1,6 @@
+language: ruby
+addons:
+  code_climate:
+    repo_token: d744a74c96e3e5c763ed776709aff0662ac2f3e8274c01e439e09b38c8be4225
+notifications:
+  email: false

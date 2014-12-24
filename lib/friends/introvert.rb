@@ -1,6 +1,5 @@
 # Introvert is the internal handler for the friends script.
 
-require "friends/gossip"
 require "friends/friend"
 
 module Friends
