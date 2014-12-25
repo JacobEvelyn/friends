@@ -5,33 +5,28 @@ require "friends/friends_error"
 
 module Friends
   class Introvert
+    DEFAULT_FILENAME = "./friends.md"
+    ACTIVITIES_HEADER = "### Activities:"
+    ACTIVITY_PREFIX = "- "
     FRIENDS_HEADER = "### Friends:"
-    DEFAULT_FILENAME = "friends.md"
     FRIEND_PREFIX = "- "
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME, verbose: false)
       @filename = filename
       @verbose = verbose
+      @cleaned_file = false # Switches to true when the file is cleaned.
     end
 
     attr_reader :filename
     attr_reader :verbose
 
-    # Add a friend and write out the new friends file.
-    # @param name [String] the name of the friend to add
-    # @raise [FriendsError] when a friend with that name is already in the file
-    def add(name:)
-      if friend_with_exact_name(name)
-        raise FriendsError, "Friend named #{name} already exists"
-      end
-
-      friends << Friend.new(name: name)
-      clean # Write a cleaned file.
-    end
-
     # Write out the friends file with cleaned/sorted data.
     def clean
+      # Short-circuit if we've already cleaned the file so we don't write it
+      # twice.
+      return if @cleaned_file
+
       names = friends.sort_by(&:name).map do |friend|
         "#{FRIEND_PREFIX}#{friend.name}"
       end
@@ -40,21 +35,54 @@ module Friends
         file.puts(FRIENDS_HEADER)
         names.each { |name| file.puts(name) }
       end
+
+      @cleaned_file = true
     end
 
-    # List all friends in the friends file.
-    def list
+    # List all friend names in the friends file.
+    # @return [Array] a list of all friend names
+    def list_friends
       friends.map(&:name)
+    end
+
+    # Add a friend and write out the new friends file.
+    # @param name [String] the name of the friend to add
+    # @raise [FriendsError] when a friend with that name is already in the file
+    def add_friend(name:)
+      if friend_with_exact_name(name)
+        raise FriendsError, "Friend named #{name} already exists"
+      end
+
+      friends << Friend.new(name: name)
+      clean # Write a cleaned file.
+    end
+
+    # List all activity details
+    # @return [Array] a list of all activity text values
+    def list_activities
+      activites.map(&:name)
     end
 
     private
 
-    # @return [Array] the list of all Friends
+    # Gets the list of friends, reading the friends file if it hasn't been read
+    # already.
+    # @return [Array] a list of all friends
     def friends
       return @friends if @friends
 
       read_file(filename: filename, friends_only: true)
       @friends
+    end
+
+    # Gets the list of activites, reading the friends file if it hasn't been
+    # read already.
+    # @return [Array] a list of all activities
+    def activities
+      return @activities if @activities
+
+      read_file(filename: filename)
+      @activities
     end
 
     # Process the friends.md file and store its contents in internal data
@@ -77,12 +105,25 @@ module Friends
           state = :reading_friends
           @friends = []
         when :reading_friends
-          if line == "### Events:"
-            state = :reading_events
+          if line == ""
+            return if friends_only
+            state = :done_reading_friends
           else
-            match = line.match(/- (?<name>.+)/)
-            bad_line("- [Friend Name]", line_num) unless match && match[:name]
+            match = line.match(/#{FRIEND_PREFIX}(?<name>.+)/)
+            unless match && match[:name]
+              bad_line("#{FRIEND_PREFIX}[Friend Name]", line_num)
+            end
             @friends << Friend.new(name: match[:name])
+          end
+        when :done_reading_friends
+          if line == ACTIVITIES_HEADER
+            state = :reading_activities
+            @activities = []
+          end
+        when :reading_activities
+          match = line.match(/#{ACTIVITY_PREFIX}(?<description>.+)/)
+          unless match && match[:description]
+            bad_line("#{ACTIVITY_PREFIX}[Activity]", line_num)
           end
         end
       end

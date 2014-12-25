@@ -51,12 +51,36 @@ describe Friends::Introvert do
     end
   end
 
-  describe "#list" do
-    subject { introvert.list }
+  describe "#list_friends" do
+    subject { introvert.list_friends }
 
     it "lists the names of friends" do
       introvert.stub(:friends, friends) do
         subject.must_equal friend_names
+      end
+    end
+  end
+
+  describe "#add_friend" do
+    let(:new_friend_name) { "Jacob Evelyn" }
+    subject { introvert.add_friend(name: new_friend_name) }
+
+    describe "when there is no existing friend with that name" do
+      it "adds the given friend" do
+        introvert.stub(:friends, friends) do
+          subject
+          introvert.list_friends.must_include new_friend_name
+        end
+      end
+    end
+
+    describe "when there is an existing friend with that name" do
+      let(:new_friend_name) { friend_names.first }
+
+      it "raises an error" do
+        introvert.stub(:friends, friends) do
+          proc { subject }.must_raise Friends::FriendsError
+        end
       end
     end
   end

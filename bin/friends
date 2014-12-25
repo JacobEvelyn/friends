@@ -1,5 +1,91 @@
 #!/usr/bin/env ruby
 
-require "friends"
+require "gli"
 
-Friends::Extrovert.start(ARGV)
+require "friends/introvert"
+require "friends/version"
+
+include GLI::App
+
+program_desc "Spend time with the people you care about. Introvert-tested. "\
+  "Extrovert-approved."
+
+version Friends::VERSION
+
+subcommand_option_handling :normal
+arguments :strict
+
+desc "Enable verbose logging"
+switch [:verbose], negatable: false
+
+desc "Set the location of the friends file"
+default_value "./friends.md"
+arg_name "FILENAME"
+flag [:filename]
+
+desc "Force a clean write of the friends file"
+switch [:clean], negatable: false
+
+desc "Lists all friends or activities"
+command :list do |c|
+  c.desc "List all friends"
+  c.command :friends do |friends|
+    friends.action do
+      puts @introvert.list_friends
+    end
+  end
+
+  c.desc "Lists all activities"
+  c.command :activities do |activities|
+    activities.action do
+    end
+  end
+end
+
+desc "Adds a friend or activity"
+command :add do |c|
+  c.desc "Adds a friend"
+  c.arg_name "NAME"
+  c.command :friend do |friend|
+    friend.action do |_, _, args|
+      @introvert.add_friend(name: args.first)
+    end
+  end
+
+  c.desc "Adds an activity"
+  c.arg_name "DESCRIPTION"
+  c.command :activity do |activity|
+    activity.action do
+    end
+  end
+end
+
+desc "Cleans your friends.md file"
+command :clean do |c|
+  c.action do
+    @introvert.clean
+  end
+end
+
+# Before each command, clean up all arguments and create the global Introvert.
+pre do |global_options, _, options|
+  final_options = global_options.merge!(options).select do |key, _|
+    [:filename, :verbose].include? key
+  end
+
+  @introvert = Friends::Introvert.new(final_options)
+  true
+end
+
+# After each command, clean if requested with the --clean flag.
+post do |global_options|
+  @introvert.clean if global_options[:clean]
+end
+
+# If an error is raised, print the message to STDERR and exit the program.
+on_error do |error|
+  abort "Error: #{error}"
+end
+
+# Run the program and return the exit code corresponding to the its success.
+exit run(ARGV)
