@@ -6,6 +6,18 @@ describe Friends::Introvert do
   let(:introvert) { Friends::Introvert.new(args) }
   let(:friend_names) { ["George Washington Carver", "Betsy Ross"] }
   let(:friends) { friend_names.map { |name| Friends::Friend.new(name: name) } }
+  let(:activities) do
+    [
+      Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Lunch with **#{friend_names.first}**."
+      ),
+      Friends::Activity.new(
+        date_s: (Date.today + 1).to_s,
+        description: "Called **#{friend_names.last}**."
+      )
+    ]
+  end
 
   describe "#new" do
     it "accepts all arguments" do
@@ -31,20 +43,27 @@ describe Friends::Introvert do
     subject { introvert.clean }
 
     it "writes cleaned file" do
-      sorted_friends = friends.sort_by(&:name)
+      sorted_friends = friends.sort
       unsorted_friends = sorted_friends.reverse
+      sorted_activities = activities.sort
+      unsorted_activities = sorted_activities.reverse
 
-      sorted_names = sorted_friends.map do |friend|
-        "#{Friends::Introvert::FRIEND_PREFIX}#{friend.name}"
-      end
+      serialized_names = sorted_friends.map(&:serialize)
+      name_output = serialized_names.join("\n")
 
-      name_output = sorted_names.join("\n")
+      serialized_descriptions = sorted_activities.map(&:serialize)
+      descriptions_output = serialized_descriptions.join("\n")
+
       expected_output =
-        "#{Friends::Introvert::FRIENDS_HEADER}\n#{name_output}\n"
+        "#{Friends::Introvert::FRIENDS_HEADER}\n#{name_output}\n\n"\
+        "#{Friends::Introvert::ACTIVITIES_HEADER}\n#{descriptions_output}\n"
 
+      # Read the input as unsorted, and make sure we get sorted output.
       introvert.stub(:friends, unsorted_friends) do
-        subject
-        File.read(filename).must_equal expected_output
+        introvert.stub(:activities, unsorted_activities) do
+          subject
+          File.read(filename).must_equal expected_output
+        end
       end
 
       File.delete(filename)

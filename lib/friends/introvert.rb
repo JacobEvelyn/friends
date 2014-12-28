@@ -1,5 +1,6 @@
 # Introvert is the internal handler for the friends script.
 
+require "friends/activity"
 require "friends/friend"
 require "friends/friends_error"
 
@@ -7,15 +8,17 @@ module Friends
   class Introvert
     DEFAULT_FILENAME = "./friends.md"
     ACTIVITIES_HEADER = "### Activities:"
-    ACTIVITY_PREFIX = "- "
     FRIENDS_HEADER = "### Friends:"
-    FRIEND_PREFIX = "- "
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME, verbose: false)
       @filename = filename
       @verbose = verbose
       @cleaned_file = false # Switches to true when the file is cleaned.
+
+      # Read in the input file. It's easier to do this now and optimize later
+      # than try to overly be clever about what we read and write.
+      read_file(filename: @filename)
     end
 
     attr_reader :filename
@@ -27,13 +30,16 @@ module Friends
       # twice.
       return if @cleaned_file
 
-      names = friends.sort_by(&:name).map do |friend|
-        "#{FRIEND_PREFIX}#{friend.name}"
-      end
+      names = friends.sort.map(&:serialize)
+      descriptions = activities.sort.map(&:serialize)
 
+      # Write out the cleaned file.
       File.open(filename, "w") do |file|
         file.puts(FRIENDS_HEADER)
         names.each { |name| file.puts(name) }
+        file.puts # Blank line separating friends from activities.
+        file.puts(ACTIVITIES_HEADER)
+        descriptions.each { |desc| file.puts(desc) }
       end
 
       @cleaned_file = true
@@ -60,36 +66,32 @@ module Friends
     # List all activity details
     # @return [Array] a list of all activity text values
     def list_activities
-      activites.map(&:name)
+      activities.map(&:display_text)
     end
 
     private
 
-    # Gets the list of friends, reading the friends file if it hasn't been read
-    # already.
+    # Gets the list of friends as read from the file.
     # @return [Array] a list of all friends
     def friends
-      return @friends if @friends
-
-      read_file(filename: filename, friends_only: true)
       @friends
     end
 
-    # Gets the list of activites, reading the friends file if it hasn't been
-    # read already.
+    # Gets the list of activites as read from the file.
     # @return [Array] a list of all activities
     def activities
-      return @activities if @activities
-
-      read_file(filename: filename)
       @activities
     end
 
     # Process the friends.md file and store its contents in internal data
     # structures.
     # @param filename [String] the name of the friends file
-    # @param friends_only [Boolean] true if we should only read the friends list
-    def read_file(filename:, friends_only: false)
+    def read_file(filename:)
+      @friends = []
+      @activities = []
+
+      return unless File.exist?(filename)
+
       state = :initial
       line_num = 0
 
@@ -103,27 +105,23 @@ module Friends
           bad_line(FRIENDS_HEADER, line_num) unless line == FRIENDS_HEADER
 
           state = :reading_friends
-          @friends = []
         when :reading_friends
           if line == ""
-            return if friends_only
             state = :done_reading_friends
           else
-            match = line.match(/#{FRIEND_PREFIX}(?<name>.+)/)
-            unless match && match[:name]
-              bad_line("#{FRIEND_PREFIX}[Friend Name]", line_num)
+            begin
+              @friends << Friend.deserialize(line)
+            rescue FriendsError => e
+              bad_line(e, line_num)
             end
-            @friends << Friend.new(name: match[:name])
           end
         when :done_reading_friends
-          if line == ACTIVITIES_HEADER
-            state = :reading_activities
-            @activities = []
-          end
+          state = :reading_activities if line == ACTIVITIES_HEADER
         when :reading_activities
-          match = line.match(/#{ACTIVITY_PREFIX}(?<description>.+)/)
-          unless match && match[:description]
-            bad_line("#{ACTIVITY_PREFIX}[Activity]", line_num)
+          begin
+            @activities << Activity.deserialize(line)
+          rescue FriendsError => e
+            bad_line(e, line_num)
           end
         end
       end
