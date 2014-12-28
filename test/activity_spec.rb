@@ -2,17 +2,20 @@ require_relative "helper"
 
 describe Friends::Activity do
   let(:date) { Date.today }
+  let(:date_s) { date.to_s }
   let(:friend1) { Friends::Friend.new(name: "Thing 1") }
   let(:friend2) { Friends::Friend.new(name: "Thing 2") }
   let(:description) { "Lunch with **#{friend1.name}** and **#{friend2.name}**" }
-  let(:activity) { Friends::Activity.new(date: date, description: description) }
+  let(:activity) do
+    Friends::Activity.new(date_s: date_s, description: description)
+  end
 
   describe ".deserialize" do
     subject { Friends::Activity.deserialize(serialized_str) }
 
     describe "when string is well-formed" do
       let(:serialized_str) do
-        "#{Friends::Activity::SERIALIZATION_PREFIX}#{date}: #{description}"
+        "#{Friends::Activity::SERIALIZATION_PREFIX}#{date_s}: #{description}"
       end
 
       it "creates an activity with the correct date and description" do
@@ -24,9 +27,9 @@ describe Friends::Activity do
 
     describe "when string is malformed" do
       # No serialization prefix, so string is malformed.
-      let(:serialized_str) { "#{date}: #{description}" }
+      let(:serialized_str) { "#{date_s}: #{description}" }
 
-      it { proc { subject }.must_raise Friends::FriendsError }
+      it { proc { subject }.must_raise Serializable::SerializationError }
     end
   end
 
@@ -42,7 +45,7 @@ describe Friends::Activity do
 
     it do
       subject.
-        must_equal "\e[1m#{date}\e[0m: "\
+        must_equal "\e[1m#{date_s}\e[0m: "\
           "Lunch with \e[1m#{friend1.name}\e[0m and \e[1m#{friend2.name}\e[0m"
     end
   end
@@ -52,17 +55,17 @@ describe Friends::Activity do
 
     it do
       subject.
-        must_equal "#{Friends::Activity::SERIALIZATION_PREFIX}#{date}: "\
+        must_equal "#{Friends::Activity::SERIALIZATION_PREFIX}#{date_s}: "\
           "#{description}"
     end
   end
 
   describe "#<=>" do
     it "sorts by reverse-date" do
-      yesterday = Date.today - 1
-      tomorrow = Date.today + 1
-      past_act = Friends::Activity.new(date: yesterday, description: "Dummy")
-      future_act = Friends::Activity.new(date: tomorrow, description: "Dummy")
+      yesterday = (Date.today - 1).to_s
+      tomorrow = (Date.today + 1).to_s
+      past_act = Friends::Activity.new(date_s: yesterday, description: "Dummy")
+      future_act = Friends::Activity.new(date_s: tomorrow, description: "Dummy")
       [past_act, future_act].sort.must_equal [future_act, past_act]
     end
   end

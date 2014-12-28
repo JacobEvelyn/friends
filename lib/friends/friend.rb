@@ -1,18 +1,21 @@
 # Friend represents a friend. You know, a real-life friend!
 
+require "friends/serializable"
+
 module Friends
   class Friend
+    extend Serializable
+
     SERIALIZATION_PREFIX = "- "
 
-    # @param str [String] the serialized friend string
-    # @return [Friend] the friend represented by the serialized string
-    def self.deserialize(str)
-      match = str.match(/#{SERIALIZATION_PREFIX}(?<name>.+)/)
-      unless match && match[:name]
-        raise FriendsError, "Expected #{SERIALIZATION_PREFIX}[Friend Name]"
-      end
+    # @return [Regexp] the regex for capturing groups in deserialization
+    def self.deserialization_regex
+      /#{SERIALIZATION_PREFIX}(?<name>.+)/
+    end
 
-      Friend.new(name: match[:name])
+    # @return [Regexp] the string of what we expected during deserialization
+    def self.deserialization_expectation
+      "#{SERIALIZATION_PREFIX}[Friend Name]"
     end
 
     # @param name [String] the name of the friend

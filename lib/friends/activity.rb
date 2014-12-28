@@ -1,31 +1,28 @@
 # Activity represents an activity you've done with one or more Friends.
 
+require "friends/serializable"
+
 module Friends
   class Activity
+    extend Serializable
+
     SERIALIZATION_PREFIX = "- "
 
-    # @param str [String] the serialized activity string
-    # @return [Activity] the activity represented by the serialized string
-    def self.deserialize(str)
-      match = str.match(
-        /#{SERIALIZATION_PREFIX}(?<date>\d{4}-\d\d-\d\d):\s(?<description>.+)/
-      )
-      unless match && match[:date] && match[:description]
-        raise FriendsError,
-              "Expected #{SERIALIZATION_PREFIX}[YYYY-MM-DD]: [Activity]"
-      end
+    # @return [Regexp] the regex for capturing groups in deserialization
+    def self.deserialization_regex
+      /#{SERIALIZATION_PREFIX}(?<date_s>\d{4}-\d\d-\d\d):\s(?<description>.+)/
+    end
 
-      Activity.new(
-        date: Date.parse(match[:date]),
-        description: match[:description]
-      )
+    # @return [Regexp] the string of what we expected during deserialization
+    def self.deserialization_expectation
+      "#{SERIALIZATION_PREFIX}[YYYY-MM-DD]: [Activity]"
     end
 
     # @param date [Date] the activity's date
     # @param description [String] the activity's description
     # @return [Activity] the new activity
-    def initialize(date:, description:)
-      @date = date
+    def initialize(date_s:, description:)
+      @date = Date.parse(date_s)
       @description = description
     end
 

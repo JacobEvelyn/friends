@@ -21,7 +21,7 @@ describe Friends::Friend do
       # No serialization prefix, so string is malformed.
       let(:serialized_str) { name }
 
-      it { proc { subject }.must_raise Friends::FriendsError }
+      it { proc { subject }.must_raise Serializable::SerializationError }
     end
   end
 

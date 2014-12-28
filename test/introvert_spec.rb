@@ -9,10 +9,12 @@ describe Friends::Introvert do
   let(:activities) do
     [
       Friends::Activity.new(
-        date: Date.today, description: "Lunch with **#{friend_names.first}**."
+        date_s: Date.today.to_s,
+        description: "Lunch with **#{friend_names.first}**."
       ),
       Friends::Activity.new(
-        date: Date.today + 1, description: "Called **#{friend_names.last}**."
+        date_s: (Date.today + 1).to_s,
+        description: "Called **#{friend_names.last}**."
       )
     ]
   end
