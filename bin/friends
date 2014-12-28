@@ -38,6 +38,7 @@ command :list do |c|
   c.desc "Lists all activities"
   c.command :activities do |activities|
     activities.action do
+      puts @introvert.list_activities
     end
   end
 end
