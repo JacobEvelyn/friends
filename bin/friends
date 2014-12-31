@@ -56,7 +56,8 @@ command :add do |c|
   c.desc "Adds an activity"
   c.arg_name "DESCRIPTION"
   c.command :activity do |activity|
-    activity.action do
+    activity.action do |_, _, args|
+      @introvert.add_activity(serialization: args.first)
     end
   end
 end

@@ -3,8 +3,8 @@ require_relative "helper"
 describe Friends::Activity do
   let(:date) { Date.today }
   let(:date_s) { date.to_s }
-  let(:friend1) { Friends::Friend.new(name: "Thing 1") }
-  let(:friend2) { Friends::Friend.new(name: "Thing 2") }
+  let(:friend1) { Friends::Friend.new(name: "Elizabeth Cady Stanton") }
+  let(:friend2) { Friends::Friend.new(name: "John Cage") }
   let(:description) { "Lunch with **#{friend1.name}** and **#{friend2.name}**" }
   let(:activity) do
     Friends::Activity.new(date_s: date_s, description: description)
@@ -26,8 +26,7 @@ describe Friends::Activity do
     end
 
     describe "when string is malformed" do
-      # No serialization prefix, so string is malformed.
-      let(:serialized_str) { "#{date_s}: #{description}" }
+      let(:serialized_str) { "" }
 
       it { proc { subject }.must_raise Serializable::SerializationError }
     end
@@ -57,6 +56,65 @@ describe Friends::Activity do
       subject.
         must_equal "#{Friends::Activity::SERIALIZATION_PREFIX}#{date_s}: "\
           "#{description}"
+    end
+  end
+
+  describe "#highlight_friends" do
+    let(:friend1) { Friends::Friend.new(name: "Elizabeth Cady Stanton") }
+    let(:friend2) { Friends::Friend.new(name: "John Cage") }
+    let(:friends) { [friend1, friend2] }
+    let(:description) { "Lunch with #{friend1.name} and #{friend2.name}." }
+    subject { activity.highlight_friends(friends: friends) }
+
+    it "finds all friends" do
+      subject
+      activity.description.
+        must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+    end
+
+    it "matches friends' first names" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Lunch with Elizabeth and John."
+      )
+      activity.highlight_friends(friends: friends)
+      activity.description.
+        must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+    end
+
+    it "ignores when there are multiple matches" do
+      friend2.name = "Elizabeth II"
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Dinner with Elizabeth."
+      )
+      activity.highlight_friends(friends: friends)
+      activity.description.must_equal "Dinner with Elizabeth." # No match found.
+    end
+
+    it "does not match with leading asterisks" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Dinner with **Elizabeth Cady Stanton."
+      )
+      activity.highlight_friends(friends: friends)
+
+      # No match found.
+      activity.description.must_equal "Dinner with **Elizabeth Cady Stanton."
+    end
+
+    it "does not match with ending asterisks" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+
+        # Note: for now we can't guarantee that "Elizabeth Cady Stanton**" won't
+        # match, because the Elizabeth isn't surrounded by asterisks.
+        description: "Dinner with Elizabeth**."
+      )
+      activity.highlight_friends(friends: friends)
+
+      # No match found.
+      activity.description.must_equal "Dinner with Elizabeth**."
     end
   end
 

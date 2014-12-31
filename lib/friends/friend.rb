@@ -10,7 +10,7 @@ module Friends
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
-      /#{SERIALIZATION_PREFIX}(?<name>.+)/
+      /(#{SERIALIZATION_PREFIX})?(?<name>.+)/
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -29,6 +29,8 @@ module Friends
     def serialize
       "#{SERIALIZATION_PREFIX}#{name}"
     end
+
+    private
 
     # Default sorting for an array of friends is alphabetical.
     def <=>(other)
