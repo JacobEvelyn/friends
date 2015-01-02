@@ -18,8 +18,7 @@ describe Friends::Friend do
     end
 
     describe "when string is malformed" do
-      # No serialization prefix, so string is malformed.
-      let(:serialized_str) { name }
+      let(:serialized_str) { "" }
 
       it { proc { subject }.must_raise Serializable::SerializationError }
     end

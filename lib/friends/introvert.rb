@@ -59,7 +59,12 @@ module Friends
         raise FriendsError, "Friend named #{name} already exists"
       end
 
-      friends << Friend.new(name: name)
+      begin
+        friends << Friend.deserialize(name)
+      rescue SerializationError => e
+        raise FriendsError, e
+      end
+
       clean # Write a cleaned file.
     end
 
@@ -67,6 +72,20 @@ module Friends
     # @return [Array] a list of all activity text values
     def list_activities
       activities.map(&:display_text)
+    end
+
+    # Add an activity and write out the new friends file.
+    # @param serialization [String] the serialized activity
+    def add_activity(serialization:)
+      begin
+        activity = Activity.deserialize(serialization)
+      rescue SerializationError => e
+        raise FriendsError, e
+      end
+
+      activity.highlight_friends(friends: friends)
+      activities << activity
+      clean # Write a cleaned file.
     end
 
     private
@@ -141,9 +160,9 @@ module Friends
     end
 
     # @param name [String] the name of the friends to search for
-    # @return [Array] a list of all friends that match the given name
-    def friends_with_similar_name(name)
-      friends.select { |friend| friend.name.match(name) }
+    # @return [Array] a list of all friends that match the given text
+    def friends_with_similar_name(text)
+      friends.select { |friend| text.match(friend.name) }
     end
 
     # Raise an error that a line in the friends file is malformed.
