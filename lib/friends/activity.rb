@@ -108,7 +108,8 @@ module Friends
 
       [chunks, [chunks.first]].map do |words|
         Regexp.new(
-          no_leading_asterisks + words.join(splitter) + no_ending_asterisks
+          no_leading_asterisks + words.join(splitter) + no_ending_asterisks,
+          Regexp::IGNORECASE
         )
       end
     end
