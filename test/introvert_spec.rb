@@ -55,8 +55,8 @@ describe Friends::Introvert do
       descriptions_output = serialized_descriptions.join("\n")
 
       expected_output =
-        "#{Friends::Introvert::FRIENDS_HEADER}\n#{name_output}\n\n"\
-        "#{Friends::Introvert::ACTIVITIES_HEADER}\n#{descriptions_output}\n"
+        "#{Friends::Introvert::ACTIVITIES_HEADER}\n#{descriptions_output}\n\n"\
+        "#{Friends::Introvert::FRIENDS_HEADER}\n#{name_output}\n"
 
       # Read the input as unsorted, and make sure we get sorted output.
       introvert.stub(:friends, unsorted_friends) do

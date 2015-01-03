@@ -15,7 +15,7 @@ module Friends
 
     # @return [Regexp] the string of what we expected during deserialization
     def self.deserialization_expectation
-      "#{SERIALIZATION_PREFIX}[YYYY-MM-DD]: [Activity]"
+      "[YYYY-MM-DD]: [Activity]"
     end
 
     # @param date [Date] the activity's date
