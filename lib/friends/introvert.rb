@@ -11,9 +11,8 @@ module Friends
     FRIENDS_HEADER = "### Friends:"
 
     # @param filename [String] the name of the friends Markdown file
-    def initialize(filename: DEFAULT_FILENAME, verbose: false)
+    def initialize(filename: DEFAULT_FILENAME)
       @filename = filename
-      @verbose = verbose
       @cleaned_file = false # Switches to true when the file is cleaned.
 
       # Read in the input file. It's easier to do this now and optimize later
@@ -22,13 +21,13 @@ module Friends
     end
 
     attr_reader :filename
-    attr_reader :verbose
+    attr_reader :activities
 
     # Write out the friends file with cleaned/sorted data.
     def clean
       # Short-circuit if we've already cleaned the file so we don't write it
       # twice.
-      return if @cleaned_file
+      return filename if @cleaned_file
 
       descriptions = activities.sort.map(&:serialize)
       names = friends.sort.map(&:serialize)
@@ -43,6 +42,8 @@ module Friends
       end
 
       @cleaned_file = true
+
+      filename
     end
 
     # List all friend names in the friends file.
@@ -54,18 +55,22 @@ module Friends
     # Add a friend and write out the new friends file.
     # @param name [String] the name of the friend to add
     # @raise [FriendsError] when a friend with that name is already in the file
+    # @return [Friend] the added friend
     def add_friend(name:)
       if friend_with_exact_name(name)
         raise FriendsError, "Friend named #{name} already exists"
       end
 
       begin
-        friends << Friend.deserialize(name)
+        friend = Friend.deserialize(name)
       rescue Serializable::SerializationError => e
         raise FriendsError, e
       end
 
+      friends << friend
       clean # Write a cleaned file.
+
+      friend # Return the added friend.
     end
 
     # List all activity details
@@ -76,6 +81,7 @@ module Friends
 
     # Add an activity and write out the new friends file.
     # @param serialization [String] the serialized activity
+    # @return [Activity] the added activity
     def add_activity(serialization:)
       begin
         activity = Activity.deserialize(serialization)
@@ -86,6 +92,8 @@ module Friends
       activity.highlight_friends(friends: friends)
       activities << activity
       clean # Write a cleaned file.
+
+      activity # Return the added activity.
     end
 
     private
@@ -94,12 +102,6 @@ module Friends
     # @return [Array] a list of all friends
     def friends
       @friends
-    end
-
-    # Gets the list of activites as read from the file.
-    # @return [Array] a list of all activities
-    def activities
-      @activities
     end
 
     # Process the friends.md file and store its contents in internal data

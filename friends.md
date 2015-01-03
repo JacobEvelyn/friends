@@ -6,5 +6,12 @@
 ### Friends:
 - George Washington
 - Grace Hopper
-- John Wilkes Booth
 - Marie Curie
+- Peter Von Euler
+- Peter Von Eulers
+- Peter Von Eulerss
+- Peter Von Eulersss
+- Peter Von Eulerssss
+- Peter Von Eulersssss
+- Peter Von Eulerssssss
+- Peter Von Eulersssssss
