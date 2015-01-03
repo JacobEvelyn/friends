@@ -30,16 +30,16 @@ module Friends
       # twice.
       return if @cleaned_file
 
-      names = friends.sort.map(&:serialize)
       descriptions = activities.sort.map(&:serialize)
+      names = friends.sort.map(&:serialize)
 
       # Write out the cleaned file.
       File.open(filename, "w") do |file|
-        file.puts(FRIENDS_HEADER)
-        names.each { |name| file.puts(name) }
-        file.puts # Blank line separating friends from activities.
         file.puts(ACTIVITIES_HEADER)
         descriptions.each { |desc| file.puts(desc) }
+        file.puts # Blank line separating friends from activities.
+        file.puts(FRIENDS_HEADER)
+        names.each { |name| file.puts(name) }
       end
 
       @cleaned_file = true
@@ -61,7 +61,7 @@ module Friends
 
       begin
         friends << Friend.deserialize(name)
-      rescue SerializationError => e
+      rescue Serializable::SerializationError => e
         raise FriendsError, e
       end
 
@@ -79,7 +79,7 @@ module Friends
     def add_activity(serialization:)
       begin
         activity = Activity.deserialize(serialization)
-      rescue SerializationError => e
+      rescue Serializable::SerializationError => e
         raise FriendsError, e
       end
 
@@ -121,26 +121,26 @@ module Friends
 
         case state
         when :initial
-          bad_line(FRIENDS_HEADER, line_num) unless line == FRIENDS_HEADER
+          bad_line(ACTIVITIES_HEADER, line_num) unless line == ACTIVITIES_HEADER
 
-          state = :reading_friends
+          state = :reading_activities
         when :reading_friends
+          begin
+            @friends << Friend.deserialize(line)
+          rescue FriendsError => e
+            bad_line(e, line_num)
+          end
+        when :done_reading_activities
+          state = :reading_friends if line == FRIENDS_HEADER
+        when :reading_activities
           if line == ""
-            state = :done_reading_friends
+            state = :done_reading_activities
           else
             begin
-              @friends << Friend.deserialize(line)
+              @activities << Activity.deserialize(line)
             rescue FriendsError => e
               bad_line(e, line_num)
             end
-          end
-        when :done_reading_friends
-          state = :reading_activities if line == ACTIVITIES_HEADER
-        when :reading_activities
-          begin
-            @activities << Activity.deserialize(line)
-          rescue FriendsError => e
-            bad_line(e, line_num)
           end
         end
       end

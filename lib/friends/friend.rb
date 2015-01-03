@@ -15,7 +15,7 @@ module Friends
 
     # @return [Regexp] the string of what we expected during deserialization
     def self.deserialization_expectation
-      "#{SERIALIZATION_PREFIX}[Friend Name]"
+      "[Friend Name]"
     end
 
     # @param name [String] the name of the friend
