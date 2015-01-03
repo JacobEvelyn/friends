@@ -82,6 +82,16 @@ describe Friends::Activity do
         must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
     end
 
+    it "matches without case sensitivity" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Lunch with elizabeth cady stanton."
+      )
+      activity.highlight_friends(friends: friends)
+      activity.description.
+        must_equal "Lunch with **Elizabeth Cady Stanton**."
+    end
+
     it "ignores when there are multiple matches" do
       friend2.name = "Elizabeth II"
       activity = Friends::Activity.new(
