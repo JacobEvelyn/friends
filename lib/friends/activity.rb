@@ -18,7 +18,7 @@ module Friends
       "[YYYY-MM-DD]: [Activity]"
     end
 
-    # @param date [Date] the activity's date
+    # @param date_s [String] the activity's date, parsed using Date.parse()
     # @param description [String] the activity's description
     # @return [Activity] the new activity
     def initialize(date_s:, description:)
