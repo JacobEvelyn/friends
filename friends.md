@@ -6,5 +6,4 @@
 ### Friends:
 - George Washington
 - Grace Hopper
-- John Wilkes Booth
 - Marie Curie

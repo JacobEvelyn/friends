@@ -21,12 +21,10 @@ describe Friends::Introvert do
 
   describe "#new" do
     it "accepts all arguments" do
-      args.merge!(verbose: true)
       introvert # Build a new introvert.
 
       # Check passed values.
       introvert.filename.must_equal filename
-      introvert.verbose.must_equal true
     end
 
     it "has sane defaults" do
@@ -35,7 +33,6 @@ describe Friends::Introvert do
 
       # Check default values.
       introvert.filename.must_equal Friends::Introvert::DEFAULT_FILENAME
-      introvert.verbose.must_equal false
     end
   end
 
@@ -68,6 +65,8 @@ describe Friends::Introvert do
 
       File.delete(filename)
     end
+
+    it { subject.must_equal filename }
   end
 
   describe "#list_friends" do
@@ -91,6 +90,12 @@ describe Friends::Introvert do
           introvert.list_friends.must_include new_friend_name
         end
       end
+
+      it "returns the friend added" do
+        introvert.stub(:friends, friends) do
+          subject.name.must_equal new_friend_name
+        end
+      end
     end
 
     describe "when there is an existing friend with that name" do
@@ -100,6 +105,35 @@ describe Friends::Introvert do
         introvert.stub(:friends, friends) do
           proc { subject }.must_raise Friends::FriendsError
         end
+      end
+    end
+  end
+
+  describe "#list_activities" do
+    subject { introvert.list_activities }
+
+    it "lists the activities" do
+      introvert.stub(:activities, activities) do
+        subject.must_equal activities.map(&:display_text)
+      end
+    end
+  end
+
+  describe "#add_activity" do
+    let(:activity_serialization) { "2014-01-01: Snorkeling with Betsy." }
+    let(:activity_description) { "Snorkeling with **Betsy Ross**." }
+    subject { introvert.add_activity(serialization: activity_serialization) }
+
+    it "adds the given activity" do
+      introvert.stub(:friends, friends) do
+        subject
+        introvert.activities.last.description.must_equal activity_description
+      end
+    end
+
+    it "returns the activity added" do
+      introvert.stub(:friends, friends) do
+        subject.description.must_equal activity_description
       end
     end
   end

@@ -15,8 +15,8 @@ version Friends::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-desc "Enable verbose logging"
-switch [:verbose], negatable: false
+desc "Quiet output messages"
+switch [:quiet], negatable: false
 
 desc "Set the location of the friends file"
 default_value "./friends.md"
@@ -48,31 +48,37 @@ command :add do |c|
   c.desc "Adds a friend"
   c.arg_name "NAME"
   c.command :friend do |friend|
-    friend.action do |_, _, args|
-      @introvert.add_friend(name: args.first)
+    friend.action do |global_options, _, args|
+      friend = @introvert.add_friend(name: args.first)
+      puts "Friend added: \"#{friend.name}\"" unless global_options[:quiet]
     end
   end
 
   c.desc "Adds an activity"
   c.arg_name "DESCRIPTION"
   c.command :activity do |activity|
-    activity.action do |_, _, args|
-      @introvert.add_activity(serialization: args.first)
+    activity.action do |global_options, _, args|
+      activity = @introvert.add_activity(serialization: args.first)
+
+      unless global_options[:quiet]
+        puts "Activity added: \"#{activity.display_text}\""
+      end
     end
   end
 end
 
 desc "Cleans your friends.md file"
 command :clean do |c|
-  c.action do
-    @introvert.clean
+  c.action do |global_options|
+    filename = @introvert.clean
+    puts "File cleaned: \"#{filename}\"" unless global_options[:quiet]
   end
 end
 
 # Before each command, clean up all arguments and create the global Introvert.
 pre do |global_options, _, options|
   final_options = global_options.merge!(options).select do |key, _|
-    [:filename, :verbose].include? key
+    [:filename].include? key
   end
 
   @introvert = Friends::Introvert.new(final_options)
