@@ -26,12 +26,22 @@ flag [:filename]
 desc "Force a clean write of the friends file"
 switch [:clean], negatable: false
 
-desc "Lists all friends or activities"
+desc "Lists friends or activities"
 command :list do |c|
   c.desc "List all friends"
   c.command :friends do |friends|
     friends.action do
       puts @introvert.list_friends
+    end
+  end
+
+  c.desc "List favorite friends"
+  c.command :favorites do |favorites|
+    favorites.action do
+      favorites = @introvert.list_favorites
+      puts "Favorite Friends:"
+      num = 0
+      favorites.each { |name| puts "#{"#{num += 1}.".ljust(2)} #{name}" }
     end
   end
 

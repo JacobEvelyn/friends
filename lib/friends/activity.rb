@@ -1,10 +1,13 @@
 # Activity represents an activity you've done with one or more Friends.
 
+require "memoist"
+
 require "friends/serializable"
 
 module Friends
   class Activity
     extend Serializable
+    extend Memoist
 
     SERIALIZATION_PREFIX = "- "
 
@@ -79,6 +82,13 @@ module Friends
 
       @description = new_description
     end
+
+    # Find the names of all friends in this description.
+    # @return [Array] list of all friend names in the description
+    def friend_names
+      description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
+    end
+    memoize :friend_names
 
     private
 

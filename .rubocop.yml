@@ -1,3 +1,6 @@
+AbcSize:
+  Enabled: false
+
 AccessorMethodName:
   Enabled: false
 
@@ -174,6 +177,9 @@ ParameterLists:
   Enabled: false
 
 ParenthesesAsGroupedExpression:
+  Enabled: false
+
+PerceivedComplexity:
   Enabled: false
 
 PercentLiteralDelimiters:

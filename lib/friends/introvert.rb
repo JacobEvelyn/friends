@@ -75,7 +75,7 @@ module Friends
       friend # Return the added friend.
     end
 
-    # List all activity details
+    # List all activity details.
     # @return [Array] a list of all activity text values
     def list_activities
       activities.map(&:display_text)
@@ -96,6 +96,36 @@ module Friends
       clean # Write a cleaned file.
 
       activity # Return the added activity.
+    end
+
+    # List your favorite friends.
+    # @param num [Integer] the number of favorite friends to return, or nil if
+    #   unlimited
+    # @return [Array] a list of the favorite friends' names and activity
+    #   counts
+    def list_favorites(num: 10)
+      if !num.nil? && num < 1
+        raise FriendsError, "Favorites count must be positive or unlimited"
+      end
+
+      # Construct a hash of friend name to frequency of appearance.
+      freq_table = Hash.new { |h, k| h[k] = 0 }
+      activities.each do |activity|
+        activity.friend_names.each do |friend_name|
+          freq_table[friend_name] += 1
+        end
+      end
+
+      # Remove names that are not in the friends list.
+      freq_table.select! { |name, _| friend_with_exact_name(name) }
+
+      # Sort the results, with the most favorite friend first.
+      results = freq_table.sort_by { |_, count| -count }
+
+      # If we need to, trim the list.
+      results = results.take(num) unless num.nil?
+
+      results.map(&:first)
     end
 
     private

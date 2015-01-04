@@ -128,6 +128,28 @@ describe Friends::Activity do
     end
   end
 
+  describe "#friend_names" do
+    subject { activity.friend_names }
+
+    it "returns a list of friend names" do
+      names = subject
+
+      # We don't assert that the output must be in a specific order because we
+      # don't care about the order and it is subject to change.
+      names.size.must_equal 2
+      names.must_include "Elizabeth Cady Stanton"
+      names.must_include "John Cage"
+    end
+
+    describe "when a friend is mentioned more than once" do
+      let(:description) { "Lunch with **John Cage**. **John Cage** can eat!" }
+
+      it "removes duplicate names" do
+        subject.must_equal ["John Cage"]
+      end
+    end
+  end
+
   describe "#<=>" do
     it "sorts by reverse-date" do
       yesterday = (Date.today - 1).to_s

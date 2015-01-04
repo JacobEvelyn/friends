@@ -10,7 +10,8 @@ describe Friends::Introvert do
     [
       Friends::Activity.new(
         date_s: Date.today.to_s,
-        description: "Lunch with **#{friend_names.first}**."
+        description: "Lunch with **#{friend_names.first}** and "\
+          "**#{friend_names.last}**."
       ),
       Friends::Activity.new(
         date_s: (Date.today + 1).to_s,
@@ -39,6 +40,9 @@ describe Friends::Introvert do
   describe "#clean" do
     subject { introvert.clean }
 
+    # Delete the file that is created each time.
+    after { File.delete(filename) }
+
     it "writes cleaned file" do
       sorted_friends = friends.sort
       unsorted_friends = sorted_friends.reverse
@@ -62,8 +66,6 @@ describe Friends::Introvert do
           File.read(filename).must_equal expected_output
         end
       end
-
-      File.delete(filename)
     end
 
     it { subject.must_equal filename }
@@ -134,6 +136,30 @@ describe Friends::Introvert do
     it "returns the activity added" do
       introvert.stub(:friends, friends) do
         subject.description.must_equal activity_description
+      end
+    end
+  end
+
+  describe "#list_favorites" do
+    subject { introvert.list_favorites }
+
+    it "returns the friends in order of favoritism" do
+      introvert.stub(:friends, friends) do
+        introvert.stub(:activities, activities) do
+          subject.must_equal ["Betsy Ross", "George Washington Carver"]
+        end
+      end
+    end
+
+    describe "when there are more friends than favorites requested" do
+      subject { introvert.list_favorites(num: 1) }
+
+      it "returns the number of favorites requested" do
+        introvert.stub(:friends, friends) do
+          introvert.stub(:activities, activities) do
+            subject.must_equal ["Betsy Ross"]
+          end
+        end
       end
     end
   end
