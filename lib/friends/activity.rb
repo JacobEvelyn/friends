@@ -13,7 +13,7 @@ module Friends
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
-      /(#{SERIALIZATION_PREFIX})?(?<date_s>\d{4}-\d\d-\d\d):\s(?<description>.+)/
+      /(#{SERIALIZATION_PREFIX})?((?<date_s>\d{4}-\d\d-\d\d):\s)?(?<description>.+)/
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -24,7 +24,7 @@ module Friends
     # @param date_s [String] the activity's date, parsed using Date.parse()
     # @param description [String] the activity's description
     # @return [Activity] the new activity
-    def initialize(date_s:, description:)
+    def initialize(date_s: Date.today.to_s, description:)
       @date = Date.parse(date_s)
       @description = description
     end

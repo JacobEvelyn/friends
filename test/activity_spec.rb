@@ -14,14 +14,24 @@ describe Friends::Activity do
     subject { Friends::Activity.deserialize(serialized_str) }
 
     describe "when string is well-formed" do
-      let(:serialized_str) do
-        "#{Friends::Activity::SERIALIZATION_PREFIX}#{date_s}: #{description}"
-      end
+      let(:serialized_str) { "#{date_s}: #{description}" }
 
       it "creates an activity with the correct date and description" do
         new_activity = subject
         new_activity.date.must_equal date
         new_activity.description.must_equal description
+      end
+    end
+
+    describe "when no date is present" do
+      let(:serialized_str) { description }
+
+      it "defaults to today" do
+        today = Date.today
+
+        # We stub out Date.today to guarantee that it is always the same even
+        # when the date changes in the middle of the test's execution.
+        Date.stub(:today, today) { subject.date.must_equal today }
       end
     end
 
