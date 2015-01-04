@@ -1,4 +1,6 @@
-# Introvert is the internal handler for the friends script.
+# Introvert is the internal handler for the friends script. It is designed to be
+# able to be used directly within another Ruby program, without needing to call
+# the command-line script explicitly.
 
 require "friends/activity"
 require "friends/friend"
