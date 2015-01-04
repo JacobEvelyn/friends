@@ -122,9 +122,9 @@ module Friends
     #   unlimited
     # @return [Array] a list of the favorite friends' names and activity
     #   counts
-    def list_favorites(num: 10)
-      if !num.nil? && num < 1
-        raise FriendsError, "Favorites count must be positive or unlimited"
+    def list_favorites(limit:)
+      if !limit.nil? && limit < 1
+        raise FriendsError, "Favorites limit must be positive or unlimited"
       end
 
       # Construct a hash of friend name to frequency of appearance.
@@ -142,7 +142,7 @@ module Friends
       results = freq_table.sort_by { |_, count| -count }
 
       # If we need to, trim the list.
-      results = results.take(num) unless num.nil?
+      results = results.take(limit) unless limit.nil?
 
       results.map(&:first)
     end

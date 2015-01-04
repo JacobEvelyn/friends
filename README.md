@@ -72,6 +72,21 @@ $ friends list activities --with "George"
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 
 ```
+Find your favorite friends:
+```
+$ friends list favorites
+Your favorite friends:
+1. George Washington Carver
+2. Grace Hopper
+3. Marie Curie
+```
+Or get a specific number of favorites:
+```
+$ friends list favorites --limit 2
+Your favorite friends:
+1. George Washington Carver
+2. Grace Hopper
+```
 
 ### Global options:
 

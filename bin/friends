@@ -15,16 +15,18 @@ version Friends::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-desc "Quiet output messages"
-switch [:quiet], negatable: false
+switch [:quiet],
+  negatable: false,
+  desc: "Quiet output messages"
 
-desc "Set the location of the friends file"
-default_value "./friends.md"
-arg_name "FILENAME"
-flag [:filename]
+flag [:filename],
+  arg_name: "FILENAME",
+  default_value: "./friends.md",
+  desc: "Set the location of the friends file"
 
-desc "Force a clean write of the friends file"
-switch [:clean], negatable: false
+switch [:clean],
+  negatable: false,
+  desc: "Force a clean write of the friends file"
 
 desc "Lists friends or activities"
 command :list do |c|
@@ -37,18 +39,31 @@ command :list do |c|
 
   c.desc "List favorite friends"
   c.command :favorites do |list_favorites|
-    list_favorites.action do
-      favorites = @introvert.list_favorites
-      puts "Favorite Friends:"
-      num = 0
-      favorites.each { |name| puts "#{"#{num += 1}.".ljust(2)} #{name}" }
+    list_favorites.flag [:limit],
+      arg_name: "NUMBER",
+      default_value: 10,
+      desc: "The number of friends to return"
+
+    list_favorites.action do |_, options|
+      limit = options[:limit].to_i
+      favorites = @introvert.list_favorites(limit: limit)
+
+      if limit == 1
+        puts "Your best friend is #{favorites.first}"
+      else
+        puts "Your favorite friends:"
+        num = 0
+        favorites.each { |name| puts "#{"#{num += 1}.".ljust(2)} #{name}" }
+      end
     end
   end
 
   c.desc "Lists all activities"
   c.command :activities do |list_activities|
-    list_activities.arg_name "NAME"
-    list_activities.flag [:with]
+    list_activities.flag [:with],
+      arg_name: "NAME",
+      desc: "List only activities involving the given friend"
+
     list_activities.action do |_, options|
       puts @introvert.list_activities(with: options[:with])
     end

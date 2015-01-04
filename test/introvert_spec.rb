@@ -184,18 +184,22 @@ describe Friends::Introvert do
   end
 
   describe "#list_favorites" do
-    subject { introvert.list_favorites }
+    subject { introvert.list_favorites(limit: limit) }
 
-    it "returns the friends in order of favoritism" do
-      introvert.stub(:friends, friends) do
-        introvert.stub(:activities, activities) do
-          subject.must_equal ["Betsy Ross", "George Washington Carver"]
+    describe "when limit is nil" do
+      let(:limit) { nil }
+
+      it "returns all friends in order of favoritism" do
+        introvert.stub(:friends, friends) do
+          introvert.stub(:activities, activities) do
+            subject.must_equal ["Betsy Ross", "George Washington Carver"]
+          end
         end
       end
     end
 
     describe "when there are more friends than favorites requested" do
-      subject { introvert.list_favorites(num: 1) }
+      let(:limit) { 1 }
 
       it "returns the number of favorites requested" do
         introvert.stub(:friends, friends) do
