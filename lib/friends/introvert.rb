@@ -76,9 +76,15 @@ module Friends
     end
 
     # List all activity details.
+    # @param [String] the name of a friend to filter by, or nil for unfiltered
     # @return [Array] a list of all activity text values
-    def list_activities
-      activities.map(&:display_text)
+    def list_activities(with:)
+      acts = activities
+
+      # Filter by friend name if argument is passed.
+      acts = acts.select { |a| a.friend_names.include? with } unless with.nil?
+
+      acts.map(&:display_text)
     end
 
     # Add an activity and write out the new friends file.

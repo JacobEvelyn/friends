@@ -29,15 +29,15 @@ switch [:clean], negatable: false
 desc "Lists friends or activities"
 command :list do |c|
   c.desc "List all friends"
-  c.command :friends do |friends|
-    friends.action do
+  c.command :friends do |list_friends|
+    list_friends.action do
       puts @introvert.list_friends
     end
   end
 
   c.desc "List favorite friends"
-  c.command :favorites do |favorites|
-    favorites.action do
+  c.command :favorites do |list_favorites|
+    list_favorites.action do
       favorites = @introvert.list_favorites
       puts "Favorite Friends:"
       num = 0
@@ -46,9 +46,11 @@ command :list do |c|
   end
 
   c.desc "Lists all activities"
-  c.command :activities do |activities|
-    activities.action do
-      puts @introvert.list_activities
+  c.command :activities do |list_activities|
+    list_activities.arg_name "NAME"
+    list_activities.flag [:with]
+    list_activities.action do |_, options|
+      puts @introvert.list_activities(with: options[:with])
     end
   end
 end
@@ -57,31 +59,28 @@ desc "Adds a friend or activity"
 command :add do |c|
   c.desc "Adds a friend"
   c.arg_name "NAME"
-  c.command :friend do |friend|
-    friend.action do |global_options, _, args|
+  c.command :friend do |add_friend|
+    add_friend.action do |_, _, args|
       friend = @introvert.add_friend(name: args.first)
-      puts "Friend added: \"#{friend.name}\"" unless global_options[:quiet]
+      @message = "Friend added: \"#{friend.name}\""
     end
   end
 
   c.desc "Adds an activity"
   c.arg_name "DESCRIPTION"
-  c.command :activity do |activity|
-    activity.action do |global_options, _, args|
+  c.command :activity do |add_activity|
+    add_activity.action do |_, _, args|
       activity = @introvert.add_activity(serialization: args.first)
-
-      unless global_options[:quiet]
-        puts "Activity added: \"#{activity.display_text}\""
-      end
+      @message = "Activity added: \"#{activity.display_text}\""
     end
   end
 end
 
 desc "Cleans your friends.md file"
 command :clean do |c|
-  c.action do |global_options|
+  c.action do
     filename = @introvert.clean
-    puts "File cleaned: \"#{filename}\"" unless global_options[:quiet]
+    @message = "File cleaned: \"#{filename}\""
   end
 end
 
@@ -95,9 +94,12 @@ pre do |global_options, _, options|
   true
 end
 
-# After each command, clean if requested with the --clean flag.
 post do |global_options|
+  # After each command, clean if requested with the --clean flag.
   @introvert.clean if global_options[:clean]
+
+  # Print the output message (if there is one) unless --quiet is passed.
+  puts @message unless @message.nil? || global_options[:quiet]
 end
 
 # If an error is raised, print the message to STDERR and exit the program.

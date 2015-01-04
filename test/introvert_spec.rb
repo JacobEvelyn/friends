@@ -112,11 +112,26 @@ describe Friends::Introvert do
   end
 
   describe "#list_activities" do
-    subject { introvert.list_activities }
+    subject { introvert.list_activities(with: with) }
 
-    it "lists the activities" do
-      introvert.stub(:activities, activities) do
-        subject.must_equal activities.map(&:display_text)
+    describe "when not filtering by a friend" do
+      let(:with) { nil }
+
+      it "lists the activities" do
+        introvert.stub(:activities, activities) do
+          subject.must_equal activities.map(&:display_text)
+        end
+      end
+    end
+
+    describe "when filtering by a friend" do
+      let(:with) { friend_names.first }
+
+      it "filters the activities by that friend" do
+        introvert.stub(:activities, activities) do
+          # Only one activity has that friend.
+          subject.must_equal activities[0..0].map(&:display_text)
+        end
       end
     end
   end
