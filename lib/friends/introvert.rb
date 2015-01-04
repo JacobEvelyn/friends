@@ -82,7 +82,20 @@ module Friends
       acts = activities
 
       # Filter by friend name if argument is passed.
-      acts = acts.select { |a| a.friend_names.include? with } unless with.nil?
+      unless with.nil?
+        friends = friends_with_name_in(with)
+
+        case friends.size
+        when 1
+          # If exactly one friend matches, use that friend to filter.
+          acts = acts.select { |a| a.friend_names.include? friends.first.name }
+        when 0 then raise FriendsError, "No friend found for \"#{with}\""
+        else
+          raise FriendsError,
+                "More than one friend found for \"#{with}\": "\
+                  "#{friends.map(&:name).join(', ')}"
+        end
+      end
 
       acts.map(&:display_text)
     end
@@ -201,8 +214,9 @@ module Friends
 
     # @param name [String] the name of the friends to search for
     # @return [Array] a list of all friends that match the given text
-    def friends_with_similar_name(text)
-      friends.select { |friend| text.match(friend.name) }
+    def friends_with_name_in(text)
+      regex = Regexp.new(text, Regexp::IGNORECASE)
+      friends.select { |friend| friend.name.match(regex) }
     end
 
     # Raise an error that a line in the friends file is malformed.

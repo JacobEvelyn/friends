@@ -96,7 +96,10 @@ end
 
 post do |global_options|
   # After each command, clean if requested with the --clean flag.
-  @introvert.clean if global_options[:clean]
+  if global_options[:clean]
+    filename = @introvert.clean
+    @message = "File cleaned: \"#{filename}\""
+  end
 
   # Print the output message (if there is one) unless --quiet is passed.
   puts @message unless @message.nil? || global_options[:quiet]

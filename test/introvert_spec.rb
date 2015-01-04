@@ -124,13 +124,41 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when filtering by a friend" do
-      let(:with) { friend_names.first }
+    describe "when filtering by part of a friend's name" do
+      let(:with) { "george" }
 
-      it "filters the activities by that friend" do
-        introvert.stub(:activities, activities) do
-          # Only one activity has that friend.
-          subject.must_equal activities[0..0].map(&:display_text)
+      describe "when there is more than one friend match" do
+        let(:friend_names) { ["George Washington Carver", "Boy George"] }
+
+        it "raises an error" do
+          introvert.stub(:friends, friends) do
+            introvert.stub(:activities, activities) do
+              proc { subject }.must_raise Friends::FriendsError
+            end
+          end
+        end
+      end
+
+      describe "when there are no friend matches" do
+        let(:friend_names) { ["Joe"] }
+
+        it "raises an error" do
+          introvert.stub(:friends, friends) do
+            introvert.stub(:activities, activities) do
+              proc { subject }.must_raise Friends::FriendsError
+            end
+          end
+        end
+      end
+
+      describe "when there is exactly one friend match" do
+        it "filters the activities by that friend" do
+          introvert.stub(:friends, friends) do
+            introvert.stub(:activities, activities) do
+              # Only one activity has that friend.
+              subject.must_equal activities[0..0].map(&:display_text)
+            end
+          end
         end
       end
     end
