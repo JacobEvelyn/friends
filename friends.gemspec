@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jacobevelyn@gmail.com"]
   spec.summary       = %q{Spend time with the people you care about.}
   spec.description   = %q{Spend time with the people you care about. Introvert-tested. Extrovert-approved.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/JacobEvelyn/friends"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
