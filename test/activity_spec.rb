@@ -112,6 +112,39 @@ describe Friends::Activity do
       activity.description.must_equal "Dinner with Elizabeth." # No match found.
     end
 
+    it "ignores when at beginning of word" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Field trip to the Johnson Co."
+      )
+      activity.highlight_friends(friends: friends)
+
+      # No match found.
+      activity.description.must_equal "Field trip to the Johnson Co."
+    end
+
+    it "ignores when in middle of word" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Field trip to the JimJohnJames Co."
+      )
+      activity.highlight_friends(friends: friends)
+
+      # No match found.
+      activity.description.must_equal "Field trip to the JimJohnJames Co."
+    end
+
+    it "ignores when at end of word" do
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Field trip to the JimJohn Co."
+      )
+      activity.highlight_friends(friends: friends)
+
+      # No match found.
+      activity.description.must_equal "Field trip to the JimJohn Co."
+    end
+
     it "does not match with leading asterisks" do
       activity = Friends::Activity.new(
         date_s: Date.today.to_s,

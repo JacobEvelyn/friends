@@ -1,19 +1,19 @@
 require_relative "helper"
 
 describe Friends::Friend do
-  let(:name) { "Jacob Evelyn" }
-  let(:friend) { Friends::Friend.new(name: name) }
+  let(:friend_name) { "Jacob Evelyn" }
+  let(:friend) { Friends::Friend.new(name: friend_name) }
 
   describe ".deserialize" do
     subject { Friends::Friend.deserialize(serialized_str) }
 
     describe "when string is well-formed" do
       let(:serialized_str) do
-        "#{Friends::Friend::SERIALIZATION_PREFIX}#{name}"
+        "#{Friends::Friend::SERIALIZATION_PREFIX}#{friend_name}"
       end
 
       it "creates a friend with the correct name" do
-        subject.name.must_equal name
+        subject.name.must_equal friend_name
       end
     end
 
@@ -27,13 +27,17 @@ describe Friends::Friend do
   describe "#new" do
     subject { friend }
 
-    it { subject.name.must_equal name }
+    it { subject.name.must_equal friend_name }
   end
 
   describe "#serialize" do
     subject { friend.serialize }
 
-    it { subject.must_equal "#{Friends::Friend::SERIALIZATION_PREFIX}#{name}" }
+    it do
+      subject.must_equal(
+        "#{Friends::Friend::SERIALIZATION_PREFIX}#{friend_name}"
+      )
+    end
   end
 
   describe "#<=>" do
