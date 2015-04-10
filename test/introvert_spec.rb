@@ -41,7 +41,7 @@ describe Friends::Introvert do
     subject { introvert.clean }
 
     # Delete the file that is created each time.
-    after { File.delete(filename) }
+    after { File.delete(filename) if File.exists?(filename) }
 
     it "writes cleaned file" do
       sorted_friends = friends.sort
@@ -84,6 +84,9 @@ describe Friends::Introvert do
   describe "#add_friend" do
     let(:new_friend_name) { "Jacob Evelyn" }
     subject { introvert.add_friend(name: new_friend_name) }
+
+    # Delete the file that is created each time.
+    after { File.delete(filename) if File.exists?(filename) }
 
     describe "when there is no existing friend with that name" do
       it "adds the given friend" do
@@ -210,6 +213,9 @@ describe Friends::Introvert do
     let(:activity_serialization) { "2014-01-01: Snorkeling with Betsy." }
     let(:activity_description) { "Snorkeling with **Betsy Ross**." }
     subject { introvert.add_activity(serialization: activity_serialization) }
+
+    # Delete the file that is created each time.
+    after { File.delete(filename) if File.exists?(filename) }
 
     it "adds the given activity" do
       introvert.stub(:friends, friends) do

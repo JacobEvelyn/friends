@@ -113,12 +113,20 @@ module Friends
       no_leading_asterisks = "(?<!\\*\\*)"
       no_ending_asterisks = "(?!\\*\\*)"
 
+      # We don't want to match names that are part of other words.
+      no_leading_alphabeticals = "(?<![A-z])"
+      no_ending_alphabeticals = "(?![A-z])"
+
       # Create the list of regexes and return it.
       chunks = name.split(Regexp.new(splitter))
 
       [chunks, [chunks.first]].map do |words|
         Regexp.new(
-          no_leading_asterisks + words.join(splitter) + no_ending_asterisks,
+          no_leading_asterisks +
+          no_leading_alphabeticals +
+          words.join(splitter) +
+          no_ending_alphabeticals +
+          no_ending_asterisks,
           Regexp::IGNORECASE
         )
       end
