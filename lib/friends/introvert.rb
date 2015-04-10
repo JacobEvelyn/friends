@@ -48,12 +48,6 @@ module Friends
       filename
     end
 
-    # List all friend names in the friends file.
-    # @return [Array] a list of all friend names
-    def list_friends
-      friends.map(&:name)
-    end
-
     # Add a friend and write out the new friends file.
     # @param name [String] the name of the friend to add
     # @raise [FriendsError] when a friend with that name is already in the file
@@ -75,31 +69,6 @@ module Friends
       friend # Return the added friend.
     end
 
-    # List all activity details.
-    # @param [String] the name of a friend to filter by, or nil for unfiltered
-    # @return [Array] a list of all activity text values
-    def list_activities(with:)
-      acts = activities
-
-      # Filter by friend name if argument is passed.
-      unless with.nil?
-        friends = friends_with_name_in(with)
-
-        case friends.size
-        when 1
-          # If exactly one friend matches, use that friend to filter.
-          acts = acts.select { |a| a.friend_names.include? friends.first.name }
-        when 0 then raise FriendsError, "No friend found for \"#{with}\""
-        else
-          raise FriendsError,
-                "More than one friend found for \"#{with}\": "\
-                  "#{friends.map(&:name).join(', ')}"
-        end
-      end
-
-      acts.map(&:display_text)
-    end
-
     # Add an activity and write out the new friends file.
     # @param serialization [String] the serialized activity
     # @return [Activity] the added activity
@@ -117,9 +86,15 @@ module Friends
       activity # Return the added activity.
     end
 
+    # List all friend names in the friends file.
+    # @return [Array] a list of all friend names
+    def list_friends
+      friends.map(&:name)
+    end
+
     # List your favorite friends.
-    # @param num [Integer] the number of favorite friends to return, or nil if
-    #   unlimited
+    # @param limit [Integer] the number of favorite friends to return, or nil
+    #   for no limit
     # @return [Array] a list of the favorite friends' names and activity
     #   counts
     def list_favorites(limit:)
@@ -145,6 +120,37 @@ module Friends
       results = results.take(limit) unless limit.nil?
 
       results.map(&:first)
+    end
+
+    # List all activity details.
+    # @param limit [Integer] the number of activities to return, or nil for no
+    #   limit
+    # @param with [String] the name of a friend to filter by, or nil for
+    #   unfiltered
+    # @return [Array] a list of all activity text values
+    def list_activities(limit:, with:)
+      acts = activities
+
+      # Filter by friend name if argument is passed.
+      unless with.nil?
+        friends = friends_with_name_in(with)
+
+        case friends.size
+        when 1
+          # If exactly one friend matches, use that friend to filter.
+          acts = acts.select { |a| a.friend_names.include? friends.first.name }
+        when 0 then raise FriendsError, "No friend found for \"#{with}\""
+        else
+          raise FriendsError,
+                "More than one friend found for \"#{with}\": "\
+                  "#{friends.map(&:name).join(', ')}"
+        end
+      end
+
+      # If we need to, trim the list.
+      acts = acts.take(limit) unless limit.nil?
+
+      acts.map(&:display_text)
     end
 
     private

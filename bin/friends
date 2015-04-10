@@ -60,12 +60,18 @@ command :list do |c|
 
   c.desc "Lists all activities"
   c.command :activities do |list_activities|
+    list_activities.flag [:limit],
+      arg_name: "NUMBER",
+      default_value: 10,
+      desc: "The number of activities to return"
+
     list_activities.flag [:with],
       arg_name: "NAME",
       desc: "List only activities involving the given friend"
 
     list_activities.action do |_, options|
-      puts @introvert.list_activities(with: options[:with])
+      limit = options[:limit].to_i
+      puts @introvert.list_activities(limit: limit, with: options[:with])
     end
   end
 end

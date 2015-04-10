@@ -112,7 +112,49 @@ describe Friends::Introvert do
   end
 
   describe "#list_activities" do
-    subject { introvert.list_activities(with: with) }
+    subject { introvert.list_activities(limit: limit, with: with) }
+    let(:limit) { nil }
+    let(:with) { nil }
+
+    describe "when the limit is lower than the number of activities" do
+      let(:limit) { 1 }
+
+      it "lists that number of activities" do
+        introvert.stub(:activities, activities) do
+          subject.size.must_equal limit
+        end
+      end
+    end
+
+    describe "when the limit is equal to the number of activities" do
+      let(:limit) { activities.size }
+
+      it "lists all activities" do
+        introvert.stub(:activities, activities) do
+          subject.size.must_equal activities.size
+        end
+      end
+    end
+
+    describe "when the limit is greater than the number of activities" do
+      let(:limit) { activities.size + 5 }
+
+      it "lists all activities" do
+        introvert.stub(:activities, activities) do
+          subject.size.must_equal activities.size
+        end
+      end
+    end
+
+    describe "when the limit is nil" do
+      let(:limit) { nil }
+
+      it "lists all activities" do
+        introvert.stub(:activities, activities) do
+          subject.size.must_equal activities.size
+        end
+      end
+    end
 
     describe "when not filtering by a friend" do
       let(:with) { nil }
