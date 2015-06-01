@@ -79,7 +79,7 @@ module Friends
         raise FriendsError, e
       end
 
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: self, friends: friends)
       activities << activity
       clean # Write a cleaned file.
 
@@ -102,24 +102,15 @@ module Friends
         raise FriendsError, "Favorites limit must be positive or unlimited"
       end
 
-      # Construct a hash of friend name to frequency of appearance.
-      freq_table = Hash.new { |h, k| h[k] = 0 }
-      activities.each do |activity|
-        activity.friend_names.each do |friend_name|
-          freq_table[friend_name] += 1
-        end
-      end
-
-      # Remove names that are not in the friends list.
-      freq_table.select! { |name, _| friend_with_exact_name(name) }
+      set_n_activities! # Set n_activities for all friends.
 
       # Sort the results, with the most favorite friend first.
-      results = freq_table.sort_by { |_, count| -count }
+      results = friends.sort_by { |friend| -friend.n_activities }
 
       # If we need to, trim the list.
       results = results.take(limit) unless limit.nil?
 
-      results.map(&:first)
+      results.map(&:name)
     end
 
     # List all activity details.
@@ -151,6 +142,23 @@ module Friends
       acts = acts.take(limit) unless limit.nil?
 
       acts.map(&:display_text)
+    end
+
+    # Sets the n_activities field on each friend.
+    def set_n_activities!
+      # Construct a hash of friend name to frequency of appearance.
+      freq_table = Hash.new { |h, k| h[k] = 0 }
+      activities.each do |activity|
+        activity.friend_names.each do |friend_name|
+          freq_table[friend_name] += 1
+        end
+      end
+
+      # Remove names that are not in the friends list.
+      freq_table.each do |name, count|
+        friend = friend_with_exact_name(name)
+        friend.n_activities = count if friend # Do nothing if name not valid.
+      end
     end
 
     private

@@ -74,7 +74,10 @@ describe Friends::Activity do
     let(:friend2) { Friends::Friend.new(name: "John Cage") }
     let(:friends) { [friend1, friend2] }
     let(:description) { "Lunch with #{friend1.name} and #{friend2.name}." }
-    subject { activity.highlight_friends(friends: friends) }
+    let(:introvert) { Minitest::Mock.new }
+    subject do
+      activity.highlight_friends(introvert: introvert, friends: friends)
+    end
 
     it "finds all friends" do
       subject
@@ -87,7 +90,7 @@ describe Friends::Activity do
         date_s: Date.today.to_s,
         description: "Lunch with Elizabeth and John."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
       activity.description.
         must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
     end
@@ -97,19 +100,9 @@ describe Friends::Activity do
         date_s: Date.today.to_s,
         description: "Lunch with elizabeth cady stanton."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
       activity.description.
         must_equal "Lunch with **Elizabeth Cady Stanton**."
-    end
-
-    it "ignores when there are multiple matches" do
-      friend2.name = "Elizabeth II"
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Dinner with Elizabeth."
-      )
-      activity.highlight_friends(friends: friends)
-      activity.description.must_equal "Dinner with Elizabeth." # No match found.
     end
 
     it "ignores when at beginning of word" do
@@ -117,7 +110,7 @@ describe Friends::Activity do
         date_s: Date.today.to_s,
         description: "Field trip to the Johnson Co."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
 
       # No match found.
       activity.description.must_equal "Field trip to the Johnson Co."
@@ -128,7 +121,7 @@ describe Friends::Activity do
         date_s: Date.today.to_s,
         description: "Field trip to the JimJohnJames Co."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
 
       # No match found.
       activity.description.must_equal "Field trip to the JimJohnJames Co."
@@ -139,7 +132,7 @@ describe Friends::Activity do
         date_s: Date.today.to_s,
         description: "Field trip to the JimJohn Co."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
 
       # No match found.
       activity.description.must_equal "Field trip to the JimJohn Co."
@@ -150,7 +143,7 @@ describe Friends::Activity do
         date_s: Date.today.to_s,
         description: "Dinner with **Elizabeth Cady Stanton."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
 
       # No match found.
       activity.description.must_equal "Dinner with **Elizabeth Cady Stanton."
@@ -164,10 +157,30 @@ describe Friends::Activity do
         # match, because the Elizabeth isn't surrounded by asterisks.
         description: "Dinner with Elizabeth**."
       )
-      activity.highlight_friends(friends: friends)
+      activity.highlight_friends(introvert: introvert, friends: friends)
 
       # No match found.
       activity.description.must_equal "Dinner with Elizabeth**."
+    end
+
+    it "chooses the better friend when there are multiple matches" do
+      friend2.name = "Elizabeth II"
+      activity = Friends::Activity.new(
+        date_s: Date.today.to_s,
+        description: "Dinner with Elizabeth."
+      )
+
+      # Pretend the introvert sets the friends' n_activities values.
+      introvert.expect(:set_n_activities!, nil)
+      friend1.n_activities = 5
+      friend2.n_activities = 7
+
+      activity.highlight_friends(introvert: introvert, friends: friends)
+
+      # Pick the friend with more activities.
+      activity.description.must_equal "Dinner with **Elizabeth II**."
+
+      # introvert.verify
     end
   end
 

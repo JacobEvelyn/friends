@@ -51,33 +51,39 @@ module Friends
     # Modify the description to turn inputted friend names
     # (e.g. "Jacob" or "Jacob Evelyn") into full asterisk'd names
     # (e.g. "**Jacob Evelyn**")
+    # @param introvert [Introvert] for use in aggregate computations
     # @param friends [Array] list of friends to highlight in the description
     # @raise [FriendsError] if more than one friend matches a part of the
     #   description
-    def highlight_friends(friends:)
+    def highlight_friends(introvert:, friends:)
       # Map each friend to a list of all possible regexes for that friend.
       friend_regexes = {}
-      friends.each { |f| friend_regexes[f.name] = regexes_for_name(f.name) }
+      friends.each { |f| friend_regexes[f] = regexes_for_name(f.name) }
 
-      # Create hash mapping regex to friend name. Note that because two friends
-      # may have the same regex (e.g. /John/), we need to store the names in an
+      # Create hash mapping regex to friend. Note that because two friends may
+      # have the same regex (e.g. /John/), we need to store the names in an
       # array since there may be more than one. We also iterate through the
       # regexes to add the most important regexes to the hash first, so
       # "Jacob Evelyn" takes precedence over all instances of "Jacob" (since
       # Ruby hashes are ordered).
       regex_map = Hash.new { |h, k| h[k] = [] }
       while !friend_regexes.empty?
-        friend_regexes.each do |friend_name, regex_list|
-          regex_map[regex_list.shift] << friend_name
-          friend_regexes.delete(friend_name) if regex_list.empty?
+        friend_regexes.each do |friend, regex_list|
+          regex_map[regex_list.shift] << friend
+          friend_regexes.delete(friend) if regex_list.empty?
         end
       end
 
-      # Go through the description and substitute in full, asterisk'd names for
+      # Go through the description and substitute full, asterisk'd names for
       # anything that matches a friend's name.
       new_description = description.clone
-      regex_map.each do |regex, names|
-        new_description.gsub!(regex, "**#{names.first}**") if names.size == 1
+      regex_map.each do |regex, friends|
+        if friends.size > 1 # If there are multiple matches, find best friend.
+          introvert.set_n_activities!
+          friends.sort_by! { |friend| -friend.n_activities }
+        end
+
+        new_description.gsub!(regex, "**#{friends.first.name}**")
       end
 
       @description = new_description

@@ -30,6 +30,13 @@ module Friends
       "#{SERIALIZATION_PREFIX}#{name}"
     end
 
+    # The number of activities this friend is in. This is for internal use only
+    # and is set by the Introvert as needed.
+    attr_writer :n_activities
+    def n_activities
+      @n_activities || 0
+    end
+
     private
 
     # Default sorting for an array of friends is alphabetical.
