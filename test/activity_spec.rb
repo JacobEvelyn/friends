@@ -184,6 +184,26 @@ describe Friends::Activity do
     end
   end
 
+  describe "#includes_friend?" do
+    subject { activity.includes_friend?(friend: friend) }
+
+    describe "when the given friend is in the activity" do
+      let(:friend) { friend1 }
+
+      it "returns true" do
+        subject.must_equal true
+      end
+    end
+
+    describe "when the given friend is not in the activity" do
+      let(:friend) { Friends::Friend.new(name: "Claude Debussy") }
+
+      it "returns false" do
+        subject.must_equal false
+      end
+    end
+  end
+
   describe "#friend_names" do
     subject { activity.friend_names }
 

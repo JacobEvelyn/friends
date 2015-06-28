@@ -29,16 +29,16 @@ switch [:clean],
   desc: "Force a clean write of the friends file"
 
 desc "Lists friends or activities"
-command :list do |c|
-  c.desc "List all friends"
-  c.command :friends do |list_friends|
+command :list do |list|
+  list.desc "List all friends"
+  list.command :friends do |list_friends|
     list_friends.action do
       puts @introvert.list_friends
     end
   end
 
-  c.desc "List favorite friends"
-  c.command :favorites do |list_favorites|
+  list.desc "List favorite friends"
+  list.command :favorites do |list_favorites|
     list_favorites.flag [:limit],
       arg_name: "NUMBER",
       default_value: 10,
@@ -61,8 +61,8 @@ command :list do |c|
     end
   end
 
-  c.desc "Lists all activities"
-  c.command :activities do |list_activities|
+  list.desc "Lists all activities"
+  list.command :activities do |list_activities|
     list_activities.flag [:limit],
       arg_name: "NUMBER",
       default_value: 10,
@@ -80,19 +80,19 @@ command :list do |c|
 end
 
 desc "Adds a friend or activity"
-command :add do |c|
-  c.desc "Adds a friend"
-  c.arg_name "NAME"
-  c.command :friend do |add_friend|
+command :add do |add|
+  add.desc "Adds a friend"
+  add.arg_name "NAME"
+  add.command :friend do |add_friend|
     add_friend.action do |_, _, args|
       friend = @introvert.add_friend(name: args.first)
       @message = "Friend added: \"#{friend.name}\""
     end
   end
 
-  c.desc "Adds an activity"
-  c.arg_name "DESCRIPTION"
-  c.command :activity do |add_activity|
+  add.desc "Adds an activity"
+  add.arg_name "DESCRIPTION"
+  add.command :activity do |add_activity|
     add_activity.action do |_, _, args|
       activity = @introvert.add_activity(serialization: args.first)
       @message = "Activity added: \"#{activity.display_text}\""
@@ -100,9 +100,20 @@ command :add do |c|
   end
 end
 
+desc "Graph"
+arg_name "NAME"
+command :graph do |graph|
+  graph.action do |_, _, args|
+    data = @introvert.graph(name: args.first)
+    data.each do |month, count|
+      puts "#{month} |#{'█' * count}"
+    end
+  end
+end
+
 desc "Cleans your friends.md file"
-command :clean do |c|
-  c.action do
+command :clean do |clean|
+  clean.action do
     filename = @introvert.clean
     @message = "File cleaned: \"#{filename}\""
   end

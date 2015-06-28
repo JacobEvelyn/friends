@@ -87,6 +87,13 @@ Your favorite friends:
 1. George Washington Carver (2 activities)
 2. Grace Hopper             (1)
 ```
+Graph your relationship with a friend over time:
+```
+$ friends graph "George"
+Nov 2014 |██
+Dec 2014 |
+Jan 2015 |██████
+```
 
 ### Global options:
 

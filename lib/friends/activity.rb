@@ -89,6 +89,12 @@ module Friends
       @description = new_description
     end
 
+    # @param friend [Friend] the friend to test
+    # @return [Boolean] true iff this activity includes the given friend
+    def includes_friend?(friend:)
+      friend_names.include? friend.name
+    end
+
     # Find the names of all friends in this description.
     # @return [Array] list of all friend names in the description
     def friend_names

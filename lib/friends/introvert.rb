@@ -11,6 +11,7 @@ module Friends
     DEFAULT_FILENAME = "./friends.md"
     ACTIVITIES_HEADER = "### Activities:"
     FRIENDS_HEADER = "### Friends:"
+    GRAPH_DATE_FORMAT = "%b %Y" # Used as the param for date.strftime().
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME)
@@ -131,24 +132,46 @@ module Friends
 
       # Filter by friend name if argument is passed.
       unless with.nil?
-        friends = friends_with_name_in(with)
-
-        case friends.size
-        when 1
-          # If exactly one friend matches, use that friend to filter.
-          acts = acts.select { |a| a.friend_names.include? friends.first.name }
-        when 0 then raise FriendsError, "No friend found for \"#{with}\""
-        else
-          raise FriendsError,
-                "More than one friend found for \"#{with}\": "\
-                  "#{friends.map(&:name).join(', ')}"
-        end
+        friend = friend_with_name_in(with)
+        acts = acts.select { |act| act.includes_friend?(friend: friend) }
       end
 
       # If we need to, trim the list.
       acts = acts.take(limit) unless limit.nil?
 
       acts.map(&:display_text)
+    end
+
+    # Find data points for graphing a given friend's relationship over time.
+    # @param name [String] the name of the friend to use
+    # @return [Hash] with the following format:
+    #   {
+    #     "Jan 2015" => 3,  # The month and number of activities with that
+    #     "Feb 2015" => 0, # friend during that month.
+    #     "Mar 2015" => 9
+    #   }
+    #   The keys of the hash are all of the months (inclusive) between the first
+    #   and last month in which activities for the given friend have been
+    #   recorded.
+    def graph(name:)
+      friend = friend_with_name_in(name) # Find the friend by name.
+
+      # Filter out activities that don't include the given friend.
+      acts = activities.select { |act| act.includes_friend?(friend: friend) }
+
+      # Initialize the table of activities to have all of the months of that
+      # friend's activity range (including months in the middle of the range
+      # with no relevant activities).
+      act_table = {}
+      (acts.last.date..acts.first.date).each do |date|
+        act_table[date.strftime(GRAPH_DATE_FORMAT)] = 0
+      end
+
+      acts.each do |activity|
+        month = activity.date.strftime(GRAPH_DATE_FORMAT)
+        act_table[month] += 1
+      end
+      act_table
     end
 
     # Sets the n_activities field on each friend.
@@ -233,7 +256,25 @@ module Friends
       end
     end
 
-    # @param name [String] the name of the friends to search for
+    # @param text [String] the name (or substring) of the friend to search for
+    # @return [Friend] the friend that matches
+    # @raise [FriendsError] if 0 of 2+ friends match the given text
+    def friend_with_name_in(text)
+      friends = friends_with_name_in(text)
+
+      case friends.size
+      when 1
+        # If exactly one friend matches, use that friend.
+        return friends.first
+      when 0 then raise FriendsError, "No friend found for \"#{text}\""
+      else
+        raise FriendsError,
+              "More than one friend found for \"#{text}\": "\
+                "#{friends.map(&:name).join(', ')}"
+      end
+    end
+
+    # @param text [String] the name (or substring) of the friends to search for
     # @return [Array] a list of all friends that match the given text
     def friends_with_name_in(text)
       regex = Regexp.new(text, Regexp::IGNORECASE)
