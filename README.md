@@ -90,9 +90,10 @@ Your favorite friends:
 Graph your relationship with a friend over time:
 ```
 $ friends graph "George"
-Nov 2014 |██
+Nov 2014 |█
 Dec 2014 |
-Jan 2015 |██████
+Jan 2015 |█████
+Feb 2015 |███
 ```
 
 ### Global options:
