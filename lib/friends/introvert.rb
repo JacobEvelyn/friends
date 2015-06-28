@@ -110,7 +110,14 @@ module Friends
       # If we need to, trim the list.
       results = results.take(limit) unless limit.nil?
 
-      results.map(&:name)
+      # max_str_size = results.first.n_activities.to_s.size
+      # results.map { |friend| "#{friend.n_activities.to_s.rjust(max_str_size)} #{friend.name}" }
+      max_str_size = results.map(&:name).map(&:size).max
+      results.map.with_index(0) do |friend, index|
+        name = friend.name.ljust(max_str_size)
+        parenthetical = "(#{friend.n_activities}#{' activities' if index == 0})"
+        "#{name} #{parenthetical}"
+      end
     end
 
     # List all activity details.

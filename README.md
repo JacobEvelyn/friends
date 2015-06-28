@@ -76,16 +76,16 @@ Find your favorite friends:
 ```
 $ friends list favorites
 Your favorite friends:
-1. George Washington Carver
-2. Grace Hopper
-3. Marie Curie
+1. George Washington Carver (2 activities)
+2. Grace Hopper             (1)
+3. Marie Curie              (1)
 ```
 Or get a specific number of favorites:
 ```
 $ friends list favorites --limit 2
 Your favorite friends:
-1. George Washington Carver
-2. Grace Hopper
+1. George Washington Carver (2 activities)
+2. Grace Hopper             (1)
 ```
 
 ### Global options:

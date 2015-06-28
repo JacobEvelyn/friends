@@ -237,10 +237,13 @@ describe Friends::Introvert do
     describe "when limit is nil" do
       let(:limit) { nil }
 
-      it "returns all friends in order of favoritism" do
+      it "returns all friends in order of favoritism with activity counts" do
         introvert.stub(:friends, friends) do
           introvert.stub(:activities, activities) do
-            subject.must_equal ["Betsy Ross", "George Washington Carver"]
+            subject.must_equal [
+              "Betsy Ross               (2 activities)",
+              "George Washington Carver (1)"
+            ]
           end
         end
       end
@@ -252,7 +255,7 @@ describe Friends::Introvert do
       it "returns the number of favorites requested" do
         introvert.stub(:friends, friends) do
           introvert.stub(:activities, activities) do
-            subject.must_equal ["Betsy Ross"]
+            subject.must_equal ["Betsy Ross (2 activities)"]
           end
         end
       end

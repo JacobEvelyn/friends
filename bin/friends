@@ -52,8 +52,11 @@ command :list do |c|
         puts "Your best friend is #{favorites.first}"
       else
         puts "Your favorite friends:"
-        num = 0
-        favorites.each { |name| puts "#{"#{num += 1}.".ljust(2)} #{name}" }
+
+        num_str_size = favorites.size.to_s.size + 1
+        favorites.each.with_index(1) do |name, rank|
+          puts "#{"#{rank}.".ljust(num_str_size)} #{name}"
+        end
       end
     end
   end
