@@ -35,10 +35,12 @@ describe Friends::Activity do
       end
     end
 
-    describe "when string is malformed" do
+    describe "when no description is present" do
       let(:serialized_str) { "" }
 
-      it { proc { subject }.must_raise Serializable::SerializationError }
+      it "sets no description in deserialization" do
+        subject.description.must_equal nil
+      end
     end
   end
 

@@ -80,6 +80,12 @@ module Friends
         raise FriendsError, e
       end
 
+      # If there's no description, prompt the user for one.
+      unless activity.description
+        print activity.display_text
+        activity.description = fixed_gets.chomp!
+      end
+
       activity.highlight_friends(introvert: self, friends: friends)
       activities << activity
       clean # Write a cleaned file.
@@ -287,6 +293,17 @@ module Friends
     # @raise [FriendsError] with a constructed message
     def bad_line(expected, line_num)
       raise FriendsError, "Expected \"#{expected}\" on line #{line_num}"
+    end
+
+    # Calling `gets` in Ruby causes errors when the program was invoked with
+    # command-line arguments. Fortunately, we can get around this by emptying
+    # the array of command-line arguments.
+    # @return [String] the user input
+    def fixed_gets
+      while !ARGV.empty? do
+        ARGV.pop
+      end
+      gets
     end
   end
 end

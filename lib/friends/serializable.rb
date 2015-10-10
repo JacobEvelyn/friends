@@ -12,7 +12,7 @@ module Serializable
   #   - deserialization_expectation
   #       a string for what was expected, if the regex does not match
   def deserialize(str)
-    match = str.match(deserialization_regex)
+    match = str.to_s.match(deserialization_regex)
 
     unless match
       raise SerializationError,

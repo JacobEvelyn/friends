@@ -145,5 +145,5 @@ on_error do |error|
   abort "Error: #{error}"
 end
 
-# Run the program and return the exit code corresponding to the its success.
+# Run the program and return the exit code corresponding to its success.
 exit run(ARGV)
