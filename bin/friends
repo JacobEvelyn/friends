@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "gli"
+require "minitest/pride"
 
 require "friends/introvert"
 require "friends/version"
@@ -105,8 +106,13 @@ arg_name "NAME"
 command :graph do |graph|
   graph.action do |_, _, args|
     data = @introvert.graph(name: args.first)
+
     data.each do |month, count|
-      puts "#{month} |#{'█' * count}"
+      print "#{month} |"
+
+      colorer = Minitest::PrideLOL.new($stdout)
+      count.times { print colorer.pride "█" }
+      puts
     end
   end
 end
