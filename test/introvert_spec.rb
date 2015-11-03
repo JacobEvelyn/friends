@@ -262,6 +262,22 @@ describe Friends::Introvert do
     end
   end
 
+  describe "#suggest" do
+    subject { introvert.suggest }
+
+    it "returns distant, moderate, and close friends" do
+      introvert.stub(:friends, friends) do
+        introvert.stub(:activities, activities) do
+          subject.must_equal(
+            distant: ["George Washington Carver"],
+            moderate: [],
+            close: ["Betsy Ross"]
+          )
+        end
+      end
+    end
+  end
+
   describe "#graph" do
     subject { introvert.graph(name: friend_name) }
 

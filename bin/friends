@@ -117,6 +117,17 @@ command :graph do |graph|
   end
 end
 
+desc "Suggest"
+command :suggest do |suggest|
+  suggest.action do
+    suggestions = @introvert.suggest
+
+    puts "Distant friend: \e[1m#{suggestions[:distant].sample}\e[0m"
+    puts "Moderate friend: \e[1m#{suggestions[:moderate].sample}\e[0m"
+    puts "Close friend: \e[1m#{suggestions[:close].sample}\e[0m"
+  end
+end
+
 desc "Cleans your friends.md file"
 command :clean do |clean|
   clean.action do

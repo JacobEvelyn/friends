@@ -180,6 +180,32 @@ module Friends
       act_table
     end
 
+    # @return [Hash] of the format:
+    #   {
+    #     distant: ["Distant Friend 1 Name", "Distant Friend 2 Name", ...],
+    #     moderate: ["Moderate Friend 1 Name", "Moderate Friend 2 Name", ...],
+    #     close: ["Close Friend 1 Name", "Close Friend 2 Name", ...]
+    #   }
+    def suggest
+      set_n_activities! # Set n_activities for all friends.
+
+      # Sort our friends, with the least favorite friend first.
+      sorted_friends = friends.sort_by(&:n_activities)
+
+      output = Hash.new { |h, k| h[k] = [] }
+
+      # First, get not-so-good friends.
+      while sorted_friends.first.n_activities < 2 do
+        output[:distant] << sorted_friends.shift.name
+      end
+
+      output[:moderate] = sorted_friends.slice!(0, sorted_friends.size * 3 / 4).
+                          map!(&:name)
+      output[:close] = sorted_friends.map!(&:name)
+
+      output
+    end
+
     # Sets the n_activities field on each friend.
     def set_n_activities!
       # Construct a hash of friend name to frequency of appearance.
