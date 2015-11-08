@@ -56,8 +56,9 @@ describe Friends::Activity do
 
     it do
       subject.
-        must_equal "\e[1m#{date_s}\e[0m: "\
-          "Lunch with \e[1m#{friend1.name}\e[0m and \e[1m#{friend2.name}\e[0m"
+        must_equal "#{Paint[date_s, :bold]}: "\
+          "Lunch with #{Paint[friend1.name, :bold, :magenta]} and "\
+          "#{Paint[friend2.name, :bold, :magenta]}"
     end
   end
 

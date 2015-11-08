@@ -1,12 +1,20 @@
 #!/usr/bin/env ruby
 
 # Todo:
+# - Add auto check for updates.
 # - Allow easy editing of most recent entry.
 # - Make automatching use context better. (David & Meryl vs. David & Patricia)
+#   - If names are: David, Patricia, John.
+#     - For each David, Patricia, and John, calculate percentage of past, e.g.:
+#       - % of past David A activities that included Patricia A: 7%
+#       - % of past David A activities that included Patricia B: 0%
+#       - % of past David A activities that included John A: 0%
+#       - % of past David A activities that included John B: 90%
+#       - ...
 # - Allow escape char to prevent automatching. ("\Zane wasn't there.")
 
 require "gli"
-require "minitest/pride"
+require "paint"
 
 require "friends/introvert"
 require "friends/version"
@@ -110,14 +118,23 @@ desc "Graph"
 arg_name "NAME"
 command :graph do |graph|
   graph.action do |_, _, args|
+    # This math is taken from Minitest's Pride plugin (the PrideLOL class).
+    PI_3 = Math::PI / 3
+
+    colors = (0...(6 * 7)).map do |n|
+      n *= 1.0 / 6
+      r  = (3 * Math.sin(n           ) + 3).to_i
+      g  = (3 * Math.sin(n + 2 * PI_3) + 3).to_i
+      b  = (3 * Math.sin(n + 4 * PI_3) + 3).to_i
+
+      [r, g, b].map { |c| c * 51 }
+    end
+
     data = @introvert.graph(name: args.first)
 
     data.each do |month, count|
       print "#{month} |"
-
-      colorer = Minitest::PrideLOL.new($stdout)
-      count.times { print colorer.pride "█" }
-      puts
+      puts colors.take(count).map { |rgb| Paint["█", rgb] }.join
     end
   end
 end
@@ -127,9 +144,11 @@ command :suggest do |suggest|
   suggest.action do
     suggestions = @introvert.suggest
 
-    puts "Distant friend: \e[1m#{suggestions[:distant].sample}\e[0m"
-    puts "Moderate friend: \e[1m#{suggestions[:moderate].sample}\e[0m"
-    puts "Close friend: \e[1m#{suggestions[:close].sample}\e[0m"
+    puts "Distant friend: "\
+      "#{Paint[suggestions[:distant].sample, :bold, :magenta]}"
+    puts "Moderate friend: "\
+      "#{Paint[suggestions[:moderate].sample, :bold, :magenta]}"
+    puts "Close friend: #{Paint[suggestions[:close].sample, :bold, :magenta]}"
   end
 end
 

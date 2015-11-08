@@ -1,6 +1,7 @@
 # Activity represents an activity you've done with one or more Friends.
 
 require "memoist"
+require "paint"
 
 require "friends/serializable"
 
@@ -34,11 +35,12 @@ module Friends
 
     # @return [String] the command-line display text for the activity
     def display_text
-      date_s = "\e[1m#{date}\e[0m"
+      date_s = Paint[date, :bold]
       description_s = description.to_s
       while match = description_s.match(/(\*\*)([^\*]+)(\*\*)/)
-        description_s =
-          "#{match.pre_match}\e[1m#{match[2]}\e[0m#{match.post_match}"
+        description_s = "#{match.pre_match}"\
+                        "#{Paint[match[2], :bold, :magenta]}"\
+                        "#{match.post_match}"
       end
       "#{date_s}: #{description_s}"
     end
