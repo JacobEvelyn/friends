@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Friends::VERSION
   spec.authors       = ["Jacob Evelyn"]
   spec.email         = ["jacobevelyn@gmail.com"]
-  spec.summary       = %q{Spend time with the people you care about.}
-  spec.description   = %q{Spend time with the people you care about. Introvert-tested. Extrovert-approved.}
+  spec.summary       = "Spend time with the people you care about."
+  spec.description   = "Spend time with the people you care about. Introvert-tested. Extrovert-approved."
   spec.homepage      = "https://github.com/JacobEvelyn/friends"
   spec.license       = "MIT"
 

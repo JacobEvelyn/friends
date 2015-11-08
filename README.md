@@ -31,34 +31,36 @@ care about.
 $ gem install friends
 ```
 
-## Usage
+## Usage*
+
+*Note that the command-line output is colored, which this README cannot show.
 
 ### Basic commands:
 
-Add a friend:
+##### Add a friend:
 
 ```
 $ friends add friend "Grace Hopper"
 Friend added: "Grace Hopper"
 ```
-List your friends:
-```
-$ friends list friends
-George Washington Carver
-Grace Hopper
-Marie Curie
-```
-Record an activity with a friend:
+##### Record an activity with a friend:
 ```
 $ friends add activity "Got lunch with Grace and George."
 Activity added: "2015-01-04: Got lunch with Grace Hopper and George Washington Carver."
 ```
-Or specify a date for the activity:
+`friends` will **automatically** figure out which "Grace" and "George" you're referring to, *even if you're friends with lots of different Graces and Georges*.
+
+You can of course specify a date for the activity:
 ```
 $ friends add activity "2014-12-31: Celebrated the new year with Marie."
 Activity added: "2014-12-31: Celebrated the new year with Marie Curie."
 ```
-List the activities you've recorded:
+Or get an **interactive prompt** by just typing `friends add activity`, with or without a date specified:
+```
+$ friends add activity 2015-11-01
+2015-11-01: <type description here>
+```
+##### List the activities you've recorded:
 ```
 $ friends list activities
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
@@ -72,7 +74,7 @@ $ friends list activities --with "George"
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 
 ```
-Find your favorite friends:
+##### Find your favorite friends:
 ```
 $ friends list favorites
 Your favorite friends:
@@ -87,7 +89,7 @@ Your favorite friends:
 1. George Washington Carver (2 activities)
 2. Grace Hopper             (1)
 ```
-Graph your relationship with a friend over time:
+##### Graph (in color!) your relationship with a friend over time:
 ```
 $ friends graph "George"
 Nov 2014 |█
@@ -95,16 +97,21 @@ Dec 2014 |
 Jan 2015 |█████
 Feb 2015 |███
 ```
-
+##### List all of your friends:
+```
+$ friends list friends
+George Washington Carver
+Grace Hopper
+Marie Curie
+```
 ### Global options:
 
 ##### --quiet
 
 Quiet output messages:
 ```
-$ friends add activity "Went rollerskating with George."
+$ friends --quiet add activity "Went rollerskating with George."
 $ # No output!
-
 ```
 
 ##### --filename
@@ -160,7 +167,7 @@ In case you're *really* interested, we have
 
 If you have an idea,
 [make a GitHub Issue](https://github.com/JacobEvelyn/friends/issues/new)!
-Suggestions are very very welcome, and often are implemented very
+Suggestions are very very welcome, and usually are implemented very
 quickly. And if you'd like to do the implementing yourself:
 
 1. Fork it (https://github.com/JacobEvelyn/friends/fork)

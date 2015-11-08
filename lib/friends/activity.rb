@@ -53,14 +53,15 @@ module Friends
     # Modify the description to turn inputted friend names
     # (e.g. "Jacob" or "Jacob Evelyn") into full asterisk'd names
     # (e.g. "**Jacob Evelyn**")
-    # @param introvert [Introvert] for use in aggregate computations
-    # @param friends [Array] list of friends to highlight in the description
-    # @raise [FriendsError] if more than one friend matches a part of the
-    #   description
-    def highlight_friends(introvert:, friends:)
-      # Map each friend to a list of all possible regexes for that friend.
-      friend_regexes = {}
-      friends.each { |f| friend_regexes[f] = regexes_for_name(f.name) }
+    # @param introvert [Introvert] used to access the list of friends and the
+    #  connections between the
+    # NOTE: When a friend name matches more than one friend, this method chooses
+    # a friend based on a best-guess algorithm that looks at which friends do
+    # activities together and which friends are stronger than others. For
+    # more information see the comments below and the
+    # introvert#set_likelihood_score! method.
+    def highlight_friends(introvert:)
+      friend_regexes = introvert.friend_regex_map
 
       # Create hash mapping regex to friend. Note that because two friends may
       # have the same regex (e.g. /John/), we need to store the names in an
@@ -76,19 +77,51 @@ module Friends
         end
       end
 
-      # Go through the description and substitute full, asterisk'd names for
-      # anything that matches a friend's name.
-      new_description = description.clone
-      regex_map.each do |regex, friends|
-        if friends.size > 1 # If there are multiple matches, find best friend.
-          introvert.set_n_activities!
-          friends.sort_by! { |friend| -friend.n_activities }
-        end
+      matched_friends = []
 
-        new_description.gsub!(regex, "**#{friends.first.name}**")
+      # First, we find all of the regex matches with only one possibility, and
+      # make those substitutions.
+      regex_map.
+        select { |_, arr| arr.size == 1 }.each do |regex, friend_list|
+        if match = @description.match(regex)
+          friend = friend_list.first # There's only one friend in the list.
+          matched_friends << friend
+          @description = "#{match.pre_match}"\
+            "**#{friend.name}**"\
+            "#{match.post_match}"
+        end
       end
 
-      @description = new_description
+      possible_matched_friends = []
+
+      # Now, we look at regex matches that are ambiguous.
+      regex_map.
+        reject { |_, arr| arr.size == 1 }.each do |regex, friend_list|
+        if @description.match(regex)
+          possible_matched_friends << friend_list
+        end
+      end
+
+      # Now, we compute the likelihood of each friend in the possible-match set.
+      introvert.set_n_activities!
+      introvert.set_likelihood_score!(
+        matches: matched_friends,
+        possible_matches: possible_matched_friends
+      )
+
+      # Now we go through and replace all of the ambiguous matches with our best
+      # guess.
+      regex_map.
+        reject { |_, arr| arr.size == 1 }.each do |regex, friend_list|
+        if match = @description.match(regex)
+          guessed_friend = friend_list.sort_by do |friend|
+            [-friend.likelihood_score, -friend.n_activities]
+          end.first
+          @description = "#{match.pre_match}"\
+            "**#{guessed_friend.name}**"\
+            "#{match.post_match}"
+        end
+      end
     end
 
     # @param friend [Friend] the friend to test
@@ -109,41 +142,6 @@ module Friends
     # Default sorting for an array of activities is reverse-date.
     def <=>(other)
       other.date <=> date
-    end
-
-    # @return [Array] a list of all regexes to match the name in a string, with
-    #   longer regexes first
-    #   Note: for now we only match on full names or first names
-    #   Example: [
-    #     /Jacob\s+Morris\s+Evelyn/,
-    #     /Jacob/
-    #   ]
-    def regexes_for_name(name)
-      # We generously allow any amount of whitespace between parts of a name.
-      splitter = "\\s+"
-
-      # We don't want to match names that are directly touching double asterisks
-      # as these are treated as sacred by our program.
-      no_leading_asterisks = "(?<!\\*\\*)"
-      no_ending_asterisks = "(?!\\*\\*)"
-
-      # We don't want to match names that are part of other words.
-      no_leading_alphabeticals = "(?<![A-z])"
-      no_ending_alphabeticals = "(?![A-z])"
-
-      # Create the list of regexes and return it.
-      chunks = name.split(Regexp.new(splitter))
-
-      [chunks, [chunks.first]].map do |words|
-        Regexp.new(
-          no_leading_asterisks +
-          no_leading_alphabeticals +
-          words.join(splitter) +
-          no_ending_alphabeticals +
-          no_ending_asterisks,
-          Regexp::IGNORECASE
-        )
-      end
     end
   end
 end

@@ -22,23 +22,20 @@ module Friends
 
       # Read in the input file. It's easier to do this now and optimize later
       # than try to overly be clever about what we read and write.
-      read_file(filename: @filename)
+      read_file
     end
-
-    attr_reader :filename
-    attr_reader :activities
 
     # Write out the friends file with cleaned/sorted data.
     def clean
       # Short-circuit if we've already cleaned the file so we don't write it
       # twice.
-      return filename if @cleaned_file
+      return @filename if @cleaned_file
 
-      descriptions = activities.sort.map(&:serialize)
-      names = friends.sort.map(&:serialize)
+      descriptions = @activities.sort.map(&:serialize)
+      names = @friends.sort.map(&:serialize)
 
       # Write out the cleaned file.
-      File.open(filename, "w") do |file|
+      File.open(@filename, "w") do |file|
         file.puts(ACTIVITIES_HEADER)
         descriptions.each { |desc| file.puts(desc) }
         file.puts # Blank line separating friends from activities.
@@ -48,7 +45,7 @@ module Friends
 
       @cleaned_file = true
 
-      filename
+      @filename
     end
 
     # Add a friend and write out the new friends file.
@@ -66,7 +63,7 @@ module Friends
         raise FriendsError, e
       end
 
-      friends << friend
+      @friends << friend
       clean # Write a cleaned file.
 
       friend # Return the added friend.
@@ -85,8 +82,8 @@ module Friends
       # If there's no description, prompt the user for one.
       activity.description ||= Readline.readline(activity.display_text)
 
-      activity.highlight_friends(introvert: self, friends: friends)
-      activities << activity
+      activity.highlight_friends(introvert: self)
+      @activities << activity
       clean # Write a cleaned file.
 
       activity # Return the added activity.
@@ -95,7 +92,7 @@ module Friends
     # List all friend names in the friends file.
     # @return [Array] a list of all friend names
     def list_friends
-      friends.map(&:name)
+      @friends.map(&:name)
     end
 
     # List your favorite friends.
@@ -111,13 +108,11 @@ module Friends
       set_n_activities! # Set n_activities for all friends.
 
       # Sort the results, with the most favorite friend first.
-      results = friends.sort_by { |friend| -friend.n_activities }
+      results = @friends.sort_by { |friend| -friend.n_activities }
 
       # If we need to, trim the list.
       results = results.take(limit) unless limit.nil?
 
-      # max_str_size = results.first.n_activities.to_s.size
-      # results.map { |friend| "#{friend.n_activities.to_s.rjust(max_str_size)} #{friend.name}" }
       max_str_size = results.map(&:name).map(&:size).max
       results.map.with_index(0) do |friend, index|
         name = friend.name.ljust(max_str_size)
@@ -133,7 +128,7 @@ module Friends
     #   unfiltered
     # @return [Array] a list of all activity text values
     def list_activities(limit:, with:)
-      acts = activities
+      acts = @activities
 
       # Filter by friend name if argument is passed.
       unless with.nil?
@@ -162,7 +157,7 @@ module Friends
       friend = friend_with_name_in(name) # Find the friend by name.
 
       # Filter out activities that don't include the given friend.
-      acts = activities.select { |act| act.includes_friend?(friend: friend) }
+      acts = @activities.select { |act| act.includes_friend?(friend: friend) }
 
       # Initialize the table of activities to have all of the months of that
       # friend's activity range (including months in the middle of the range
@@ -189,12 +184,12 @@ module Friends
       set_n_activities! # Set n_activities for all friends.
 
       # Sort our friends, with the least favorite friend first.
-      sorted_friends = friends.sort_by(&:n_activities)
+      sorted_friends = @friends.sort_by(&:n_activities)
 
       output = Hash.new { |h, k| h[k] = [] }
 
       # First, get not-so-good friends.
-      while sorted_friends.first.n_activities < 2 do
+      while sorted_friends.first.n_activities < 2
         output[:distant] << sorted_friends.shift.name
       end
 
@@ -205,11 +200,15 @@ module Friends
       output
     end
 
+    ###################################################################
+    # Methods below this are only used internally and are not tested. #
+    ###################################################################
+
     # Sets the n_activities field on each friend.
     def set_n_activities!
       # Construct a hash of friend name to frequency of appearance.
       freq_table = Hash.new { |h, k| h[k] = 0 }
-      activities.each do |activity|
+      @activities.each do |activity|
         activity.friend_names.each do |friend_name|
           freq_table[friend_name] += 1
         end
@@ -222,28 +221,64 @@ module Friends
       end
     end
 
-    private
-
-    # Gets the list of friends as read from the file.
-    # @return [Array] a list of all friends
-    def friends
-      @friends
+    # @return [Hash] mapping each friend to a list of all possible regexes for
+    #   that friend's name
+    def friend_regex_map
+      @friends.each_with_object({}) do |friend, hash|
+        hash[friend] = friend.regexes_for_name
+      end
     end
+
+    # Sets the likelihood_score field on each friend in `possible_matches`. This
+    # score represents how likely it is that an activity containing the friends
+    # in `matches` and containing a friend from each group in `possible_matches`
+    # contains that given friend.
+    # @param matches [Array<Friend>] the friends in a specific activity
+    # @param possible_matches [Array<Array<Friend>>] an array of groups of
+    #   possible matches, for example:
+    #   [
+    #     [Friend.new(name: "John Doe"), Friend.new(name: "John Deere")],
+    #     [Friend.new(name: "Aunt Mae"), Friend.new(name: "Aunt Sue")]
+    #   ]
+    #   These groups will all contain friends with similar names; the purpose of
+    #   this method is to give us a likelihood that a "John" in an activity
+    #   description, for instance, is "John Deere" vs. "John Doe"
+    def set_likelihood_score!(matches:, possible_matches:)
+      combinations = (matches + possible_matches.flatten).
+        combination(2).
+        reject do |friend1, friend2|
+          (matches & [friend1, friend2]).size == 2 ||
+          possible_matches.any? do |group|
+            (group & [friend1, friend2]).size == 2
+          end
+        end
+
+      @activities.each do |activity|
+        names = activity.friend_names
+
+        combinations.each do |group|
+          if (names & group.map(&:name)).size == 2
+            group.each { |friend| friend.likelihood_score += 1 }
+          end
+        end
+      end
+    end
+
+    private
 
     # Process the friends.md file and store its contents in internal data
     # structures.
-    # @param filename [String] the name of the friends file
-    def read_file(filename:)
+    def read_file
       @friends = []
       @activities = []
 
-      return unless File.exist?(filename)
+      return unless File.exist?(@filename)
 
       state = :initial
       line_num = 0
 
       # Loop through all lines in the file and process them.
-      File.foreach(filename) do |line|
+      File.foreach(@filename) do |line|
         line_num += 1
         line.chomp! # Remove trailing newline from each line.
 
@@ -278,7 +313,7 @@ module Friends
     # @return [Friend] the friend whose name exactly matches the argument
     # @raise [FriendsError] if more than one friend has the given name
     def friend_with_exact_name(name)
-      results = friends.select { |friend| friend.name == name }
+      results = @friends.select { |friend| friend.name == name }
 
       case results.size
       when 0 then nil
@@ -309,7 +344,7 @@ module Friends
     # @return [Array] a list of all friends that match the given text
     def friends_with_name_in(text)
       regex = Regexp.new(text, Regexp::IGNORECASE)
-      friends.select { |friend| friend.name.match(regex) }
+      @friends.select { |friend| friend.name.match(regex) }
     end
 
     # Raise an error that a line in the friends file is malformed.

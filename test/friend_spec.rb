@@ -40,6 +40,43 @@ describe Friends::Friend do
     end
   end
 
+  describe "#n_activities" do
+    subject { friend.n_activities }
+
+    it "defaults to zero" do
+      subject.must_equal 0
+    end
+
+    it "is writable" do
+      friend.n_activities += 1
+      subject.must_equal 1
+    end
+  end
+
+  describe "#likelihood_score" do
+    subject { friend.likelihood_score }
+
+    it "defaults to zero" do
+      subject.must_equal 0
+    end
+
+    it "is writable" do
+      friend.likelihood_score += 1
+      subject.must_equal 1
+    end
+  end
+
+  describe "#regexes_for_name" do
+    subject { friend.regexes_for_name }
+
+    it "generates appropriate regexes" do
+      subject.must_equal [
+        /(?<!\*\*)(?<![A-z])Jacob\s+Evelyn(?![A-z])(?!\*\*)/i,
+        /(?<!\*\*)(?<![A-z])Jacob(?![A-z])(?!\*\*)/i
+      ]
+    end
+  end
+
   describe "#<=>" do
     it "sorts alphabetically" do
       aaron = Friends::Friend.new(name: "Aaron")

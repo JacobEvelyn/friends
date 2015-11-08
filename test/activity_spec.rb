@@ -73,117 +73,153 @@ describe Friends::Activity do
   end
 
   describe "#highlight_friends" do
-    let(:friend1) { Friends::Friend.new(name: "Elizabeth Cady Stanton") }
-    let(:friend2) { Friends::Friend.new(name: "John Cage") }
+    # Add helpers to set internal states for friends and activities.
+    def stub_friends(val)
+      introvert.instance_variable_set(:@friends, val)
+      yield
+    end
+
+    def stub_activities(val)
+      introvert.instance_variable_set(:@activities, val)
+      yield
+    end
+
     let(:friends) { [friend1, friend2] }
-    let(:description) { "Lunch with #{friend1.name} and #{friend2.name}." }
-    let(:introvert) { Minitest::Mock.new }
+    let(:introvert) { Friends::Introvert.new }
     subject do
-      activity.highlight_friends(introvert: introvert, friends: friends)
+      stub_friends(friends) { activity.highlight_friends(introvert: introvert) }
     end
 
     it "finds all friends" do
       subject
       activity.description.
-        must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+        must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**"
     end
 
-    it "matches friends' first names" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Lunch with Elizabeth and John."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-      activity.description.
-        must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+    describe "when description has first names" do
+      let(:description) { "Lunch with Elizabeth and John." }
+      it "matches friends" do
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+      end
     end
 
-    it "matches without case sensitivity" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Lunch with elizabeth cady stanton."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-      activity.description.
-        must_equal "Lunch with **Elizabeth Cady Stanton**."
+    describe "when names are not entered case-sensitively" do
+      let(:description) { "Lunch with elizabeth cady stanton." }
+      it "matches friends" do
+        subject
+        activity.description.must_equal "Lunch with **Elizabeth Cady Stanton**."
+      end
     end
 
-    it "ignores when at beginning of word" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Field trip to the Johnson Co."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-
-      # No match found.
-      activity.description.must_equal "Field trip to the Johnson Co."
+    describe "when name is at beginning of word" do
+      let(:description) { "Field trip to the Johnson Co." }
+      it "does not match a friend" do
+        subject
+        # No match found.
+        activity.description.must_equal "Field trip to the Johnson Co."
+      end
     end
 
-    it "ignores when in middle of word" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Field trip to the JimJohnJames Co."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-
-      # No match found.
-      activity.description.must_equal "Field trip to the JimJohnJames Co."
+    describe "when name is in middle of word" do
+      let(:description) { "Field trip to the JimJohnJames Co." }
+      it "does not match a friend" do
+        subject
+        # No match found.
+        activity.description.must_equal "Field trip to the JimJohnJames Co."
+      end
     end
 
-    it "ignores when at end of word" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Field trip to the JimJohn Co."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-
-      # No match found.
-      activity.description.must_equal "Field trip to the JimJohn Co."
+    describe "when name is at end of word" do
+      let(:description) { "Field trip to the JimJohn Co." }
+      it "does not match a friend" do
+        subject
+        # No match found.
+        activity.description.must_equal "Field trip to the JimJohn Co."
+      end
     end
 
-    it "does not match with leading asterisks" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Dinner with **Elizabeth Cady Stanton."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-
-      # No match found.
-      activity.description.must_equal "Dinner with **Elizabeth Cady Stanton."
+    describe "when name has leading asterisks" do
+      let(:description) { "Dinner with **Elizabeth Cady Stanton." }
+      it "does not match a friend" do
+        subject
+        # No match found.
+        activity.description.must_equal "Dinner with **Elizabeth Cady Stanton."
+      end
     end
 
-    it "does not match with ending asterisks" do
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
+    describe "when name has ending asterisks" do
+      let(:description) { "Dinner with Elizabeth**." }
+      it "does not match a friend" do
+        subject
 
         # Note: for now we can't guarantee that "Elizabeth Cady Stanton**" won't
         # match, because the Elizabeth isn't surrounded by asterisks.
-        description: "Dinner with Elizabeth**."
-      )
-      activity.highlight_friends(introvert: introvert, friends: friends)
-
-      # No match found.
-      activity.description.must_equal "Dinner with Elizabeth**."
+        activity.description.must_equal "Dinner with Elizabeth**."
+      end
     end
 
-    it "chooses the better friend when there are multiple matches" do
-      friend2.name = "Elizabeth II"
-      activity = Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Dinner with Elizabeth."
-      )
+    describe "when there are multiple matches" do
+      describe "when there is context from past activities" do
+        let(:description) { "Dinner with Elizabeth and John." }
+        let(:friends) do
+          [
+            friend1,
+            friend2,
+            Friends::Friend.new(name: "Elizabeth II")
+          ]
+        end
 
-      # Pretend the introvert sets the friends' n_activities values.
-      introvert.expect(:set_n_activities!, nil)
-      friend1.n_activities = 5
-      friend2.n_activities = 7
+        it "chooses a match based on the context" do
+          # Create a past activity in which Elizabeth Cady Stanton did something
+          # with John Cage. Then, create past activities to make Elizabeth II a
+          # better friend than Elizabeth Cady Stanton.
+          old_activities = [
+            Friends::Activity.new(
+              date_s: date_s,
+              description: "Picnic with **Elizabeth Cady Stanton** and "\
+                           "**John Cage**."
+            ),
+            Friends::Activity.new(
+              date_s: date_s,
+              description: "Got lunch with with **Elizabeth II**."
+            ),
+            Friends::Activity.new(
+              date_s: date_s,
+              description: "Ice skated with **Elizabeth II**."
+            )
+          ]
 
-      activity.highlight_friends(introvert: introvert, friends: friends)
+          # Elizabeth II is the better friend, but historical activities have
+          # had Elizabeth Cady Stanton and John Cage together. Thus, we should
+          # interpret "Elizabeth" as Elizabeth Cady Stanton.
+          stub_activities(old_activities) { subject }
 
-      # Pick the friend with more activities.
-      activity.description.must_equal "Dinner with **Elizabeth II**."
+          activity.description.
+            must_equal "Dinner with **Elizabeth Cady Stanton** and "\
+                       "**John Cage**."
+        end
+      end
 
-      # introvert.verify
+      describe "when there is no context from past activities" do
+        let(:description) { "Dinner with Elizabeth." }
+
+        it "falls back to choosing the better friend" do
+          friend2.name = "Elizabeth II"
+
+          # Give a past activity to Elizabeth II.
+          old_activity = Friends::Activity.new(
+            date_s: date_s,
+            description: "Do something with **Elizabeth II**."
+          )
+
+          stub_activities([old_activity]) { subject }
+
+          # Pick the friend with more activities.
+          activity.description.must_equal "Dinner with **Elizabeth II**."
+        end
+      end
     end
   end
 

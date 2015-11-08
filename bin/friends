@@ -1,16 +1,9 @@
 #!/usr/bin/env ruby
 
 # Todo:
+# - Split out serialization into separate repository.
 # - Add auto check for updates.
 # - Allow easy editing of most recent entry.
-# - Make automatching use context better. (David & Meryl vs. David & Patricia)
-#   - If names are: David, Patricia, John.
-#     - For each David, Patricia, and John, calculate percentage of past, e.g.:
-#       - % of past David A activities that included Patricia A: 7%
-#       - % of past David A activities that included Patricia B: 0%
-#       - % of past David A activities that included John A: 0%
-#       - % of past David A activities that included John B: 90%
-#       - ...
 # - Allow escape char to prevent automatching. ("\Zane wasn't there.")
 
 require "gli"

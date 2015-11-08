@@ -1,6 +1,22 @@
 require_relative "helper"
 
 describe Friends::Introvert do
+  # Add readers to make internal state easier to test.
+  class Friends::Introvert
+    attr_reader :filename, :activities, :friends
+  end
+
+  # Add helpers to set internal states for friends and activities.
+  def stub_friends(val)
+    introvert.instance_variable_set(:@friends, val)
+    yield
+  end
+
+  def stub_activities(val)
+    introvert.instance_variable_set(:@activities, val)
+    yield
+  end
+
   let(:filename) { "test/tmp/friends.md" }
   let(:args) { { filename: filename } }
   let(:introvert) { Friends::Introvert.new(args) }
@@ -60,8 +76,8 @@ describe Friends::Introvert do
         "#{Friends::Introvert::FRIENDS_HEADER}\n#{name_output}\n"
 
       # Read the input as unsorted, and make sure we get sorted output.
-      introvert.stub(:friends, unsorted_friends) do
-        introvert.stub(:activities, unsorted_activities) do
+      stub_friends(unsorted_friends) do
+        stub_activities(unsorted_activities) do
           subject
           File.read(filename).must_equal expected_output
         end
@@ -75,7 +91,7 @@ describe Friends::Introvert do
     subject { introvert.list_friends }
 
     it "lists the names of friends" do
-      introvert.stub(:friends, friends) do
+      stub_friends(friends) do
         subject.must_equal friend_names
       end
     end
@@ -90,14 +106,14 @@ describe Friends::Introvert do
 
     describe "when there is no existing friend with that name" do
       it "adds the given friend" do
-        introvert.stub(:friends, friends) do
+        stub_friends(friends) do
           subject
           introvert.list_friends.must_include new_friend_name
         end
       end
 
       it "returns the friend added" do
-        introvert.stub(:friends, friends) do
+        stub_friends(friends) do
           subject.name.must_equal new_friend_name
         end
       end
@@ -107,7 +123,7 @@ describe Friends::Introvert do
       let(:new_friend_name) { friend_names.first }
 
       it "raises an error" do
-        introvert.stub(:friends, friends) do
+        stub_friends(friends) do
           proc { subject }.must_raise Friends::FriendsError
         end
       end
@@ -123,7 +139,7 @@ describe Friends::Introvert do
       let(:limit) { 1 }
 
       it "lists that number of activities" do
-        introvert.stub(:activities, activities) do
+        stub_activities(activities) do
           subject.size.must_equal limit
         end
       end
@@ -133,7 +149,7 @@ describe Friends::Introvert do
       let(:limit) { activities.size }
 
       it "lists all activities" do
-        introvert.stub(:activities, activities) do
+        stub_activities(activities) do
           subject.size.must_equal activities.size
         end
       end
@@ -143,7 +159,7 @@ describe Friends::Introvert do
       let(:limit) { activities.size + 5 }
 
       it "lists all activities" do
-        introvert.stub(:activities, activities) do
+        stub_activities(activities) do
           subject.size.must_equal activities.size
         end
       end
@@ -153,7 +169,7 @@ describe Friends::Introvert do
       let(:limit) { nil }
 
       it "lists all activities" do
-        introvert.stub(:activities, activities) do
+        stub_activities(activities) do
           subject.size.must_equal activities.size
         end
       end
@@ -163,7 +179,7 @@ describe Friends::Introvert do
       let(:with) { nil }
 
       it "lists the activities" do
-        introvert.stub(:activities, activities) do
+        stub_activities(activities) do
           subject.must_equal activities.map(&:display_text)
         end
       end
@@ -176,8 +192,8 @@ describe Friends::Introvert do
         let(:friend_names) { ["George Washington Carver", "Boy George"] }
 
         it "raises an error" do
-          introvert.stub(:friends, friends) do
-            introvert.stub(:activities, activities) do
+          stub_friends(friends) do
+            stub_activities(activities) do
               proc { subject }.must_raise Friends::FriendsError
             end
           end
@@ -188,8 +204,8 @@ describe Friends::Introvert do
         let(:friend_names) { ["Joe"] }
 
         it "raises an error" do
-          introvert.stub(:friends, friends) do
-            introvert.stub(:activities, activities) do
+          stub_friends(friends) do
+            stub_activities(activities) do
               proc { subject }.must_raise Friends::FriendsError
             end
           end
@@ -198,8 +214,8 @@ describe Friends::Introvert do
 
       describe "when there is exactly one friend match" do
         it "filters the activities by that friend" do
-          introvert.stub(:friends, friends) do
-            introvert.stub(:activities, activities) do
+          stub_friends(friends) do
+            stub_activities(activities) do
               # Only one activity has that friend.
               subject.must_equal activities[0..0].map(&:display_text)
             end
@@ -218,14 +234,14 @@ describe Friends::Introvert do
     after { File.delete(filename) if File.exists?(filename) }
 
     it "adds the given activity" do
-      introvert.stub(:friends, friends) do
+      stub_friends(friends) do
         subject
         introvert.activities.last.description.must_equal activity_description
       end
     end
 
     it "returns the activity added" do
-      introvert.stub(:friends, friends) do
+      stub_friends(friends) do
         subject.description.must_equal activity_description
       end
     end
@@ -238,8 +254,8 @@ describe Friends::Introvert do
       let(:limit) { nil }
 
       it "returns all friends in order of favoritism with activity counts" do
-        introvert.stub(:friends, friends) do
-          introvert.stub(:activities, activities) do
+        stub_friends(friends) do
+          stub_activities(activities) do
             subject.must_equal [
               "Betsy Ross               (2 activities)",
               "George Washington Carver (1)"
@@ -253,8 +269,8 @@ describe Friends::Introvert do
       let(:limit) { 1 }
 
       it "returns the number of favorites requested" do
-        introvert.stub(:friends, friends) do
-          introvert.stub(:activities, activities) do
+        stub_friends(friends) do
+          stub_activities(activities) do
             subject.must_equal ["Betsy Ross (2 activities)"]
           end
         end
@@ -266,8 +282,8 @@ describe Friends::Introvert do
     subject { introvert.suggest }
 
     it "returns distant, moderate, and close friends" do
-      introvert.stub(:friends, friends) do
-        introvert.stub(:activities, activities) do
+      stub_friends(friends) do
+        stub_activities(activities) do
           subject.must_equal(
             distant: ["George Washington Carver"],
             moderate: [],
@@ -293,7 +309,7 @@ describe Friends::Introvert do
       let(:friend_name) { "e" }
 
       it "raises an error" do
-        introvert.stub(:friends, friends) do
+        stub_friends(friends) do
           proc { subject }.must_raise Friends::FriendsError
         end
       end
@@ -325,8 +341,8 @@ describe Friends::Introvert do
       end
 
       it "returns a hash of months and frequencies" do
-        introvert.stub(:friends, friends) do
-          introvert.stub(:activities, activities) do
+        stub_friends(friends) do
+          stub_activities(activities) do
             strftime_format = Friends::Introvert::GRAPH_DATE_FORMAT
 
             first = activities[0]
