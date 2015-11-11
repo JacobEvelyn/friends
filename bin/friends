@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
 # Todo:
+# - Create file if none exists.
 # - Split out serialization into separate repository.
 # - Add auto check for updates.
+# - Allow friends to have nicknames.
 # - Allow easy editing of most recent entry.
 # - Allow escape char to prevent automatching. ("\Zane wasn't there.")
 
