@@ -71,8 +71,8 @@ describe Friends::Friend do
 
     it "generates appropriate regexes" do
       subject.must_equal [
-        /(?<!\*\*)(?<![A-z])Jacob\s+Evelyn(?![A-z])(?!\*\*)/i,
-        /(?<!\*\*)(?<![A-z])Jacob(?![A-z])(?!\*\*)/i
+        /(?<!\\)(?<!\*\*)(?<![A-z])Jacob\s+Evelyn(?![A-z])(?!\*\*)/i,
+        /(?<!\\)(?<!\*\*)(?<![A-z])Jacob(?![A-z])(?!\*\*)/i
       ]
     end
   end

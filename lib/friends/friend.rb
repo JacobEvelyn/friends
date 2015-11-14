@@ -58,6 +58,10 @@ module Friends
       # We generously allow any amount of whitespace between parts of a name.
       splitter = "\\s+"
 
+      # We don't want to match names that are "escaped" with a leading
+      # backslash.
+      no_leading_backslash = "(?<!\\\\)"
+
       # We don't want to match names that are directly touching double asterisks
       # as these are treated as sacred by our program.
       no_leading_asterisks = "(?<!\\*\\*)"
@@ -72,6 +76,7 @@ module Friends
 
       [chunks, [chunks.first]].map do |words|
         Regexp.new(
+          no_leading_backslash +
           no_leading_asterisks +
           no_leading_alphabeticals +
           words.join(splitter) +

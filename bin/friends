@@ -6,7 +6,6 @@
 # - Add auto check for updates.
 # - Allow friends to have nicknames.
 # - Allow easy editing of most recent entry.
-# - Allow escape char to prevent automatching. ("\Zane wasn't there.")
 
 require "gli"
 require "paint"

@@ -122,6 +122,10 @@ module Friends
             "#{match.post_match}"
         end
       end
+
+      # Lastly, we remove any backslashes, as these are used to escape friends'
+      # names that we don't want to match.
+      @description.gsub!("\\", "")
     end
 
     # @param friend [Friend] the friend to test

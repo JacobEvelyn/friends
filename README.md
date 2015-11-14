@@ -60,6 +60,18 @@ Or get an **interactive prompt** by just typing `friends add activity`, with or 
 $ friends add activity 2015-11-01
 2015-11-01: <type description here>
 ```
+You can escape the names of friends you don't want `friends` to match with a backslash:
+```
+$ friends add activity "2015-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
+Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
+```
+##### Suggest a friend to do something with:
+```
+$ friends suggest
+Distant friend: Marie Curie
+Moderate friend: Grace Hopper
+Close friend: George Washington Carver
+```
 ##### List the activities you've recorded:
 ```
 $ friends list activities

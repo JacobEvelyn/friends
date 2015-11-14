@@ -140,6 +140,16 @@ describe Friends::Activity do
       end
     end
 
+    describe "when name is escaped with a backslash" do
+      # We have to use two backslashes here because that's how Ruby encodes one.
+      let(:description) { "Dinner with \\Elizabeth Cady Stanton." }
+      it "does not match a friend and removes the backslash" do
+        subject
+        # No match found.
+        activity.description.must_equal "Dinner with Elizabeth Cady Stanton."
+      end
+    end
+
     describe "when name has leading asterisks" do
       let(:description) { "Dinner with **Elizabeth Cady Stanton." }
       it "does not match a friend" do
