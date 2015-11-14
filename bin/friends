@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 # Todo:
-# - Create file if none exists.
 # - Split out serialization into separate repository.
 # - Add auto check for updates.
 # - Allow friends to have nicknames.
@@ -35,6 +34,27 @@ flag [:filename],
 switch [:clean],
   negatable: false,
   desc: "Force a clean write of the friends file"
+
+command :update do |update|
+  update.action do
+    search = `gem search friends`
+    if match = search.match(/^friends\s\(([^\)]+)\)$/)
+      remote_version = match[1]
+      if remote_version.to_r > Friends::VERSION.to_r
+        `gem update friends && gem cleanup friends`
+        if $?.success?
+          puts Paint["Updated to friends #{remote_version}", :bold, :green]
+        else
+          puts Paint[
+            "Error updating to friends version #{remote_version}", :bold, :red
+          ]
+        end
+      else
+        puts Paint["Already up-to-date (#{Friends::VERSION})", :bold, :green]
+      end
+    end
+  end
+end
 
 desc "Lists friends or activities"
 command :list do |list|

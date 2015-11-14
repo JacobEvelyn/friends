@@ -116,6 +116,11 @@ George Washington Carver
 Grace Hopper
 Marie Curie
 ```
+##### Update to the latest version:
+```
+$ friends update
+Updated to friends 0.3
+```
 ### Global options:
 
 ##### --quiet
