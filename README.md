@@ -16,12 +16,12 @@ care about.
 1. **Friends** gives you:
   - More organization around staying in touch with friends and
     family.
-  - A way to track of the ebbs and flows of your relationships over
+  - A way to track the ebbs and flows of your relationships over
     time.
   - Suggestions for who to call or hang out with when you have free
     time, whether it's fifteen minutes or an entire weekend.
   - A low-cost way to record and remember big moments in your life.
-2. **Friends** stores its data in a universally readable `friends.md`
+2. **Friends** stores its data in a human-readable `friends.md`
   Markdown file. No proprietary formats here!
 3. **Friends** is open-source and very open to new ideas. Contribute!
 
