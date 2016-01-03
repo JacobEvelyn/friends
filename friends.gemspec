@@ -19,13 +19,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # We need Ruby 2.0's keyword arguments and default UTF-8 encoding.
-  spec.required_ruby_version = ">= 2.0"
+  spec.required_ruby_version = ">= 2.1"
 
   spec.add_dependency "gli", "~> 2.12"
   spec.add_dependency "memoist", "~> 0.11"
   spec.add_dependency "paint", "~> 1.0"
 
-  spec.add_development_dependency "bundler", "~> 1.7"
+  spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
   spec.add_development_dependency "minitest", "~> 5.5"
   spec.add_development_dependency "rake", "~> 10.0"
