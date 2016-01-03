@@ -236,7 +236,15 @@ describe Friends::Introvert do
     it "adds the given activity" do
       stub_friends(friends) do
         subject
-        introvert.activities.last.description.must_equal activity_description
+        introvert.activities.first.description.must_equal activity_description
+      end
+    end
+
+    it "adds the activity after others on the same day" do
+      stub_friends(friends) do
+        introvert.add_activity(serialization: "2014-01-01: Ate breakfast.")
+        subject
+        introvert.activities.first.description.must_equal activity_description
       end
     end
 
