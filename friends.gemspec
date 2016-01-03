@@ -18,6 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  # We need Ruby 2.0's keyword arguments and default UTF-8 encoding.
+  spec.required_ruby_version = ">= 2.0"
+
   spec.add_dependency "gli", "~> 2.12"
   spec.add_dependency "memoist", "~> 0.11"
   spec.add_dependency "paint", "~> 1.0"
