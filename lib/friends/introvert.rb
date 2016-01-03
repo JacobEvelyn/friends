@@ -83,7 +83,7 @@ module Friends
       activity.description ||= Readline.readline(activity.display_text)
 
       activity.highlight_friends(introvert: self)
-      @activities << activity
+      @activities.unshift(activity)
       clean # Write a cleaned file.
 
       activity # Return the added activity.
