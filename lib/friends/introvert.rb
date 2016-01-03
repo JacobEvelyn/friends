@@ -89,6 +89,35 @@ module Friends
       activity # Return the added activity.
     end
 
+    # Add a nickname to an existing friend and write out the new friends file.
+    # @param name [String] the name of the friend
+    # @param nickname [String] the nickname to add to the friend
+    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @return [Friend] the existing friend
+    def add_nickname(name:, nickname:)
+      friend = friend_with_name_in(name)
+      friend.add_nickname(nickname.strip)
+
+      clean # Write a cleaned file.
+
+      friend
+    end
+
+    # Remove a nickname from an existing friend and write out the new friends
+    #   file.
+    # @param name [String] the name of the friend
+    # @param nickname [String] the nickname to remove from the friend
+    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @return [Friend] the existing friend
+    def remove_nickname(name:, nickname:)
+      friend = friend_with_name_in(name)
+      friend.remove_nickname(nickname.strip)
+
+      clean # Write a cleaned file.
+
+      friend
+    end
+
     # List all friend names in the friends file.
     # @return [Array] a list of all friend names
     def list_friends
@@ -127,6 +156,7 @@ module Friends
     # @param with [String] the name of a friend to filter by, or nil for
     #   unfiltered
     # @return [Array] a list of all activity text values
+    # @raise [FriendsError] if 0 of 2+ friends match the given `with` text
     def list_activities(limit:, with:)
       acts = @activities
 
@@ -153,6 +183,7 @@ module Friends
     #   The keys of the hash are all of the months (inclusive) between the first
     #   and last month in which activities for the given friend have been
     #   recorded.
+    # @raise [FriendsError] if 0 of 2+ friends match the given name
     def graph(name:)
       friend = friend_with_name_in(name) # Find the friend by name.
 

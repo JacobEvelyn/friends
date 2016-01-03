@@ -6,5 +6,5 @@
 
 ### Friends:
 - George Washington Carver
-- Grace Hopper
+- Grace Hopper (a.k.a. The Admiral)
 - Marie Curie

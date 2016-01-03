@@ -7,10 +7,11 @@ module Friends
     extend Serializable
 
     SERIALIZATION_PREFIX = "- "
+    NICKNAME_PREFIX = "a.k.a. "
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
-      /(#{SERIALIZATION_PREFIX})?(?<name>.+)/
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?/
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -19,15 +20,43 @@ module Friends
     end
 
     # @param name [String] the name of the friend
-    def initialize(name:)
-      @name = name
+    def initialize(name:, nickname_str: nil)
+      @name = name.strip
+      @nicknames = nickname_str &&
+                   nickname_str.split(NICKNAME_PREFIX)[1..-1].map(&:strip) ||
+                   []
     end
 
     attr_accessor :name
 
     # @return [String] the file serialization text for the friend
     def serialize
-      "#{SERIALIZATION_PREFIX}#{name}"
+      "#{SERIALIZATION_PREFIX}#{to_s}"
+    end
+
+    # @return [String] a string representing the friend's name and nicknames
+    def to_s
+      return name if @nicknames.empty?
+
+      nickname_str = @nicknames.map { |n| "#{NICKNAME_PREFIX}#{n}" }.join(" ")
+      "#{name} (#{nickname_str})"
+    end
+
+    # Adds a nickname, avoiding duplicates and stripping surrounding whitespace.
+    # @param nickname [String] the nickname to add
+    def add_nickname(nickname)
+      @nicknames << nickname
+      @nicknames.uniq
+    end
+
+    # @param nickname [String] the nickname to remove
+    # @return [Boolean] true if the nickname was present, false otherwise
+    def remove_nickname(nickname)
+      unless @nicknames.include? nickname
+        raise FriendsError, "Nickname \"#{nickname}\" not found for \"#{name}\""
+      end
+
+      @nicknames.delete(nickname)
     end
 
     # The number of activities this friend is in. This is for internal use only
@@ -74,7 +103,7 @@ module Friends
       # Create the list of regexes and return it.
       chunks = name.split(Regexp.new(splitter))
 
-      [chunks, [chunks.first]].map do |words|
+      [chunks, [chunks.first], *@nicknames.map { |n| [n] }].map do |words|
         Regexp.new(
           no_leading_backslash +
           no_leading_asterisks +

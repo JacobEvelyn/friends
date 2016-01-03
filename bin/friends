@@ -35,6 +35,7 @@ switch [:clean],
   negatable: false,
   desc: "Force a clean write of the friends file"
 
+desc "Updates the `friends` program"
 command :update do |update|
   update.action do
     search = `gem search friends`
@@ -126,9 +127,30 @@ command :add do |add|
       @message = "Activity added: \"#{activity.display_text}\""
     end
   end
+
+  add.desc "Adds a nickname to a friend"
+  add.arg_name "NAME NICKNAME"
+  add.command :nickname do |add_nickname|
+    add_nickname.action do |_, _, args|
+      friend = @introvert.add_nickname(name: args.first, nickname: args[1])
+      @message = "Nickname added: \"#{friend}\""
+    end
+  end
 end
 
-desc "Graph"
+desc "Remove a nickname"
+command :remove do |remove|
+  remove.desc "Removes a nickname from a friend"
+  remove.arg_name "NAME NICKNAME"
+  remove.command :nickname do |remove_nickname|
+    remove_nickname.action do |_, _, args|
+      friend = @introvert.remove_nickname(name: args.first, nickname: args[1])
+      @message = "Nickname removed: \"#{friend}\""
+    end
+  end
+end
+
+desc "Graph a friend's relationship over time"
 arg_name "NAME"
 command :graph do |graph|
   graph.action do |_, _, args|
@@ -153,7 +175,7 @@ command :graph do |graph|
   end
 end
 
-desc "Suggest"
+desc "Suggest friends to do activities with"
 command :suggest do |suggest|
   suggest.action do
     suggestions = @introvert.suggest
