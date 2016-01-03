@@ -178,7 +178,7 @@ $ friends list activities --help
 ## Documentation
 
 In case you're *really* interested, we have
-[documentation](http://www.rubydoc.info/JacobEvelyn/friends).
+[documentation](http://www.rubydoc.info/github/JacobEvelyn/friends).
 
 ## Contributing
 
