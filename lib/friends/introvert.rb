@@ -264,6 +264,16 @@ module Friends
       end
     end
 
+    # List total no of friends
+    def total_friends
+      @friends ? @friends.size : 0
+    end
+    
+    # List total no of activities
+    def total_activities
+      @activities ? @activities.size : 0
+    end    
+
     private
 
     # Process the friends.md file and store its contents in internal data
