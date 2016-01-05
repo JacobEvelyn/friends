@@ -195,7 +195,7 @@ quickly. And if you'd like to do the implementing yourself:
 
 **Make sure your changes have appropriate tests (`rake test`) and
 conform to the Rubocop style specified. This project uses
-[overcommit](https://github.com/causes/overcommit) to enforce good
+[overcommit](https://github.com/brigade/overcommit) to enforce good
 code.**
 
 ## License
