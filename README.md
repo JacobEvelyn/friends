@@ -185,18 +185,11 @@ In case you're *really* interested, we have
 If you have an idea,
 [make a GitHub Issue](https://github.com/JacobEvelyn/friends/issues/new)!
 Suggestions are very very welcome, and usually are implemented very
-quickly. And if you'd like to do the implementing yourself:
+quickly. And if you'd like to do the implementing yourself, see the
+[contributing guide](https://github.com/JacobEvelyn/friends/blob/master/CONTRIBUTING.md).
 
-1. Fork it (https://github.com/JacobEvelyn/friends/fork)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am "Add some feature"`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-**Make sure your changes have appropriate tests (`rake test`) and
-conform to the Rubocop style specified. This project uses
-[overcommit](https://github.com/brigade/overcommit) to enforce good
-code.**
+A big big thanks to all of this project's lovely
+[contributors](https://github.com/JacobEvelyn/friends/graphs/contributors)!
 
 ## License
 
