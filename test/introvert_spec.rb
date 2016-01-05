@@ -300,6 +300,18 @@ describe Friends::Introvert do
         end
       end
     end
+
+    it "doesn't choke when there are no friends" do
+      stub_friends([]) do
+        stub_activities([]) do
+          subject.must_equal(
+            distant: [],
+            moderate: [],
+            close: []
+          )
+        end
+      end
+    end
   end
 
   describe "#graph" do
