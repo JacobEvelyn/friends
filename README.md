@@ -191,6 +191,11 @@ quickly. And if you'd like to do the implementing yourself, see the
 A big big thanks to all of this project's lovely
 [contributors](https://github.com/JacobEvelyn/friends/graphs/contributors)!
 
+## Code of Conduct
+
+Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/master/CODE_OF_CONDUCT.md).
+If you're a polite, reasonable person you won't have any issues!
+
 ## License
 
 Friends is released under the
