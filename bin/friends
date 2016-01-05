@@ -159,10 +159,11 @@ command :suggest do |suggest|
     suggestions = @introvert.suggest
 
     puts "Distant friend: "\
-      "#{Paint[suggestions[:distant].sample, :bold, :magenta]}"
+      "#{Paint[suggestions[:distant].sample || 'None found', :bold, :magenta]}"
     puts "Moderate friend: "\
-      "#{Paint[suggestions[:moderate].sample, :bold, :magenta]}"
-    puts "Close friend: #{Paint[suggestions[:close].sample, :bold, :magenta]}"
+      "#{Paint[suggestions[:moderate].sample || 'None found', :bold, :magenta]}"
+    puts "Close friend: "\
+      "#{Paint[suggestions[:close].sample || 'None found', :bold, :magenta]}"
   end
 end
 

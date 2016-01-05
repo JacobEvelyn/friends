@@ -188,8 +188,12 @@ module Friends
 
       output = Hash.new { |h, k| h[k] = [] }
 
+      # Set initial value in case there are no friends and the while loop is
+      # never entered.
+      output[:distant] = []
+
       # First, get not-so-good friends.
-      while sorted_friends.first.n_activities < 2
+      while !sorted_friends.empty? && sorted_friends.first.n_activities < 2
         output[:distant] << sorted_friends.shift.name
       end
 
