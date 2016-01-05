@@ -32,21 +32,62 @@
 - Make activities on same day chronologically ordered [\#38](https://github.com/JacobEvelyn/friends/pull/38) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.4](https://github.com/JacobEvelyn/friends/tree/v0.4) (2015-11-14)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.3...v0.4)
+
+## [v0.3](https://github.com/JacobEvelyn/friends/tree/v0.3) (2015-11-11)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.2...v0.3)
+
 **Implemented enhancements:**
 
 - Be able to enter activity with normal prompt [\#34](https://github.com/JacobEvelyn/friends/issues/34)
-- Add confirmation after commands \(and --quiet\) [\#28](https://github.com/JacobEvelyn/friends/issues/28)
-- Have activity dates default to today if none provided [\#27](https://github.com/JacobEvelyn/friends/issues/27)
 - Create file if none exists [\#25](https://github.com/JacobEvelyn/friends/issues/25)
-- Add more detailed usage example to README. [\#23](https://github.com/JacobEvelyn/friends/issues/23)
-- Have robustness around name extraction from activities [\#21](https://github.com/JacobEvelyn/friends/issues/21)
-- Put activities before friends in friends.md [\#20](https://github.com/JacobEvelyn/friends/issues/20)
-- Friend name lookups should be case-insensitive [\#18](https://github.com/JacobEvelyn/friends/issues/18)
 - Friends should be able to have nicknames [\#17](https://github.com/JacobEvelyn/friends/issues/17)
 - Add ability to change friend name [\#16](https://github.com/JacobEvelyn/friends/issues/16)
+- Auto-update? [\#8](https://github.com/JacobEvelyn/friends/issues/8)
+
+## [v0.2](https://github.com/JacobEvelyn/friends/tree/v0.2) (2015-11-08)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.1...v0.2)
+
+## [v0.1](https://github.com/JacobEvelyn/friends/tree/v0.1) (2015-11-03)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.6...v0.1)
+
+## [v0.0.6](https://github.com/JacobEvelyn/friends/tree/v0.0.6) (2015-06-28)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.5...v0.0.6)
+
+**Implemented enhancements:**
+
+- Have robustness around name extraction from activities [\#21](https://github.com/JacobEvelyn/friends/issues/21)
+
+## [v0.0.5](https://github.com/JacobEvelyn/friends/tree/v0.0.5) (2015-06-28)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.4...v0.0.5)
+
+## [v0.0.4](https://github.com/JacobEvelyn/friends/tree/v0.0.4) (2015-06-01)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.3...v0.0.4)
+
+**Merged pull requests:**
+
+- Bump version to 0.0.3 [\#33](https://github.com/JacobEvelyn/friends/pull/33) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
+## [v0.0.3](https://github.com/JacobEvelyn/friends/tree/v0.0.3) (2015-05-28)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.2...v0.0.3)
+
+**Merged pull requests:**
+
+- Allow limiting of activity lists [\#32](https://github.com/JacobEvelyn/friends/pull/32) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Improve friend matching code [\#31](https://github.com/JacobEvelyn/friends/pull/31) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
+## [v0.0.2](https://github.com/JacobEvelyn/friends/tree/v0.0.2) (2015-01-11)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.1...v0.0.2)
+
+**Implemented enhancements:**
+
+- Add confirmation after commands \(and --quiet\) [\#28](https://github.com/JacobEvelyn/friends/issues/28)
+- Have activity dates default to today if none provided [\#27](https://github.com/JacobEvelyn/friends/issues/27)
+- Add more detailed usage example to README. [\#23](https://github.com/JacobEvelyn/friends/issues/23)
+- Put activities before friends in friends.md [\#20](https://github.com/JacobEvelyn/friends/issues/20)
+- Friend name lookups should be case-insensitive [\#18](https://github.com/JacobEvelyn/friends/issues/18)
 - Add link to RubyDoc in README [\#12](https://github.com/JacobEvelyn/friends/issues/12)
 - Release to RubyGems [\#10](https://github.com/JacobEvelyn/friends/issues/10)
-- Auto-update? [\#8](https://github.com/JacobEvelyn/friends/issues/8)
 - Gracefully handle friend name conflicts in all commands [\#7](https://github.com/JacobEvelyn/friends/issues/7)
 - Be able to list activities [\#6](https://github.com/JacobEvelyn/friends/issues/6)
 - Be able to add activities [\#5](https://github.com/JacobEvelyn/friends/issues/5)
@@ -57,9 +98,6 @@
 
 **Merged pull requests:**
 
-- Bump version to 0.0.3 [\#33](https://github.com/JacobEvelyn/friends/pull/33) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Allow limiting of activity lists [\#32](https://github.com/JacobEvelyn/friends/pull/32) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Improve friend matching code [\#31](https://github.com/JacobEvelyn/friends/pull/31) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Improve documentation [\#30](https://github.com/JacobEvelyn/friends/pull/30) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Add confirm messages and --quiet switch [\#29](https://github.com/JacobEvelyn/friends/pull/29) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Put activities above friends in file [\#26](https://github.com/JacobEvelyn/friends/pull/26) ([JacobEvelyn](https://github.com/JacobEvelyn))
@@ -72,6 +110,7 @@
 - Clean up gemspec dependencies [\#11](https://github.com/JacobEvelyn/friends/pull/11) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Clean up README [\#9](https://github.com/JacobEvelyn/friends/pull/9) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
+## [v0.0.1](https://github.com/JacobEvelyn/friends/tree/v0.0.1) (2014-12-11)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
