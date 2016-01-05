@@ -421,4 +421,16 @@ describe Friends::Introvert do
       end
     end
   end
+
+  describe "#stats" do
+    it "returns total no of friends" do
+      introvert.add_friend(name: "Jacob Evelyn")
+      introvert.total_friends.must_equal 1
+    end
+
+    it "returns total no of activities" do
+      introvert.add_activity(serialization: "2014-01-01: Ate breakfast.")
+      introvert.total_activities.must_equal 1
+    end
+  end
 end
