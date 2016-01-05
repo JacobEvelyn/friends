@@ -264,14 +264,14 @@ module Friends
       end
     end
 
-    # List total no of friends
+    # @return [Integer] the total number of friends
     def total_friends
-      @friends ? @friends.size : 0
+      @friends.size
     end
     
-    # List total no of activities
+    # @return [Integer] the total number of activities
     def total_activities
-      @activities ? @activities.size : 0
+      @activities.size
     end    
 
     private
