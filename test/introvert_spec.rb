@@ -422,32 +422,39 @@ describe Friends::Introvert do
     end
   end
 
-  describe "#stats" do
-
-    # Delete the file that is created each time.
-    after { File.delete(filename) if File.exists?(filename) }
+  describe "#total_friends" do
+    it "return 0 when no friends" do
+      introvert.total_friends.must_equal 0
+    end
 
     it "returns total no of friends" do
-      introvert.add_friend(name: "Jacob Evelyn")
-      introvert.total_friends.must_equal 1
+      stub_friends(friends) do
+      end
+     introvert.total_friends.must_equal 2
     end
+  end
 
-    subject { introvert.add_activity(serialization: "2014-01-01: Snorkeling with Betsy.") }
+  describe "#total_activities" do
+    it "return 0 when no activities" do
+      introvert.total_activities.must_equal 0
+    end
 
     it "returns total no of activities" do
-      subject
-      introvert.total_activities.must_equal 1
+      stub_activities(activities) do
+      end
+      introvert.total_activities.must_equal 2
     end
+  end
 
-    it "returns total no of elapsed days as 0" do
-      subject
+  describe "#elapsed_days" do
+    it "return 0 elapsed days for no activity" do
       introvert.elapsed_days.must_equal 0
     end
 
-    it "returns total no of elapsed days as 365" do
-      subject
-      introvert.add_activity(serialization: "2015-01-01: Snorkeling with Betsy.")
-      introvert.elapsed_days.must_equal 365
+    it "returns number of elapsed days" do
+      stub_activities(activities) do
+      end
+      introvert.elapsed_days.must_equal 1
     end
   end
 end

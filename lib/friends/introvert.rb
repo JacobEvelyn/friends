@@ -309,10 +309,12 @@ module Friends
       @activities.size
     end
 
+    # @return [Integer] the number of days elapsed between
+    #   the first and last activity
     def elapsed_days
       return 0 if @activities.size < 2
       sorted_activity = @activities.sort_by{ |activity| activity.date }
-      (sorted_activity.last.date -  sorted_activity.first.date).to_i
+      (sorted_activity.last.date - sorted_activity.first.date).to_i
     end
 
     private
