@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.8](https://github.com/JacobEvelyn/friends/tree/v0.8) (2016-01-06)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.7...v0.8)
+
+**Implemented enhancements:**
+
+- Reference friends by real name or nickname [\#40](https://github.com/JacobEvelyn/friends/issues/40)
+
+**Merged pull requests:**
+
+- Fix nicknames bug and add README documentation [\#54](https://github.com/JacobEvelyn/friends/pull/54) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add basic nickname support [\#53](https://github.com/JacobEvelyn/friends/pull/53) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add CHANGELOG.md and RELEASING.md [\#52](https://github.com/JacobEvelyn/friends/pull/52) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Update Code of Conduct [\#51](https://github.com/JacobEvelyn/friends/pull/51) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Improve contributing documentation [\#50](https://github.com/JacobEvelyn/friends/pull/50) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add badgefury.io badge [\#49](https://github.com/JacobEvelyn/friends/pull/49) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.7](https://github.com/JacobEvelyn/friends/tree/v0.7) (2016-01-05)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.6...v0.7)
 
