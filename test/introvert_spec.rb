@@ -421,4 +421,40 @@ describe Friends::Introvert do
       end
     end
   end
+
+  describe "#total_friends" do
+    it "return 0 when no friends" do
+      introvert.total_friends.must_equal 0
+    end
+
+    it "returns total no of friends" do
+      stub_friends(friends) do
+      end
+     introvert.total_friends.must_equal 2
+    end
+  end
+
+  describe "#total_activities" do
+    it "return 0 when no activities" do
+      introvert.total_activities.must_equal 0
+    end
+
+    it "returns total no of activities" do
+      stub_activities(activities) do
+      end
+      introvert.total_activities.must_equal 2
+    end
+  end
+
+  describe "#elapsed_days" do
+    it "return 0 elapsed days for no activity" do
+      introvert.elapsed_days.must_equal 0
+    end
+
+    it "returns number of elapsed days" do
+      stub_activities(activities) do
+      end
+      introvert.elapsed_days.must_equal 1
+    end
+  end
 end
