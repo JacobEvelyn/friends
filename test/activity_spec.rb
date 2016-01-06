@@ -75,13 +75,17 @@ describe Friends::Activity do
   describe "#highlight_friends" do
     # Add helpers to set internal states for friends and activities.
     def stub_friends(val)
+      old_val = introvert.instance_variable_get(:@friends)
       introvert.instance_variable_set(:@friends, val)
       yield
+      introvert.instance_variable_set(:@friends, old_val)
     end
 
     def stub_activities(val)
+      old_val = introvert.instance_variable_get(:@activities)
       introvert.instance_variable_set(:@activities, val)
       yield
+      introvert.instance_variable_set(:@activities, old_val)
     end
 
     let(:friends) { [friend1, friend2] }
