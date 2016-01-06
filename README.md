@@ -38,7 +38,6 @@ $ gem install friends
 ### Basic commands:
 
 ##### Add a friend:
-
 ```
 $ friends add friend "Grace Hopper"
 Friend added: "Grace Hopper"
@@ -64,6 +63,24 @@ You can escape the names of friends you don't want `friends` to match with a bac
 ```
 $ friends add activity "2015-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
 Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
+```
+##### Set a friend's nicknames:
+```
+$ friends add nickname "Grace Hopper" "The Admiral"
+Nickname added: "Grace Hopper (a.k.a. The Admiral)
+$ friends add nickname "Grace Hopper" "Amazing Grace"
+Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
+```
+Nicknames will be used to match friends in activities,
+just like formal names:
+```
+$ friends add activity "Invented debugging with Amazing Grace.""
+Activity added: "2016-01-06: Invented debugging with Amazing Grace Hopper."
+```
+And they can be removed as well:
+```
+$ friends remove nickname "Grace Hopper" "The Admiral"
+Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
 ```
 ##### Suggest a friend to do something with:
 ```

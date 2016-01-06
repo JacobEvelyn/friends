@@ -49,8 +49,10 @@ describe Friends::Friend do
     end
 
     it "does not keep duplicates" do
-      subject
-      subject
+      # Add the same nickname twice. Do not use `subject` because it's memoized.
+      friend.add_nickname("The Dude")
+      friend.add_nickname("The Dude")
+
       friend.instance_variable_get(:@nicknames).must_equal ["The Dude"]
     end
   end

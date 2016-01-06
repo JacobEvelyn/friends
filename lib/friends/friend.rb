@@ -46,7 +46,7 @@ module Friends
     # @param nickname [String] the nickname to add
     def add_nickname(nickname)
       @nicknames << nickname
-      @nicknames.uniq
+      @nicknames.uniq!
     end
 
     # @param nickname [String] the nickname to remove
