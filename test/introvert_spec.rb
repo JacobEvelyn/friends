@@ -255,6 +255,37 @@ describe Friends::Introvert do
     end
   end
 
+  describe "#add_nickname" do
+    subject do
+      introvert.add_nickname(name: friend_names.first, nickname: "The Dude")
+    end
+
+    # Delete the file that is created each time.
+    after { File.delete(filename) if File.exists?(filename) }
+
+    it "returns the modified friend" do
+      stub_friends(friends) do
+        subject.must_equal friends.first
+      end
+    end
+  end
+
+  describe "#remove_nickname" do
+    subject do
+      introvert.remove_nickname(name: "Jeff", nickname: "The Dude")
+    end
+
+    # Delete the file that is created each time.
+    after { File.delete(filename) if File.exists?(filename) }
+
+    it "returns the modified friend" do
+      friend = Friends::Friend.new(name: "Jeff", nickname_str: "a.k.a. The Dude")
+      stub_friends([friend]) do
+        subject.must_equal friend
+      end
+    end
+  end
+
   describe "#list_favorites" do
     subject { introvert.list_favorites(limit: limit) }
 

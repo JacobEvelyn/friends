@@ -40,6 +40,43 @@ describe Friends::Friend do
     end
   end
 
+  describe "#add_nickname" do
+    subject { friend.add_nickname("The Dude") }
+
+    it "adds the nickname" do
+      subject
+      friend.instance_variable_get(:@nicknames).must_include("The Dude")
+    end
+
+    it "does not keep duplicates" do
+      subject
+      subject
+      friend.instance_variable_get(:@nicknames).must_equal ["The Dude"]
+    end
+  end
+
+  describe "#remove_nickname" do
+    subject { friend.remove_nickname("Jake") }
+
+    describe "when the nickname is present" do
+      let(:friend) do
+        Friends::Friend.new(name: friend_name, nickname_str: "a.k.a. Jake")
+      end
+
+      it "removes the nickname" do
+        friend.instance_variable_get(:@nicknames).must_equal ["Jake"]
+        subject
+        friend.instance_variable_get(:@nicknames).must_equal []
+      end
+    end
+
+    describe "when the nickname is not present" do
+      it "raises an error if the nickname is not found" do
+        proc { subject }.must_raise Friends::FriendsError
+      end
+    end
+  end
+
   describe "#n_activities" do
     subject { friend.n_activities }
 
