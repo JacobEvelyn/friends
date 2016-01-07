@@ -31,6 +31,10 @@ flag [:filename],
   default_value: "./friends.md",
   desc: "Set the location of the friends file"
 
+switch [:debug],
+  negatable: false,
+  desc: "Debug error messages with a full backtrace"
+
 desc "Updates the `friends` program"
 command :update do |update|
   update.action do
@@ -209,6 +213,8 @@ end
 
 # Before each command, clean up all arguments and create the global Introvert.
 pre do |global_options, _, options|
+  @debug_mode = global_options[:debug]
+
   final_options = global_options.merge!(options).select do |key, _|
     [:filename].include? key
   end
@@ -231,7 +237,11 @@ end
 
 # If an error is raised, print the message to STDERR and exit the program.
 on_error do |error|
-  abort "Error: #{error}"
+  if @debug_mode
+    raise error
+  else
+    abort "Error: #{error}"
+  end
 end
 
 # Run the program and return the exit code corresponding to its success.
