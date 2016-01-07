@@ -1,4 +1,4 @@
-require_relative "helper"
+require "./test/helper"
 
 describe Friends::Activity do
   let(:date) { Date.today }

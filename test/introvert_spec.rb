@@ -1,4 +1,4 @@
-require_relative "helper"
+require "./test/helper"
 
 describe Friends::Introvert do
   # Add readers to make internal state easier to test.
