@@ -299,6 +299,24 @@ module Friends
       end
     end
 
+    # @return [Integer] the total number of friends
+    def total_friends
+      @friends.size
+    end
+
+    # @return [Integer] the total number of activities
+    def total_activities
+      @activities.size
+    end
+
+    # @return [Integer] the number of days elapsed between
+    #   the first and last activity
+    def elapsed_days
+      return 0 if @activities.size < 2
+      sorted_activities = @activities.sort
+      (sorted_activities.first.date - sorted_activities.last.date).to_i
+    end
+
     private
 
     # Process the friends.md file and store its contents in internal data

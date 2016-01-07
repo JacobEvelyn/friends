@@ -197,6 +197,16 @@ command :clean do |clean|
   end
 end
 
+desc "List all stats"
+command :stats do |stats|
+  stats.action do
+    puts "Total activities: #{@introvert.total_activities}"
+    puts "Total friends: #{@introvert.total_friends}"
+    days = @introvert.elapsed_days
+    puts "Total time elapsed: #{days} day#{'s' if days != 1}"
+  end
+end
+
 # Before each command, clean up all arguments and create the global Introvert.
 pre do |global_options, _, options|
   final_options = global_options.merge!(options).select do |key, _|
