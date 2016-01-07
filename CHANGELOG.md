@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.9](https://github.com/JacobEvelyn/friends/tree/v0.9) (2016-01-07)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.8...v0.9)
+
+**Implemented enhancements:**
+
+- Add command to retrieve basic stats [\#36](https://github.com/JacobEvelyn/friends/issues/36)
+
+**Merged pull requests:**
+
+- Add stats command [\#55](https://github.com/JacobEvelyn/friends/pull/55) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.8](https://github.com/JacobEvelyn/friends/tree/v0.8) (2016-01-06)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.7...v0.8)
 
