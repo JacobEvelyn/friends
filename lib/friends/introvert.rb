@@ -71,10 +71,7 @@ module Friends
         raise FriendsError, e
       end
 
-      # If there's no description, prompt the user for one.
-      activity.description ||= Readline.readline(activity.display_text)
-
-      activity.highlight_friends(introvert: self)
+      activity.highlight_friends(introvert: self) if activity.description
       @activities.unshift(activity)
 
       activity # Return the added activity.
