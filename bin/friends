@@ -3,7 +3,6 @@
 # Todo:
 # - Split out serialization into separate repository.
 # - Add auto check for updates.
-# - Allow friends to have nicknames.
 # - Allow easy editing of most recent entry.
 
 require "gli"
@@ -125,6 +124,13 @@ command :add do |add|
   add.command :activity do |add_activity|
     add_activity.action do |_, _, args|
       activity = @introvert.add_activity(serialization: args.first)
+
+      # If there's no description, prompt the user for one.
+      if !activity.description
+        activity.description = Readline.readline(activity.display_text)
+        activity.highlight_friends(introvert: @introvert)
+      end
+
       @message = "Activity added: \"#{activity.display_text}\""
       @dirty = true # Mark the file for cleaning.
     end
