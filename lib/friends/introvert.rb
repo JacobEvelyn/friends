@@ -303,7 +303,7 @@ module Friends
     def total_friends
       @friends.size
     end
-    
+
     # @return [Integer] the total number of activities
     def total_activities
       @activities.size
@@ -313,8 +313,8 @@ module Friends
     #   the first and last activity
     def elapsed_days
       return 0 if @activities.size < 2
-      sorted_activity = @activities.sort_by{ |activity| activity.date }
-      (sorted_activity.last.date - sorted_activity.first.date).to_i
+      sorted_activities = @activities.sort
+      (sorted_activities.first.date - sorted_activities.last.date).to_i
     end
 
     private
