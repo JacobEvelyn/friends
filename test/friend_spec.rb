@@ -1,4 +1,4 @@
-require_relative "helper"
+require "./test/helper"
 
 describe Friends::Friend do
   let(:friend_name) { "Jacob Evelyn" }
