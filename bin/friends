@@ -31,10 +31,6 @@ flag [:filename],
   default_value: "./friends.md",
   desc: "Set the location of the friends file"
 
-switch [:clean],
-  negatable: false,
-  desc: "Force a clean write of the friends file"
-
 desc "Updates the `friends` program"
 command :update do |update|
   update.action do
@@ -116,6 +112,7 @@ command :add do |add|
     add_friend.action do |_, _, args|
       friend = @introvert.add_friend(name: args.first)
       @message = "Friend added: \"#{friend.name}\""
+      @dirty = true # Mark the file for cleaning.
     end
   end
 
@@ -125,6 +122,7 @@ command :add do |add|
     add_activity.action do |_, _, args|
       activity = @introvert.add_activity(serialization: args.first)
       @message = "Activity added: \"#{activity.display_text}\""
+      @dirty = true # Mark the file for cleaning.
     end
   end
 
@@ -134,6 +132,7 @@ command :add do |add|
     add_nickname.action do |_, _, args|
       friend = @introvert.add_nickname(name: args.first, nickname: args[1])
       @message = "Nickname added: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
     end
   end
 end
@@ -146,6 +145,7 @@ command :remove do |remove|
     remove_nickname.action do |_, _, args|
       friend = @introvert.remove_nickname(name: args.first, nickname: args[1])
       @message = "Nickname removed: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
     end
   end
 end
@@ -192,8 +192,8 @@ end
 desc "Cleans your friends.md file"
 command :clean do |clean|
   clean.action do
-    filename = @introvert.clean
-    @message = "File cleaned: \"#{filename}\""
+    @clean_command = true
+    @dirty = true # Mark the file for cleaning.
   end
 end
 
@@ -218,11 +218,12 @@ pre do |global_options, _, options|
 end
 
 post do |global_options|
-  # After each command, clean if requested with the --clean flag.
-  if global_options[:clean]
-    filename = @introvert.clean
-    @message = "File cleaned: \"#{filename}\""
-  end
+  # After each command, clean the file if we have modifications to make.
+  filename = @introvert.clean if @dirty
+
+  # This is a special-case piece of code that lets us print a message that
+  # includes the filename when `friends clean` is called.
+  @message = "File cleaned: \"#{filename}\"" if @clean_command
 
   # Print the output message (if there is one) unless --quiet is passed.
   puts @message unless @message.nil? || global_options[:quiet]
