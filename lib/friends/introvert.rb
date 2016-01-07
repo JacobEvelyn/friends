@@ -18,7 +18,6 @@ module Friends
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME)
       @filename = filename
-      @cleaned_file = false # Switches to true when the file is cleaned.
 
       # Read in the input file. It's easier to do this now and optimize later
       # than try to overly be clever about what we read and write.
@@ -27,10 +26,6 @@ module Friends
 
     # Write out the friends file with cleaned/sorted data.
     def clean
-      # Short-circuit if we've already cleaned the file so we don't write it
-      # twice.
-      return @filename if @cleaned_file
-
       descriptions = @activities.sort.map(&:serialize)
       names = @friends.sort.map(&:serialize)
 
@@ -42,8 +37,6 @@ module Friends
         file.puts(FRIENDS_HEADER)
         names.each { |name| file.puts(name) }
       end
-
-      @cleaned_file = true
 
       @filename
     end
@@ -64,7 +57,6 @@ module Friends
       end
 
       @friends << friend
-      clean # Write a cleaned file.
 
       friend # Return the added friend.
     end
@@ -84,7 +76,6 @@ module Friends
 
       activity.highlight_friends(introvert: self)
       @activities.unshift(activity)
-      clean # Write a cleaned file.
 
       activity # Return the added activity.
     end
@@ -97,9 +88,6 @@ module Friends
     def add_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
       friend.add_nickname(nickname.strip)
-
-      clean # Write a cleaned file.
-
       friend
     end
 
@@ -112,9 +100,6 @@ module Friends
     def remove_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
       friend.remove_nickname(nickname.strip)
-
-      clean # Write a cleaned file.
-
       friend
     end
 
