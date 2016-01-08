@@ -7,6 +7,7 @@
 
 require "gli"
 require "paint"
+require "readline"
 
 require "friends/introvert"
 require "friends/version"

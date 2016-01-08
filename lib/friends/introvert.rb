@@ -2,8 +2,6 @@
 # able to be used directly within another Ruby program, without needing to call
 # the command-line script explicitly.
 
-require "readline"
-
 require "friends/activity"
 require "friends/friend"
 require "friends/friends_error"
