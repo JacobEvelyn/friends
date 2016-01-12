@@ -174,6 +174,16 @@ describe Friends::Activity do
       end
     end
 
+    describe "when a friend's name is mentioned multiple times" do
+      let(:description) { "Dinner with Elizabeth.  Elizabeth made us pasta." }
+      it "highlights all occurrences of the friend's name" do
+        subject
+        activity.description.
+          must_equal "Dinner with **Elizabeth Cady Stanton**."\
+                     "  **Elizabeth Cady Stanton** made us pasta."
+      end
+    end
+
     describe "when there are multiple matches" do
       describe "when there is context from past activities" do
         let(:description) { "Dinner with Elizabeth and John." }
