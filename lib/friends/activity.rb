@@ -14,7 +14,11 @@ module Friends
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
-      /(#{SERIALIZATION_PREFIX})?((?<date_s>\d{4}-\d\d-\d\d)(:\s)?)?(?<description>.+)?/
+      %r{
+        (#{SERIALIZATION_PREFIX})?
+        ((?<date_s>\d{4}-\d\d-\d\d)(:\s)?)?
+        (?<description>.+)?
+      }x
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -83,12 +87,10 @@ module Friends
       # make those substitutions.
       regex_map.
         select { |_, arr| arr.size == 1 }.each do |regex, friend_list|
-        if match = @description.match(regex)
+        if @description.match(regex)
           friend = friend_list.first # There's only one friend in the list.
           matched_friends << friend
-          @description = "#{match.pre_match}"\
-            "**#{friend.name}**"\
-            "#{match.post_match}"
+          @description.gsub!(regex, "**#{friend.name}**")
         end
       end
 
@@ -113,19 +115,17 @@ module Friends
       # guess.
       regex_map.
         reject { |_, arr| arr.size == 1 }.each do |regex, friend_list|
-        if match = @description.match(regex)
+        if @description.match(regex)
           guessed_friend = friend_list.sort_by do |friend|
             [-friend.likelihood_score, -friend.n_activities]
           end.first
-          @description = "#{match.pre_match}"\
-            "**#{guessed_friend.name}**"\
-            "#{match.post_match}"
+          @description.gsub!(regex, "**#{guessed_friend.name}**")
         end
       end
 
       # Lastly, we remove any backslashes, as these are used to escape friends'
       # names that we don't want to match.
-      @description.gsub!("\\", "")
+      @description.delete!("\\")
     end
 
     # @param friend [Friend] the friend to test
