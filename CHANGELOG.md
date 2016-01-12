@@ -1,5 +1,31 @@
 # Change Log
 
+## [v0.10](https://github.com/JacobEvelyn/friends/tree/v0.10) (2016-01-12)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.9...v0.10)
+
+**Implemented enhancements:**
+
+- Add --debug flag for error backtraces [\#62](https://github.com/JacobEvelyn/friends/issues/62)
+
+**Fixed bugs:**
+
+- The same name is only highlighted once per description [\#35](https://github.com/JacobEvelyn/friends/issues/35)
+
+**Closed issues:**
+
+- Don't write files in middle of commands [\#60](https://github.com/JacobEvelyn/friends/issues/60)
+- Remove require\_relative from codebase [\#58](https://github.com/JacobEvelyn/friends/issues/58)
+- Cleanly separate Introvert from non-library concerns [\#57](https://github.com/JacobEvelyn/friends/issues/57)
+
+**Merged pull requests:**
+
+- Highlight multiple occurrences [\#70](https://github.com/JacobEvelyn/friends/pull/70) ([GuruKhalsa](https://github.com/GuruKhalsa))
+- Fix Travis badge \(master only\) [\#67](https://github.com/JacobEvelyn/friends/pull/67) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Move activity prompt to bin/friends [\#64](https://github.com/JacobEvelyn/friends/pull/64) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Adds the --debug flag for printing backtraces on error [\#63](https://github.com/JacobEvelyn/friends/pull/63) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Move file writes to end of command actions [\#61](https://github.com/JacobEvelyn/friends/pull/61) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Remove require\_relative from codebase [\#59](https://github.com/JacobEvelyn/friends/pull/59) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.9](https://github.com/JacobEvelyn/friends/tree/v0.9) (2016-01-07)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.8...v0.9)
 
