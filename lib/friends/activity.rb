@@ -14,11 +14,7 @@ module Friends
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
-      %r{
-        (#{SERIALIZATION_PREFIX})?
-        ((?<date_s>\d{4}-\d\d-\d\d)(:\s)?)?
-        (?<description>.+)?
-      }x
+      /(#{SERIALIZATION_PREFIX})?((?<date_s>\d{4}-\d\d-\d\d)(:\s)?)?(?<description>.+)?/
     end
 
     # @return [Regexp] the string of what we expected during deserialization
