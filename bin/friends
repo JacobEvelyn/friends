@@ -8,6 +8,7 @@
 require "gli"
 require "paint"
 require "readline"
+require "semverse"
 
 require "friends/introvert"
 require "friends/version"
@@ -41,7 +42,8 @@ command :update do |update|
     search = `gem search friends`
     if match = search.match(/^friends\s\(([^\)]+)\)$/)
       remote_version = match[1]
-      if remote_version.to_r > Friends::VERSION.to_r
+      if Semverse::Version.coerce(remote_version) >
+         Semverse::Version.coerce(Friends::VERSION)
         `gem update friends && gem cleanup friends`
         if $?.success?
           puts Paint["Updated to friends #{remote_version}", :bold, :green]
