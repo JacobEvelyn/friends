@@ -39,6 +39,15 @@ module Friends
       @filename
     end
 
+    # Replace old name with new name upon friend name change.
+    # @param old_name [String] the old name of the friend
+    # @param new_name [String] the new name of the friend
+    def replace_old_name(old_name, new_name)
+      @activities.each do |activity|
+        activity.description.gsub!(friend_with_name_in(old_name).name, new_name)
+      end
+    end
+
     # Add a friend and write out the new friends file.
     # @param name [String] the name of the friend to add
     # @raise [FriendsError] when a friend with that name is already in the file
@@ -73,6 +82,17 @@ module Friends
       @activities.unshift(activity)
 
       activity # Return the added activity.
+    end
+
+    # Rename an existing added friend.
+    # @param name [String] the name of the friend
+    # @param new_name [String] the new name of the friend
+    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @return [Friend] the existing friend
+    def rename_friend(name:, new_name:)
+      friend = friend_with_name_in(name)
+      friend.rename_friend(new_name.strip)
+      friend
     end
 
     # Add a nickname to an existing friend and write out the new friends file.

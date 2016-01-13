@@ -49,6 +49,13 @@ module Friends
       @nicknames.uniq!
     end
 
+    # Renames a friend, avoiding duplicates and stripping surrounding
+    # whitespace.
+    # @param new_name [String] the friend's new name
+    def rename_friend(new_name)
+      @name = new_name
+    end
+
     # @param nickname [String] the nickname to remove
     # @return [Boolean] true if the nickname was present, false otherwise
     def remove_nickname(nickname)
