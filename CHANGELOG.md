@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.11](https://github.com/JacobEvelyn/friends/tree/v0.11) (2016-01-13)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.10...v0.11)
+
+**Fixed bugs:**
+
+- friends update doesn't correctly compare version numbers [\#72](https://github.com/JacobEvelyn/friends/issues/72)
+- Date gets duplicated with each new activity [\#71](https://github.com/JacobEvelyn/friends/issues/71)
+
+**Merged pull requests:**
+
+- Fix bug in comparing gem versions for update [\#74](https://github.com/JacobEvelyn/friends/pull/74) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix bug in how dates are deserialized [\#73](https://github.com/JacobEvelyn/friends/pull/73) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.10](https://github.com/JacobEvelyn/friends/tree/v0.10) (2016-01-12)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.9...v0.10)
 
