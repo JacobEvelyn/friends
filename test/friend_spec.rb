@@ -30,11 +30,11 @@ describe Friends::Friend do
     it { subject.name.must_equal friend_name }
   end
 
-  describe "#rename_friend" do
+  describe "#rename" do
     subject { friend }
 
     it "renames the friend" do
-      friend.rename_friend("Ada Lovelace")
+      friend.rename("Ada Lovelace")
       subject.name.must_equal "Ada Lovelace"
     end
   end

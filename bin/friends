@@ -226,8 +226,7 @@ command :rename do |rename|
   rename.arg_name "NAME NEWNAME"
   rename.command :friend do |rename_friend|
     rename_friend.action do |_, _, args|
-      @introvert.replace_old_name(args.first, args[1])
-      friend = @introvert.rename_friend(name: args.first, new_name: args[1])
+      friend = @introvert.rename_friend(args.first, args[1])
       @message = "Name changed: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end

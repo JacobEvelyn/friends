@@ -52,7 +52,7 @@ module Friends
     # Renames a friend, avoiding duplicates and stripping surrounding
     # whitespace.
     # @param new_name [String] the friend's new name
-    def rename_friend(new_name)
+    def rename(new_name)
       @name = new_name
     end
 

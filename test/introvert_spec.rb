@@ -91,21 +91,6 @@ describe Friends::Introvert do
     it { subject.must_equal filename }
   end
 
-  describe "#replace_old_name" do
-    let(:new_name) { "David Bowie" }
-    subject { introvert.replace_old_name(friend_names.last, new_name) }
-
-    it "replaces old name within activities to the new name" do
-      stub_friends(friends) do
-        stub_activities(activities) do
-          subject
-          introvert.activities.first.description.must_include new_name
-          introvert.activities.last.description.must_include new_name
-        end
-      end
-    end
-  end
-
   describe "#list_friends" do
     subject { introvert.list_friends }
 
@@ -274,9 +259,18 @@ describe Friends::Introvert do
     end
   end
 
-  describe "#rename" do
-    subject do
-      introvert.rename(name: friend_names.first, new_name: "Walter Sobchak")
+  describe "#rename_friend" do
+    let(:new_name) { "David Bowie" }
+    subject { introvert.rename_friend(friend_names.last, new_name) }
+
+    it "replaces old name within activities to the new name" do
+      stub_friends(friends) do
+        stub_activities(activities) do
+          subject
+          introvert.activities.first.description.must_include new_name
+          introvert.activities.last.description.must_include new_name
+        end
+      end
     end
   end
 
