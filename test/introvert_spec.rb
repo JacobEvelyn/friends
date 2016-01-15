@@ -274,6 +274,24 @@ describe Friends::Introvert do
         end
       end
     end
+
+    describe "when given names with leading and trailing spaces" do
+      let(:new_name) { "    David Bowie " }
+      let(:old_name) { friend_names.last + "    " }
+      subject do
+        introvert.rename_friend(old_name: old_name, new_name: new_name)
+      end
+
+      it "correctly strips the spaces" do
+        stub_friends(friends) do
+          stub_activities(activities) do
+            subject
+            introvert.activities.first.description.must_include "David Bowie"
+            introvert.activities.last.description.must_include "David Bowie"
+          end
+        end
+      end
+    end
   end
 
   describe "#add_nickname" do
