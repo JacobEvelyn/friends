@@ -298,4 +298,15 @@ describe Friends::Activity do
       [past_act, future_act].sort.must_equal [future_act, past_act]
     end
   end
+
+  describe "#update_name" do
+    let(:description) { "Lunch with **John Candy**." }
+    subject do
+      activity.update_name(old_name: "John Candy", new_name: "John Cleese")
+    end
+
+    it "renames the given friend in the description" do
+      subject.must_equal "Lunch with **John Cleese**."
+    end
+  end
 end

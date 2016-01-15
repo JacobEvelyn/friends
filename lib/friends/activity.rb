@@ -124,6 +124,15 @@ module Friends
       @description.delete!("\\")
     end
 
+    # Updates a friends old_name to their new_name
+    # @param [String] old_name
+    # @param [String] new_name
+    def update_name(old_name:, new_name:)
+      description.gsub!(
+        Regexp.new("(?<=\\*\\*)#{old_name}(?=\\*\\*)"),
+        new_name)
+    end
+
     # @param friend [Friend] the friend to test
     # @return [Boolean] true iff this activity includes the given friend
     def includes_friend?(friend:)

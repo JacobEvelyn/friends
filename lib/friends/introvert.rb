@@ -76,12 +76,17 @@ module Friends
     end
 
     # Rename an existing added friend.
-    # @param name [String] the name of the friend
+    # @param old_name [String] the name of the friend
     # @param new_name [String] the new name of the friend
     # @raise [FriendsError] if 0 of 2+ friends match the given name
     # @return [Friend] the existing friend
-    def rename_friend(name, new_name)
-      replace_old_name(name, new_name)
+    def rename_friend(old_name:, new_name:)
+      friend = friend_with_name_in(old_name)
+      @activities.each do |activity|
+        activity.update_name(old_name: friend.name, new_name: new_name)
+      end
+      friend.rename(new_name.strip)
+      friend
     end
 
     # Add a nickname to an existing friend and write out the new friends file.
@@ -313,12 +318,6 @@ module Friends
     # @param new_name [String] the new name of the friend
     # @return [Friend] the friend whose name was just changed
     def replace_old_name(old_name, new_name)
-      friend = friend_with_name_in(old_name)
-      @activities.each do |activity|
-        activity.description.gsub!(friend.name, new_name)
-      end
-      friend.rename(new_name.strip)
-      friend
     end
 
     # Process the friends.md file and store its contents in internal data

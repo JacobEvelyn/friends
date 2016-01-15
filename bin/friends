@@ -223,10 +223,11 @@ end
 desc "Renames a friend"
 command :rename do |rename|
   rename.desc "Renames a friend"
-  rename.arg_name "NAME NEWNAME"
+  rename.arg_name "NAME NEW_NAME"
   rename.command :friend do |rename_friend|
     rename_friend.action do |_, _, args|
-      friend = @introvert.rename_friend(args.first, args[1])
+      friend = @introvert.rename_friend(old_name: args.first.strip,
+                                        new_name: args[1])
       @message = "Name changed: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end
