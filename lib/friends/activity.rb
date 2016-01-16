@@ -124,9 +124,11 @@ module Friends
       @description.delete!("\\")
     end
 
-    # Updates a friends old_name to their new_name
+    # Updates a friend's old_name to their new_name
     # @param [String] old_name
     # @param [String] new_name
+    # @return [String] if name found in description
+    # @return [nil] if no change was made
     def update_name(old_name:, new_name:)
       description.gsub!(
         Regexp.new("(?<=\\*\\*)#{old_name}(?=\\*\\*)"),

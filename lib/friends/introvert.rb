@@ -313,13 +313,6 @@ module Friends
 
     private
 
-    # Replace old name with new name upon friend name change.
-    # @param old_name [String] the old name of the friend
-    # @param new_name [String] the new name of the friend
-    # @return [Friend] the friend whose name was just changed
-    def replace_old_name(old_name, new_name)
-    end
-
     # Process the friends.md file and store its contents in internal data
     # structures.
     def read_file
