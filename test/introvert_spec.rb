@@ -2,8 +2,10 @@ require "./test/helper"
 
 describe Friends::Introvert do
   # Add readers to make internal state easier to test.
-  class Friends::Introvert
-    attr_reader :filename, :activities, :friends
+  module Friends
+    class Introvert
+      attr_reader :filename, :activities, :friends
+    end
   end
 
   # Add helpers to set internal states for friends and activities.
@@ -318,7 +320,8 @@ describe Friends::Introvert do
     after { File.delete(filename) if File.exists?(filename) }
 
     it "returns the modified friend" do
-      friend = Friends::Friend.new(name: "Jeff", nickname_str: "a.k.a. The Dude")
+      friend = Friends::Friend.new(name: "Jeff",
+                                   nickname_str: "a.k.a. The Dude")
       stub_friends([friend]) do
         subject.must_equal friend
       end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Friend represents a friend. You know, a real-life friend!
 
 require "friends/serializable"
@@ -6,12 +7,15 @@ module Friends
   class Friend
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- "
-    NICKNAME_PREFIX = "a.k.a. "
+    SERIALIZATION_PREFIX = "- ".freeze
+    NICKNAME_PREFIX = "a.k.a. ".freeze
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
+      # Note: this regex must be on one line because whitespace is important
+      # rubocop:disable Metrics/LineLength
       /(#{SERIALIZATION_PREFIX})?(?<name>[^\(]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?/
+      # rubocop:enable Metrics/LineLength
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -31,7 +35,7 @@ module Friends
 
     # @return [String] the file serialization text for the friend
     def serialize
-      "#{SERIALIZATION_PREFIX}#{to_s}"
+      "#{SERIALIZATION_PREFIX}#{self}"
     end
 
     # @return [String] a string representing the friend's name and nicknames

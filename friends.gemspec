@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jacob Evelyn"]
   spec.email         = ["jacobevelyn@gmail.com"]
   spec.summary       = "Spend time with the people you care about."
-  spec.description   = "Spend time with the people you care about. Introvert-tested. Extrovert-approved."
+  spec.description   = "Spend time with the people you care about. "\
+                       "Introvert-tested. Extrovert-approved."
   spec.homepage      = "https://github.com/JacobEvelyn/friends"
   spec.license       = "MIT"
 
@@ -31,5 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.5"
   spec.add_development_dependency "overcommit", "~> 0.30"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rubocop", "~> 0.35"
+  spec.add_development_dependency "rubocop", "~> 0.36"
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Introvert is the internal handler for the friends script. It is designed to be
 # able to be used directly within another Ruby program, without needing to call
 # the command-line script explicitly.
@@ -8,10 +9,10 @@ require "friends/friends_error"
 
 module Friends
   class Introvert
-    DEFAULT_FILENAME = "./friends.md"
-    ACTIVITIES_HEADER = "### Activities:"
-    FRIENDS_HEADER = "### Friends:"
-    GRAPH_DATE_FORMAT = "%b %Y" # Used as the param for date.strftime().
+    DEFAULT_FILENAME = "./friends.md".freeze
+    ACTIVITIES_HEADER = "### Activities:".freeze
+    FRIENDS_HEADER = "### Friends:".freeze
+    GRAPH_DATE_FORMAT = "%b %Y".freeze # Used as the param for date.strftime().
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME)
@@ -274,13 +275,13 @@ module Friends
     #   description, for instance, is "John Deere" vs. "John Doe"
     def set_likelihood_score!(matches:, possible_matches:)
       combinations = (matches + possible_matches.flatten).
-        combination(2).
-        reject do |friend1, friend2|
-          (matches & [friend1, friend2]).size == 2 ||
-          possible_matches.any? do |group|
-            (group & [friend1, friend2]).size == 2
-          end
-        end
+                     combination(2).
+                     reject do |friend1, friend2|
+                       (matches & [friend1, friend2]).size == 2 ||
+                         possible_matches.any? do |group|
+                           (group & [friend1, friend2]).size == 2
+                         end
+                     end
 
       @activities.each do |activity|
         names = activity.friend_names
