@@ -298,4 +298,34 @@ describe Friends::Activity do
       [past_act, future_act].sort.must_equal [future_act, past_act]
     end
   end
+
+  describe "#update_name" do
+    let(:description) { "Lunch with **John Candy**." }
+    subject do
+      activity.update_name(old_name: "John Candy", new_name: "John Cleese")
+    end
+
+    it "renames the given friend in the description" do
+      subject.must_equal "Lunch with **John Cleese**."
+    end
+
+    describe "when the description contains a fragment of the old name" do
+      let(:description) { "Lunch with **John Candy** at Johnny's Diner." }
+
+      it "only replaces the name" do
+        subject.must_equal "Lunch with **John Cleese** at Johnny's Diner."
+      end
+    end
+
+    describe "when the description contains the complete old name" do
+      let(:description) { "Coffee with **John** at John's Studio." }
+      subject do
+        activity.update_name(old_name: "John", new_name: "Joe")
+      end
+
+      it "only replaces the actual name" do
+        subject.must_equal "Coffee with **Joe** at John's Studio."
+      end
+    end
+  end
 end

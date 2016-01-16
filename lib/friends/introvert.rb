@@ -75,6 +75,20 @@ module Friends
       activity # Return the added activity.
     end
 
+    # Rename an existing added friend.
+    # @param old_name [String] the name of the friend
+    # @param new_name [String] the new name of the friend
+    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @return [Friend] the existing friend
+    def rename_friend(old_name:, new_name:)
+      friend = friend_with_name_in(old_name.strip)
+      @activities.each do |activity|
+        activity.update_name(old_name: friend.name, new_name: new_name.strip)
+      end
+      friend.rename(new_name.strip)
+      friend
+    end
+
     # Add a nickname to an existing friend and write out the new friends file.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to add to the friend
