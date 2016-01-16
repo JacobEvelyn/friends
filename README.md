@@ -82,6 +82,11 @@ And they can be removed as well:
 $ friends remove nickname "Grace Hopper" "The Admiral"
 Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
 ```
+##### Change a friend's name:
+```
+$ friends rename friend "Grace Hopper" "Grace Brewster Murray Hopper"
+Name changed: "Grace Brewster Murray Hopper (a.k.a. Amazing Grace)"
+```
 ##### Suggest a friend to do something with:
 ```
 $ friends suggest

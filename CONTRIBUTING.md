@@ -18,7 +18,8 @@ that's great as well!
 6. Make your changes. Add or modify tests if necessary!
 (Run tests with `rake test`.) Do your best to conform to
 existing style and commenting patterns.
-7. Commit your changes
+7. Update the `README.md` as necessary to include your changes.
+8. Commit your changes
 (`git commit -am "Add some feature"`). You should see
 output from
 [`overcommit`](https://github.com/brigade/overcommit) as
@@ -44,10 +45,10 @@ it runs commit hooks that looks something like this:
   how! This practice is meant to keep the code clean but
   it shouldn't be scary and it's totally fine to need
   help!
-8. Push your changes to GitHub, and open a Pull Request.
-9. Your code will be reviewed and merged as quickly as
+9. Push your changes to GitHub, and open a Pull Request.
+10. Your code will be reviewed and merged as quickly as
 possible!
-10. Check yourself out on the [contributors page](https://github.com/JacobEvelyn/friends/graphs/contributors)! Look at how cool you are!
+11. Check yourself out on the [contributors page](https://github.com/JacobEvelyn/friends/graphs/contributors)! Look at how cool you are!
 
 If you have any questions at all or get stuck on any step,
 don't hesitate to
