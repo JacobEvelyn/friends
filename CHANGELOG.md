@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.12](https://github.com/JacobEvelyn/friends/tree/v0.12) (2016-01-16)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.11...v0.12)
+
+**Implemented enhancements:**
+
+- Add examples for rename command in README [\#76](https://github.com/JacobEvelyn/friends/issues/76)
+- Add change name command [\#68](https://github.com/JacobEvelyn/friends/issues/68)
+
+**Merged pull requests:**
+
+- Update README and CONTRIBUTING docs. Closes \#76 [\#77](https://github.com/JacobEvelyn/friends/pull/77) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add rename friend [\#75](https://github.com/JacobEvelyn/friends/pull/75) ([bloomyminded](https://github.com/bloomyminded))
+
 ## [v0.11](https://github.com/JacobEvelyn/friends/tree/v0.11) (2016-01-13)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.10...v0.11)
 
