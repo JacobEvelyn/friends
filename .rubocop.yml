@@ -8,7 +8,7 @@ Alias:
   Enabled: false
 
 AllCops:
-  RunRailsCops: false
+  TargetRubyVersion: 2.3
 
 AmbiguousOperator:
   Enabled: false
@@ -149,6 +149,9 @@ MethodLength:
 ModuleFunction:
   Enabled: false
 
+MutableConstant:
+  Enabled: true
+
 NegatedIf:
   Enabled: false
 
@@ -196,6 +199,9 @@ PredicateName:
 Proc:
   Enabled: false
 
+Rails:
+  Enabled: false
+
 RaiseArgs:
   Enabled: false
 
@@ -232,8 +238,11 @@ Style/MultilineBlockChain:
 VariableInterpolation:
   Enabled: false
 
-TrailingComma:
-  Enabled: false
+TrailingCommaInArguments:
+  Enabled: true
+
+TrailingCommaInLiteral:
+  Enabled: true
 
 TrivialAccessors:
   Enabled: false

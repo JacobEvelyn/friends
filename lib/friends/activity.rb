@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Activity represents an activity you've done with one or more Friends.
 
 require "memoist"
@@ -10,11 +11,14 @@ module Friends
     extend Serializable
     extend Memoist
 
-    SERIALIZATION_PREFIX = "- "
+    SERIALIZATION_PREFIX = "- ".freeze
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
+      # Note: this regex must be on one line because whitespace is important
+      # rubocop:disable Metrics/LineLength
       /(#{SERIALIZATION_PREFIX})?((?<date_s>\d{4}-\d\d-\d\d)(:\s)?)?(?<description>.+)?/
+      # rubocop:enable Metrics/LineLength
     end
 
     # @return [Regexp] the string of what we expected during deserialization

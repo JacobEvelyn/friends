@@ -24,17 +24,17 @@ subcommand_option_handling :normal
 arguments :strict
 
 switch [:quiet],
-  negatable: false,
-  desc: "Quiet output messages"
+       negatable: false,
+       desc: "Quiet output messages"
 
 flag [:filename],
-  arg_name: "FILENAME",
-  default_value: "./friends.md",
-  desc: "Set the location of the friends file"
+     arg_name: "FILENAME",
+     default_value: "./friends.md",
+     desc: "Set the location of the friends file"
 
 switch [:debug],
-  negatable: false,
-  desc: "Debug error messages with a full backtrace"
+       negatable: false,
+       desc: "Debug error messages with a full backtrace"
 
 desc "Updates the `friends` program"
 command :update do |update|
@@ -71,9 +71,9 @@ command :list do |list|
   list.desc "List favorite friends"
   list.command :favorites do |list_favorites|
     list_favorites.flag [:limit],
-      arg_name: "NUMBER",
-      default_value: 10,
-      desc: "The number of friends to return"
+                        arg_name: "NUMBER",
+                        default_value: 10,
+                        desc: "The number of friends to return"
 
     list_favorites.action do |_, options|
       limit = options[:limit].to_i
@@ -95,13 +95,13 @@ command :list do |list|
   list.desc "Lists all activities"
   list.command :activities do |list_activities|
     list_activities.flag [:limit],
-      arg_name: "NUMBER",
-      default_value: 10,
-      desc: "The number of activities to return"
+                         arg_name: "NUMBER",
+                         default_value: 10,
+                         desc: "The number of activities to return"
 
     list_activities.flag [:with],
-      arg_name: "NAME",
-      desc: "List only activities involving the given friend"
+                         arg_name: "NAME",
+                         desc: "List only activities involving the given friend"
 
     list_activities.action do |_, options|
       limit = options[:limit].to_i
@@ -172,7 +172,7 @@ command :graph do |graph|
 
     colors = (0...(6 * 7)).map do |n|
       n *= 1.0 / 6
-      r  = (3 * Math.sin(n           ) + 3).to_i
+      r  = (3 * Math.sin(n) + 3).to_i
       g  = (3 * Math.sin(n + 2 * PI_3) + 3).to_i
       b  = (3 * Math.sin(n + 4 * PI_3) + 3).to_i
 
