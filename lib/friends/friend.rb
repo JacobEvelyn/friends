@@ -87,13 +87,12 @@ module Friends
       @likelihood_score || 0
     end
 
-    # @return [Array] a list of all regexes to match the name in a string, with
-    #   longer regexes first
-    #   Note: for now we only match on full names or first names
+    # @return [Array] a list of all regexes to match the name in a string
     #   Example: [
     #     /Jacob\s+Morris\s+Evelyn/,
     #     /Jacob/
     #   ]
+    # NOTE: For now we only match on full names or first names.
     def regexes_for_name
       # We generously allow any amount of whitespace between parts of a name.
       splitter = "\\s+"
@@ -104,6 +103,10 @@ module Friends
 
       # We don't want to match names that are directly touching double asterisks
       # as these are treated as sacred by our program.
+      # NOTE: Technically we don't need this check here, since we perform a more
+      # complex asterisk check in the Activity#description_matches method, but
+      # this class shouldn't need to know about the internal implementation of
+      # another class.
       no_leading_asterisks = "(?<!\\*\\*)"
       no_ending_asterisks = "(?!\\*\\*)"
 

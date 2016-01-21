@@ -135,6 +135,54 @@ describe Friends::Activity do
       end
     end
 
+    describe "when one name ends another after a hyphen" do
+      let(:friend1) { Friends::Friend.new(name: "Mary-Kate Olsen") }
+      let(:friend2) { Friends::Friend.new(name: "Kate Winslet") }
+      let(:description) { "Shopping with Mary-Kate." }
+
+      it "gives precedence to the larger name" do
+        # Make sure "Kate" is a closer friend than "Mary-Kate" so we know our
+        # test result isn't due to chance.
+        friend1.n_activities = 0
+        friend2.n_activities = 10
+
+        subject
+        activity.description.must_equal "Shopping with **Mary-Kate Olsen**."
+      end
+    end
+
+    describe "when one name preceeds another before a hyphen" do
+      let(:friend1) { Friends::Friend.new(name: "Mary-Kate Olsen") }
+      let(:friend2) { Friends::Friend.new(name: "Mary Poppins") }
+      let(:description) { "Shopping with Mary-Kate." }
+
+      it "gives precedence to the larger name" do
+        # Make sure "Kate" is a closer friend than "Mary-Kate" so we know our
+        # test result isn't due to chance.
+        friend1.n_activities = 0
+        friend2.n_activities = 10
+
+        subject
+        activity.description.must_equal "Shopping with **Mary-Kate Olsen**."
+      end
+    end
+
+    describe "when one name is contained within another via a hyphen" do
+      let(:friend1) { Friends::Friend.new(name: "Mary-Jo-Kate Olsen") }
+      let(:friend2) { Friends::Friend.new(name: "Jo Stafford") }
+      let(:description) { "Shopping with Mary-Jo-Kate." }
+
+      it "gives precedence to the larger name" do
+        # Make sure "Kate" is a closer friend than "Mary-Kate" so we know our
+        # test result isn't due to chance.
+        friend1.n_activities = 0
+        friend2.n_activities = 10
+
+        subject
+        activity.description.must_equal "Shopping with **Mary-Jo-Kate Olsen**."
+      end
+    end
+
     describe "when name is at end of word" do
       let(:description) { "Field trip to the JimJohn Co." }
       it "does not match a friend" do
