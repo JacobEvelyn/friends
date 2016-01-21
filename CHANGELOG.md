@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.13](https://github.com/JacobEvelyn/friends/tree/v0.13) (2016-01-21)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.12...v0.13)
+
+**Fixed bugs:**
+
+- Treat double names as a single name [\#80](https://github.com/JacobEvelyn/friends/issues/80)
+
+**Closed issues:**
+
+- 4 RuboCop errors prevent git commit [\#78](https://github.com/JacobEvelyn/friends/issues/78)
+
+**Merged pull requests:**
+
+- Improve handling of double-names and names within names [\#81](https://github.com/JacobEvelyn/friends/pull/81) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Update RuboCop and fix many offenses [\#79](https://github.com/JacobEvelyn/friends/pull/79) ([bloomyminded](https://github.com/bloomyminded))
+
 ## [v0.12](https://github.com/JacobEvelyn/friends/tree/v0.12) (2016-01-16)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.11...v0.12)
 
