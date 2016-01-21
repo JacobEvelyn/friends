@@ -251,12 +251,15 @@ module Friends
       end
     end
 
-    # @return [Hash] mapping each friend to a list of all possible regexes for
-    #   that friend's name
-    def friend_regex_map
-      @friends.each_with_object({}) do |friend, hash|
-        hash[friend] = friend.regexes_for_name
-      end
+    # @return [Hash] of the form { /regex/ => [list of friends matching regex] }
+    #   This hash is sorted (because Ruby's hashes are ordered) by decreasing
+    #   regex key length, so the key /Jacob Evelyn/ appears before /Jacob/.
+    def regex_friend_map
+      @friends.each_with_object(Hash.new { |h, k| h[k] = [] }) do |friend, hash|
+        friend.regexes_for_name.each do |regex|
+          hash[regex] << friend
+        end
+      end.sort_by { |k, _| -k.to_s.size }.to_h
     end
 
     # Sets the likelihood_score field on each friend in `possible_matches`. This
@@ -278,9 +281,9 @@ module Friends
                      combination(2).
                      reject do |friend1, friend2|
                        (matches & [friend1, friend2]).size == 2 ||
-                         possible_matches.any? do |group|
-                           (group & [friend1, friend2]).size == 2
-                         end
+                       possible_matches.any? do |group|
+                         (group & [friend1, friend2]).size == 2
+                       end
                      end
 
       @activities.each do |activity|

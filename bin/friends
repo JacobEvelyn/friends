@@ -40,7 +40,9 @@ desc "Updates the `friends` program"
 command :update do |update|
   update.action do
     search = `gem search friends`
+    # rubocop:disable Lint/AssignmentInCondition
     if match = search.match(/^friends\s\(([^\)]+)\)$/)
+      # rubocop:enable Lint/AssignmentInCondition
       remote_version = match[1]
       if Semverse::Version.coerce(remote_version) >
          Semverse::Version.coerce(Friends::VERSION)
