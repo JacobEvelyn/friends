@@ -1,5 +1,19 @@
 # Change Log
 
+## [v0.15](https://github.com/JacobEvelyn/friends/tree/v0.15) (2016-03-11)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.14...v0.15)
+
+## [v0.14](https://github.com/JacobEvelyn/friends/tree/v0.14) (2016-03-11)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.13...v0.14)
+
+**Implemented enhancements:**
+
+- Allow dates in natural-language formats [\#65](https://github.com/JacobEvelyn/friends/issues/65)
+
+**Merged pull requests:**
+
+- Allow natural-language dates [\#82](https://github.com/JacobEvelyn/friends/pull/82) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.13](https://github.com/JacobEvelyn/friends/tree/v0.13) (2016-01-21)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.12...v0.13)
 
