@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # Activity represents an activity you've done with one or more Friends.
 
+require "chronic"
 require "memoist"
 require "paint"
 
@@ -12,13 +13,11 @@ module Friends
     extend Memoist
 
     SERIALIZATION_PREFIX = "- ".freeze
+    DATE_PARTITION = ": ".freeze
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
-      # Note: this regex must be on one line because whitespace is important
-      # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?((?<date_s>\d{4}-\d\d-\d\d)(:\s)?)?(?<description>.+)?/
-      # rubocop:enable Metrics/LineLength
+      /(#{SERIALIZATION_PREFIX})?(?<str>.+)?/
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -26,12 +25,23 @@ module Friends
       "[YYYY-MM-DD]: [Activity]"
     end
 
-    # @param date_s [String] the activity's date, parsed using Date.parse()
-    # @param description [String] the activity's description
+    # @param str [String] the text of the activity, of one of the formats:
+    #   "<date>: <description>"
+    #   "<date>" (Program will prompt for description.)
+    #   "<description>" (The current date will be used by default.)
     # @return [Activity] the new activity
-    def initialize(date_s: Date.today.to_s, description: nil)
-      @date = Date.parse(date_s)
-      @description = description
+    def initialize(str: "")
+      # Partition lets us parse "Today" and "Today: I awoke." identically.
+      date_s, _, description = str.partition(DATE_PARTITION)
+
+      if time = Chronic.parse(date_s)
+        @date = time.to_date
+        @description = description
+      else
+        # If the user didn't input a date, we fall back to the current date.
+        @date = Date.today
+        @description = str # Use str in case DATE_PARTITION occurred naturally.
+      end
     end
 
     attr_reader :date

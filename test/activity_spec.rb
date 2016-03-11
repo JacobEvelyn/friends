@@ -1,17 +1,36 @@
 require "./test/helper"
 
 describe Friends::Activity do
-  let(:date) { Date.today }
+  let(:date) { Date.today - 1 }
   let(:date_s) { date.to_s }
   let(:friend1) { Friends::Friend.new(name: "Elizabeth Cady Stanton") }
   let(:friend2) { Friends::Friend.new(name: "John Cage") }
   let(:description) { "Lunch with **#{friend1.name}** and **#{friend2.name}**" }
+  let(:partition) { Friends::Activity::DATE_PARTITION }
   let(:activity) do
-    Friends::Activity.new(date_s: date_s, description: description)
+    Friends::Activity.new(str: "#{date_s}#{partition}#{description}")
   end
 
   describe ".deserialize" do
     subject { Friends::Activity.deserialize(serialized_str) }
+
+    describe "when serialized string is empty" do
+      let(:serialized_str) { "" }
+
+      it "defaults date to today and sets no description" do
+        today = Date.today - 7
+
+        # We stub out Date.today to guarantee that it is always the same even
+        # when the date changes in the middle of the test's execution. To ensure
+        # this technique actually works, we move our reference time backward by
+        # a week.
+        Date.stub(:today, today) do
+          new_activity = subject
+          new_activity.date.must_equal today
+          new_activity.description.must_equal ""
+        end
+      end
+    end
 
     describe "when string is well-formed" do
       let(:serialized_str) { "#{date_s}: #{description}" }
@@ -23,23 +42,45 @@ describe Friends::Activity do
       end
     end
 
+    describe "when date is written in natural language" do
+      let(:serialized_str) { "Yesterday: #{description}" }
+
+      it "creates an activity with the correct date and description" do
+        now = Time.now + 604800
+
+        # Chronic uses Time.now for parsing, so we stub this to prevent racy
+        # behavior when the date changes in the middle of test execution. To
+        # ensure this technique actually works, we move our reference time
+        # backward by a week.
+        Time.stub(:now, now) do
+          new_activity = subject
+          new_activity.date.must_equal (now.to_date - 1)
+          new_activity.description.must_equal description
+        end
+      end
+    end
+
     describe "when no date is present" do
       let(:serialized_str) { description }
 
       it "defaults to today" do
-        today = Date.today
+        today = Date.today - 7
 
         # We stub out Date.today to guarantee that it is always the same even
-        # when the date changes in the middle of the test's execution.
+        # when the date changes in the middle of the test's execution. To ensure
+        # this technique actually works, we move our reference time backward by
+        # a week.
         Date.stub(:today, today) { subject.date.must_equal today }
       end
     end
 
     describe "when no description is present" do
-      let(:serialized_str) { "" }
+      let(:serialized_str) { date_s }
 
-      it "sets no description in deserialization" do
-        subject.description.must_equal nil
+      it "leaves description blank" do
+        new_activity = subject
+        new_activity.date.must_equal date
+        new_activity.description.must_equal ""
       end
     end
   end
@@ -249,17 +290,14 @@ describe Friends::Activity do
           # better friend than Elizabeth Cady Stanton.
           old_activities = [
             Friends::Activity.new(
-              date_s: date_s,
-              description: "Picnic with **Elizabeth Cady Stanton** and "\
-                           "**John Cage**."
+              str: "#{date_s}#{partition}Picnic with "\
+                   "**Elizabeth Cady Stanton** and **John Cage**."
             ),
             Friends::Activity.new(
-              date_s: date_s,
-              description: "Got lunch with with **Elizabeth II**."
+              str: "#{date_s}#{partition}Got lunch with **Elizabeth II**."
             ),
             Friends::Activity.new(
-              date_s: date_s,
-              description: "Ice skated with **Elizabeth II**."
+              str: "#{date_s}#{partition}Ice skated with **Elizabeth II**."
             )
           ]
 
@@ -282,8 +320,7 @@ describe Friends::Activity do
 
           # Give a past activity to Elizabeth II.
           old_activity = Friends::Activity.new(
-            date_s: date_s,
-            description: "Do something with **Elizabeth II**."
+            str: "#{date_s}#{partition}Do something with **Elizabeth II**."
           )
 
           stub_activities([old_activity]) { subject }
@@ -339,10 +376,8 @@ describe Friends::Activity do
 
   describe "#<=>" do
     it "sorts by reverse-date" do
-      yesterday = (Date.today - 1).to_s
-      tomorrow = (Date.today + 1).to_s
-      past_act = Friends::Activity.new(date_s: yesterday, description: "Dummy")
-      future_act = Friends::Activity.new(date_s: tomorrow, description: "Dummy")
+      past_act = Friends::Activity.new(str: "Yesterday: Dummy")
+      future_act = Friends::Activity.new(str: "Tomorrow: Dummy")
       [past_act, future_act].sort.must_equal [future_act, past_act]
     end
   end

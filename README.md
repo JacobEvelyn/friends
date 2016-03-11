@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends) [![Code Climate](https://codeclimate.com/github/JacobEvelyn/friends/badges/gpa.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Test Coverage](https://codeclimate.com/github/JacobEvelyn/friends/badges/coverage.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends) [![Inline docs](http://inch-ci.org/github/JacobEvelyn/friends.png)](http://inch-ci.org/github/JacobEvelyn/friends) [![ghit.me](https://ghit.me/badge.svg?repo=JacobEvelyn/friends)](https://ghit.me/repo/JacobEvelyn/friends)
+[![Gem Version](https://badge.fury.io/rb/friends.svg)]q(https://badge.fury.io/rb/friends) [![Code Climate](https://codeclimate.com/github/JacobEvelyn/friends/badges/gpa.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Test Coverage](https://codeclimate.com/github/JacobEvelyn/friends/badges/coverage.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends) [![Inline docs](http://inch-ci.org/github/JacobEvelyn/friends.png)](http://inch-ci.org/github/JacobEvelyn/friends) [![ghit.me](https://ghit.me/badge.svg?repo=JacobEvelyn/friends)](https://ghit.me/repo/JacobEvelyn/friends)
 
 # Friends
 
@@ -51,13 +51,18 @@ Activity added: "2015-01-04: Got lunch with Grace Hopper and George Washington C
 
 You can of course specify a date for the activity:
 ```
-$ friends add activity "2014-12-31: Celebrated the new year with Marie."
+$ friends add activity "Yesterday: Celebrated the new year with Marie."
 Activity added: "2014-12-31: Celebrated the new year with Marie Curie."
 ```
 Or get an **interactive prompt** by just typing `friends add activity`, with or without a date specified:
 ```
 $ friends add activity 2015-11-01
 2015-11-01: <type description here>
+```
+**Natural-language dates** work just fine:
+```
+$ friends add activity 'last Monday'
+2016-03-07: <type description here>
 ```
 You can escape the names of friends you don't want `friends` to match with a backslash:
 ```
