@@ -31,13 +31,10 @@ describe Friends::Introvert do
   let(:activities) do
     [
       Friends::Activity.new(
-        date_s: Date.today.to_s,
-        description: "Lunch with **#{friend_names.first}** and "\
-          "**#{friend_names.last}**."
+        str: "Lunch w/ **#{friend_names.first}** and **#{friend_names.last}**."
       ),
       Friends::Activity.new(
-        date_s: (Date.today - 1).to_s,
-        description: "Called **#{friend_names.last}**."
+        str: "Yesterday: Called **#{friend_names.last}**."
       )
     ]
   end
@@ -413,22 +410,19 @@ describe Friends::Introvert do
       let(:activities) do
         [
           Friends::Activity.new(
-            date_s: Date.today.to_s,
-            description: "Lunch with **George Washington Carver**."
+            str: "Lunch with **George Washington Carver**."
           ),
 
           # Create another activity with a gap of over a month between it and
           # the next activity, so we can test that we correctly return data for
           # months in the range with no activities.
           Friends::Activity.new(
-            date_s: (Date.today - 70).to_s,
-            description: "Called **George Washington Carver**."
+            str: "70 days ago: Called **George Washington Carver**."
           ),
 
           # Create an activity that doesn't involve our friend name.
           Friends::Activity.new(
-            date_s: (Date.today - 150).to_s,
-            description: "Called **Betsy Ross** on the phone."
+            str: "150 days ago: Called **Betsy Ross** on the phone."
           )
         ]
       end
