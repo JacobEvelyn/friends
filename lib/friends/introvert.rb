@@ -179,11 +179,15 @@ module Friends
     #   and last month in which activities for the given friend have been
     #   recorded.
     # @raise [FriendsError] if 0 of 2+ friends match the given name
-    def graph(name:)
-      friend = friend_with_name_in(name) # Find the friend by name.
+    def graph(name: nil)
+      if name
+        friend = friend_with_name_in(name) # Find the friend by name.
 
-      # Filter out activities that don't include the given friend.
-      acts = @activities.select { |act| act.includes_friend?(friend: friend) }
+        # Filter out activities that don't include the given friend.
+        acts = @activities.select { |act| act.includes_friend?(friend: friend) }
+      else
+        acts = @activities
+      end
 
       # Initialize the table of activities to have all of the months of that
       # friend's activity range (including months in the middle of the range
