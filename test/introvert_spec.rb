@@ -387,6 +387,26 @@ describe Friends::Introvert do
   describe "#graph" do
     subject { introvert.graph(name: friend_name) }
 
+    let(:activities) do
+      [
+        Friends::Activity.new(
+          str: "2016-04-01: Lunch with **George Washington Carver**."
+        ),
+
+        # Create another activity with a gap of over a month between it and
+        # the next activity, so we can test that we correctly return data for
+        # months in the range with no activities.
+        Friends::Activity.new(
+          str: "2016-02-01: Called **George Washington Carver**."
+        ),
+
+        # Create an activity that doesn't involve our friend name.
+        Friends::Activity.new(
+          str: "2016-01-01: Called **Betsy Ross** on the phone."
+        )
+      ]
+    end
+
     describe "when friend name is invalid" do
       let(:friend_name) { "Oscar the Grouch" }
 
@@ -405,49 +425,34 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when friend name is valid" do
-      let(:friend_name) { "George" }
-      let(:activities) do
-        [
-          Friends::Activity.new(
-            str: "Lunch with **George Washington Carver**."
-          ),
-
-          # Create another activity with a gap of over a month between it and
-          # the next activity, so we can test that we correctly return data for
-          # months in the range with no activities.
-          Friends::Activity.new(
-            str: "70 days ago: Called **George Washington Carver**."
-          ),
-
-          # Create an activity that doesn't involve our friend name.
-          Friends::Activity.new(
-            str: "150 days ago: Called **Betsy Ross** on the phone."
-          )
-        ]
-      end
+    describe "when friend is empty" do
+      let(:friend_name) { nil }
 
       it "returns a hash of months and frequencies" do
         stub_friends(friends) do
           stub_activities(activities) do
-            strftime_format = Friends::Introvert::GRAPH_DATE_FORMAT
+            subject.must_equal({
+              "Jan 2016" => 1,
+              "Feb 2016" => 1,
+              "Mar 2016" => 0,
+              "Apr 2016" => 1
+            })
+          end
+        end
+      end
+    end
 
-            first = activities[0]
-            second = activities[1]
-            months = (second.date..first.date).map do |date|
-              date.strftime(strftime_format)
-            end.uniq
+    describe "when friend name is valid" do
+      let(:friend_name) { "George" }
 
-            # Make sure all of the months are in our output data set (even the
-            # months with no relevant activity). This also checks that the
-            # irrelevant activity is not in our data set.
-            subject.keys.must_equal(months)
-
-            # Check that the activities for George are recorded, and that all
-            # other months have no activities recorded.
-            subject[first.date.strftime(strftime_format)].must_equal 1
-            subject[second.date.strftime(strftime_format)].must_equal 1
-            subject.values.inject(:+).must_equal 2
+      it "returns a hash of months and frequencies" do
+        stub_friends(friends) do
+          stub_activities(activities) do
+            subject.must_equal({
+              "Feb 2016" => 1,
+              "Mar 2016" => 0,
+              "Apr 2016" => 1
+            })
           end
         end
       end
