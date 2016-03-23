@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.16](https://github.com/JacobEvelyn/friends/tree/v0.16) (2016-03-23)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.15...v0.16)
+
+**Implemented enhancements:**
+
+- Allow `graph` without arguments to graph all activities [\#83](https://github.com/JacobEvelyn/friends/issues/83)
+
+**Merged pull requests:**
+
+- Allow `graph` without arguments to graph all activities \(Closes \#83\) [\#85](https://github.com/JacobEvelyn/friends/pull/85) ([andypearson](https://github.com/andypearson))
+
 ## [v0.15](https://github.com/JacobEvelyn/friends/tree/v0.15) (2016-03-11)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.14...v0.15)
 
