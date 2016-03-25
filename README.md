@@ -99,6 +99,18 @@ Distant friend: Marie Curie
 Moderate friend: Grace Hopper
 Close friend: George Washington Carver
 ```
+##### Add a location for your friends and activities:
+```
+$ friends add location Paris
+Location added: "Paris"
+```
+##### List the locations you've added:
+```
+$ friends list locations
+Atlantis
+New York City
+Paris
+```
 ##### List the activities you've recorded:
 ```
 $ friends list activities

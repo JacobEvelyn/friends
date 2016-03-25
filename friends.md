@@ -8,3 +8,7 @@
 - George Washington Carver
 - Grace Hopper (a.k.a. The Admiral)
 - Marie Curie
+
+### Locations:
+- Atlantis
+- Paris
