@@ -61,7 +61,7 @@ command :update do |update|
   end
 end
 
-desc "Lists friends or activities"
+desc "Lists friends, activities, and locations"
 command :list do |list|
   list.desc "List all friends"
   list.command :friends do |list_friends|
@@ -110,9 +110,16 @@ command :list do |list|
       puts @introvert.list_activities(limit: limit, with: options[:with])
     end
   end
+
+  list.desc "List all locations"
+  list.command :locations do |list_locations|
+    list_locations.action do
+      puts @introvert.list_locations
+    end
+  end
 end
 
-desc "Adds a friend or activity"
+desc "Adds a friend (or nickname), activity, or location"
 command :add do |add|
   add.desc "Adds a friend"
   add.arg_name "NAME"
@@ -137,6 +144,16 @@ command :add do |add|
       end
 
       @message = "Activity added: \"#{activity.display_text}\""
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
+  add.desc "Adds a location"
+  add.arg_name "NAME"
+  add.command :location do |add_location|
+    add_location.action do |_, _, args|
+      location = @introvert.add_location(name: args.first)
+      @message = "Location added: \"#{location.name}\""
       @dirty = true # Mark the file for cleaning.
     end
   end

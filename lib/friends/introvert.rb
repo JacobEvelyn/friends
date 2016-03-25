@@ -5,6 +5,7 @@
 
 require "friends/activity"
 require "friends/friend"
+require "friends/location"
 require "friends/friends_error"
 
 module Friends
@@ -12,6 +13,7 @@ module Friends
     DEFAULT_FILENAME = "./friends.md".freeze
     ACTIVITIES_HEADER = "### Activities:".freeze
     FRIENDS_HEADER = "### Friends:".freeze
+    LOCATIONS_HEADER = "### Locations:".freeze
     GRAPH_DATE_FORMAT = "%b %Y".freeze # Used as the param for date.strftime().
 
     # @param filename [String] the name of the friends Markdown file
@@ -25,22 +27,21 @@ module Friends
 
     # Write out the friends file with cleaned/sorted data.
     def clean
-      descriptions = @activities.sort.map(&:serialize)
-      names = @friends.sort.map(&:serialize)
-
-      # Write out the cleaned file.
       File.open(@filename, "w") do |file|
         file.puts(ACTIVITIES_HEADER)
-        descriptions.each { |desc| file.puts(desc) }
-        file.puts # Blank line separating friends from activities.
+        @activities.sort.each { |act| file.puts(act.serialize) }
+        file.puts # Blank line separating activities from friends.
         file.puts(FRIENDS_HEADER)
-        names.each { |name| file.puts(name) }
+        @friends.sort.each { |friend| file.puts(friend.serialize) }
+        file.puts # Blank line separating friends from locations.
+        file.puts(LOCATIONS_HEADER)
+        @locations.sort.each { |location| file.puts(location.serialize) }
       end
 
       @filename
     end
 
-    # Add a friend and write out the new friends file.
+    # Add a friend.
     # @param name [String] the name of the friend to add
     # @raise [FriendsError] when a friend with that name is already in the file
     # @return [Friend] the added friend
@@ -60,7 +61,7 @@ module Friends
       friend # Return the added friend.
     end
 
-    # Add an activity and write out the new friends file.
+    # Add an activity.
     # @param serialization [String] the serialized activity
     # @return [Activity] the added activity
     def add_activity(serialization:)
@@ -74,6 +75,25 @@ module Friends
       @activities.unshift(activity)
 
       activity # Return the added activity.
+    end
+
+    # Add a location.
+    # @param serialization [String] the serialized location
+    # @return [Location] the added location
+    def add_location(name:)
+      if @locations.any? { |location| location.name == name }
+        raise FriendsError, "Location \"#{name}\" already exists"
+      end
+
+      begin
+        location = Location.deserialize(name)
+      rescue Serializable::SerializationError => e
+        raise FriendsError, e
+      end
+
+      @locations << location
+
+      location # Return the added location.
     end
 
     # Rename an existing added friend.
@@ -90,7 +110,7 @@ module Friends
       friend
     end
 
-    # Add a nickname to an existing friend and write out the new friends file.
+    # Add a nickname to an existing friend.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to add to the friend
     # @raise [FriendsError] if 0 of 2+ friends match the given name
@@ -165,6 +185,12 @@ module Friends
       acts = acts.take(limit) unless limit.nil?
 
       acts.map(&:display_text)
+    end
+
+    # List all location names in the friends file.
+    # @return [Array] a list of all location names
+    def list_locations
+      @locations.map(&:name)
     end
 
     # Find data points for graphing a given friend's relationship over time.
@@ -285,9 +311,9 @@ module Friends
                      combination(2).
                      reject do |friend1, friend2|
                        (matches & [friend1, friend2]).size == 2 ||
-                       possible_matches.any? do |group|
-                         (group & [friend1, friend2]).size == 2
-                       end
+                         possible_matches.any? do |group|
+                           (group & [friend1, friend2]).size == 2
+                         end
                      end
 
       @activities.each do |activity|
@@ -326,43 +352,64 @@ module Friends
     def read_file
       @friends = []
       @activities = []
+      @locations = []
 
       return unless File.exist?(@filename)
 
-      state = :initial
-      line_num = 0
+      state = :unknown
 
       # Loop through all lines in the file and process them.
-      File.foreach(@filename) do |line|
-        line_num += 1
+      File.foreach(@filename).with_index(1) do |line, line_num|
         line.chomp! # Remove trailing newline from each line.
 
-        case state
-        when :initial
-          bad_line(ACTIVITIES_HEADER, line_num) unless line == ACTIVITIES_HEADER
-
-          state = :reading_activities
-        when :reading_friends
-          begin
-            @friends << Friend.deserialize(line)
-          rescue FriendsError => e
-            bad_line(e, line_num)
-          end
-        when :done_reading_activities
-          state = :reading_friends if line == FRIENDS_HEADER
-        when :reading_activities
-          if line == ""
-            state = :done_reading_activities
-          else
-            begin
-              @activities << Activity.deserialize(line)
-            rescue FriendsError => e
-              bad_line(e, line_num)
-            end
-          end
-        end
+        # Parse the line and update the parsing state.
+        state = parse_line!(line, line_num: line_num, state: state)
       end
     end
+
+    # Parse the given line, adding to the various internal data structures as
+    # necessary.
+    # @param line [String]
+    # @param line_num [Integer] the 1-indexed file line number we're parsing
+    # @param state [Symbol] the state of the parsing, one of:
+    #   [:unknown, :reading_activities, :reading_friends, :reading_locations]
+    # @return [Symbol] the updated state after parsing the given line
+    def parse_line!(line, line_num:, state:)
+      return :unknown if line == ""
+
+      # If we're in an unknown state, look for a header to tell us what we're
+      # parsing next.
+      if state == :unknown
+        PARSING_STAGES.each do |stage|
+          if line == self.class.const_get("#{stage.id.to_s.upcase}_HEADER")
+            return "reading_#{stage.id}".to_sym
+          end
+        end
+
+        # If we made it here, we couldn't recognize a header.
+        bad_line("Couldn't parse line.", line_num)
+      end
+
+      # If we made it this far, we're parsing objects in a class.
+      stage = PARSING_STAGES.find { |s| state == "reading_#{s.id}".to_sym }
+
+      begin
+        instance_variable_get("@#{stage.id}") << stage.klass.deserialize(line)
+      rescue FriendsError => e
+        bad_line(e, line_num)
+      end
+
+      state
+    end
+
+    # Used internally by the parse_line! method above to associate stages with
+    # the class to create.
+    ParsingStage = Struct.new(:id, :klass)
+    PARSING_STAGES = [
+      ParsingStage.new(:activities, Activity),
+      ParsingStage.new(:friends, Friend),
+      ParsingStage.new(:locations, Location)
+    ].freeze
 
     # @param name [String] the name of the friend to search for
     # @return [Friend] the friend whose name exactly matches the argument

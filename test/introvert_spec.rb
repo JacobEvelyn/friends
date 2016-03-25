@@ -8,7 +8,7 @@ describe Friends::Introvert do
     end
   end
 
-  # Add helpers to set internal states for friends and activities.
+  # Add helpers to set internal states for friends/locations/activities.
   def stub_friends(val)
     old_val = introvert.instance_variable_get(:@friends)
     introvert.instance_variable_set(:@friends, val)
@@ -21,6 +21,13 @@ describe Friends::Introvert do
     introvert.instance_variable_set(:@activities, val)
     yield
     introvert.instance_variable_set(:@activities, old_val)
+  end
+
+  def stub_locations(val)
+    old_val = introvert.instance_variable_get(:@locations)
+    introvert.instance_variable_set(:@locations, val)
+    yield
+    introvert.instance_variable_set(:@locations, old_val)
   end
 
   let(:filename) { "test/tmp/friends.md" }
@@ -36,6 +43,12 @@ describe Friends::Introvert do
       Friends::Activity.new(
         str: "Yesterday: Called **#{friend_names.last}**."
       )
+    ]
+  end
+  let(:locations) do
+    [
+      Friends::Location.new(name: "The Eiffel Tower"),
+      Friends::Location.new(name: "Atlantis")
     ]
   end
 
@@ -67,22 +80,28 @@ describe Friends::Introvert do
       unsorted_friends = sorted_friends.reverse
       sorted_activities = activities.sort
       unsorted_activities = sorted_activities.reverse
+      sorted_locations = locations.sort
+      unsorted_locations = sorted_locations.reverse
 
-      serialized_names = sorted_friends.map(&:serialize)
-      name_output = serialized_names.join("\n")
-
-      serialized_descriptions = sorted_activities.map(&:serialize)
-      descriptions_output = serialized_descriptions.join("\n")
+      serialized_friends = sorted_friends.map(&:serialize).join("\n")
+      serialized_activities = sorted_activities.map(&:serialize).join("\n")
+      serialized_locations = sorted_locations.map(&:serialize).join("\n")
 
       expected_output =
-        "#{Friends::Introvert::ACTIVITIES_HEADER}\n#{descriptions_output}\n\n"\
-        "#{Friends::Introvert::FRIENDS_HEADER}\n#{name_output}\n"
+        "#{Friends::Introvert::ACTIVITIES_HEADER}\n"\
+        "#{serialized_activities}\n\n"\
+        "#{Friends::Introvert::FRIENDS_HEADER}\n"\
+        "#{serialized_friends}\n\n"\
+        "#{Friends::Introvert::LOCATIONS_HEADER}\n"\
+        "#{serialized_locations}\n"
 
       # Read the input as unsorted, and make sure we get sorted output.
       stub_friends(unsorted_friends) do
         stub_activities(unsorted_activities) do
-          subject
-          File.read(filename).must_equal expected_output
+          stub_locations(unsorted_locations) do
+            subject
+            File.read(filename).must_equal expected_output
+          end
         end
       end
     end
@@ -103,9 +122,6 @@ describe Friends::Introvert do
   describe "#add_friend" do
     let(:new_friend_name) { "Jacob Evelyn" }
     subject { introvert.add_friend(name: new_friend_name) }
-
-    # Delete the file that is created each time.
-    after { File.delete(filename) if File.exists?(filename) }
 
     describe "when there is no existing friend with that name" do
       it "adds the given friend" do
@@ -129,6 +145,46 @@ describe Friends::Introvert do
         stub_friends(friends) do
           proc { subject }.must_raise Friends::FriendsError
         end
+      end
+    end
+  end
+
+  describe "#add_location" do
+    let(:new_location_name) { "Peru" }
+    subject { introvert.add_location(name: new_location_name) }
+
+    describe "when there is no existing location with that name" do
+      it "adds the given location" do
+        stub_locations(locations) do
+          subject
+          introvert.list_locations.must_include new_location_name
+        end
+      end
+
+      it "returns the location added" do
+        stub_locations(locations) do
+          subject.name.must_equal new_location_name
+        end
+      end
+    end
+
+    describe "when there is an existing location with that name" do
+      let(:new_location_name) { locations.first.name }
+
+      it "raises an error" do
+        stub_locations(locations) do
+          proc { subject }.must_raise Friends::FriendsError
+        end
+      end
+    end
+  end
+
+  describe "#list_locations" do
+    subject { introvert.list_locations }
+
+    it "lists all locations" do
+      stub_locations(locations) do
+        subject.must_equal locations.map(&:name)
       end
     end
   end
@@ -233,9 +289,6 @@ describe Friends::Introvert do
     let(:activity_description) { "Snorkeling with **Betsy Ross**." }
     subject { introvert.add_activity(serialization: activity_serialization) }
 
-    # Delete the file that is created each time.
-    after { File.delete(filename) if File.exists?(filename) }
-
     it "adds the given activity" do
       stub_friends(friends) do
         subject
@@ -298,9 +351,6 @@ describe Friends::Introvert do
       introvert.add_nickname(name: friend_names.first, nickname: "The Dude")
     end
 
-    # Delete the file that is created each time.
-    after { File.delete(filename) if File.exists?(filename) }
-
     it "returns the modified friend" do
       stub_friends(friends) do
         subject.must_equal friends.first
@@ -312,9 +362,6 @@ describe Friends::Introvert do
     subject do
       introvert.remove_nickname(name: "Jeff", nickname: "The Dude")
     end
-
-    # Delete the file that is created each time.
-    after { File.delete(filename) if File.exists?(filename) }
 
     it "returns the modified friend" do
       friend = Friends::Friend.new(name: "Jeff",
@@ -431,12 +478,14 @@ describe Friends::Introvert do
       it "returns a hash of months and frequencies" do
         stub_friends(friends) do
           stub_activities(activities) do
-            subject.must_equal({
-              "Jan 2016" => 1,
-              "Feb 2016" => 1,
-              "Mar 2016" => 0,
-              "Apr 2016" => 1
-            })
+            subject.must_equal(
+              {
+                "Jan 2016" => 1,
+                "Feb 2016" => 1,
+                "Mar 2016" => 0,
+                "Apr 2016" => 1
+              }
+            )
           end
         end
       end
@@ -448,11 +497,13 @@ describe Friends::Introvert do
       it "returns a hash of months and frequencies" do
         stub_friends(friends) do
           stub_activities(activities) do
-            subject.must_equal({
-              "Feb 2016" => 1,
-              "Mar 2016" => 0,
-              "Apr 2016" => 1
-            })
+            subject.must_equal(
+              {
+                "Feb 2016" => 1,
+                "Mar 2016" => 0,
+                "Apr 2016" => 1
+              }
+            )
           end
         end
       end
