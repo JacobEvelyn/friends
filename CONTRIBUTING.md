@@ -17,7 +17,8 @@ that's great as well!
 (`git checkout -b my-new-feature`).
 6. Make your changes. Add or modify tests if necessary!
 (Run tests with `rake test`.) Do your best to conform to
-existing style and commenting patterns.
+existing style and commenting patterns. You can run the local version of the
+`friends` script with `bundle exec bin/friends`.
 7. Update the `README.md` as necessary to include your changes.
 8. Commit your changes
 (`git commit -am "Add some feature"`). You should see
