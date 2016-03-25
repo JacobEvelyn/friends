@@ -130,11 +130,26 @@ Your favorite friends:
 ```
 ##### Graph (in color!) your relationship with a friend over time:
 ```
-$ friends graph "George"
+$ friends graph George
 Nov 2014 |█
 Dec 2014 |
 Jan 2015 |█████
 Feb 2015 |███
+```
+##### Or just graph all of your activities:
+```
+$ friends graph
+Nov 2014 |███
+Dec 2014 |██
+Jan 2015 |███████
+Feb 2015 |█████
+```
+##### Or just check out your lifetime stats:
+```
+$ friends stats
+Total activities: 4
+Total friends: 3
+Total time elapsed: 5 days
 ```
 ##### List all of your friends:
 ```
