@@ -40,6 +40,14 @@ describe Friends::Location do
     end
   end
 
+  describe "#regex_for_name" do
+    subject { loc.regex_for_name }
+
+    it "generates an appropriate regex" do
+      (!!(subject =~ location_name)).must_equal true
+    end
+  end
+
   describe "#<=>" do
     it "sorts alphabetically" do
       algeria = Friends::Location.new(name: "Algeria")

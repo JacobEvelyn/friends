@@ -5,7 +5,10 @@ describe Friends::Activity do
   let(:date_s) { date.to_s }
   let(:friend1) { Friends::Friend.new(name: "Elizabeth Cady Stanton") }
   let(:friend2) { Friends::Friend.new(name: "John Cage") }
-  let(:description) { "Lunch with **#{friend1.name}** and **#{friend2.name}**" }
+  let(:description) do
+    "Lunch with **#{friend1.name}** and **#{friend2.name}** on _The Moon_ "\
+    "after hanging out in _Atlantis_."
+  end
   let(:partition) { Friends::Activity::DATE_PARTITION }
   let(:activity) do
     Friends::Activity.new(str: "#{date_s}#{partition}#{description}")
@@ -99,7 +102,9 @@ describe Friends::Activity do
       subject.
         must_equal "#{Paint[date_s, :bold]}: "\
           "Lunch with #{Paint[friend1.name, :bold, :magenta]} and "\
-          "#{Paint[friend2.name, :bold, :magenta]}"
+          "#{Paint[friend2.name, :bold, :magenta]} on "\
+          "#{Paint['The Moon', :bold, :yellow]} after hanging out in "\
+          "#{Paint['Atlantis', :bold, :yellow]}."
     end
   end
 
@@ -113,7 +118,7 @@ describe Friends::Activity do
     end
   end
 
-  describe "#highlight_friends" do
+  describe "#highlight_description" do
     # Add helpers to set internal states for friends and activities.
     def stub_friends(val)
       old_val = introvert.instance_variable_get(:@friends)
@@ -129,16 +134,34 @@ describe Friends::Activity do
       introvert.instance_variable_set(:@activities, old_val)
     end
 
+    def stub_locations(val)
+      old_val = introvert.instance_variable_get(:@locations)
+      introvert.instance_variable_set(:@locations, val)
+      yield
+      introvert.instance_variable_set(:@locations, old_val)
+    end
+
+    let(:locations) do
+      [
+        Friends::Location.new(name: "Atlantis"),
+        Friends::Location.new(name: "The Moon")
+      ]
+    end
     let(:friends) { [friend1, friend2] }
     let(:introvert) { Friends::Introvert.new }
     subject do
-      stub_friends(friends) { activity.highlight_friends(introvert: introvert) }
+      stub_friends(friends) do
+        stub_locations(locations) do
+          activity.highlight_description(introvert: introvert)
+        end
+      end
     end
 
-    it "finds all friends" do
+    it "finds all friends and locations" do
       subject
-      activity.description.
-        must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**"
+      activity.description.must_equal "Lunch with **#{friend1.name}** and "\
+                                      "**#{friend2.name}** on _The Moon_ "\
+                                      "after hanging out in _Atlantis_."
     end
 
     describe "when description has first names" do
