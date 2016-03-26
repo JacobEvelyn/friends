@@ -101,15 +101,13 @@ Close friend: George Washington Carver
 ```
 ##### Add a location for your friends and activities:
 ```
-$ friends add location Paris
-Location added: "Paris"
+$ friends add location Atlantis
+Location added: "Atlantis"
 ```
-##### List the locations you've added:
+##### And locations will be matched as well:
 ```
-$ friends list locations
-Atlantis
-New York City
-Paris
+$ friends add activity "Went swimming near atlantis with George."
+Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
 ```
 ##### List the activities you've recorded:
 ```
@@ -169,6 +167,13 @@ $ friends list friends
 George Washington Carver
 Grace Hopper
 Marie Curie
+```
+##### List the locations you've added:
+```
+$ friends list locations
+Atlantis
+New York City
+Paris
 ```
 ##### Update to the latest version:
 ```

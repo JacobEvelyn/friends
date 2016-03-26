@@ -140,7 +140,7 @@ command :add do |add|
       # If there's no description, prompt the user for one.
       if activity.description.nil? || activity.description.empty?
         activity.description = Readline.readline(activity.display_text)
-        activity.highlight_friends(introvert: @introvert)
+        activity.highlight_description(introvert: @introvert)
       end
 
       @message = "Activity added: \"#{activity.display_text}\""

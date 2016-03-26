@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # Location represents a location in the world.
 
+require "friends/regex_builder"
 require "friends/serializable"
 
 module Friends
@@ -30,6 +31,12 @@ module Friends
     # @return [String] the file serialization text for the location
     def serialize
       "#{SERIALIZATION_PREFIX}#{@name}"
+    end
+
+    # @return [Regexp] the regex used to match this location's name in an
+    #   activity description
+    def regex_for_name
+      Friends::RegexBuilder.regex(@name)
     end
 
     private

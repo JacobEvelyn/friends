@@ -118,10 +118,8 @@ describe Friends::Friend do
     subject { friend.regexes_for_name }
 
     it "generates appropriate regexes" do
-      subject.must_equal [
-        /(?<!\\)(?<!\*\*)(?<![A-z])Jacob\s+Evelyn(?![A-z])(?!\*\*)/i,
-        /(?<!\\)(?<!\*\*)(?<![A-z])Jacob(?![A-z])(?!\*\*)/i
-      ]
+      subject.any? { |r| r =~ friend_name }.must_equal true
+      subject.any? { |r| r =~ friend_name.partition(" ").first }.must_equal true
     end
   end
 

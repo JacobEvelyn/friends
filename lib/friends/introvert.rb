@@ -71,7 +71,7 @@ module Friends
         raise FriendsError, e
       end
 
-      activity.highlight_friends(introvert: self) if activity.description
+      activity.highlight_description(introvert: self) if activity.description
       @activities.unshift(activity)
 
       activity # Return the added activity.
@@ -289,6 +289,15 @@ module Friends
         friend.regexes_for_name.each do |regex|
           hash[regex] << friend
         end
+      end.sort_by { |k, _| -k.to_s.size }.to_h
+    end
+
+    # @return [Hash] of the form { /regex/ => location }
+    #   This hash is sorted (because Ruby's hashes are ordered) by decreasing
+    #   regex key length, so the key /Paris, France/ appears before /Paris/.
+    def regex_location_map
+      @locations.each_with_object({}) do |location, hash|
+        hash[location.regex_for_name] = location
       end.sort_by { |k, _| -k.to_s.size }.to_h
     end
 
