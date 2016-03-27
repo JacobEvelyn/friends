@@ -92,16 +92,26 @@ module Friends
     # @param [String] new_name
     # @return [String] if name found in description
     # @return [nil] if no change was made
-    def update_name(old_name:, new_name:)
-      description.gsub!(
+    def update_friend_name(old_name:, new_name:)
+      @description.gsub!(
         Regexp.new("(?<=\\*\\*)#{old_name}(?=\\*\\*)"),
-        new_name)
+        new_name
+      )
+    end
+
+    # Updates a location's old_name to their new_name
+    # @param [String] old_name
+    # @param [String] new_name
+    # @return [String] if name found in description
+    # @return [nil] if no change was made
+    def update_location_name(old_name:, new_name:)
+      @description.gsub!(Regexp.new("(?<=_)#{old_name}(?=_)"), new_name)
     end
 
     # @param location [Location] the location to test
     # @return [Boolean] true iff this activity includes the given location
     def includes_location?(location:)
-      description.scan(/(?<=_)[^_]+(?=_)/).include? location.name
+      @description.scan(/(?<=_)[^_]+(?=_)/).include? location.name
     end
 
     # @param friend [Friend] the friend to test
@@ -113,7 +123,7 @@ module Friends
     # Find the names of all friends in this description.
     # @return [Array] list of all friend names in the description
     def friend_names
-      description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
+      @description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
     end
     memoize :friend_names
 

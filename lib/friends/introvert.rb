@@ -110,18 +110,46 @@ module Friends
       friend
     end
 
-    # Rename an existing added friend.
+    # Rename an existing friend.
     # @param old_name [String] the name of the friend
     # @param new_name [String] the new name of the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def rename_friend(old_name:, new_name:)
-      friend = friend_with_name_in(old_name.strip)
+      old_name.strip!
+      new_name.strip!
+
+      friend = friend_with_name_in(old_name)
       @activities.each do |activity|
-        activity.update_name(old_name: friend.name, new_name: new_name.strip)
+        activity.update_friend_name(old_name: friend.name, new_name: new_name)
       end
-      friend.name = new_name.strip
+      friend.name = new_name
       friend
+    end
+
+    # Rename an existing location.
+    # @param old_name [String] the name of the location
+    # @param new_name [String] the new name of the location
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @return [Location] the existing location
+    def rename_location(old_name:, new_name:)
+      old_name.strip!
+      new_name.strip!
+
+      loc = location_with_name_in(old_name)
+
+      # Update locations in activities.
+      @activities.each do |activity|
+        activity.update_location_name(old_name: loc.name, new_name: new_name)
+      end
+
+      # Update locations of friends.
+      @friends.select { |f| f.location_name == loc.name }.each do |friend|
+        friend.location_name = new_name
+      end
+
+      loc.name = new_name # Update location itself.
+      loc
     end
 
     # Add a nickname to an existing friend.

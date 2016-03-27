@@ -446,6 +446,79 @@ describe Friends::Introvert do
     end
   end
 
+  describe "#rename_location" do
+    subject do
+      introvert.rename_location(old_name: old_name, new_name: new_name)
+    end
+    let(:old_name) { "Paris" }
+    let(:new_name) { "Paris, France" }
+
+    let(:activities) do
+      [
+        Friends::Activity.new(str: "Dining in _Paris_."),
+        Friends::Activity.new(str: "Falling in love in _Paris_."),
+        Friends::Activity.new(str: "Swimming near _Atlantis_.")
+      ]
+    end
+    let(:locations) do
+      [
+        Friends::Location.new(name: "Paris"),
+        Friends::Location.new(name: "Atlantis")
+      ]
+    end
+
+    it "replaces old name within activities to the new name" do
+      stub_locations(locations) do
+        stub_activities(activities) do
+          subject
+          introvert.activities.map do |activity|
+            activity.description.include? new_name
+          end.must_equal [true, true, false]
+        end
+      end
+    end
+
+    describe "when there are friends at the location" do
+      let(:friends) do
+        [
+          Friends::Friend.new(name: "Jacques Cousteau", location_name: "Paris"),
+          Friends::Friend.new(name: "Marie Antoinette", location_name: "Paris"),
+          Friends::Friend.new(name: "Julius Caesar", location_name: "Rome")
+        ]
+      end
+
+      it "updates their locations" do
+        stub_locations(locations) do
+          stub_friends(friends) do
+            subject
+            introvert.friends.map do |friend|
+              friend.location_name == new_name
+            end.must_equal [true, true, false]
+          end
+        end
+      end
+    end
+
+    describe "when given names with leading and trailing spaces" do
+      let(:new_name) { "    Paris, France " }
+      let(:old_name) { " Paris    " }
+      subject do
+        introvert.rename_location(old_name: old_name, new_name: new_name)
+      end
+
+      it "correctly strips the spaces" do
+        stub_locations(locations) do
+          stub_activities(activities) do
+            subject
+            introvert.activities.map do |activity|
+              activity.description.include? new_name
+            end.must_equal [true, true, false]
+          end
+        end
+      end
+    end
+  end
+
   describe "#set_location" do
     subject do
       introvert.set_location(
