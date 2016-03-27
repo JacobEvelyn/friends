@@ -87,10 +87,20 @@ And they can be removed as well:
 $ friends remove nickname "Grace Hopper" "The Admiral"
 Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
 ```
+##### Set a friend's location:
+```
+$ friends set location Marie Paris
+Marie Curie's location set to: Paris
+```
 ##### Change a friend's name:
 ```
 $ friends rename friend "Grace Hopper" "Grace Brewster Murray Hopper"
 Name changed: "Grace Brewster Murray Hopper (a.k.a. Amazing Grace)"
+```
+##### Change the name of a location:
+```
+$ friends rename location Paris "Paris, France"
+Location renamed: "Paris, France"
 ```
 ##### Suggest a friend to do something with:
 ```
@@ -98,6 +108,11 @@ $ friends suggest
 Distant friend: Marie Curie
 Moderate friend: Grace Hopper
 Close friend: George Washington Carver
+```
+Or only suggest friends in a specific location:
+```
+$ friends suggest --in Paris
+Distant friend: Marie Curie
 ```
 ##### Add a location for your friends and activities:
 ```
@@ -113,7 +128,7 @@ Activity added: "2016-01-06: Went swimming near Atlantis with George Washington 
 ```
 $ friends list activities
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-12-31: Celebrated the new year with Marie Curie.
+2014-12-31: Celebrated the new year with Marie Curie in New York City.
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 Or only list the activities you did with a certain friend:
@@ -122,6 +137,11 @@ $ friends list activities --with "George"
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 
+```
+Or filter your activities by location:
+```
+$ friends list activities --in "New York"
+2014-12-31: Celebrated the new year with Marie Curie in New York City.
 ```
 ##### Find your favorite friends:
 ```
@@ -166,6 +186,11 @@ Total time elapsed: 5 days
 $ friends list friends
 George Washington Carver
 Grace Hopper
+Marie Curie
+```
+Or list only the friends in a specific location:
+```
+$ friends list friends --in Paris
 Marie Curie
 ```
 ##### List the locations you've added:
