@@ -594,28 +594,61 @@ describe Friends::Introvert do
   end
 
   describe "#suggest" do
-    subject { introvert.suggest }
+    subject { introvert.suggest(location_name: location_name) }
 
-    it "returns distant, moderate, and close friends" do
-      stub_friends(friends) do
-        stub_activities(activities) do
-          subject.must_equal(
-            distant: ["George Washington Carver"],
-            moderate: [],
-            close: ["Betsy Ross"]
-          )
+    describe "when no location name is passed" do
+      let(:location_name) { nil }
+
+      it "returns distant, moderate, and close friends" do
+        stub_friends(friends) do
+          stub_activities(activities) do
+            subject.must_equal(
+              distant: ["George Washington Carver"],
+              moderate: [],
+              close: ["Betsy Ross"]
+            )
+          end
+        end
+      end
+
+      it "doesn't choke when there are no friends" do
+        stub_friends([]) do
+          stub_activities([]) do
+            subject.must_equal(
+              distant: [],
+              moderate: [],
+              close: []
+            )
+          end
         end
       end
     end
 
-    it "doesn't choke when there are no friends" do
-      stub_friends([]) do
-        stub_activities([]) do
-          subject.must_equal(
-            distant: [],
-            moderate: [],
-            close: []
-          )
+    describe "when a location name is passed" do
+      let(:location_name) { "USA" }
+
+      it "returns distant, moderate, and close friends" do
+        friends.first.location_name = location_name
+        stub_friends(friends) do
+          stub_activities(activities) do
+            subject.must_equal(
+              distant: ["George Washington Carver"],
+              moderate: [],
+              close: []
+            )
+          end
+        end
+      end
+
+      it "doesn't choke when there are no friends" do
+        stub_friends([]) do
+          stub_activities([]) do
+            subject.must_equal(
+              distant: [],
+              moderate: [],
+              close: []
+            )
+          end
         end
       end
     end

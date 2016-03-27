@@ -229,8 +229,12 @@ end
 
 desc "Suggest friends to do activities with"
 command :suggest do |suggest|
-  suggest.action do
-    suggestions = @introvert.suggest
+  suggest.flag [:in],
+               arg_name: "LOCATION",
+               desc: "Suggest only friends in the given location"
+
+  suggest.action do |_, options|
+    suggestions = @introvert.suggest(location_name: options[:in])
 
     puts "Distant friend: "\
       "#{Paint[suggestions[:distant].sample || 'None found', :bold, :magenta]}"

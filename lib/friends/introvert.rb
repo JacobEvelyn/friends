@@ -177,7 +177,7 @@ module Friends
 
     # List all friend names in the friends file.
     # @param location_name [String] the name of a location to filter by, or nil
-    #  for unfiltered
+    #   for unfiltered
     # @return [Array] a list of all friend names
     def list_friends(location_name:)
       fs = @friends
@@ -223,7 +223,7 @@ module Friends
     # @param with [String] the name of a friend to filter by, or nil for
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
-    #  for unfiltered
+    #   for unfiltered
     # @return [Array] a list of all activity text values
     # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
     def list_activities(limit:, with:, location_name:)
@@ -302,12 +302,18 @@ module Friends
     #     close: ["Close Friend 1 Name", "Close Friend 2 Name", ...]
     #   }
     #
+    # @param location_name [String] the name of a location to filter by, or nil
+    #   for unfiltered
     # @return [Hash{String => Array<String>}]
-    def suggest
+    def suggest(location_name:)
       set_n_activities! # Set n_activities for all friends.
 
+      # Filter our friends by location if necessary.
+      fs = @friends
+      fs = fs.select { |f| f.location_name == location_name } if location_name
+
       # Sort our friends, with the least favorite friend first.
-      sorted_friends = @friends.sort_by(&:n_activities)
+      sorted_friends = fs.sort_by(&:n_activities)
 
       output = Hash.new { |h, k| h[k] = [] }
 
