@@ -110,11 +110,35 @@ describe Friends::Introvert do
   end
 
   describe "#list_friends" do
-    subject { introvert.list_friends }
+    subject { introvert.list_friends(location_name: location_name) }
 
-    it "lists the names of friends" do
-      stub_friends(friends) do
-        subject.must_equal friend_names
+    describe "when no location name has been passed" do
+      let(:location_name) { nil }
+
+      it "lists the names of friends" do
+        stub_friends(friends) do
+          subject.must_equal friend_names
+        end
+      end
+    end
+
+    describe "when a location name has been passed" do
+      let(:location_name) { "Atlantis" }
+      let(:friends) do
+        [
+          Friends::Friend.new(name: "Mark Watney", location_name: "Mars"),
+          Friends::Friend.new(name: "Aquaman", location_name: "Atlantis"),
+          Friends::Friend.new(name: "Shark-Boy", location_name: "Atlantis"),
+          Friends::Friend.new(name: "Ms. Nowhere")
+        ]
+      end
+
+      it "lists the names of friends" do
+        stub_friends(friends) do
+          stub_locations(locations) do
+            subject.must_equal ["Aquaman", "Shark-Boy"]
+          end
+        end
       end
     end
   end
@@ -127,7 +151,8 @@ describe Friends::Introvert do
       it "adds the given friend" do
         stub_friends(friends) do
           subject
-          introvert.list_friends.must_include new_friend_name
+          introvert.list_friends(location_name: nil).
+            must_include new_friend_name
         end
       end
 

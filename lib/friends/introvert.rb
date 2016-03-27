@@ -148,9 +148,19 @@ module Friends
     end
 
     # List all friend names in the friends file.
+    # @param location_name [String] the name of a location to filter by, or nil
+    #  for unfiltered
     # @return [Array] a list of all friend names
-    def list_friends
-      @friends.map(&:to_s)
+    def list_friends(location_name:)
+      fs = @friends
+
+      # Filter by location if a name is passed.
+      if location_name
+        location = location_with_name_in(location_name)
+        fs = fs.select { |friend| friend.location_name == location.name }
+      end
+
+      fs.map(&:name)
     end
 
     # List your favorite friends.
@@ -185,7 +195,7 @@ module Friends
     # @param with [String] the name of a friend to filter by, or nil for
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
-    #  for  unfiltered
+    #  for unfiltered
     # @return [Array] a list of all activity text values
     # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
     def list_activities(limit:, with:, location_name:)

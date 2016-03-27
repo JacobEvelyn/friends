@@ -15,7 +15,7 @@ module Friends
     def self.deserialization_regex
       # Note: this regex must be on one line because whitespace is important
       # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?\s?(?<location_name>\[[^\]]+\])?/
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?\s?(\[(?<location_name>[^\]]+)\])?/
       # rubocop:enable Metrics/LineLength
     end
 
@@ -30,7 +30,7 @@ module Friends
       @nicknames = nickname_str &&
                    nickname_str.split(NICKNAME_PREFIX)[1..-1].map(&:strip) ||
                    []
-      @location_name = location_name[1..-2] if location_name
+      @location_name = location_name
     end
 
     attr_accessor :name

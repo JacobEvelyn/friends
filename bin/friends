@@ -60,8 +60,12 @@ desc "Lists friends, activities, and locations"
 command :list do |list|
   list.desc "List all friends"
   list.command :friends do |list_friends|
-    list_friends.action do
-      puts @introvert.list_friends
+    list_friends.flag [:in],
+                      arg_name: "LOCATION",
+                      desc: "List only friends in the given location"
+
+    list_friends.action do |_, options|
+      puts @introvert.list_friends(location_name: options[:in])
     end
   end
 
@@ -100,9 +104,9 @@ command :list do |list|
                          arg_name: "NAME",
                          desc: "List only activities involving the given friend"
 
-     list_activities.flag [:in],
-                          arg_name: "LOCATION",
-                          desc: "List only activities in the given location"
+    list_activities.flag [:in],
+                         arg_name: "LOCATION",
+                         desc: "List only activities in the given location"
 
     list_activities.action do |_, options|
       limit = options[:limit].to_i
