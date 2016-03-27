@@ -190,9 +190,16 @@ describe Friends::Introvert do
   end
 
   describe "#list_activities" do
-    subject { introvert.list_activities(limit: limit, with: with) }
+    subject do
+      introvert.list_activities(
+        limit: limit,
+        with: with,
+        location_name: location_name
+      )
+    end
     let(:limit) { nil }
     let(:with) { nil }
+    let(:location_name) { nil }
 
     describe "when the limit is lower than the number of activities" do
       let(:limit) { 1 }
@@ -277,6 +284,74 @@ describe Friends::Introvert do
             stub_activities(activities) do
               # Only one activity has that friend.
               subject.must_equal activities[0..0].map(&:display_text)
+            end
+          end
+        end
+      end
+    end
+
+    describe "when not filtering by a location" do
+      let(:location_name) { nil }
+
+      it "lists the activities" do
+        stub_activities(activities) do
+          subject.must_equal activities.map(&:display_text)
+        end
+      end
+    end
+
+    describe "when filtering by part of a location name" do
+      let(:location_name) { "City" }
+
+      describe "when there is more than one location match" do
+        let(:locations) do
+          [
+            Friends::Location.new(name: "New York City"),
+            Friends::Location.new(name: "Kansas City")
+          ]
+        end
+
+        it "raises an error" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              stub_activities(activities) do
+                proc { subject }.must_raise Friends::FriendsError
+              end
+            end
+          end
+        end
+      end
+
+      describe "when there are no location matches" do
+        let(:locations) { [Friends::Location.new(name: "Atantis")] }
+
+        it "raises an error" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              stub_activities(activities) do
+                proc { subject }.must_raise Friends::FriendsError
+              end
+            end
+          end
+        end
+      end
+
+      describe "when there is exactly one location match" do
+        let(:location_name) { "Atlantis" }
+        let(:activities) do
+          [
+            Friends::Activity.new(str: "Swimming near _Atlantis_."),
+            Friends::Activity.new(str: "Swimming somewhere else.")
+          ]
+        end
+
+        it "filters the activities by that location" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              stub_activities(activities) do
+                # Only one activity has that friend.
+                subject.must_equal activities[0..0].map(&:display_text)
+              end
             end
           end
         end

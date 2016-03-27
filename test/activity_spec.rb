@@ -355,23 +355,32 @@ describe Friends::Activity do
     end
   end
 
+  describe "#includes_location?" do
+    subject { activity.includes_location?(location: loc) }
+    let(:loc) { Friends::Location.new(name: "Atlantis") }
+
+    describe "when the given location is in the activity" do
+      let(:activity) { Friends::Activity.new(str: "Explored _#{loc.name}_") }
+      it { subject.must_equal true }
+    end
+
+    describe "when the given location is not in the activity" do
+      let(:activity) { Friends::Activity.new(str: "Explored _Elsewhere_") }
+      it { subject.must_equal false }
+    end
+  end
+
   describe "#includes_friend?" do
     subject { activity.includes_friend?(friend: friend) }
 
     describe "when the given friend is in the activity" do
       let(:friend) { friend1 }
-
-      it "returns true" do
-        subject.must_equal true
-      end
+      it { subject.must_equal true }
     end
 
     describe "when the given friend is not in the activity" do
       let(:friend) { Friends::Friend.new(name: "Claude Debussy") }
-
-      it "returns false" do
-        subject.must_equal false
-      end
+      it { subject.must_equal false }
     end
   end
 

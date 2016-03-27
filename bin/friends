@@ -1,10 +1,5 @@
 #!/usr/bin/env ruby
 
-# Todo:
-# - Split out serialization into separate repository.
-# - Add auto check for updates.
-# - Allow easy editing of most recent entry.
-
 require "gli"
 require "paint"
 require "readline"
@@ -105,9 +100,17 @@ command :list do |list|
                          arg_name: "NAME",
                          desc: "List only activities involving the given friend"
 
+     list_activities.flag [:in],
+                          arg_name: "LOCATION",
+                          desc: "List only activities in the given location"
+
     list_activities.action do |_, options|
       limit = options[:limit].to_i
-      puts @introvert.list_activities(limit: limit, with: options[:with])
+      puts @introvert.list_activities(
+        limit: limit,
+        with: options[:with],
+        location_name: options[:in]
+      )
     end
   end
 

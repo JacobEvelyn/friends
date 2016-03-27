@@ -170,15 +170,23 @@ module Friends
     #   limit
     # @param with [String] the name of a friend to filter by, or nil for
     #   unfiltered
+    # @param location_name [String] the name of a location to filter by, or nil
+    #  for  unfiltered
     # @return [Array] a list of all activity text values
     # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
-    def list_activities(limit:, with:)
+    def list_activities(limit:, with:, location_name:)
       acts = @activities
 
       # Filter by friend name if argument is passed.
       unless with.nil?
         friend = friend_with_name_in(with)
         acts = acts.select { |act| act.includes_friend?(friend: friend) }
+      end
+
+      # Filter by location name if argument is passed.
+      unless location_name.nil?
+        location = location_with_name_in(location_name)
+        acts = acts.select { |act| act.includes_location?(location: location) }
       end
 
       # If we need to, trim the list.
@@ -198,7 +206,7 @@ module Friends
     #
     # The returned hash uses the following format:
     #   {
-    #     "Jan 2015" => 3, # The month and number of activities during that month
+    #     "Jan 2015" => 3, # The number of activities during each month.
     #     "Feb 2015" => 0,
     #     "Mar 2015" => 9
     #   }
@@ -460,7 +468,8 @@ module Friends
     # @return [Friend] the friend that matches
     # @raise [FriendsError] if 0 or 2+ friends match the given text
     def friend_with_name_in(text)
-      friends = friends_with_name_in(text)
+      regex = Regexp.new(text, Regexp::IGNORECASE)
+      friends = @friends.select { |friend| friend.name.match(regex) }
 
       case friends.size
       when 1
@@ -474,11 +483,23 @@ module Friends
       end
     end
 
-    # @param text [String] the name (or substring) of the friends to search for
-    # @return [Array] a list of all friends that match the given text
-    def friends_with_name_in(text)
+    # @param text [String] the name (or substring) of the location to search for
+    # @return [Location] the location that matches
+    # @raise [FriendsError] if 0 or 2+ location match the given text
+    def location_with_name_in(text)
       regex = Regexp.new(text, Regexp::IGNORECASE)
-      @friends.select { |friend| friend.name.match(regex) }
+      locations = @locations.select { |location| location.name.match(regex) }
+
+      case locations.size
+      when 1
+        # If exactly one location matches, use that location.
+        return locations.first
+      when 0 then raise FriendsError, "No location found for \"#{text}\""
+      else
+        raise FriendsError,
+              "More than one location found for \"#{text}\": "\
+                "#{locations.map(&:name).join(', ')}"
+      end
     end
 
     # Raise an error that a line in the friends file is malformed.
