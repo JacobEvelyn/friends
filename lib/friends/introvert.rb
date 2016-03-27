@@ -78,7 +78,7 @@ module Friends
     end
 
     # Add a location.
-    # @param serialization [String] the serialized location
+    # @param name [String] the serialized location
     # @return [Location] the added location
     def add_location(name:)
       if @locations.any? { |location| location.name == name }
@@ -99,7 +99,7 @@ module Friends
     # Rename an existing added friend.
     # @param old_name [String] the name of the friend
     # @param new_name [String] the new name of the friend
-    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def rename_friend(old_name:, new_name:)
       friend = friend_with_name_in(old_name.strip)
@@ -113,7 +113,7 @@ module Friends
     # Add a nickname to an existing friend.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to add to the friend
-    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def add_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
@@ -125,7 +125,7 @@ module Friends
     #   file.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to remove from the friend
-    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def remove_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
@@ -171,7 +171,7 @@ module Friends
     # @param with [String] the name of a friend to filter by, or nil for
     #   unfiltered
     # @return [Array] a list of all activity text values
-    # @raise [FriendsError] if 0 of 2+ friends match the given `with` text
+    # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
     def list_activities(limit:, with:)
       acts = @activities
 
@@ -193,18 +193,21 @@ module Friends
       @locations.map(&:name)
     end
 
-    # Find data points for graphing a given friend's relationship over time.
-    # @param name [String] the name of the friend to use
-    # @return [Hash] with the following format:
+    # Find data points for graphing activities over time.
+    # Optionally filter by a friend to see a given relationship over time.
+    #
+    # The returned hash uses the following format:
     #   {
-    #     "Jan 2015" => 3,  # The month and number of activities with that
-    #     "Feb 2015" => 0, # friend during that month.
+    #     "Jan 2015" => 3, # The month and number of activities during that month
+    #     "Feb 2015" => 0,
     #     "Mar 2015" => 9
     #   }
-    #   The keys of the hash are all of the months (inclusive) between the first
-    #   and last month in which activities for the given friend have been
-    #   recorded.
-    # @raise [FriendsError] if 0 of 2+ friends match the given name
+    # The keys of the hash are all of the months (inclusive) between the first
+    # and last month in which activities have been recorded.
+    #
+    # @param name [String] the name of the friend to use
+    # @return [Hash{String => Fixnum}]
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
     def graph(name: nil)
       if name
         friend = friend_with_name_in(name) # Find the friend by name.
@@ -230,12 +233,16 @@ module Friends
       act_table
     end
 
-    # @return [Hash] of the format:
+    # Suggest friends to do something with.
+    #
+    # The returned hash uses the following format:
     #   {
     #     distant: ["Distant Friend 1 Name", "Distant Friend 2 Name", ...],
     #     moderate: ["Moderate Friend 1 Name", "Moderate Friend 2 Name", ...],
     #     close: ["Close Friend 1 Name", "Close Friend 2 Name", ...]
     #   }
+    #
+    # @return [Hash{String => Array<String>}]
     def suggest
       set_n_activities! # Set n_activities for all friends.
 
@@ -281,9 +288,17 @@ module Friends
       end
     end
 
-    # @return [Hash] of the form { /regex/ => [list of friends matching regex] }
-    #   This hash is sorted (because Ruby's hashes are ordered) by decreasing
-    #   regex key length, so the key /Jacob Evelyn/ appears before /Jacob/.
+    # Get a regex friend map.
+    #
+    # The returned hash uses the following format:
+    #   {
+    #     /regex/ => [list of friends matching regex]
+    #   }
+    #
+    # This hash is sorted (because Ruby's hashes are ordered) by decreasing
+    # regex key length, so the key /Jacob Evelyn/ appears before /Jacob/.
+    #
+    # @return [Hash{Regexp => Array<Friends::Friend>}]
     def regex_friend_map
       @friends.each_with_object(Hash.new { |h, k| h[k] = [] }) do |friend, hash|
         friend.regexes_for_name.each do |regex|
@@ -292,9 +307,17 @@ module Friends
       end.sort_by { |k, _| -k.to_s.size }.to_h
     end
 
-    # @return [Hash] of the form { /regex/ => location }
-    #   This hash is sorted (because Ruby's hashes are ordered) by decreasing
-    #   regex key length, so the key /Paris, France/ appears before /Paris/.
+    # Get a regex location map.
+    #
+    # The returned hash uses the following format:
+    #   {
+    #     /regex/ => [list of friends matching regex]
+    #   }
+    #
+    # This hash is sorted (because Ruby's hashes are ordered) by decreasing
+    # regex key length, so the key /Paris, France/ appears before /Paris/.
+    #
+    # @return [Hash{Regexp => Array<Friends::Location>}]
     def regex_location_map
       @locations.each_with_object({}) do |location, hash|
         hash[location.regex_for_name] = location
@@ -435,7 +458,7 @@ module Friends
 
     # @param text [String] the name (or substring) of the friend to search for
     # @return [Friend] the friend that matches
-    # @raise [FriendsError] if 0 of 2+ friends match the given text
+    # @raise [FriendsError] if 0 or 2+ friends match the given text
     def friend_with_name_in(text)
       friends = friends_with_name_in(text)
 
