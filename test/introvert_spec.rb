@@ -421,6 +421,23 @@ describe Friends::Introvert do
     end
   end
 
+  describe "#set_location" do
+    subject do
+      introvert.set_location(
+        name: friend_names.first,
+        location_name: locations.first.name
+      )
+    end
+
+    it "returns the modified friend" do
+      stub_friends(friends) do
+        stub_locations(locations) do
+          subject.must_equal friends.first
+        end
+      end
+    end
+  end
+
   describe "#add_nickname" do
     subject do
       introvert.add_nickname(name: friend_names.first, nickname: "The Dude")

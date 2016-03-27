@@ -152,7 +152,7 @@ command :add do |add|
   end
 
   add.desc "Adds a location"
-  add.arg_name "NAME"
+  add.arg_name "LOCATION"
   add.command :location do |add_location|
     add_location.action do |_, _, args|
       location = @introvert.add_location(name: args.first)
@@ -172,6 +172,19 @@ command :add do |add|
   end
 end
 
+desc "Set data about friends"
+command :set do |set|
+  set.desc "Set a friend's location"
+  set.arg_name "NAME LOCATION"
+  set.command :location do |set_location|
+    set_location.action do |_, _, args|
+      friend = @introvert.set_location(name: args.first, location_name: args[1])
+      @message = "#{friend.name}'s location set to: #{friend.location_name}"
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+end
+
 desc "Remove a nickname"
 command :remove do |remove|
   remove.desc "Removes a nickname from a friend"
@@ -185,8 +198,8 @@ command :remove do |remove|
   end
 end
 
-desc "Graph a friend's relationship over time"
-arg_name "NAME"
+desc "Graph all activities or a friend's relationship over time"
+arg_name "NAME (default: none)"
 command :graph do |graph|
   graph.action do |_, _, args|
     # This math is taken from Minitest's Pride plugin (the PrideLOL class).

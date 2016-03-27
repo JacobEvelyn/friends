@@ -15,7 +15,7 @@ module Friends
     def self.deserialization_regex
       # Note: this regex must be on one line because whitespace is important
       # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?/
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?\s?(?<location_name>\[[^\]]+\])?/
       # rubocop:enable Metrics/LineLength
     end
 
@@ -25,14 +25,16 @@ module Friends
     end
 
     # @param name [String] the name of the friend
-    def initialize(name:, nickname_str: nil)
+    def initialize(name:, nickname_str: nil, location_name: nil)
       @name = name.strip
       @nicknames = nickname_str &&
                    nickname_str.split(NICKNAME_PREFIX)[1..-1].map(&:strip) ||
                    []
+      @location_name = location_name[1..-2] if location_name
     end
 
     attr_accessor :name
+    attr_accessor :location_name
 
     # @return [String] the file serialization text for the friend
     def serialize
@@ -41,10 +43,16 @@ module Friends
 
     # @return [String] a string representing the friend's name and nicknames
     def to_s
-      return name if @nicknames.empty?
+      unless @nicknames.empty?
+        nickname_str =
+          " (" +
+          @nicknames.map { |n| "#{NICKNAME_PREFIX}#{n}" }.join(" ") +
+          ")"
+      end
 
-      nickname_str = @nicknames.map { |n| "#{NICKNAME_PREFIX}#{n}" }.join(" ")
-      "#{name} (#{nickname_str})"
+      location_str = " [#{@location_name}]" unless @location_name.nil?
+
+      "#{@name}#{nickname_str}#{location_str}"
     end
 
     # Adds a nickname, avoiding duplicates and stripping surrounding whitespace.
@@ -52,13 +60,6 @@ module Friends
     def add_nickname(nickname)
       @nicknames << nickname
       @nicknames.uniq!
-    end
-
-    # Renames a friend, avoiding duplicates and stripping surrounding
-    # whitespace.
-    # @param new_name [String] the friend's new name
-    def rename(new_name)
-      @name = new_name
     end
 
     # @param nickname [String] the nickname to remove

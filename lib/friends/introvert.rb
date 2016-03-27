@@ -80,6 +80,7 @@ module Friends
     # Add a location.
     # @param name [String] the serialized location
     # @return [Location] the added location
+    # @raise [FriendsError] if a location with that name already exists
     def add_location(name:)
       if @locations.any? { |location| location.name == name }
         raise FriendsError, "Location \"#{name}\" already exists"
@@ -96,6 +97,19 @@ module Friends
       location # Return the added location.
     end
 
+    # Set a friend's location.
+    # @param name [String] the friend's name
+    # @param location_name [String] the name of an existing location
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @raise [FriendsError] if 0 or 2+ locations match the given location name
+    # @return [Friend] the modified friend
+    def set_location(name:, location_name:)
+      friend = friend_with_name_in(name)
+      location = location_with_name_in(location_name)
+      friend.location_name = location.name
+      friend
+    end
+
     # Rename an existing added friend.
     # @param old_name [String] the name of the friend
     # @param new_name [String] the new name of the friend
@@ -106,7 +120,7 @@ module Friends
       @activities.each do |activity|
         activity.update_name(old_name: friend.name, new_name: new_name.strip)
       end
-      friend.rename(new_name.strip)
+      friend.name = new_name.strip
       friend
     end
 
@@ -136,7 +150,7 @@ module Friends
     # List all friend names in the friends file.
     # @return [Array] a list of all friend names
     def list_friends
-      @friends.map(&:name)
+      @friends.map(&:to_s)
     end
 
     # List your favorite friends.
