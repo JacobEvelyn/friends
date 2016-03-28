@@ -1,5 +1,28 @@
 # Change Log
 
+## [v0.17](https://github.com/JacobEvelyn/friends/tree/v0.17) (2016-03-28)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.16...v0.17)
+
+**Implemented enhancements:**
+
+- Add --in flag to `suggest` [\#106](https://github.com/JacobEvelyn/friends/issues/106)
+- Allow locations to be renamed [\#105](https://github.com/JacobEvelyn/friends/issues/105)
+- Add --in location flag to `list activities` [\#100](https://github.com/JacobEvelyn/friends/issues/100)
+- Add --in location flag to `list friends` [\#99](https://github.com/JacobEvelyn/friends/issues/99)
+- Add location matching to activity descriptions [\#97](https://github.com/JacobEvelyn/friends/issues/97)
+- Add `list locations` command [\#96](https://github.com/JacobEvelyn/friends/issues/96)
+- Add `add location` command [\#95](https://github.com/JacobEvelyn/friends/issues/95)
+- Add backwards-compatible \#\#\# Locations: heading to friends.md file. [\#94](https://github.com/JacobEvelyn/friends/issues/94)
+- Update documentation for `graph` and `stats` commands [\#93](https://github.com/JacobEvelyn/friends/issues/93)
+- Add location features [\#107](https://github.com/JacobEvelyn/friends/pull/107) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix documentation formatting and typos [\#104](https://github.com/JacobEvelyn/friends/pull/104) ([andypearson](https://github.com/andypearson))
+- Add backwards-compatible `add location` and `list locations` commands [\#101](https://github.com/JacobEvelyn/friends/pull/101) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
+**Merged pull requests:**
+
+- Add location matching/highlighting to activities [\#103](https://github.com/JacobEvelyn/friends/pull/103) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add documentation for `graph` and `stats` commands [\#102](https://github.com/JacobEvelyn/friends/pull/102) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.16](https://github.com/JacobEvelyn/friends/tree/v0.16) (2016-03-23)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.15...v0.16)
 
