@@ -6,8 +6,8 @@
 
 ### Friends:
 - George Washington Carver
-- Grace Hopper (a.k.a. The Admiral)
-- Marie Curie
+- Grace Hopper (a.k.a. The Admiral) [Paris]
+- Marie Curie [Atlantis]
 
 ### Locations:
 - Atlantis

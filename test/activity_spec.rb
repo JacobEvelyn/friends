@@ -355,23 +355,32 @@ describe Friends::Activity do
     end
   end
 
+  describe "#includes_location?" do
+    subject { activity.includes_location?(location: loc) }
+    let(:loc) { Friends::Location.new(name: "Atlantis") }
+
+    describe "when the given location is in the activity" do
+      let(:activity) { Friends::Activity.new(str: "Explored _#{loc.name}_") }
+      it { subject.must_equal true }
+    end
+
+    describe "when the given location is not in the activity" do
+      let(:activity) { Friends::Activity.new(str: "Explored _Elsewhere_") }
+      it { subject.must_equal false }
+    end
+  end
+
   describe "#includes_friend?" do
     subject { activity.includes_friend?(friend: friend) }
 
     describe "when the given friend is in the activity" do
       let(:friend) { friend1 }
-
-      it "returns true" do
-        subject.must_equal true
-      end
+      it { subject.must_equal true }
     end
 
     describe "when the given friend is not in the activity" do
       let(:friend) { Friends::Friend.new(name: "Claude Debussy") }
-
-      it "returns false" do
-        subject.must_equal false
-      end
+      it { subject.must_equal false }
     end
   end
 
@@ -405,10 +414,13 @@ describe Friends::Activity do
     end
   end
 
-  describe "#update_name" do
+  describe "#update_friend_name" do
     let(:description) { "Lunch with **John Candy**." }
     subject do
-      activity.update_name(old_name: "John Candy", new_name: "John Cleese")
+      activity.update_friend_name(
+        old_name: "John Candy",
+        new_name: "John Cleese"
+      )
     end
 
     it "renames the given friend in the description" do
@@ -426,11 +438,47 @@ describe Friends::Activity do
     describe "when the description contains the complete old name" do
       let(:description) { "Coffee with **John** at John's Studio." }
       subject do
-        activity.update_name(old_name: "John", new_name: "Joe")
+        activity.update_friend_name(old_name: "John", new_name: "Joe")
       end
 
       it "only replaces the actual name" do
         subject.must_equal "Coffee with **Joe** at John's Studio."
+      end
+    end
+  end
+
+  describe "#update_location_name" do
+    let(:description) { "Lunch in _Paris_." }
+    subject do
+      activity.update_location_name(
+        old_name: "Paris",
+        new_name: "Paris, France"
+      )
+    end
+
+    it "renames the given friend in the description" do
+      subject.must_equal "Lunch in _Paris, France_."
+    end
+
+    describe "when the description contains a fragment of the old name" do
+      let(:description) { "Lunch in _Paris_ at the Parisian Café." }
+
+      it "only replaces the name" do
+        subject.must_equal "Lunch in _Paris, France_ at the Parisian Café."
+      end
+    end
+
+    describe "when the description contains the complete old name" do
+      let(:description) { "Lunch in _Paris_ at The Paris Café." }
+      subject do
+        activity.update_location_name(
+          old_name: "Paris",
+          new_name: "Paris, France"
+        )
+      end
+
+      it "only replaces the actual name" do
+        subject.must_equal "Lunch in _Paris, France_ at The Paris Café."
       end
     end
   end

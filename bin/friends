@@ -1,10 +1,5 @@
 #!/usr/bin/env ruby
 
-# Todo:
-# - Split out serialization into separate repository.
-# - Add auto check for updates.
-# - Allow easy editing of most recent entry.
-
 require "gli"
 require "paint"
 require "readline"
@@ -65,8 +60,12 @@ desc "Lists friends, activities, and locations"
 command :list do |list|
   list.desc "List all friends"
   list.command :friends do |list_friends|
-    list_friends.action do
-      puts @introvert.list_friends
+    list_friends.flag [:in],
+                      arg_name: "LOCATION",
+                      desc: "List only friends in the given location"
+
+    list_friends.action do |_, options|
+      puts @introvert.list_friends(location_name: options[:in])
     end
   end
 
@@ -105,9 +104,17 @@ command :list do |list|
                          arg_name: "NAME",
                          desc: "List only activities involving the given friend"
 
+    list_activities.flag [:in],
+                         arg_name: "LOCATION",
+                         desc: "List only activities in the given location"
+
     list_activities.action do |_, options|
       limit = options[:limit].to_i
-      puts @introvert.list_activities(limit: limit, with: options[:with])
+      puts @introvert.list_activities(
+        limit: limit,
+        with: options[:with],
+        location_name: options[:in]
+      )
     end
   end
 
@@ -149,7 +156,7 @@ command :add do |add|
   end
 
   add.desc "Adds a location"
-  add.arg_name "NAME"
+  add.arg_name "LOCATION"
   add.command :location do |add_location|
     add_location.action do |_, _, args|
       location = @introvert.add_location(name: args.first)
@@ -169,6 +176,19 @@ command :add do |add|
   end
 end
 
+desc "Set data about friends"
+command :set do |set|
+  set.desc "Set a friend's location"
+  set.arg_name "NAME LOCATION"
+  set.command :location do |set_location|
+    set_location.action do |_, _, args|
+      friend = @introvert.set_location(name: args.first, location_name: args[1])
+      @message = "#{friend.name}'s location set to: #{friend.location_name}"
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+end
+
 desc "Remove a nickname"
 command :remove do |remove|
   remove.desc "Removes a nickname from a friend"
@@ -182,8 +202,8 @@ command :remove do |remove|
   end
 end
 
-desc "Graph a friend's relationship over time"
-arg_name "NAME"
+desc "Graph all activities or a friend's relationship over time"
+arg_name "NAME (default: none)"
 command :graph do |graph|
   graph.action do |_, _, args|
     # This math is taken from Minitest's Pride plugin (the PrideLOL class).
@@ -209,8 +229,12 @@ end
 
 desc "Suggest friends to do activities with"
 command :suggest do |suggest|
-  suggest.action do
-    suggestions = @introvert.suggest
+  suggest.flag [:in],
+               arg_name: "LOCATION",
+               desc: "Suggest only friends in the given location"
+
+  suggest.action do |_, options|
+    suggestions = @introvert.suggest(location_name: options[:in])
 
     puts "Distant friend: "\
       "#{Paint[suggestions[:distant].sample || 'None found', :bold, :magenta]}"
@@ -239,15 +263,30 @@ command :stats do |stats|
   end
 end
 
-desc "Renames a friend"
+desc "Renames a friend or location"
 command :rename do |rename|
   rename.desc "Renames a friend"
   rename.arg_name "NAME NEW_NAME"
   rename.command :friend do |rename_friend|
     rename_friend.action do |_, _, args|
-      friend = @introvert.rename_friend(old_name: args.first,
-                                        new_name: args[1])
+      friend = @introvert.rename_friend(
+        old_name: args.first,
+        new_name: args[1]
+      )
       @message = "Name changed: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
+  rename.desc "Renames a location"
+  rename.arg_name "NAME NEW_NAME"
+  rename.command :location do |rename_location|
+    rename_location.action do |_, _, args|
+      location = @introvert.rename_location(
+        old_name: args.first,
+        new_name: args[1]
+      )
+      @message = "Location renamed: \"#{location.name}\""
       @dirty = true # Mark the file for cleaning.
     end
   end

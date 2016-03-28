@@ -110,11 +110,35 @@ describe Friends::Introvert do
   end
 
   describe "#list_friends" do
-    subject { introvert.list_friends }
+    subject { introvert.list_friends(location_name: location_name) }
 
-    it "lists the names of friends" do
-      stub_friends(friends) do
-        subject.must_equal friend_names
+    describe "when no location name has been passed" do
+      let(:location_name) { nil }
+
+      it "lists the names of friends" do
+        stub_friends(friends) do
+          subject.must_equal friend_names
+        end
+      end
+    end
+
+    describe "when a location name has been passed" do
+      let(:location_name) { "Atlantis" }
+      let(:friends) do
+        [
+          Friends::Friend.new(name: "Mark Watney", location_name: "Mars"),
+          Friends::Friend.new(name: "Aquaman", location_name: "Atlantis"),
+          Friends::Friend.new(name: "Shark-Boy", location_name: "Atlantis"),
+          Friends::Friend.new(name: "Ms. Nowhere")
+        ]
+      end
+
+      it "lists the names of friends" do
+        stub_friends(friends) do
+          stub_locations(locations) do
+            subject.must_equal ["Aquaman", "Shark-Boy"]
+          end
+        end
       end
     end
   end
@@ -127,7 +151,8 @@ describe Friends::Introvert do
       it "adds the given friend" do
         stub_friends(friends) do
           subject
-          introvert.list_friends.must_include new_friend_name
+          introvert.list_friends(location_name: nil).
+            must_include new_friend_name
         end
       end
 
@@ -190,9 +215,16 @@ describe Friends::Introvert do
   end
 
   describe "#list_activities" do
-    subject { introvert.list_activities(limit: limit, with: with) }
+    subject do
+      introvert.list_activities(
+        limit: limit,
+        with: with,
+        location_name: location_name
+      )
+    end
     let(:limit) { nil }
     let(:with) { nil }
+    let(:location_name) { nil }
 
     describe "when the limit is lower than the number of activities" do
       let(:limit) { 1 }
@@ -282,6 +314,74 @@ describe Friends::Introvert do
         end
       end
     end
+
+    describe "when not filtering by a location" do
+      let(:location_name) { nil }
+
+      it "lists the activities" do
+        stub_activities(activities) do
+          subject.must_equal activities.map(&:display_text)
+        end
+      end
+    end
+
+    describe "when filtering by part of a location name" do
+      let(:location_name) { "City" }
+
+      describe "when there is more than one location match" do
+        let(:locations) do
+          [
+            Friends::Location.new(name: "New York City"),
+            Friends::Location.new(name: "Kansas City")
+          ]
+        end
+
+        it "raises an error" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              stub_activities(activities) do
+                proc { subject }.must_raise Friends::FriendsError
+              end
+            end
+          end
+        end
+      end
+
+      describe "when there are no location matches" do
+        let(:locations) { [Friends::Location.new(name: "Atantis")] }
+
+        it "raises an error" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              stub_activities(activities) do
+                proc { subject }.must_raise Friends::FriendsError
+              end
+            end
+          end
+        end
+      end
+
+      describe "when there is exactly one location match" do
+        let(:location_name) { "Atlantis" }
+        let(:activities) do
+          [
+            Friends::Activity.new(str: "Swimming near _Atlantis_."),
+            Friends::Activity.new(str: "Swimming somewhere else.")
+          ]
+        end
+
+        it "filters the activities by that location" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              stub_activities(activities) do
+                # Only one activity has that friend.
+                subject.must_equal activities[0..0].map(&:display_text)
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
   describe "#add_activity" do
@@ -346,6 +446,96 @@ describe Friends::Introvert do
     end
   end
 
+  describe "#rename_location" do
+    subject do
+      introvert.rename_location(old_name: old_name, new_name: new_name)
+    end
+    let(:old_name) { "Paris" }
+    let(:new_name) { "Paris, France" }
+
+    let(:activities) do
+      [
+        Friends::Activity.new(str: "Dining in _Paris_."),
+        Friends::Activity.new(str: "Falling in love in _Paris_."),
+        Friends::Activity.new(str: "Swimming near _Atlantis_.")
+      ]
+    end
+    let(:locations) do
+      [
+        Friends::Location.new(name: "Paris"),
+        Friends::Location.new(name: "Atlantis")
+      ]
+    end
+
+    it "replaces old name within activities to the new name" do
+      stub_locations(locations) do
+        stub_activities(activities) do
+          subject
+          introvert.activities.map do |activity|
+            activity.description.include? new_name
+          end.must_equal [true, true, false]
+        end
+      end
+    end
+
+    describe "when there are friends at the location" do
+      let(:friends) do
+        [
+          Friends::Friend.new(name: "Jacques Cousteau", location_name: "Paris"),
+          Friends::Friend.new(name: "Marie Antoinette", location_name: "Paris"),
+          Friends::Friend.new(name: "Julius Caesar", location_name: "Rome")
+        ]
+      end
+
+      it "updates their locations" do
+        stub_locations(locations) do
+          stub_friends(friends) do
+            subject
+            introvert.friends.map do |friend|
+              friend.location_name == new_name
+            end.must_equal [true, true, false]
+          end
+        end
+      end
+    end
+
+    describe "when given names with leading and trailing spaces" do
+      let(:new_name) { "    Paris, France " }
+      let(:old_name) { " Paris    " }
+      subject do
+        introvert.rename_location(old_name: old_name, new_name: new_name)
+      end
+
+      it "correctly strips the spaces" do
+        stub_locations(locations) do
+          stub_activities(activities) do
+            subject
+            introvert.activities.map do |activity|
+              activity.description.include? new_name
+            end.must_equal [true, true, false]
+          end
+        end
+      end
+    end
+  end
+
+  describe "#set_location" do
+    subject do
+      introvert.set_location(
+        name: friend_names.first,
+        location_name: locations.first.name
+      )
+    end
+
+    it "returns the modified friend" do
+      stub_friends(friends) do
+        stub_locations(locations) do
+          subject.must_equal friends.first
+        end
+      end
+    end
+  end
+
   describe "#add_nickname" do
     subject do
       introvert.add_nickname(name: friend_names.first, nickname: "The Dude")
@@ -404,28 +594,61 @@ describe Friends::Introvert do
   end
 
   describe "#suggest" do
-    subject { introvert.suggest }
+    subject { introvert.suggest(location_name: location_name) }
 
-    it "returns distant, moderate, and close friends" do
-      stub_friends(friends) do
-        stub_activities(activities) do
-          subject.must_equal(
-            distant: ["George Washington Carver"],
-            moderate: [],
-            close: ["Betsy Ross"]
-          )
+    describe "when no location name is passed" do
+      let(:location_name) { nil }
+
+      it "returns distant, moderate, and close friends" do
+        stub_friends(friends) do
+          stub_activities(activities) do
+            subject.must_equal(
+              distant: ["George Washington Carver"],
+              moderate: [],
+              close: ["Betsy Ross"]
+            )
+          end
+        end
+      end
+
+      it "doesn't choke when there are no friends" do
+        stub_friends([]) do
+          stub_activities([]) do
+            subject.must_equal(
+              distant: [],
+              moderate: [],
+              close: []
+            )
+          end
         end
       end
     end
 
-    it "doesn't choke when there are no friends" do
-      stub_friends([]) do
-        stub_activities([]) do
-          subject.must_equal(
-            distant: [],
-            moderate: [],
-            close: []
-          )
+    describe "when a location name is passed" do
+      let(:location_name) { "USA" }
+
+      it "returns distant, moderate, and close friends" do
+        friends.first.location_name = location_name
+        stub_friends(friends) do
+          stub_activities(activities) do
+            subject.must_equal(
+              distant: ["George Washington Carver"],
+              moderate: [],
+              close: []
+            )
+          end
+        end
+      end
+
+      it "doesn't choke when there are no friends" do
+        stub_friends([]) do
+          stub_activities([]) do
+            subject.must_equal(
+              distant: [],
+              moderate: [],
+              close: []
+            )
+          end
         end
       end
     end
