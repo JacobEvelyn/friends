@@ -173,6 +173,30 @@ describe Friends::Activity do
       end
     end
 
+    describe "when description has nicknames" do
+      let(:description) { "Lunch with Lizzy and Johnny." }
+      it "matches friends" do
+        friend1.add_nickname("Lizzy")
+        friend2.add_nickname("Johnny")
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+      end
+    end
+
+    describe "when discription has nicknames which contain first names" do
+      let(:nickname1) { "Awesome #{friend1.name}" }
+      let(:nickname2) { "Long #{friend2.name} Silver" }
+      let(:description) { "Lunch with #{nickname1} and #{nickname2}." }
+      it "matches friends" do
+        friend1.add_nickname(nickname1)
+        friend2.add_nickname(nickname2)
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend1.name}** and **#{friend2.name}**."
+      end
+    end
+
     describe "when names are not entered case-sensitively" do
       let(:description) { "Lunch with elizabeth cady stanton." }
       it "matches friends" do

@@ -101,7 +101,10 @@ module Friends
 
       # Create the list of regexes and return it.
       chunks = name.split(Regexp.new(splitter))
-      [chunks, [chunks.first], *@nicknames.map { |n| [n] }].map do |words|
+
+      # We check nicknames before first names because nicknames may contain
+      # first names, as in "Amazing Grace" being a nickname for Grace Hopper.
+      [chunks, *@nicknames.map { |n| [n] }, [chunks.first]].map do |words|
         Friends::RegexBuilder.regex(words.join(splitter))
       end
     end
