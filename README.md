@@ -5,25 +5,66 @@
 Spend time with the people you care about. Introvert-tested.
 Extrovert-approved.
 
-### What is it?
+## Table of Contents
 
-**Friends** is both a Ruby library and a command-line interface that
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Core concepts](#core-concepts)
+  - [Global flags](#global-flags)
+  - [Syncing across multiple machines](#syncing-across-multiple-machines)
+  - [Command reference](#command-reference)
+    - [`add`](#add)
+      - [`add activity`](#add-activity)
+      - [`add friend`](#add-friend)
+      - [`add location`](#add-location)
+      - [`add nickname`](#add-nickname)
+    - [`clean`](#clean)
+    - [`graph`](#graph)
+    - [`help`](#help)
+    - [`list`](#list)
+      - [`list activities`](#list-activities)
+      - [`list favorites`](#list-favorites)
+      - [`list friends`](#list-friends)
+      - [`list locations`](#list-locations)
+    - [`remove nickname`](#remove-nickname)
+    - [`rename`](#rename)
+      - [`rename friend`](#rename-friend)
+      - [`rename location`](#rename-location)
+    - [`set location`](#set)
+    - [`stats`](#stats)
+    - [`suggest`](#suggest)
+    - [`update`](#update)
+- [Other documentation](#other-documentation)
+- [Contributing (it's encouraged!)](#contributing-its-encouraged)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+
+----
+
+## Overview
+
+`friends` is both a Ruby library and a command-line interface that
 allows you to keep track of your relationships with the people you
 care about.
 
-### Why use it?
+`friends` gives you:
+- More organization around staying in touch with friends and
+  family.
+- A way to track the ebbs and flows of your relationships over
+  time.
+- Suggestions for who to call or hang out with when you have free
+  time, whether it's fifteen minutes or an entire weekend.
+- A low-cost way to record and remember big moments in your life.
 
-1. **Friends** gives you:
-  - More organization around staying in touch with friends and
-    family.
-  - A way to track the ebbs and flows of your relationships over
-    time.
-  - Suggestions for who to call or hang out with when you have free
-    time, whether it's fifteen minutes or an entire weekend.
-  - A low-cost way to record and remember big moments in your life.
-2. **Friends** stores its data in a human-readable `friends.md`
-  Markdown file. No proprietary formats here!
-3. **Friends** is open-source and very open to new ideas. Contribute!
+Its philosophy emphasizes:
+
+- **Simplicity**—it should be quick and easy to use.
+- **Transparency**—all data is stored in a human-readable Markdown file. No
+  proprietary formats here! And in addition to being open-source, `friends` is
+  very much open to new ideas. Contribute!
+- **Intelligence**—specify dates with English phrases like "yesterday." Specify
+  friends with their first names, even when you're friends with many *Joanne*s. `friends` will figure it out.
 
 ## Installation
 
@@ -31,240 +72,416 @@ care about.
 $ gem install friends
 ```
 
-## Usage*
+Easy, huh?
+
+## Usage
+
+### Core concepts
+
+`friends` is structured around several different types of things:
+
+- **Activities**: The things you do. Each activity has a date associated with
+  it.
+- **Friends**: The people you do *activities* with. Each friend has a name and,
+  optionally, one or several nicknames.
+- **Locations**: The places in which *activities* happen.
+
+The `friends.md` Markdown file that stores all of your data contains:
+
+- an alphabetical list of all locations:
+
+```markdown
+### Locations:
+- Atlantis
+- Marie's Diner
+- Paris
+```
+
+- an alphabetical list of all friends and their nicknames and locations:
+
+```markdown
+### Friends:
+- George Washington Carver
+- Grace Hopper (a.k.a. The Admiral) [Paris]
+- Marie Curie [Atlantis]
+```
+
+- and an ordered list of all activities:
+
+```markdown
+### Activities:
+- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+- 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
+- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
+- 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
+```
+
+See the example
+[`friends.md`](https://github.com/JacobEvelyn/friends/blob/master/friends.md)
+file for more information.
+
+### Global flags
+
+`friends` supports several global flags that can be used on any command when
+specified before the name of the command, like: `friends [flags] [command]`.
+
+These flags are:
+
+- `--debug`: Debug error messages with a full backtrace.
+- `--filename`: Set the location of the friends file to use (default: ./friends.md)
+
+```bash
+$ friends --filename ./test/tmp/friends.md clean
+File cleaned: "./test/tmp/friends.md"
+```
+
+- `--quiet`: Quiet output messages.
+
+```bash
+$ friends --quiet add activity "Went rollerskating with George."
+$ # No output!
+```
+
+In addition, these flags may be used without any command:
+
+- `--help`: Show the help menu. This is equivalent to `friends help`.
+Help menus are available for all levels of commands:
+
+```bash
+$ friends --help
+```
+
+```bash
+$ friends list --help
+```
+
+```bash
+$ friends list activities --help
+```
+
+- `--version`: Show the `friends` program version.
+
+### Syncing across multiple machines
+
+Wouldn't it be nice to be able to use `friends` across all of your
+devices? Hooray, you can! Just put the `friends.md` file in your
+Dropbox/Box Sync/Google Drive/whatever folder and use the
+`--filename` flag. You can even set up a Bash/Zsh/whatever alias to
+do this for you, like so:
+
+```bash
+alias friends="friends --filename '~/Dropbox/friends.md'"
+```
+
+### Command reference*
 
 *Note that the command-line output is colored, which this README cannot show.
 
-### Basic commands:
+#### `add`
 
-##### Add a friend:
-```
-$ friends add friend "Grace Hopper"
-Friend added: "Grace Hopper"
-```
-##### Record an activity with a friend:
-```
+##### `add activity`
+
+```bash
 $ friends add activity "Got lunch with Grace and George."
 Activity added: "2015-01-04: Got lunch with Grace Hopper and George Washington Carver."
 ```
+
 `friends` will **automatically** figure out which "Grace" and "George" you're referring to, *even if you're friends with lots of different Graces and Georges*.
 
-You can of course specify a date for the activity:
+Nicknames will be used to match friends in activities,
+just like formal names:
+
+```bash
+$ friends add activity "Invented debugging with The Admiral."
+Activity added: "2016-01-06: Invented debugging with Grace Hopper."
 ```
+
+And locations will be matched as well:
+
+```bash
+$ friends add activity "Went swimming near atlantis with George."
+Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
+```
+
+You can of course specify a date for the activity:
+
+```bash
 $ friends add activity "Yesterday: Celebrated the new year with Marie."
 Activity added: "2014-12-31: Celebrated the new year with Marie Curie."
 ```
+
 Or get an **interactive prompt** by just typing `friends add activity`, with or without a date specified:
-```
+
+```bash
 $ friends add activity 2015-11-01
 2015-11-01: <type description here>
 ```
+
 **Natural-language dates** work just fine:
-```
+
+```bash
 $ friends add activity 'last Monday'
 2016-03-07: <type description here>
 ```
+
 You can escape the names of friends you don't want `friends` to match with a backslash:
-```
+
+```bash
 $ friends add activity "2015-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
 Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
 ```
-##### Set a friend's nicknames:
+
+##### `add friend`
+
+```bash
+$ friends add friend "Grace Hopper"
+Friend added: "Grace Hopper"
 ```
+
+##### `add location`
+
+```
+$ friends add location Atlantis
+Location added: "Atlantis"
+```
+
+##### `add nickname`
+
+```bash
 $ friends add nickname "Grace Hopper" "The Admiral"
 Nickname added: "Grace Hopper (a.k.a. The Admiral)
 $ friends add nickname "Grace Hopper" "Amazing Grace"
 Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
 ```
-Nicknames will be used to match friends in activities,
-just like formal names:
-```
-$ friends add activity "Invented debugging with Amazing Grace.""
-Activity added: "2016-01-06: Invented debugging with Amazing Grace Hopper."
-```
-And they can be removed as well:
-```
-$ friends remove nickname "Grace Hopper" "The Admiral"
-Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
-```
-##### Set a friend's location:
-```
-$ friends set location Marie Paris
-Marie Curie's location set to: Paris
-```
-##### Change a friend's name:
-```
-$ friends rename friend "Grace Hopper" "Grace Brewster Murray Hopper"
-Name changed: "Grace Brewster Murray Hopper (a.k.a. Amazing Grace)"
-```
-##### Change the name of a location:
-```
-$ friends rename location Paris "Paris, France"
-Location renamed: "Paris, France"
-```
-##### Suggest a friend to do something with:
-```
-$ friends suggest
-Distant friend: Marie Curie
-Moderate friend: Grace Hopper
-Close friend: George Washington Carver
-```
-Or only suggest friends in a specific location:
-```
-$ friends suggest --in Paris
-Distant friend: Marie Curie
-```
-##### Add a location for your friends and activities:
-```
-$ friends add location Atlantis
-Location added: "Atlantis"
-```
-##### And locations will be matched as well:
-```
-$ friends add activity "Went swimming near atlantis with George."
-Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
-```
-##### List the activities you've recorded:
-```
-$ friends list activities
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
-```
-Or only list the activities you did with a certain friend:
-```
-$ friends list activities --with "George"
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
 
+#### `clean`
+
+Reads and re-writes the `friends.md` file:
+
+```bash
+$ friends clean
+File cleaned: "./friends.md"
 ```
-Or filter your activities by location:
-```
-$ friends list activities --in "New York"
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
-```
-##### Find your favorite friends:
-```
-$ friends list favorites
-Your favorite friends:
-1. George Washington Carver (2 activities)
-2. Grace Hopper             (1)
-3. Marie Curie              (1)
-```
-Or get a specific number of favorites:
-```
-$ friends list favorites --limit 2
-Your favorite friends:
-1. George Washington Carver (2 activities)
-2. Grace Hopper             (1)
-```
-##### Graph (in color!) your relationship with a friend over time:
-```
+
+This command is useful after manual editing of the file, for re-ordering its
+contents.
+
+#### `graph`
+
+Graphs (in color!) your relationship with a given friend over time:
+
+```bash
 $ friends graph George
 Nov 2014 |█
 Dec 2014 |
 Jan 2015 |█████
 Feb 2015 |███
 ```
-##### Or just graph all of your activities:
-```
+
+Or just graph all of your activities:
+
+```bash
 $ friends graph
 Nov 2014 |███
 Dec 2014 |██
 Jan 2015 |███████
 Feb 2015 |█████
 ```
-##### Or just check out your lifetime stats:
+
+#### `help`
+
+Displays a help menu. This is equivalent to `friends --help`.
+
+```bash
+$ friends help
+NAME
+    friends - Spend time with the people you care about. Introvert-tested. Extrovert-approved.
+
+SYNOPSIS
+    friends [global options] command [command options] [arguments...]
+
+...
 ```
-$ friends stats
-Total activities: 4
-Total friends: 3
-Total time elapsed: 5 days
+
+Help menus are available for all levels of commands:
+
+```bash
+$ friends help
 ```
-##### List all of your friends:
+
+```bash
+$ friends help list
 ```
+
+```bash
+$ friends help list activities
+```
+
+#### `list`
+
+##### `list activities`
+
+Lists recent activities:
+
+```bash
+$ friends list activities
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
+2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
+```
+
+You can adjust how many activities are shown:
+
+```bash
+$ friends list activities --limit 2
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
+2014-12-31: Celebrated the new year with Marie Curie in New York City.
+```
+
+Or only list the activities you did with a certain friend:
+
+```bash
+$ friends list activities --with "George"
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
+```
+
+Or filter your activities by location:
+
+```bash
+$ friends list activities --in "New York"
+2014-12-31: Celebrated the new year with Marie Curie in New York City.
+```
+
+##### `list favorites`
+
+Lists your "favorite" friends (by total number of activities):
+
+```bash
+$ friends list favorites
+Your favorite friends:
+1. George Washington Carver (2 activities)
+2. Grace Hopper             (1)
+3. Marie Curie              (1)
+```
+
+You can specify a number of favorites to show:
+
+```bash
+$ friends list favorites --limit 2
+Your favorite friends:
+1. George Washington Carver (2 activities)
+2. Grace Hopper             (1)
+```
+
+##### `list friends`
+
+Lists all of your friends:
+
+```bash
 $ friends list friends
 George Washington Carver
 Grace Hopper
 Marie Curie
 ```
-Or list only the friends in a specific location:
-```
+
+You can filter your friends by location:
+
+```bash
 $ friends list friends --in Paris
 Marie Curie
 ```
-##### List the locations you've added:
+
+##### `list locations`
+
+Lists all of the locations you've added:
+
 ```
 $ friends list locations
 Atlantis
 New York City
 Paris
 ```
-##### Update to the latest version:
+
+#### `remove nickname`
+
+Removes a specific nickname from a friend:
+
+```bash
+$ friends remove nickname "Grace Hopper" "The Admiral"
+Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
+```
+
+#### `rename`
+
+##### `rename friend`
+
+```bash
+$ friends rename friend "Grace Hopper" "Grace Brewster Murray Hopper"
+Name changed: "Grace Brewster Murray Hopper (a.k.a. Amazing Grace)"
+```
+
+##### `rename location`
+
+```bash
+$ friends rename location Paris "Paris, France"
+Location renamed: "Paris, France"
+```
+
+#### `set location`
+
+Sets a friend's location:
+
+```bash
+$ friends set location Marie Paris
+Marie Curie's location set to: Paris
+```
+
+#### `stats`
+
+Gives you your lifetime usage stats:
+
+```bash
+$ friends stats
+Total activities: 4
+Total friends: 3
+Total time elapsed: 5 days
+```
+
+#### `suggest`
+
+Gives you suggestions of up to three random friends to do something with, based
+on how often you've done things with them in the past:
+
+```bash
+$ friends suggest
+Distant friend: Marie Curie
+Moderate friend: Grace Hopper
+Close friend: George Washington Carver
+```
+
+You can request suggestions of friends in a specific location:
+
+```bash
+$ friends suggest --in Paris
+Distant friend: Marie Curie
+```
+
+#### `update`
+
+Updates `friends` to the latest version on RubyGems:
+
 ```
 $ friends update
-Updated to friends 0.3
-```
-### Global options:
-
-##### --quiet
-
-Quiet output messages:
-```
-$ friends --quiet add activity "Went rollerskating with George."
-$ # No output!
+Updated to friends 0.17
 ```
 
-##### --filename
+## Other documentation
 
-Change the location/name of the `friends.md` file:
-```
-$ friends --filename ./test/tmp/friends.md clean
-File cleaned: "./test/tmp/friends.md"
-```
+In case you're *really* interested, we have documentation on
+[RubyDoc](http://www.rubydoc.info/github/JacobEvelyn/friends).
 
-##### --clean
-
-Force cleaning of the `friends.md` file, even if the command does not
-normally write to the file.
-```
-$ friends --clean list friends
-George Washington Carver
-Grace Hopper
-Marie Curie
-File cleaned: "./friends.md"
-```
-
-### Advanced usage:
-
-Wouldn't it be nice to be able to use **Friends** across all of your
-devices? Hooray, you can! Just put the `friends.md` file in your
-Dropbox/Box Sync/Google Drive/whatever folder and use the
-`--filename` flag. You can even set up a Bash/Zsh/whatever alias to
-do this for you, like so:
-```bash
-alias friends="friends --filename '~/Dropbox/friends.md'"
-```
-
-### Help:
-
-Help menus are available for all levels of commands:
-```
-$ friends --help
-```
-```
-$ friends list --help
-```
-```
-$ friends list activities --help
-```
-
-## Documentation
-
-In case you're *really* interested, we have
-[documentation](http://www.rubydoc.info/github/JacobEvelyn/friends).
-
-## Contributing
+## Contributing (it's encouraged!)
 
 If you have an idea,
 [make a GitHub Issue](https://github.com/JacobEvelyn/friends/issues/new)!
