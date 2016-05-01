@@ -102,7 +102,7 @@ The `friends.md` Markdown file that stores all of your data contains:
 ```markdown
 ### Friends:
 - George Washington Carver
-- Grace Hopper (a.k.a. The Admiral) [Paris]
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
 - Marie Curie [Atlantis]
 ```
 
@@ -265,6 +265,24 @@ File cleaned: "./friends.md"
 
 This command is useful after manual editing of the file, for re-ordering its
 contents.
+
+#### `edit`
+
+Allows you to manually edit the file:
+
+```bash
+$ friends edit
+Opening "./friends.md" in vim
+```
+
+The file is opened with the command specified by the `$EDITOR` environment
+variable, falling back to `vim` if it is not set:
+
+```bash
+$ export EDITOR=atom
+$ friends edit
+Opening "./friends.md" in atom
+```
 
 #### `graph`
 
