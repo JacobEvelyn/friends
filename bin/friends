@@ -34,9 +34,8 @@ switch [:debug],
 desc "Updates the `friends` program"
 command :update do |update|
   update.action do
-    search = `gem search friends`
     # rubocop:disable Lint/AssignmentInCondition
-    if match = search.match(/^friends\s\(([^\)]+)\)$/)
+    if match = `gem search friends`.match(/^friends\s\(([^\)]+)\)$/)
       # rubocop:enable Lint/AssignmentInCondition
       remote_version = match[1]
       if Semverse::Version.coerce(remote_version) >
@@ -53,6 +52,17 @@ command :update do |update|
         puts Paint["Already up-to-date (#{Friends::VERSION})", :bold, :green]
       end
     end
+  end
+end
+
+desc "Opens the `friends.md` file in $EDITOR for manual editing"
+command :edit do |edit|
+  edit.action do |global_options|
+    editor = ENV["EDITOR"] || "vim"
+    filename = global_options[:filename]
+
+    puts "Opening \"#{filename}\" in #{editor}" unless global_options[:quiet]
+    Kernel.exec "#{editor} #{filename}"
   end
 end
 
