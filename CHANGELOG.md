@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.19](https://github.com/JacobEvelyn/friends/tree/v0.19) (2016-05-02)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.18...v0.19)
+
+**Implemented enhancements:**
+
+- Add command to list favorite locations [\#108](https://github.com/JacobEvelyn/friends/issues/108)
+
+**Merged pull requests:**
+
+- Add `list favorite locations` command [\#115](https://github.com/JacobEvelyn/friends/pull/115) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.18](https://github.com/JacobEvelyn/friends/tree/v0.18) (2016-05-02)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.17...v0.18)
 
