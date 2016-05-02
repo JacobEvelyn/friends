@@ -196,6 +196,15 @@ $ friends add activity "Invented debugging with The Admiral."
 Activity added: "2016-01-06: Invented debugging with Grace Hopper."
 ```
 
+You can also use the first initial of a last name instead of the whole thing.
+`friends` will figure out what to do with those pesky periods (if you include
+them) based on whether you're in the middle of a sentence or not:
+
+```bash
+$ friends add activity "Got lunch with Earnest H and Earnest S. in the park. Man, I like Earnest H. but really love Earnest S."
+Activity added: "2016-05-01: Got lunch with Earnest Hemingway and Earnest Shackleton in the park. Man, I like Earnest Hemingway but really love Earnest Shackleton."
+```
+
 And locations will be matched as well:
 
 ```bash

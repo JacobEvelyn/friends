@@ -197,6 +197,54 @@ describe Friends::Activity do
       end
     end
 
+    describe 'when description ends with "<first name> <last name initial>"' do
+      let(:description) { "Lunch with John C" }
+      it "matches the friend" do
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend2.name}**"
+      end
+    end
+
+    describe 'when description ends with "<first name> <last name initial>".' do
+      let(:description) { "Lunch with John C." }
+      it "matches the friend and keeps the period" do
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend2.name}**."
+      end
+    end
+
+    describe "when description has \"<first name> <last name initial>\" in "\
+             "the middle of a sentence" do
+      let(:description) { "Lunch with John C in the park." }
+      it "matches the friend" do
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend2.name}** in the park."
+      end
+    end
+
+    describe "when description has \"<first name> <last name initial>.\" in "\
+             "the middle of a sentence" do
+      let(:description) { "Lunch with John C. in the park." }
+      it "matches the friend and swallows the period" do
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend2.name}** in the park."
+      end
+    end
+
+    describe "when description has \"<first name> <last name initial>\". at "\
+             "the end of a sentence" do
+      let(:description) { "Lunch with John C. It was great!" }
+      it "matches the friend and keeps the period" do
+        subject
+        activity.description.
+          must_equal "Lunch with **#{friend2.name}**. It was great!"
+      end
+    end
+
     describe "when names are not entered case-sensitively" do
       let(:description) { "Lunch with elizabeth cady stanton." }
       it "matches friends" do
