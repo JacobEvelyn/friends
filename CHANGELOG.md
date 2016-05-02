@@ -1,5 +1,25 @@
 # Change Log
 
+## [v0.18](https://github.com/JacobEvelyn/friends/tree/v0.18) (2016-05-02)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.17...v0.18)
+
+**Implemented enhancements:**
+
+- Improve documentation [\#92](https://github.com/JacobEvelyn/friends/issues/92)
+- Have a way to correct mistakes? [\#91](https://github.com/JacobEvelyn/friends/issues/91)
+- Allow friends to be found with first name and last name initial [\#87](https://github.com/JacobEvelyn/friends/issues/87)
+
+**Fixed bugs:**
+
+- Nicknames including first names should match over first name [\#111](https://github.com/JacobEvelyn/friends/issues/111)
+
+**Merged pull requests:**
+
+- Match friends with first name and last name initial [\#114](https://github.com/JacobEvelyn/friends/pull/114) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Give nicknames matching precedence over first names [\#113](https://github.com/JacobEvelyn/friends/pull/113) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add `friends edit` command [\#112](https://github.com/JacobEvelyn/friends/pull/112) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Organize documentation in README [\#110](https://github.com/JacobEvelyn/friends/pull/110) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.17](https://github.com/JacobEvelyn/friends/tree/v0.17) (2016-03-28)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.16...v0.17)
 
@@ -62,7 +82,7 @@
 **Merged pull requests:**
 
 - Improve handling of double-names and names within names [\#81](https://github.com/JacobEvelyn/friends/pull/81) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Update RuboCop and fix many offenses [\#79](https://github.com/JacobEvelyn/friends/pull/79) ([bloomyminded](https://github.com/bloomyminded))
+- Update RuboCop and fix many offenses [\#79](https://github.com/JacobEvelyn/friends/pull/79) ([codyjroberts](https://github.com/codyjroberts))
 
 ## [v0.12](https://github.com/JacobEvelyn/friends/tree/v0.12) (2016-01-16)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.11...v0.12)
@@ -75,7 +95,7 @@
 **Merged pull requests:**
 
 - Update README and CONTRIBUTING docs. Closes \#76 [\#77](https://github.com/JacobEvelyn/friends/pull/77) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Add rename friend [\#75](https://github.com/JacobEvelyn/friends/pull/75) ([bloomyminded](https://github.com/bloomyminded))
+- Add rename friend [\#75](https://github.com/JacobEvelyn/friends/pull/75) ([codyjroberts](https://github.com/codyjroberts))
 
 ## [v0.11](https://github.com/JacobEvelyn/friends/tree/v0.11) (2016-01-13)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.10...v0.11)
