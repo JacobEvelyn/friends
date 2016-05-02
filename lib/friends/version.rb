@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 module Friends
-  VERSION = "0.18".freeze
+  VERSION = "0.19".freeze
 end
