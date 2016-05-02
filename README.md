@@ -14,7 +14,7 @@ Extrovert-approved.
   - [Global flags](#global-flags)
   - [Syncing across multiple machines](#syncing-across-multiple-machines)
   - [Command reference](#command-reference)
-    - [`add`](#add)
+    - `add`
       - [`add activity`](#add-activity)
       - [`add friend`](#add-friend)
       - [`add location`](#add-location)
@@ -22,13 +22,15 @@ Extrovert-approved.
     - [`clean`](#clean)
     - [`graph`](#graph)
     - [`help`](#help)
-    - [`list`](#list)
+    - `list`
       - [`list activities`](#list-activities)
-      - [`list favorites`](#list-favorites)
+      - `list favorite`
+        - [`list favorite friends`](#list-favorite-friends)
+        - [`list favorite locations`](#list-favorite-locations)
       - [`list friends`](#list-friends)
       - [`list locations`](#list-locations)
     - [`remove nickname`](#remove-nickname)
-    - [`rename`](#rename)
+    - `rename`
       - [`rename friend`](#rename-friend)
       - [`rename location`](#rename-location)
     - [`set location`](#set)
@@ -177,9 +179,7 @@ alias friends="friends --filename '~/Dropbox/friends.md'"
 
 *Note that the command-line output is colored, which this README cannot show.
 
-#### `add`
-
-##### `add activity`
+#### `add activity`
 
 ```bash
 $ friends add activity "Got lunch with Grace and George."
@@ -240,21 +240,21 @@ $ friends add activity "2015-11-01: Grace and I went to \Marie's Diner. \George 
 Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
 ```
 
-##### `add friend`
+#### `add friend`
 
 ```bash
 $ friends add friend "Grace Hopper"
 Friend added: "Grace Hopper"
 ```
 
-##### `add location`
+#### `add location`
 
 ```
 $ friends add location Atlantis
 Location added: "Atlantis"
 ```
 
-##### `add nickname`
+#### `add nickname`
 
 ```bash
 $ friends add nickname "Grace Hopper" "The Admiral"
@@ -344,9 +344,7 @@ $ friends help list
 $ friends help list activities
 ```
 
-#### `list`
-
-##### `list activities`
+#### `list activities`
 
 Lists recent activities:
 
@@ -380,12 +378,12 @@ $ friends list activities --in "New York"
 2014-12-31: Celebrated the new year with Marie Curie in New York City.
 ```
 
-##### `list favorites`
+#### `list favorite friends`
 
 Lists your "favorite" friends (by total number of activities):
 
 ```bash
-$ friends list favorites
+$ friends list favorite friends
 Your favorite friends:
 1. George Washington Carver (2 activities)
 2. Grace Hopper             (1)
@@ -395,13 +393,34 @@ Your favorite friends:
 You can specify a number of favorites to show:
 
 ```bash
-$ friends list favorites --limit 2
+$ friends list favorite friends --limit 2
 Your favorite friends:
 1. George Washington Carver (2 activities)
 2. Grace Hopper             (1)
 ```
 
-##### `list friends`
+#### `list favorite locations`
+
+Lists your "favorite" locations (by total number of activities):
+
+```bash
+$ friends list favorite locations
+Your favorite locations:
+1. Atlantis (2 activities)
+2. Paris    (1)
+3. London   (1)
+```
+
+You can specify a number of favorites to show:
+
+```bash
+$ friends list favorite locations --limit 2
+Your favorite locations:
+1. Atlantis (2 activities)
+2. Paris    (1)
+```
+
+#### `list friends`
 
 Lists all of your friends:
 
@@ -419,7 +438,7 @@ $ friends list friends --in Paris
 Marie Curie
 ```
 
-##### `list locations`
+#### `list locations`
 
 Lists all of the locations you've added:
 
@@ -439,16 +458,14 @@ $ friends remove nickname "Grace Hopper" "The Admiral"
 Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
 ```
 
-#### `rename`
-
-##### `rename friend`
+#### `rename friend`
 
 ```bash
 $ friends rename friend "Grace Hopper" "Grace Brewster Murray Hopper"
 Name changed: "Grace Brewster Murray Hopper (a.k.a. Amazing Grace)"
 ```
 
-##### `rename location`
+#### `rename location`
 
 ```bash
 $ friends rename location Paris "Paris, France"

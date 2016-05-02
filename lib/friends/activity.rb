@@ -127,6 +127,13 @@ module Friends
     end
     memoize :friend_names
 
+    # Find the names of all locations in this description.
+    # @return [Array] list of all location names in the description
+    def location_names
+      @description.scan(/(?<=_)\w[^_]*(?=_)/).uniq
+    end
+    memoize :location_names
+
     private
 
     # Modify the description to turn inputted location names (e.g. "Atlantis")
@@ -184,7 +191,7 @@ module Friends
       end
 
       # Now, we compute the likelihood of each friend in the possible-match set.
-      introvert.set_n_activities!
+      introvert.set_friend_n_activities!
       introvert.set_likelihood_score!(
         matches: matched_friends,
         possible_matches: possible_matched_friends

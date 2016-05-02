@@ -79,25 +79,52 @@ command :list do |list|
     end
   end
 
-  list.desc "List favorite friends"
-  list.command :favorites do |list_favorites|
-    list_favorites.flag [:limit],
-                        arg_name: "NUMBER",
-                        default_value: 10,
-                        desc: "The number of friends to return"
+  list.desc "List favorite friends and locations"
+  list.command :favorite do |list_favorite|
+    list_favorite.desc "List favorite friends"
+    list_favorite.command :friends do |list_favorite_friends|
+      list_favorite_friends.flag [:limit],
+                                 arg_name: "NUMBER",
+                                 default_value: 10,
+                                 desc: "The number of friends to return"
 
-    list_favorites.action do |_, options|
-      limit = options[:limit].to_i
-      favorites = @introvert.list_favorites(limit: limit)
+      list_favorite_friends.action do |_, options|
+        limit = options[:limit].to_i
+        favorites = @introvert.list_favorite_friends(limit: limit)
 
-      if limit == 1
-        puts "Your best friend is #{favorites.first}"
-      else
-        puts "Your favorite friends:"
+        if limit == 1
+          puts "Your best friend is #{favorites.first}"
+        else
+          puts "Your favorite friends:"
 
-        num_str_size = favorites.size.to_s.size + 1
-        favorites.each.with_index(1) do |name, rank|
-          puts "#{"#{rank}.".ljust(num_str_size)} #{name}"
+          num_str_size = favorites.size.to_s.size + 1
+          favorites.each.with_index(1) do |name, rank|
+            puts "#{"#{rank}.".ljust(num_str_size)} #{name}"
+          end
+        end
+      end
+    end
+
+    list_favorite.desc "List favorite locations"
+    list_favorite.command :locations do |list_favorite_locations|
+      list_favorite_locations.flag [:limit],
+                                   arg_name: "NUMBER",
+                                   default_value: 10,
+                                   desc: "The number of locations to return"
+
+      list_favorite_locations.action do |_, options|
+        limit = options[:limit].to_i
+        favorites = @introvert.list_favorite_locations(limit: limit)
+
+        if limit == 1
+          puts "Your favorite location is #{favorites.first}"
+        else
+          puts "Your favorite locations:"
+
+          num_str_size = favorites.size.to_s.size + 1
+          favorites.each.with_index(1) do |name, rank|
+            puts "#{"#{rank}.".ljust(num_str_size)} #{name}"
+          end
         end
       end
     end
