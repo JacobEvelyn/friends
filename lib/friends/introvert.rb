@@ -192,29 +192,19 @@ module Friends
     end
 
     # List your favorite friends.
-    # @param limit [Integer] the number of favorite friends to return, or nil
-    #   for no limit
+    # @param limit [Integer] the number of favorite friends to return
     # @return [Array] a list of the favorite friends' names and activity
     #   counts
-    def list_favorites(limit:)
-      if !limit.nil? && limit < 1
-        raise FriendsError, "Favorites limit must be positive or unlimited"
-      end
+    def list_favorite_friends(limit:)
+      list_favorite_things(:friend, limit: limit)
+    end
 
-      set_n_activities! # Set n_activities for all friends.
-
-      # Sort the results, with the most favorite friend first.
-      results = @friends.sort_by { |friend| -friend.n_activities }
-
-      # If we need to, trim the list.
-      results = results.take(limit) unless limit.nil?
-
-      max_str_size = results.map(&:name).map(&:size).max
-      results.map.with_index(0) do |friend, index|
-        name = friend.name.ljust(max_str_size)
-        parenthetical = "(#{friend.n_activities}#{' activities' if index == 0})"
-        "#{name} #{parenthetical}"
-      end
+    # List your favorite friends.
+    # @param limit [Integer] the number of favorite locations to return
+    # @return [Array] a list of the favorite locations' names and activity
+    #   counts
+    def list_favorite_locations(limit:)
+      list_favorite_things(:location, limit: limit)
     end
 
     # List all activity details.
@@ -306,7 +296,7 @@ module Friends
     #   for unfiltered
     # @return [Hash{String => Array<String>}]
     def suggest(location_name:)
-      set_n_activities! # Set n_activities for all friends.
+      set_friend_n_activities! # Set n_activities for all friends.
 
       # Filter our friends by location if necessary.
       fs = @friends
@@ -338,20 +328,8 @@ module Friends
     ###################################################################
 
     # Sets the n_activities field on each friend.
-    def set_n_activities!
-      # Construct a hash of friend name to frequency of appearance.
-      freq_table = Hash.new { |h, k| h[k] = 0 }
-      @activities.each do |activity|
-        activity.friend_names.each do |friend_name|
-          freq_table[friend_name] += 1
-        end
-      end
-
-      # Remove names that are not in the friends list.
-      freq_table.each do |name, count|
-        friend = friend_with_exact_name(name)
-        friend.n_activities = count if friend # Do nothing if name not valid.
-      end
+    def set_friend_n_activities!
+      set_n_activities!(:friend)
     end
 
     # Get a regex friend map.
@@ -444,6 +422,59 @@ module Friends
     end
 
     private
+
+    # @param type [Symbol] one of: [:friend, :location]
+    # @param limit [Integer] the number of favorite things to return
+    # @return [Array] a list of the favorite things' names and activity counts
+    def list_favorite_things(type, limit:)
+      unless [:friend, :location].include? type
+        raise FriendsError, "Type must be either :friend or :location"
+      end
+
+      if limit < 1
+        raise FriendsError, "Favorites limit must be positive"
+      end
+
+      send("set_n_activities!", type) # Set n_activities for all things.
+
+      # Sort the results, with the most favorite thing first.
+      results = instance_variable_get("@#{type}s").sort_by do |thing|
+        -thing.n_activities
+      end.take(limit) # Trim the list.
+
+      max_str_size = results.map(&:name).map(&:size).max
+      results.map.with_index(0) do |thing, index|
+        name = thing.name.ljust(max_str_size)
+        n = thing.n_activities
+        if index == 0
+          label = n == 1 ? " activity" : " activities"
+        end
+        parenthetical = "(#{n}#{label})"
+        "#{name} #{parenthetical}"
+      end
+    end
+
+    # Sets the n_activities field on each thing.
+    # @param type [Symbol] one of: [:friend, :location]
+    def set_n_activities!(type)
+      unless [:friend, :location].include? type
+        raise FriendsError, "Type must be either :friend or :location"
+      end
+
+      # Construct a hash of location name to frequency of appearance.
+      freq_table = Hash.new { |h, k| h[k] = 0 }
+      @activities.each do |activity|
+        activity.send("#{type}_names").each do |thing_name|
+          freq_table[thing_name] += 1
+        end
+      end
+
+      # Remove names that are not in the locations list.
+      freq_table.each do |name, count|
+        thing = send("#{type}_with_exact_name", name)
+        thing.n_activities = count if thing # Do nothing if name isn't valid.
+      end
+    end
 
     # Process the friends.md file and store its contents in internal data
     # structures.
@@ -538,6 +569,19 @@ module Friends
         raise FriendsError,
               "More than one friend found for \"#{text}\": "\
                 "#{friends.map(&:name).join(', ')}"
+      end
+    end
+
+    # @param name [String] the name of the location to search for
+    # @return [Location] the location whose name exactly matches the argument
+    # @raise [FriendsError] if more than one location has the given name
+    def location_with_exact_name(name)
+      results = @locations.select { |location| location.name == name }
+
+      case results.size
+      when 0 then nil
+      when 1 then results.first
+      else raise FriendsError, "More than one location named #{name}"
       end
     end
 
