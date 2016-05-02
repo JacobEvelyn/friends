@@ -21,17 +21,22 @@ module Friends
     NO_LEADING_ALPHABETICALS = "(?<![A-z])".freeze
     NO_TRAILING_ALPHABETICALS = "(?![A-z])".freeze
 
+    # We ignore case within the regex as opposed to globally to allow consumers
+    # of this API the ability to pass in strings that turn off this modifier
+    # with the "(?-i)" string.
+    IGNORE_CASE = "(?i)".freeze
+
     def self.regex(str)
       Regexp.new(
         NO_LEADING_BACKSLASH +
         NO_LEADING_ASTERISKS +
         NO_LEADING_UNDERSCORES +
         NO_LEADING_ALPHABETICALS +
+        IGNORE_CASE +
         str +
         NO_TRAILING_ALPHABETICALS +
         NO_TRAILING_UNDERSCORES +
-        NO_TRAILING_ASTERISKS,
-        Regexp::IGNORECASE
+        NO_TRAILING_ASTERISKS
       )
     end
   end
