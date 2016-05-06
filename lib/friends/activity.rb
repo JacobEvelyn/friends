@@ -14,7 +14,7 @@ module Friends
 
     SERIALIZATION_PREFIX = "- ".freeze
     DATE_PARTITION = ": ".freeze
-    TAG_REGEX = /#\p{Alnum}+/
+    HASHTAG_REGEX = /#\p{Alnum}+/
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
@@ -71,7 +71,7 @@ module Friends
       end
 
       description_s = description_s.
-                      gsub(TAG_REGEX, Paint['\0', :bold, :cyan])
+                      gsub(HASHTAG_REGEX, Paint['\0', :bold, :cyan])
 
       "#{date_s}: #{description_s}"
     end
@@ -125,17 +125,17 @@ module Friends
       friend_names.include? friend.name
     end
 
-    # @param tag [String] the tag to test, of the form "tag" or "#tag" (a "#"
-    #   will be added if not present)
+    # @param hashtag [String] the hashtag to test, of the form "hashtag" or
+    #  "#hashtag" (a "#" will be added if not present)
     # @return [Boolean] true iff this activity includes the given hashtag
-    def includes_tag?(tag:)
-      tag = "##{tag}" unless tag[0] == "#"
-      tags.include? tag
+    def includes_hashtag?(hashtag:)
+      hashtag = "##{hashtag}" unless hashtag[0] == "#"
+      hashtags.include? hashtag
     end
 
-    # @return [Set] all tags in this activity (including the "#")
-    def tags
-      Set.new(@description.scan(TAG_REGEX))
+    # @return [Set] all hashtags in this activity (including the "#")
+    def hashtags
+      Set.new(@description.scan(HASHTAG_REGEX))
     end
 
     # Find the names of all friends in this description.

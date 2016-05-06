@@ -456,41 +456,41 @@ describe Friends::Activity do
     end
   end
 
-  describe "#tags" do
-    subject { activity.tags }
+  describe "#hashtags" do
+    subject { activity.hashtags }
 
-    describe "when the activity has no tags" do
+    describe "when the activity has no hashtags" do
       let(:activity) { Friends::Activity.new(str: "Enormous ball pit!") }
       it { subject.must_be :empty? }
     end
 
-    describe "when the activity has tags" do
+    describe "when the activity has hashtags" do
       let(:activity) { Friends::Activity.new(str: "Party! #fun #crazy #fun") }
       it { subject.must_equal Set.new(["#fun", "#crazy"]) }
     end
   end
 
-  describe "#includes_tag?" do
-    subject { activity.includes_tag?(tag: tag) }
+  describe "#includes_hashtag?" do
+    subject { activity.includes_hashtag?(hashtag: hashtag) }
     let(:activity) { Friends::Activity.new(str: "Enormous ball pit! #fun") }
 
-    describe "when the given tag is not in the activity" do
-      let(:tag) { "#garbage" }
+    describe "when the given hashtag is not in the activity" do
+      let(:hashtag) { "#garbage" }
       it { subject.must_equal false }
     end
 
-    describe "when the given word is in the activity but not as a tag" do
-      let(:tag) { "ball" }
+    describe "when the given word is in the activity but not as a hashtag" do
+      let(:hashtag) { "ball" }
       it { subject.must_equal false }
     end
 
-    describe "when the given tag is in the activity" do
-      let(:tag) { "#fun" }
+    describe "when the given hashtag is in the activity" do
+      let(:hashtag) { "#fun" }
       it { subject.must_equal true }
     end
 
-    describe "when the given tag is in the activity and has no '#'" do
-      let(:tag) { "fun" }
+    describe "when the given hashtag is in the activity and has no '#'" do
+      let(:hashtag) { "fun" }
       it { subject.must_equal true }
     end
   end

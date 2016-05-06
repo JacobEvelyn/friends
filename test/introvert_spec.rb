@@ -224,7 +224,7 @@ describe Friends::Introvert do
       ]
     end
 
-    it "lists all activity tags in sorted order" do
+    it "lists all activity hashtags in sorted order" do
       stub_activities(activities) do
         subject.must_equal ["#food", "#picnic", "#swanky"]
       end
@@ -402,7 +402,7 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when not filtering by a tag" do
+    describe "when not filtering by a hashtag" do
       let(:tagged) { nil }
 
       it "lists the activities" do
@@ -412,7 +412,7 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when filtering by a tag" do
+    describe "when filtering by a hashtag" do
       let(:activities) do
         [
           Friends::Activity.new(str: "Tennis after work. #exercise #tennis"),
@@ -421,7 +421,7 @@ describe Friends::Introvert do
         ]
       end
 
-      describe "when the tag ('#tag') is not used at all" do
+      describe "when the hashtag ('#hashtag') is not used at all" do
         let(:tagged) { "#garbage" }
         it "returns no results" do
           stub_activities(activities) do
@@ -430,27 +430,27 @@ describe Friends::Introvert do
         end
       end
 
-      describe "when the tag ('#tag') is used once" do
+      describe "when the hashtag ('#hashtag') is used once" do
         let(:tagged) { "#beer" }
-        it "returns the activity with that tag" do
+        it "returns the activity with that hashtag" do
           stub_activities(activities) do
             subject.must_equal [activities.last.display_text]
           end
         end
       end
 
-      describe "when the tag ('#tag') is used multiple times" do
+      describe "when the hashtag ('#hashtag') is used multiple times" do
         let(:tagged) { "#tennis" }
-        it "returns the activities with that tag" do
+        it "returns the activities with that hashtag" do
           stub_activities(activities) do
             subject.must_equal activities[0..1].map(&:display_text)
           end
         end
       end
 
-      describe "when the tag ('tag') is provided without a '#'" do
+      describe "when the hashtag ('hashtag') is provided without a '#'" do
         let(:tagged) { "tennis" }
-        it "returns the activities with that tag" do
+        it "returns the activities with that hashtag" do
           stub_activities(activities) do
             subject.must_equal activities[0..1].map(&:display_text)
           end

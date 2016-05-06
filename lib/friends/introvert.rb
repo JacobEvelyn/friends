@@ -214,7 +214,7 @@ module Friends
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @param tagged [String] the name of a tag to filter by, or nil for
+    # @param tagged [String] the name of a hashtag to filter by, or nil for
     #   unfiltered
     # @return [Array] a list of all activity text values
     # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
@@ -235,7 +235,7 @@ module Friends
 
       # Filter by tag if argument is passed.
       unless tagged.nil?
-        acts = acts.select { |act| act.includes_tag?(tag: tagged) }
+        acts = acts.select { |act| act.includes_hashtag?(hashtag: tagged) }
       end
 
       # If we need to, trim the list.
@@ -253,7 +253,7 @@ module Friends
     # @return [Array] a sorted list of all hashtags in activity descriptions
     def list_hashtags
       @activities.each_with_object(Set.new) do |activity, set|
-        set.merge(activity.tags)
+        set.merge(activity.hashtags)
       end.sort_by(&:downcase)
     end
 

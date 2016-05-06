@@ -95,8 +95,8 @@ command :list do |list|
                          desc: "List only activities in the given location"
 
     list_activities.flag [:tagged],
-                         arg_name: "TAG",
-                         desc: "List only activities with the given tag"
+                         arg_name: "HASHTAG",
+                         desc: "List only activities with the given hashtag"
 
     list_activities.action do |_, options|
       limit = options[:limit].to_i
