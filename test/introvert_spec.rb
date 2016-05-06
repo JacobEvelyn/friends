@@ -447,15 +447,6 @@ describe Friends::Introvert do
           end
         end
       end
-
-      describe "when the hashtag ('hashtag') is provided without a '#'" do
-        let(:tagged) { "tennis" }
-        it "returns the activities with that hashtag" do
-          stub_activities(activities) do
-            subject.must_equal activities[0..1].map(&:display_text)
-          end
-        end
-      end
     end
   end
 

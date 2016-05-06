@@ -125,11 +125,9 @@ module Friends
       friend_names.include? friend.name
     end
 
-    # @param hashtag [String] the hashtag to test, of the form "hashtag" or
-    #  "#hashtag" (a "#" will be added if not present)
+    # @param hashtag [String] the hashtag to test, of the form "#hashtag"
     # @return [Boolean] true iff this activity includes the given hashtag
     def includes_hashtag?(hashtag:)
-      hashtag = "##{hashtag}" unless hashtag[0] == "#"
       hashtags.include? hashtag
     end
 

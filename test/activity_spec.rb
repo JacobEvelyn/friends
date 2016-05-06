@@ -480,17 +480,12 @@ describe Friends::Activity do
     end
 
     describe "when the given word is in the activity but not as a hashtag" do
-      let(:hashtag) { "ball" }
+      let(:hashtag) { "#ball" }
       it { subject.must_equal false }
     end
 
     describe "when the given hashtag is in the activity" do
       let(:hashtag) { "#fun" }
-      it { subject.must_equal true }
-    end
-
-    describe "when the given hashtag is in the activity and has no '#'" do
-      let(:hashtag) { "fun" }
       it { subject.must_equal true }
     end
   end
