@@ -28,6 +28,7 @@ Extrovert-approved.
         - [`list favorite friends`](#list-favorite-friends)
         - [`list favorite locations`](#list-favorite-locations)
       - [`list friends`](#list-friends)
+      - [`list hashtags`](#list-hashtags)
       - [`list locations`](#list-locations)
     - [`remove nickname`](#remove-nickname)
     - `rename`
@@ -448,7 +449,7 @@ Your favorite locations:
 
 #### `list friends`
 
-Lists all of your friends:
+Lists all of your friends in alphabetical order:
 
 ```bash
 $ friends list friends
@@ -464,9 +465,20 @@ $ friends list friends --in Paris
 Marie Curie
 ```
 
+#### `list hashtags`
+
+Lists all hashtags you've used, in alphabetical order:
+
+```bash
+$ friends list hashtags
+#dancing
+#food
+#swanky
+```
+
 #### `list locations`
 
-Lists all of the locations you've added:
+Lists all of the locations you've added, in alphabetical order::
 
 ```
 $ friends list locations

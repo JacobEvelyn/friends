@@ -214,6 +214,23 @@ describe Friends::Introvert do
     end
   end
 
+  describe "#list_hashtags" do
+    subject { introvert.list_hashtags }
+
+    let(:activities) do
+      [
+        Friends::Activity.new(str: "Lunch in the park. #picnic #food"),
+        Friends::Activity.new(str: "Fancy dinner. #food #swanky")
+      ]
+    end
+
+    it "lists all activity tags in sorted order" do
+      stub_activities(activities) do
+        subject.must_equal ["#food", "#picnic", "#swanky"]
+      end
+    end
+  end
+
   describe "#list_activities" do
     subject do
       introvert.list_activities(

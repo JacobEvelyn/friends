@@ -456,6 +456,20 @@ describe Friends::Activity do
     end
   end
 
+  describe "#tags" do
+    subject { activity.tags }
+
+    describe "when the activity has no tags" do
+      let(:activity) { Friends::Activity.new(str: "Enormous ball pit!") }
+      it { subject.must_be :empty? }
+    end
+
+    describe "when the activity has tags" do
+      let(:activity) { Friends::Activity.new(str: "Party! #fun #crazy #fun") }
+      it { subject.must_equal Set.new(["#fun", "#crazy"]) }
+    end
+  end
+
   describe "#includes_tag?" do
     subject { activity.includes_tag?(tag: tag) }
     let(:activity) { Friends::Activity.new(str: "Enormous ball pit! #fun") }

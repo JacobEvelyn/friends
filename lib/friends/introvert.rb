@@ -250,6 +250,13 @@ module Friends
       @locations.map(&:name)
     end
 
+    # @return [Array] a sorted list of all hashtags in activity descriptions
+    def list_hashtags
+      @activities.each_with_object(Set.new) do |activity, set|
+        set.merge(activity.tags)
+      end.sort_by(&:downcase)
+    end
+
     # Find data points for graphing activities over time.
     # Optionally filter by a friend to see a given relationship over time.
     #

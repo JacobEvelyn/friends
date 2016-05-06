@@ -79,6 +79,50 @@ command :list do |list|
     end
   end
 
+  list.desc "Lists all activities"
+  list.command :activities do |list_activities|
+    list_activities.flag [:limit],
+                         arg_name: "NUMBER",
+                         default_value: 10,
+                         desc: "The number of activities to return"
+
+    list_activities.flag [:with],
+                         arg_name: "NAME",
+                         desc: "List only activities involving the given friend"
+
+    list_activities.flag [:in],
+                         arg_name: "LOCATION",
+                         desc: "List only activities in the given location"
+
+    list_activities.flag [:tagged],
+                         arg_name: "TAG",
+                         desc: "List only activities with the given tag"
+
+    list_activities.action do |_, options|
+      limit = options[:limit].to_i
+      puts @introvert.list_activities(
+        limit: limit,
+        with: options[:with],
+        location_name: options[:in],
+        tagged: options[:tagged]
+      )
+    end
+  end
+
+  list.desc "List all locations"
+  list.command :locations do |list_locations|
+    list_locations.action do
+      puts @introvert.list_locations
+    end
+  end
+
+  list.desc "List all hashtags used"
+  list.command :hashtags do |list_hashtags|
+    list_hashtags.action do
+      puts @introvert.list_hashtags
+    end
+  end
+
   list.desc "List favorite friends and locations"
   list.command :favorite do |list_favorite|
     list_favorite.desc "List favorite friends"
@@ -127,43 +171,6 @@ command :list do |list|
           end
         end
       end
-    end
-  end
-
-  list.desc "Lists all activities"
-  list.command :activities do |list_activities|
-    list_activities.flag [:limit],
-                         arg_name: "NUMBER",
-                         default_value: 10,
-                         desc: "The number of activities to return"
-
-    list_activities.flag [:with],
-                         arg_name: "NAME",
-                         desc: "List only activities involving the given friend"
-
-    list_activities.flag [:in],
-                         arg_name: "LOCATION",
-                         desc: "List only activities in the given location"
-
-    list_activities.flag [:tagged],
-                         arg_name: "TAG",
-                         desc: "List only activities with the given tag"
-
-    list_activities.action do |_, options|
-      limit = options[:limit].to_i
-      puts @introvert.list_activities(
-        limit: limit,
-        with: options[:with],
-        location_name: options[:in],
-        tagged: options[:tagged]
-      )
-    end
-  end
-
-  list.desc "List all locations"
-  list.command :locations do |list_locations|
-    list_locations.action do
-      puts @introvert.list_locations
     end
   end
 end
