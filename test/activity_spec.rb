@@ -456,6 +456,31 @@ describe Friends::Activity do
     end
   end
 
+  describe "#includes_tag?" do
+    subject { activity.includes_tag?(tag: tag) }
+    let(:activity) { Friends::Activity.new(str: "Enormous ball pit! #fun") }
+
+    describe "when the given tag is not in the activity" do
+      let(:tag) { "#garbage" }
+      it { subject.must_equal false }
+    end
+
+    describe "when the given word is in the activity but not as a tag" do
+      let(:tag) { "ball" }
+      it { subject.must_equal false }
+    end
+
+    describe "when the given tag is in the activity" do
+      let(:tag) { "#fun" }
+      it { subject.must_equal true }
+    end
+
+    describe "when the given tag is in the activity and has no '#'" do
+      let(:tag) { "fun" }
+      it { subject.must_equal true }
+    end
+  end
+
   describe "#friend_names" do
     subject { activity.friend_names }
 

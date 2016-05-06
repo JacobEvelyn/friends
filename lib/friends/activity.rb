@@ -68,6 +68,10 @@ module Friends
                         "#{Paint[match[1], :bold, :yellow]}"\
                         "#{match.post_match}"
       end
+
+      description_s = description_s.
+                      gsub(/#\p{Alnum}+/, Paint['\0', :bold, :cyan])
+
       "#{date_s}: #{description_s}"
     end
 
@@ -118,6 +122,14 @@ module Friends
     # @return [Boolean] true iff this activity includes the given friend
     def includes_friend?(friend:)
       friend_names.include? friend.name
+    end
+
+    # @param tag [String] the tag to test, of the form "tag" or "#tag" (a "#"
+    #   will be added if not present)
+    # @return [Boolean] true iff this activity includes the given hashtag
+    def includes_tag?(tag:)
+      tag = "##{tag}" unless tag[0] == "#"
+      @description.include? tag
     end
 
     # Find the names of all friends in this description.

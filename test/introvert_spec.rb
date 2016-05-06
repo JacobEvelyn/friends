@@ -219,12 +219,14 @@ describe Friends::Introvert do
       introvert.list_activities(
         limit: limit,
         with: with,
-        location_name: location_name
+        location_name: location_name,
+        tagged: tagged
       )
     end
     let(:limit) { nil }
     let(:with) { nil }
     let(:location_name) { nil }
+    let(:tagged) { nil }
 
     describe "when the limit is lower than the number of activities" do
       let(:limit) { 1 }
@@ -378,6 +380,62 @@ describe Friends::Introvert do
                 subject.must_equal activities[0..0].map(&:display_text)
               end
             end
+          end
+        end
+      end
+    end
+
+    describe "when not filtering by a tag" do
+      let(:tagged) { nil }
+
+      it "lists the activities" do
+        stub_activities(activities) do
+          subject.must_equal activities.map(&:display_text)
+        end
+      end
+    end
+
+    describe "when filtering by a tag" do
+      let(:activities) do
+        [
+          Friends::Activity.new(str: "Tennis after work. #exercise #tennis"),
+          Friends::Activity.new(str: "Wimbledon! #tennis"),
+          Friends::Activity.new(str: "Drinks after work. #beer")
+        ]
+      end
+
+      describe "when the tag ('#tag') is not used at all" do
+        let(:tagged) { "#garbage" }
+        it "returns no results" do
+          stub_activities(activities) do
+            subject.must_equal []
+          end
+        end
+      end
+
+      describe "when the tag ('#tag') is used once" do
+        let(:tagged) { "#beer" }
+        it "returns the activity with that tag" do
+          stub_activities(activities) do
+            subject.must_equal [activities.last.display_text]
+          end
+        end
+      end
+
+      describe "when the tag ('#tag') is used multiple times" do
+        let(:tagged) { "#tennis" }
+        it "returns the activities with that tag" do
+          stub_activities(activities) do
+            subject.must_equal activities[0..1].map(&:display_text)
+          end
+        end
+      end
+
+      describe "when the tag ('tag') is provided without a '#'" do
+        let(:tagged) { "tennis" }
+        it "returns the activities with that tag" do
+          stub_activities(activities) do
+            subject.must_equal activities[0..1].map(&:display_text)
           end
         end
       end

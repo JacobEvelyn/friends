@@ -214,9 +214,11 @@ module Friends
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
+    # @param tagged [String] the name of a tag to filter by, or nil for
+    #   unfiltered
     # @return [Array] a list of all activity text values
     # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
-    def list_activities(limit:, with:, location_name:)
+    def list_activities(limit:, with:, location_name:, tagged:)
       acts = @activities
 
       # Filter by friend name if argument is passed.
@@ -229,6 +231,11 @@ module Friends
       unless location_name.nil?
         location = location_with_name_in(location_name)
         acts = acts.select { |act| act.includes_location?(location: location) }
+      end
+
+      # Filter by tag if argument is passed.
+      unless tagged.nil?
+        acts = acts.select { |act| act.includes_tag?(tag: tagged) }
       end
 
       # If we need to, trim the list.

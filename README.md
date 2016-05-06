@@ -83,10 +83,14 @@ Easy, huh?
 `friends` is structured around several different types of things:
 
 - **Activities**: The things you do. Each activity has a date associated with
-  it.
+  it. Activities may optionally contain any number of *friends*, *locations*,
+  and *hashtags*.
 - **Friends**: The people you do *activities* with. Each friend has a name and,
-  optionally, one or several nicknames.
-- **Locations**: The places in which *activities* happen.
+  optionally, one or several nicknames. (Examples: `John`, `Grace Hopper`)
+- **Locations**: The places in which *activities* happen. (Examples: `Paris`,
+  `Marie's Diner`)
+- **Hashtags**: A way to categorize your *activities* with tags of your
+  choosing. (Examples: `#exercise`, `#concert`)
 
 The `friends.md` Markdown file that stores all of your data contains:
 
@@ -210,6 +214,14 @@ And locations will be matched as well:
 ```bash
 $ friends add activity "Went swimming near atlantis with George."
 Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
+```
+
+Hashtags will be colored if they're provided (though this README can't display
+color so you'll just have to have faith here):
+
+```bash
+$ friends add activity "The office softball team wins a game! #work #exercise"
+Activity added: "2016-05-05: The office softball team wins a game! #work #exercise"
 ```
 
 You can of course specify a date for the activity:
@@ -350,8 +362,8 @@ Lists recent activities:
 
 ```bash
 $ friends list activities
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
+2014-12-31: Celebrated the new year with Marie Curie in New York City. #partying
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
@@ -359,15 +371,15 @@ You can adjust how many activities are shown:
 
 ```bash
 $ friends list activities --limit 2
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
+2014-12-31: Celebrated the new year with Marie Curie in New York City. #partying
 ```
 
 Or only list the activities you did with a certain friend:
 
 ```bash
-$ friends list activities --with "George"
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
+$ friends list activities --with George
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
@@ -375,7 +387,21 @@ Or filter your activities by location:
 
 ```bash
 $ friends list activities --in "New York"
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2014-12-31: Celebrated the new year with Marie Curie in New York City. #partying
+```
+
+Or by hashtag:
+
+```bash
+$ friends list activities --tagged food
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
+```
+
+And you can mix and match these options to your heart's content:
+
+```bash
+$ friends list activities --tagged food --with Grace
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
 ```
 
 #### `list favorite friends`

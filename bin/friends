@@ -145,12 +145,17 @@ command :list do |list|
                          arg_name: "LOCATION",
                          desc: "List only activities in the given location"
 
+    list_activities.flag [:tagged],
+                         arg_name: "TAG",
+                         desc: "List only activities with the given tag"
+
     list_activities.action do |_, options|
       limit = options[:limit].to_i
       puts @introvert.list_activities(
         limit: limit,
         with: options[:with],
-        location_name: options[:in]
+        location_name: options[:in],
+        tagged: options[:tagged]
       )
     end
   end
