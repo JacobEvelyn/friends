@@ -18,6 +18,28 @@ version Friends::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
+class Hashtag
+  # @param str [String] of the form "hashtag" or "#hashtag"
+  # @return [String] the string, with whitespace stripped and a hashtag
+  #   prepended if there isn't one already
+  # NOTE: This logic could be only in the accept block if GLI allowed type
+  # conversions for arguments.
+  # See: https://github.com/davetron5000/gli/issues/241
+  def self.convert_to_hashtag(str)
+    str = str.strip
+    str.size > 0 && str[0] == "#" ? str : "##{str}"
+  end
+end
+
+accept(Hashtag) do |value|
+  Hashtag.convert_to_hashtag(value)
+end
+
+class Stripped ; end
+accept(Stripped) do |value|
+  value.strip
+end
+
 switch [:quiet],
        negatable: false,
        desc: "Quiet output messages"
@@ -72,10 +94,75 @@ command :list do |list|
   list.command :friends do |list_friends|
     list_friends.flag [:in],
                       arg_name: "LOCATION",
-                      desc: "List only friends in the given location"
+                      desc: "List only friends in the given location",
+                      type: Stripped
+
+    list_friends.flag [:tagged],
+                      arg_name: "HASHTAG",
+                      desc: "List only friends with the given hashtag",
+                      type: Hashtag
+
+    list_friends.switch [:verbose],
+                        negatable: false,
+                        desc: "Output friend nicknames, locations, and hashtags"
 
     list_friends.action do |_, options|
-      puts @introvert.list_friends(location_name: options[:in])
+      puts @introvert.list_friends(
+        location_name: options[:in],
+        tagged: options[:tagged],
+        verbose: options[:verbose]
+      )
+    end
+  end
+
+  list.desc "Lists all activities"
+  list.command :activities do |list_activities|
+    list_activities.flag [:limit],
+                         arg_name: "NUMBER",
+                         desc: "The number of activities to return",
+                         default_value: 10,
+                         type: Integer
+
+    list_activities.flag [:with],
+                         arg_name: "NAME",
+                         desc: "List only activities with the given friend",
+                         type: Stripped
+
+    list_activities.flag [:in],
+                         arg_name: "LOCATION",
+                         desc: "List only activities in the given location",
+                         type: Stripped
+
+    list_activities.flag [:tagged],
+                         arg_name: "HASHTAG",
+                         desc: "List only activities with the given hashtag",
+                         type: Hashtag
+
+    list_activities.action do |_, options|
+      puts @introvert.list_activities(
+        limit: options[:limit],
+        with: options[:with],
+        location_name: options[:in],
+        tagged: options[:tagged]
+      )
+    end
+  end
+
+  list.desc "List all locations"
+  list.command :locations do |list_locations|
+    list_locations.action do
+      puts @introvert.list_locations
+    end
+  end
+
+  list.desc "List all hashtags used"
+  list.command :hashtags do |list_hashtags|
+    list_hashtags.flag [:from],
+                       arg_name: '"activities" or "friends" (default: both)',
+                       desc: "List only hashtags from activities or friends "\
+                             "instead of both"
+    list_hashtags.action do |_, options|
+      puts @introvert.list_hashtags(from: options[:from])
     end
   end
 
@@ -85,12 +172,12 @@ command :list do |list|
     list_favorite.command :friends do |list_favorite_friends|
       list_favorite_friends.flag [:limit],
                                  arg_name: "NUMBER",
+                                 desc: "The number of friends to return",
                                  default_value: 10,
-                                 desc: "The number of friends to return"
+                                 type: Integer
 
       list_favorite_friends.action do |_, options|
-        limit = options[:limit].to_i
-        favorites = @introvert.list_favorite_friends(limit: limit)
+        favorites = @introvert.list_favorite_friends(limit: options[:limit])
 
         if limit == 1
           puts "Your best friend is #{favorites.first}"
@@ -109,12 +196,12 @@ command :list do |list|
     list_favorite.command :locations do |list_favorite_locations|
       list_favorite_locations.flag [:limit],
                                    arg_name: "NUMBER",
+                                   desc: "The number of locations to return",
                                    default_value: 10,
-                                   desc: "The number of locations to return"
+                                   type: Integer
 
       list_favorite_locations.action do |_, options|
-        limit = options[:limit].to_i
-        favorites = @introvert.list_favorite_locations(limit: limit)
+        favorites = @introvert.list_favorite_locations(limit: options[:limit])
 
         if limit == 1
           puts "Your favorite location is #{favorites.first}"
@@ -127,38 +214,6 @@ command :list do |list|
           end
         end
       end
-    end
-  end
-
-  list.desc "Lists all activities"
-  list.command :activities do |list_activities|
-    list_activities.flag [:limit],
-                         arg_name: "NUMBER",
-                         default_value: 10,
-                         desc: "The number of activities to return"
-
-    list_activities.flag [:with],
-                         arg_name: "NAME",
-                         desc: "List only activities involving the given friend"
-
-    list_activities.flag [:in],
-                         arg_name: "LOCATION",
-                         desc: "List only activities in the given location"
-
-    list_activities.action do |_, options|
-      limit = options[:limit].to_i
-      puts @introvert.list_activities(
-        limit: limit,
-        with: options[:with],
-        location_name: options[:in]
-      )
-    end
-  end
-
-  list.desc "List all locations"
-  list.command :locations do |list_locations|
-    list_locations.action do
-      puts @introvert.list_locations
     end
   end
 end
@@ -183,11 +238,11 @@ command :add do |add|
 
       # If there's no description, prompt the user for one.
       if activity.description.nil? || activity.description.empty?
-        activity.description = Readline.readline(activity.display_text)
+        activity.description = Readline.readline(activity.to_s)
         activity.highlight_description(introvert: @introvert)
       end
 
-      @message = "Activity added: \"#{activity.display_text}\""
+      @message = "Activity added: \"#{activity}\""
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -208,6 +263,19 @@ command :add do |add|
     add_nickname.action do |_, _, args|
       friend = @introvert.add_nickname(name: args.first, nickname: args[1])
       @message = "Nickname added: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
+  add.desc "Adds a hashtag to a friend"
+  add.arg_name "NAME HASHTAG"
+  add.command :hashtag do |add_hashtag|
+    add_hashtag.action do |_, _, args|
+      friend = @introvert.add_hashtag(
+        name: args.first,
+        hashtag: Hashtag.convert_to_hashtag(args[1])
+      )
+      @message = "Hashtag added to friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -234,6 +302,19 @@ command :remove do |remove|
     remove_nickname.action do |_, _, args|
       friend = @introvert.remove_nickname(name: args.first, nickname: args[1])
       @message = "Nickname removed: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
+  remove.desc "Removes a hashtag to a friend"
+  remove.arg_name "NAME HASHTAG"
+  remove.command :hashtag do |remove_hashtag|
+    remove_hashtag.action do |_, _, args|
+      friend = @introvert.remove_hashtag(
+        name: args.first,
+        hashtag: Hashtag.convert_to_hashtag(args[1])
+      )
+      @message = "Hashtag removed from friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -268,7 +349,8 @@ desc "Suggest friends to do activities with"
 command :suggest do |suggest|
   suggest.flag [:in],
                arg_name: "LOCATION",
-               desc: "Suggest only friends in the given location"
+               desc: "Suggest only friends in the given location",
+               type: Stripped
 
   suggest.action do |_, options|
     suggestions = @introvert.suggest(location_name: options[:in])

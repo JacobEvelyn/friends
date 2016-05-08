@@ -116,9 +116,6 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def rename_friend(old_name:, new_name:)
-      old_name.strip!
-      new_name.strip!
-
       friend = friend_with_name_in(old_name)
       @activities.each do |activity|
         activity.update_friend_name(old_name: friend.name, new_name: new_name)
@@ -133,9 +130,6 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Location] the existing location
     def rename_location(old_name:, new_name:)
-      old_name.strip!
-      new_name.strip!
-
       loc = location_with_name_in(old_name)
 
       # Update locations in activities.
@@ -159,27 +153,54 @@ module Friends
     # @return [Friend] the existing friend
     def add_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
-      friend.add_nickname(nickname.strip)
+      friend.add_nickname(nickname)
       friend
     end
 
-    # Remove a nickname from an existing friend and write out the new friends
-    #   file.
+    # Add a hashtag to an existing friend.
+    # @param name [String] the name of the friend
+    # @param hashtag [String] the hashtag to add to the friend
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @return [Friend] the existing friend
+    def add_hashtag(name:, hashtag:)
+      friend = friend_with_name_in(name)
+      friend.add_hashtag(hashtag)
+      friend
+    end
+
+    # Remove a hashtag from an existing friend.
+    # @param name [String] the name of the friend
+    # @param hashtag [String] the hashtag to remove from the friend
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @raise [FriendsError] if the friend does not have the given nickname
+    # @return [Friend] the existing friend
+    def remove_hashtag(name:, hashtag:)
+      friend = friend_with_name_in(name)
+      friend.remove_hashtag(hashtag)
+      friend
+    end
+
+    # Remove a nickname from an existing friend.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to remove from the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @raise [FriendsError] if the friend does not have the given nickname
     # @return [Friend] the existing friend
     def remove_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
-      friend.remove_nickname(nickname.strip)
+      friend.remove_nickname(nickname)
       friend
     end
 
     # List all friend names in the friends file.
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
+    # @param tagged [String] the name of a hashtag to filter by, or nil for
+    #   unfiltered
+    # @param verbose [Boolean] true iff we should output friend names with
+    #   nicknames, locations, and hashtags; false for names only
     # @return [Array] a list of all friend names
-    def list_friends(location_name:)
+    def list_friends(location_name:, tagged:, verbose:)
       fs = @friends
 
       # Filter by location if a name is passed.
@@ -188,7 +209,10 @@ module Friends
         fs = fs.select { |friend| friend.location_name == location.name }
       end
 
-      fs.map(&:name)
+      # Filter by hashtag if one is passed.
+      fs = fs.select { |friend| friend.hashtags.include? tagged } if tagged
+
+      verbose ? fs.map(&:to_s) : fs.map(&:name)
     end
 
     # List your favorite friends.
@@ -214,9 +238,11 @@ module Friends
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
+    # @param tagged [String] the name of a hashtag to filter by, or nil for
+    #   unfiltered
     # @return [Array] a list of all activity text values
     # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
-    def list_activities(limit:, with:, location_name:)
+    def list_activities(limit:, with:, location_name:, tagged:)
       acts = @activities
 
       # Filter by friend name if argument is passed.
@@ -231,16 +257,43 @@ module Friends
         acts = acts.select { |act| act.includes_location?(location: location) }
       end
 
+      # Filter by tag if argument is passed.
+      unless tagged.nil?
+        acts = acts.select { |act| act.includes_hashtag?(hashtag: tagged) }
+      end
+
       # If we need to, trim the list.
       acts = acts.take(limit) unless limit.nil?
 
-      acts.map(&:display_text)
+      acts.map(&:to_s)
     end
 
     # List all location names in the friends file.
     # @return [Array] a list of all location names
     def list_locations
       @locations.map(&:name)
+    end
+
+    # @param from [String] one of: ["activities", "friends", nil]
+    #   If not nil, limits the hashtags returned to only those from either
+    #   activities or friends.
+    # @return [Array] a sorted list of all hashtags in activity descriptions
+    def list_hashtags(from:)
+      output = Set.new
+
+      unless from == "friends" # If from is "activities" or nil.
+        @activities.each_with_object(output) do |activity, set|
+          set.merge(activity.hashtags)
+        end
+      end
+
+      unless from == "activities" # If from is "friends" or nil.
+        @friends.each_with_object(output) do |friend, set|
+          set.merge(friend.hashtags)
+        end
+      end
+
+      output.sort_by(&:downcase)
     end
 
     # Find data points for graphing activities over time.

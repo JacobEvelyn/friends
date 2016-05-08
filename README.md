@@ -17,6 +17,7 @@ Extrovert-approved.
     - `add`
       - [`add activity`](#add-activity)
       - [`add friend`](#add-friend)
+      - [`add hashtag`](#add-hashtag)
       - [`add location`](#add-location)
       - [`add nickname`](#add-nickname)
     - [`clean`](#clean)
@@ -28,8 +29,11 @@ Extrovert-approved.
         - [`list favorite friends`](#list-favorite-friends)
         - [`list favorite locations`](#list-favorite-locations)
       - [`list friends`](#list-friends)
+      - [`list hashtags`](#list-hashtags)
       - [`list locations`](#list-locations)
-    - [`remove nickname`](#remove-nickname)
+    - `remove`
+      - [`remove hashtag`](#remove-hashtag)
+      - [`remove nickname`](#remove-nickname)
     - `rename`
       - [`rename friend`](#rename-friend)
       - [`rename location`](#rename-location)
@@ -83,10 +87,14 @@ Easy, huh?
 `friends` is structured around several different types of things:
 
 - **Activities**: The things you do. Each activity has a date associated with
-  it.
+  it. Activities may optionally contain any number of *friends*, *locations*,
+  and *hashtags*.
 - **Friends**: The people you do *activities* with. Each friend has a name and,
-  optionally, one or several nicknames.
-- **Locations**: The places in which *activities* happen.
+  optionally, one or several nicknames. (Examples: `John`, `Grace Hopper`)
+- **Locations**: The places in which *activities* happen. (Examples: `Paris`,
+  `Marie's Diner`)
+- **Hashtags**: A way to categorize your *activities* with tags of your
+  choosing. (Examples: `#exercise`, `#concert`)
 
 The `friends.md` Markdown file that stores all of your data contains:
 
@@ -212,6 +220,14 @@ $ friends add activity "Went swimming near atlantis with George."
 Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
 ```
 
+Hashtags will be colored if they're provided (though this README can't display
+color so you'll just have to have faith here):
+
+```bash
+$ friends add activity "The office softball team wins a game! #work #exercise"
+Activity added: "2016-05-05: The office softball team wins a game! #work #exercise"
+```
+
 You can of course specify a date for the activity:
 
 ```bash
@@ -245,6 +261,13 @@ Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George ha
 ```bash
 $ friends add friend "Grace Hopper"
 Friend added: "Grace Hopper"
+```
+
+#### `add hashtag`
+
+```bash
+$ friends add hashtag "Grace Hopper" science
+Hashtag added to friend: "Grace Hopper #science
 ```
 
 #### `add location`
@@ -350,8 +373,8 @@ Lists recent activities:
 
 ```bash
 $ friends list activities
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
+2014-12-31: Celebrated the new year with Marie Curie in New York City. #partying
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
@@ -359,15 +382,15 @@ You can adjust how many activities are shown:
 
 ```bash
 $ friends list activities --limit 2
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
+2014-12-31: Celebrated the new year with Marie Curie in New York City. #partying
 ```
 
 Or only list the activities you did with a certain friend:
 
 ```bash
-$ friends list activities --with "George"
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver.
+$ friends list activities --with George
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
@@ -375,7 +398,21 @@ Or filter your activities by location:
 
 ```bash
 $ friends list activities --in "New York"
-2014-12-31: Celebrated the new year with Marie Curie in New York City.
+2014-12-31: Celebrated the new year with Marie Curie in New York City. #partying
+```
+
+Or by hashtag:
+
+```bash
+$ friends list activities --tagged food
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
+```
+
+And you can mix and match these options to your heart's content:
+
+```bash
+$ friends list activities --tagged food --with Grace
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. #food
 ```
 
 #### `list favorite friends`
@@ -422,13 +459,22 @@ Your favorite locations:
 
 #### `list friends`
 
-Lists all of your friends:
+Lists all of your friends in alphabetical order:
 
 ```bash
 $ friends list friends
 George Washington Carver
 Grace Hopper
 Marie Curie
+```
+
+You can also include friend nicknames, locations, and hashtags:
+
+```bash
+$ friends list friends --verbose
+George Washington Carver
+Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] #navy #science
+Marie Curie [Atlantis] #science
 ```
 
 You can filter your friends by location:
@@ -438,15 +484,61 @@ $ friends list friends --in Paris
 Marie Curie
 ```
 
+And you can also filter your friends by hashtag:
+
+```bash
+$ friends list friends --tagged science
+Grace Hopper
+Marie Curie
+```
+
+#### `list hashtags`
+
+Lists all hashtags you've used, in alphabetical order:
+
+```bash
+$ friends list hashtags
+#dancing
+#food
+#school
+#swanky
+```
+
+You can limit this to only hashtags from activities:
+
+```bash
+$ friends list hashtags --from activities
+#dancing
+#food
+#swanky
+```
+
+Or only hashtags from friends:
+
+```bash
+$ friends list hashtags --from friends
+#school
+#swanky
+```
+
 #### `list locations`
 
-Lists all of the locations you've added:
+Lists all of the locations you've added, in alphabetical order::
 
 ```
 $ friends list locations
 Atlantis
 New York City
 Paris
+```
+
+#### `remove hashtag`
+
+Removes a specific hashtag from a friend:
+
+```bash
+$ friends remove hashtag "Grace Hopper" fun
+Hashtag removed from friend: "Grace Hopper (a.k.a. Amazing Grace) #OtherHashtag"
 ```
 
 #### `remove nickname`

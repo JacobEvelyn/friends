@@ -95,8 +95,8 @@ describe Friends::Activity do
     it { subject.description.must_equal description }
   end
 
-  describe "#display_text" do
-    subject { activity.display_text }
+  describe "#to_s" do
+    subject { activity.to_s }
 
     it do
       subject.
@@ -453,6 +453,40 @@ describe Friends::Activity do
     describe "when the given friend is not in the activity" do
       let(:friend) { Friends::Friend.new(name: "Claude Debussy") }
       it { subject.must_equal false }
+    end
+  end
+
+  describe "#hashtags" do
+    subject { activity.hashtags }
+
+    describe "when the activity has no hashtags" do
+      let(:activity) { Friends::Activity.new(str: "Enormous ball pit!") }
+      it { subject.must_be :empty? }
+    end
+
+    describe "when the activity has hashtags" do
+      let(:activity) { Friends::Activity.new(str: "Party! #fun #crazy #fun") }
+      it { subject.must_equal Set.new(["#fun", "#crazy"]) }
+    end
+  end
+
+  describe "#includes_hashtag?" do
+    subject { activity.includes_hashtag?(hashtag: hashtag) }
+    let(:activity) { Friends::Activity.new(str: "Enormous ball pit! #fun") }
+
+    describe "when the given hashtag is not in the activity" do
+      let(:hashtag) { "#garbage" }
+      it { subject.must_equal false }
+    end
+
+    describe "when the given word is in the activity but not as a hashtag" do
+      let(:hashtag) { "#ball" }
+      it { subject.must_equal false }
+    end
+
+    describe "when the given hashtag is in the activity" do
+      let(:hashtag) { "#fun" }
+      it { subject.must_equal true }
     end
   end
 

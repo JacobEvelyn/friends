@@ -50,7 +50,7 @@ module Friends
     attr_accessor :description
 
     # @return [String] the command-line display text for the activity
-    def display_text
+    def to_s
       date_s = Paint[date, :bold]
       description_s = description.to_s
       # rubocop:disable Lint/AssignmentInCondition
@@ -68,6 +68,10 @@ module Friends
                         "#{Paint[match[1], :bold, :yellow]}"\
                         "#{match.post_match}"
       end
+
+      description_s = description_s.
+                      gsub(HASHTAG_REGEX, Paint['\0', :bold, :cyan])
+
       "#{date_s}: #{description_s}"
     end
 
@@ -118,6 +122,17 @@ module Friends
     # @return [Boolean] true iff this activity includes the given friend
     def includes_friend?(friend:)
       friend_names.include? friend.name
+    end
+
+    # @param hashtag [String] the hashtag to test, of the form "#hashtag"
+    # @return [Boolean] true iff this activity includes the given hashtag
+    def includes_hashtag?(hashtag:)
+      hashtags.include? hashtag
+    end
+
+    # @return [Set] all hashtags in this activity (including the "#")
+    def hashtags
+      Set.new(@description.scan(HASHTAG_REGEX))
     end
 
     # Find the names of all friends in this description.
