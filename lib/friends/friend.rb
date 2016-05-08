@@ -42,6 +42,7 @@ module Friends
 
     attr_accessor :name
     attr_accessor :location_name
+    attr_reader :hashtags
 
     # @return [String] the file serialization text for the friend
     def serialize

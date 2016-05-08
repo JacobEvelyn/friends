@@ -267,11 +267,26 @@ module Friends
       @locations.map(&:name)
     end
 
+    # @param from [String] one of: ["activities", "friends", nil]
+    #   If not nil, limits the hashtags returned to only those from either
+    #   activities or friends.
     # @return [Array] a sorted list of all hashtags in activity descriptions
-    def list_hashtags
-      @activities.each_with_object(Set.new) do |activity, set|
-        set.merge(activity.hashtags)
-      end.sort_by(&:downcase)
+    def list_hashtags(from:)
+      output = Set.new
+
+      unless from == "friends" # If from is "activities" or nil.
+        @activities.each_with_object(output) do |activity, set|
+          set.merge(activity.hashtags)
+        end
+      end
+
+      unless from == "activities" # If from is "friends" or nil.
+        @friends.each_with_object(output) do |friend, set|
+          set.merge(friend.hashtags)
+        end
+      end
+
+      output.sort_by(&:downcase)
     end
 
     # Find data points for graphing activities over time.

@@ -84,7 +84,7 @@ describe Friends::Friend do
 
     it "adds the nickname" do
       subject
-      friend.instance_variable_get(:@hashtags).must_include("#college")
+      friend.hashtags.must_include("#college")
     end
 
     it "does not keep duplicates" do
@@ -92,7 +92,7 @@ describe Friends::Friend do
       friend.add_hashtag("#college")
       friend.add_hashtag("#college")
 
-      friend.instance_variable_get(:@hashtags).must_equal ["#college"]
+      friend.hashtags.must_equal ["#college"]
     end
   end
 

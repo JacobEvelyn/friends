@@ -483,6 +483,24 @@ Lists all hashtags you've used, in alphabetical order:
 $ friends list hashtags
 #dancing
 #food
+#school
+#swanky
+```
+
+You can limit this to only hashtags from activities:
+
+```bash
+$ friends list hashtags --from activities
+#dancing
+#food
+#swanky
+```
+
+Or only hashtags from friends:
+
+```bash
+$ friends list hashtags --from friends
+#school
 #swanky
 ```
 

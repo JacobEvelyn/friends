@@ -215,7 +215,7 @@ describe Friends::Introvert do
   end
 
   describe "#list_hashtags" do
-    subject { introvert.list_hashtags }
+    subject { introvert.list_hashtags(from: from) }
 
     let(:activities) do
       [
@@ -224,9 +224,50 @@ describe Friends::Introvert do
       ]
     end
 
-    it "lists all activity hashtags in sorted order" do
-      stub_activities(activities) do
-        subject.must_equal ["#food", "#picnic", "#swanky"]
+    let(:friends) do
+      [
+        Friends::Friend.new(name: "Grace Hopper", hashtags_str: "#coder #navy"),
+        Friends::Friend.new(name: "James Bond", hashtags_str: "#cool #swanky")
+      ]
+    end
+
+    describe "when from flag is nil" do
+      let(:from) { nil }
+      it "lists all hashtags in sorted order" do
+        stub_activities(activities) do
+          stub_friends(friends) do
+            subject.must_equal [
+              "#coder",
+              "#cool",
+              "#food",
+              "#navy",
+              "#picnic",
+              "#swanky"
+            ]
+          end
+        end
+      end
+    end
+
+    describe 'when from flag is "activities"' do
+      let(:from) { "activities" }
+      it "lists all activity hashtags in sorted order" do
+        stub_activities(activities) do
+          stub_friends(friends) do
+            subject.must_equal ["#food", "#picnic", "#swanky"]
+          end
+        end
+      end
+    end
+
+    describe 'when from flag is "friends"' do
+      let(:from) { "friends" }
+      it "lists all friend hashtags in sorted order" do
+        stub_activities(activities) do
+          stub_friends(friends) do
+            subject.must_equal ["#coder", "#cool", "#navy", "#swanky"]
+          end
+        end
       end
     end
   end

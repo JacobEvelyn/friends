@@ -144,8 +144,12 @@ command :list do |list|
 
   list.desc "List all hashtags used"
   list.command :hashtags do |list_hashtags|
-    list_hashtags.action do
-      puts @introvert.list_hashtags
+    list_hashtags.flag [:from],
+                       arg_name: '"activities" or "friends" (default: both)',
+                       desc: "List only hashtags from activities or friends "\
+                             "instead of both"
+    list_hashtags.action do |_, options|
+      puts @introvert.list_hashtags(from: options[:from])
     end
   end
 
