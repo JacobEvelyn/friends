@@ -195,8 +195,10 @@ module Friends
     # List all friend names in the friends file.
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
+    # @param verbose [Boolean] true iff we should output friend names with
+    #   nicknames, locations, and hashtags; false for names only
     # @return [Array] a list of all friend names
-    def list_friends(location_name:)
+    def list_friends(location_name:, verbose:)
       fs = @friends
 
       # Filter by location if a name is passed.
@@ -205,7 +207,7 @@ module Friends
         fs = fs.select { |friend| friend.location_name == location.name }
       end
 
-      fs.map(&:name)
+      verbose ? fs.map(&:to_s) : fs.map(&:name)
     end
 
     # List your favorite friends.
@@ -258,7 +260,7 @@ module Friends
       # If we need to, trim the list.
       acts = acts.take(limit) unless limit.nil?
 
-      acts.map(&:display_text)
+      acts.map(&:to_s)
     end
 
     # List all location names in the friends file.

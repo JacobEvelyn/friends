@@ -34,7 +34,11 @@ describe Friends::Introvert do
   let(:args) { { filename: filename } }
   let(:introvert) { Friends::Introvert.new(args) }
   let(:friend_names) { ["George Washington Carver", "Betsy Ross"] }
-  let(:friends) { friend_names.map { |name| Friends::Friend.new(name: name) } }
+  let(:friends) do
+    friend_names.map do |name|
+      Friends::Friend.new(name: name, hashtags_str: "#test")
+    end
+  end
   let(:activities) do
     [
       Friends::Activity.new(
@@ -110,14 +114,32 @@ describe Friends::Introvert do
   end
 
   describe "#list_friends" do
-    subject { introvert.list_friends(location_name: location_name) }
+    subject do
+      introvert.list_friends(location_name: location_name, verbose: verbose)
+    end
 
     describe "when no location name has been passed" do
       let(:location_name) { nil }
 
-      it "lists the names of friends" do
-        stub_friends(friends) do
-          subject.must_equal friend_names
+      describe "when not verbose" do
+        let(:verbose) { false }
+        it "lists the names of friends" do
+          stub_friends(friends) do
+            subject.must_equal friend_names
+          end
+        end
+      end
+
+      describe "when verbose" do
+        let(:verbose) { true }
+        it "lists the names and details of friends" do
+          stub_friends(friends) do
+            # Just check that there's a difference between the verbose and
+            # non-verbose versions of friends (otherwise our test is useless).
+            subject.wont_equal friend_names
+
+            subject.must_equal friends.map(&:to_s)
+          end
         end
       end
     end
@@ -133,10 +155,28 @@ describe Friends::Introvert do
         ]
       end
 
-      it "lists the names of friends" do
-        stub_friends(friends) do
-          stub_locations(locations) do
-            subject.must_equal ["Aquaman", "Shark-Boy"]
+      describe "when not verbose" do
+        let(:verbose) { false }
+        it "lists the names of friends" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              subject.must_equal ["Aquaman", "Shark-Boy"]
+            end
+          end
+        end
+      end
+
+      describe "when verbose" do
+        let(:verbose) { true }
+        it "lists the names and details of friends" do
+          stub_friends(friends) do
+            stub_locations(locations) do
+              # Just check that there's a difference between the verbose and
+              # non-verbose versions of friends (otherwise our test is useless).
+              subject.wont_equal friend_names
+
+              subject.must_equal friends[1..2].map(&:to_s)
+            end
           end
         end
       end
@@ -151,7 +191,7 @@ describe Friends::Introvert do
       it "adds the given friend" do
         stub_friends(friends) do
           subject
-          introvert.list_friends(location_name: nil).
+          introvert.list_friends(location_name: nil, verbose: false).
             must_include new_friend_name
         end
       end
@@ -331,7 +371,7 @@ describe Friends::Introvert do
 
       it "lists the activities" do
         stub_activities(activities) do
-          subject.must_equal activities.map(&:display_text)
+          subject.must_equal activities.map(&:to_s)
         end
       end
     end
@@ -368,7 +408,7 @@ describe Friends::Introvert do
           stub_friends(friends) do
             stub_activities(activities) do
               # Only one activity has that friend.
-              subject.must_equal activities[0..0].map(&:display_text)
+              subject.must_equal activities[0..0].map(&:to_s)
             end
           end
         end
@@ -380,7 +420,7 @@ describe Friends::Introvert do
 
       it "lists the activities" do
         stub_activities(activities) do
-          subject.must_equal activities.map(&:display_text)
+          subject.must_equal activities.map(&:to_s)
         end
       end
     end
@@ -435,7 +475,7 @@ describe Friends::Introvert do
             stub_locations(locations) do
               stub_activities(activities) do
                 # Only one activity has that friend.
-                subject.must_equal activities[0..0].map(&:display_text)
+                subject.must_equal activities[0..0].map(&:to_s)
               end
             end
           end
@@ -448,7 +488,7 @@ describe Friends::Introvert do
 
       it "lists the activities" do
         stub_activities(activities) do
-          subject.must_equal activities.map(&:display_text)
+          subject.must_equal activities.map(&:to_s)
         end
       end
     end
@@ -475,7 +515,7 @@ describe Friends::Introvert do
         let(:tagged) { "#beer" }
         it "returns the activity with that hashtag" do
           stub_activities(activities) do
-            subject.must_equal [activities.last.display_text]
+            subject.must_equal [activities.last.to_s]
           end
         end
       end
@@ -484,7 +524,7 @@ describe Friends::Introvert do
         let(:tagged) { "#tennis" }
         it "returns the activities with that hashtag" do
           stub_activities(activities) do
-            subject.must_equal activities[0..1].map(&:display_text)
+            subject.must_equal activities[0..1].map(&:to_s)
           end
         end
       end

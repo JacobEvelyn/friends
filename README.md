@@ -468,6 +468,15 @@ Grace Hopper
 Marie Curie
 ```
 
+You can also include friend nicknames, locations, and hashtags:
+
+```bash
+$ friends list friends --verbose
+George Washington Carver
+Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] #navy #science
+Marie Curie [Atlantis] #science
+```
+
 You can filter your friends by location:
 
 ```bash

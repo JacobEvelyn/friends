@@ -50,7 +50,7 @@ module Friends
     attr_accessor :description
 
     # @return [String] the command-line display text for the activity
-    def display_text
+    def to_s
       date_s = Paint[date, :bold]
       description_s = description.to_s
       # rubocop:disable Lint/AssignmentInCondition

@@ -97,8 +97,15 @@ command :list do |list|
                       desc: "List only friends in the given location",
                       type: Stripped
 
+    list_friends.switch [:verbose],
+                        negatable: false,
+                        desc: "Output friend nicknames, locations, and hashtags"
+
     list_friends.action do |_, options|
-      puts @introvert.list_friends(location_name: options[:in])
+      puts @introvert.list_friends(
+        location_name: options[:in],
+        verbose: options[:verbose]
+      )
     end
   end
 
@@ -225,11 +232,11 @@ command :add do |add|
 
       # If there's no description, prompt the user for one.
       if activity.description.nil? || activity.description.empty?
-        activity.description = Readline.readline(activity.display_text)
+        activity.description = Readline.readline(activity.to_s)
         activity.highlight_description(introvert: @introvert)
       end
 
-      @message = "Activity added: \"#{activity.display_text}\""
+      @message = "Activity added: \"#{activity}\""
       @dirty = true # Mark the file for cleaning.
     end
   end

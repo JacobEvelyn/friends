@@ -95,8 +95,8 @@ describe Friends::Activity do
     it { subject.description.must_equal description }
   end
 
-  describe "#display_text" do
-    subject { activity.display_text }
+  describe "#to_s" do
+    subject { activity.to_s }
 
     it do
       subject.
