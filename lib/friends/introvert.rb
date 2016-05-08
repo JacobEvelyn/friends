@@ -195,10 +195,12 @@ module Friends
     # List all friend names in the friends file.
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
+    # @param tagged [String] the name of a hashtag to filter by, or nil for
+    #   unfiltered
     # @param verbose [Boolean] true iff we should output friend names with
     #   nicknames, locations, and hashtags; false for names only
     # @return [Array] a list of all friend names
-    def list_friends(location_name:, verbose:)
+    def list_friends(location_name:, tagged:, verbose:)
       fs = @friends
 
       # Filter by location if a name is passed.
@@ -206,6 +208,9 @@ module Friends
         location = location_with_name_in(location_name)
         fs = fs.select { |friend| friend.location_name == location.name }
       end
+
+      # Filter by hashtag if one is passed.
+      fs = fs.select { |friend| friend.hashtags.include? tagged } if tagged
 
       verbose ? fs.map(&:to_s) : fs.map(&:name)
     end

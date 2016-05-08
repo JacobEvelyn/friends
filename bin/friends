@@ -97,6 +97,11 @@ command :list do |list|
                       desc: "List only friends in the given location",
                       type: Stripped
 
+    list_friends.flag [:tagged],
+                      arg_name: "HASHTAG",
+                      desc: "List only friends with the given hashtag",
+                      type: Hashtag
+
     list_friends.switch [:verbose],
                         negatable: false,
                         desc: "Output friend nicknames, locations, and hashtags"
@@ -104,6 +109,7 @@ command :list do |list|
     list_friends.action do |_, options|
       puts @introvert.list_friends(
         location_name: options[:in],
+        tagged: options[:tagged],
         verbose: options[:verbose]
       )
     end

@@ -115,37 +115,17 @@ describe Friends::Introvert do
 
   describe "#list_friends" do
     subject do
-      introvert.list_friends(location_name: location_name, verbose: verbose)
-    end
-
-    describe "when no location name has been passed" do
-      let(:location_name) { nil }
-
-      describe "when not verbose" do
-        let(:verbose) { false }
-        it "lists the names of friends" do
-          stub_friends(friends) do
-            subject.must_equal friend_names
-          end
-        end
-      end
-
-      describe "when verbose" do
-        let(:verbose) { true }
-        it "lists the names and details of friends" do
-          stub_friends(friends) do
-            # Just check that there's a difference between the verbose and
-            # non-verbose versions of friends (otherwise our test is useless).
-            subject.wont_equal friend_names
-
-            subject.must_equal friends.map(&:to_s)
-          end
-        end
-      end
+      introvert.list_friends(
+        location_name: location_name,
+        tagged: tagged,
+        verbose: verbose
+      )
     end
 
     describe "when a location name has been passed" do
       let(:location_name) { "Atlantis" }
+      let(:tagged) { nil }
+      let(:verbose) { false }
       let(:friends) do
         [
           Friends::Friend.new(name: "Mark Watney", location_name: "Mars"),
@@ -155,29 +135,59 @@ describe Friends::Introvert do
         ]
       end
 
-      describe "when not verbose" do
-        let(:verbose) { false }
-        it "lists the names of friends" do
-          stub_friends(friends) do
-            stub_locations(locations) do
-              subject.must_equal ["Aquaman", "Shark-Boy"]
-            end
+      it "lists the names of friends in that location" do
+        stub_friends(friends) do
+          stub_locations(locations) do
+            subject.must_equal ["Aquaman", "Shark-Boy"]
           end
         end
       end
+    end
 
-      describe "when verbose" do
-        let(:verbose) { true }
-        it "lists the names and details of friends" do
-          stub_friends(friends) do
-            stub_locations(locations) do
-              # Just check that there's a difference between the verbose and
-              # non-verbose versions of friends (otherwise our test is useless).
-              subject.wont_equal friend_names
+    describe "when a hashtag has been passed" do
+      let(:location_name) { nil }
+      let(:tagged) { "#superhero" }
+      let(:verbose) { false }
+      let(:friends) do
+        [
+          Friends::Friend.new(name: "Mark Watney"),
+          Friends::Friend.new(name: "Aquaman", hashtags_str: "#superhero"),
+          Friends::Friend.new(name: "Shark-Boy", hashtags_str: "#superhero"),
+          Friends::Friend.new(name: "Ms. Nowhere")
+        ]
+      end
 
-              subject.must_equal friends[1..2].map(&:to_s)
-            end
+      it "lists the names of friends in that location" do
+        stub_friends(friends) do
+          stub_locations(locations) do
+            subject.must_equal ["Aquaman", "Shark-Boy"]
           end
+        end
+      end
+    end
+
+    describe "when not verbose" do
+      let(:verbose) { false }
+      let(:location_name) { nil }
+      let(:tagged) { nil }
+      it "lists the names of friends" do
+        stub_friends(friends) do
+          subject.must_equal friend_names
+        end
+      end
+    end
+
+    describe "when verbose" do
+      let(:verbose) { true }
+      let(:location_name) { nil }
+      let(:tagged) { nil }
+      it "lists the names and details of friends" do
+        stub_friends(friends) do
+          # Just check that there's a difference between the verbose and
+          # non-verbose versions of friends (otherwise our test is useless).
+          subject.wont_equal friend_names
+
+          subject.must_equal friends.map(&:to_s)
         end
       end
     end
@@ -191,7 +201,9 @@ describe Friends::Introvert do
       it "adds the given friend" do
         stub_friends(friends) do
           subject
-          introvert.list_friends(location_name: nil, verbose: false).
+          introvert.
+            instance_variable_get(:@friends).
+            map(&:name).
             must_include new_friend_name
         end
       end

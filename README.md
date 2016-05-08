@@ -484,6 +484,14 @@ $ friends list friends --in Paris
 Marie Curie
 ```
 
+And you can also filter your friends by hashtag:
+
+```bash
+$ friends list friends --tagged science
+Grace Hopper
+Marie Curie
+```
+
 #### `list hashtags`
 
 Lists all hashtags you've used, in alphabetical order:
