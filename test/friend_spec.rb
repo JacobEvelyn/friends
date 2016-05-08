@@ -62,13 +62,52 @@ describe Friends::Friend do
 
     describe "when the nickname is present" do
       let(:friend) do
-        Friends::Friend.new(name: friend_name, nickname_str: "a.k.a. Jake")
+        Friends::Friend.new(name: friend_name, nickname_str: "Jake")
       end
 
       it "removes the nickname" do
         friend.instance_variable_get(:@nicknames).must_equal ["Jake"]
         subject
         friend.instance_variable_get(:@nicknames).must_equal []
+      end
+    end
+
+    describe "when the nickname is not present" do
+      it "raises an error if the nickname is not found" do
+        proc { subject }.must_raise Friends::FriendsError
+      end
+    end
+  end
+
+  describe "#add_hashtag" do
+    subject { friend.add_hashtag("#college") }
+
+    it "adds the nickname" do
+      subject
+      friend.instance_variable_get(:@hashtags).must_include("#college")
+    end
+
+    it "does not keep duplicates" do
+      # Add the same nickname twice. Do not use `subject` because it's memoized.
+      friend.add_hashtag("#college")
+      friend.add_hashtag("#college")
+
+      friend.instance_variable_get(:@hashtags).must_equal ["#college"]
+    end
+  end
+
+  describe "#remove_hashtag" do
+    subject { friend.remove_hashtag("#school") }
+
+    describe "when the hashtag is present" do
+      let(:friend) do
+        Friends::Friend.new(name: friend_name, hashtags_str: "#school #work")
+      end
+
+      it "removes the nickname" do
+        friend.instance_variable_get(:@hashtags).must_equal ["#school", "#work"]
+        subject
+        friend.instance_variable_get(:@hashtags).must_equal ["#work"]
       end
     end
 

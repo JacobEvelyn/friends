@@ -116,9 +116,6 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def rename_friend(old_name:, new_name:)
-      old_name.strip!
-      new_name.strip!
-
       friend = friend_with_name_in(old_name)
       @activities.each do |activity|
         activity.update_friend_name(old_name: friend.name, new_name: new_name)
@@ -133,9 +130,6 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Location] the existing location
     def rename_location(old_name:, new_name:)
-      old_name.strip!
-      new_name.strip!
-
       loc = location_with_name_in(old_name)
 
       # Update locations in activities.
@@ -159,19 +153,42 @@ module Friends
     # @return [Friend] the existing friend
     def add_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
-      friend.add_nickname(nickname.strip)
+      friend.add_nickname(nickname)
       friend
     end
 
-    # Remove a nickname from an existing friend and write out the new friends
-    #   file.
+    # Add a hashtag to an existing friend.
+    # @param name [String] the name of the friend
+    # @param hashtag [String] the hashtag to add to the friend
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @return [Friend] the existing friend
+    def add_hashtag(name:, hashtag:)
+      friend = friend_with_name_in(name)
+      friend.add_hashtag(hashtag)
+      friend
+    end
+
+    # Remove a hashtag from an existing friend.
+    # @param name [String] the name of the friend
+    # @param hashtag [String] the hashtag to remove from the friend
+    # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @raise [FriendsError] if the friend does not have the given nickname
+    # @return [Friend] the existing friend
+    def remove_hashtag(name:, hashtag:)
+      friend = friend_with_name_in(name)
+      friend.remove_hashtag(hashtag)
+      friend
+    end
+
+    # Remove a nickname from an existing friend.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to remove from the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
+    # @raise [FriendsError] if the friend does not have the given nickname
     # @return [Friend] the existing friend
     def remove_nickname(name:, nickname:)
       friend = friend_with_name_in(name)
-      friend.remove_nickname(nickname.strip)
+      friend.remove_nickname(nickname)
       friend
     end
 

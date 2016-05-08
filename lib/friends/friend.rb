@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # Friend represents a friend. You know, a real-life friend!
 
+require "friends"
 require "friends/regex_builder"
 require "friends/serializable"
 
@@ -15,7 +16,7 @@ module Friends
     def self.deserialization_regex
       # Note: this regex must be on one line because whitespace is important
       # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[]+)(\((?<nickname_str>#{NICKNAME_PREFIX}.+)\))?\s?(\[(?<location_name>[^\]]+)\])?/
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[#]*[^\(\[#\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<hashtags_str>(#{HASHTAG_REGEX}\s*)+))?/
       # rubocop:enable Metrics/LineLength
     end
 
@@ -25,12 +26,18 @@ module Friends
     end
 
     # @param name [String] the name of the friend
-    def initialize(name:, nickname_str: nil, location_name: nil)
-      @name = name.strip
+    def initialize(
+      name:,
+      nickname_str: nil,
+      location_name: nil,
+      hashtags_str: nil
+    )
+      @name = name
       @nicknames = nickname_str &&
-                   nickname_str.split(NICKNAME_PREFIX)[1..-1].map(&:strip) ||
+                   nickname_str.split(" #{NICKNAME_PREFIX}") ||
                    []
       @location_name = location_name
+      @hashtags = hashtags_str && hashtags_str.split(/\s+/) || []
     end
 
     attr_accessor :name
@@ -52,10 +59,28 @@ module Friends
 
       location_str = " [#{@location_name}]" unless @location_name.nil?
 
-      "#{@name}#{nickname_str}#{location_str}"
+      hashtag_str = " #{@hashtags.join(' ')}" unless @hashtags.empty?
+
+      "#{@name}#{nickname_str}#{location_str}#{hashtag_str}"
     end
 
-    # Adds a nickname, avoiding duplicates and stripping surrounding whitespace.
+    # Adds a hashtag, ignoring duplicates.
+    # @param hashtag [String] the hashtag to add
+    def add_hashtag(hashtag)
+      @hashtags << hashtag
+      @hashtags.uniq!
+    end
+
+    # @param hashtag [String] the hashtag to remove
+    def remove_hashtag(hashtag)
+      unless @hashtags.include? hashtag
+        raise FriendsError, "Hashtag \"#{hashtag}\" not found for \"#{name}\""
+      end
+
+      @hashtags.delete(hashtag)
+    end
+
+    # Adds a nickname, ignoring duplicates.
     # @param nickname [String] the nickname to add
     def add_nickname(nickname)
       @nicknames << nickname
@@ -63,7 +88,7 @@ module Friends
     end
 
     # @param nickname [String] the nickname to remove
-    # @return [Boolean] true if the nickname was present, false otherwise
+    # @raise [FriendsError] if the friend does not have the given nickname
     def remove_nickname(nickname)
       unless @nicknames.include? nickname
         raise FriendsError, "Nickname \"#{nickname}\" not found for \"#{name}\""

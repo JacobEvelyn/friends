@@ -17,6 +17,7 @@ Extrovert-approved.
     - `add`
       - [`add activity`](#add-activity)
       - [`add friend`](#add-friend)
+      - [`add hashtag`](#add-hashtag)
       - [`add location`](#add-location)
       - [`add nickname`](#add-nickname)
     - [`clean`](#clean)
@@ -30,7 +31,9 @@ Extrovert-approved.
       - [`list friends`](#list-friends)
       - [`list hashtags`](#list-hashtags)
       - [`list locations`](#list-locations)
-    - [`remove nickname`](#remove-nickname)
+    - `remove`
+      - [`remove hashtag`](#remove-hashtag)
+      - [`remove nickname`](#remove-nickname)
     - `rename`
       - [`rename friend`](#rename-friend)
       - [`rename location`](#rename-location)
@@ -260,6 +263,13 @@ $ friends add friend "Grace Hopper"
 Friend added: "Grace Hopper"
 ```
 
+#### `add hashtag`
+
+```bash
+$ friends add hashtag "Grace Hopper" science
+Hashtag added to friend: "Grace Hopper #science
+```
+
 #### `add location`
 
 ```
@@ -485,6 +495,15 @@ $ friends list locations
 Atlantis
 New York City
 Paris
+```
+
+#### `remove hashtag`
+
+Removes a specific hashtag from a friend:
+
+```bash
+$ friends remove hashtag "Grace Hopper" fun
+Hashtag removed from friend: "Grace Hopper (a.k.a. Amazing Grace) #OtherHashtag"
 ```
 
 #### `remove nickname`

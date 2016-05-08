@@ -16,3 +16,4 @@ mkmf.log
 ideas.txt
 TODO.txt
 .DS_Store
+.byebug_history

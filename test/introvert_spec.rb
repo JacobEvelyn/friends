@@ -492,24 +492,6 @@ describe Friends::Introvert do
         end
       end
     end
-
-    describe "when given names with leading and trailing spaces" do
-      let(:new_name) { "    David Bowie " }
-      let(:old_name) { friend_names.last + "    " }
-      subject do
-        introvert.rename_friend(old_name: old_name, new_name: new_name)
-      end
-
-      it "correctly strips the spaces" do
-        stub_friends(friends) do
-          stub_activities(activities) do
-            subject
-            introvert.activities.first.description.must_include "David Bowie"
-            introvert.activities.last.description.must_include "David Bowie"
-          end
-        end
-      end
-    end
   end
 
   describe "#rename_location" do
@@ -564,25 +546,6 @@ describe Friends::Introvert do
         end
       end
     end
-
-    describe "when given names with leading and trailing spaces" do
-      let(:new_name) { "    Paris, France " }
-      let(:old_name) { " Paris    " }
-      subject do
-        introvert.rename_location(old_name: old_name, new_name: new_name)
-      end
-
-      it "correctly strips the spaces" do
-        stub_locations(locations) do
-          stub_activities(activities) do
-            subject
-            introvert.activities.map do |activity|
-              activity.description.include? new_name
-            end.must_equal [true, true, false]
-          end
-        end
-      end
-    end
   end
 
   describe "#set_location" do
@@ -620,8 +583,32 @@ describe Friends::Introvert do
     end
 
     it "returns the modified friend" do
-      friend = Friends::Friend.new(name: "Jeff",
-                                   nickname_str: "a.k.a. The Dude")
+      friend = Friends::Friend.new(name: "Jeff", nickname_str: "The Dude")
+      stub_friends([friend]) do
+        subject.must_equal friend
+      end
+    end
+  end
+
+  describe "#add_hashtag" do
+    subject do
+      introvert.add_hashtag(name: friend_names.first, hashtag: "#school")
+    end
+
+    it "returns the modified friend" do
+      stub_friends(friends) do
+        subject.must_equal friends.first
+      end
+    end
+  end
+
+  describe "#remove_hashtag" do
+    subject do
+      introvert.remove_hashtag(name: "Jeff", hashtag: "#school")
+    end
+
+    it "returns the modified friend" do
+      friend = Friends::Friend.new(name: "Jeff", hashtags_str: "#school")
       stub_friends([friend]) do
         subject.must_equal friend
       end

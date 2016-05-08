@@ -18,9 +18,26 @@ version Friends::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-class Hashtag ; end
+class Hashtag
+  # @param str [String] of the form "hashtag" or "#hashtag"
+  # @return [String] the string, with whitespace stripped and a hashtag
+  #   prepended if there isn't one already
+  # NOTE: This logic could be only in the accept block if GLI allowed type
+  # conversions for arguments.
+  # See: https://github.com/davetron5000/gli/issues/241
+  def self.convert_to_hashtag(str)
+    str = str.strip
+    str.size > 0 && str[0] == "#" ? str : "##{str}"
+  end
+end
+
 accept(Hashtag) do |value|
-  value.size > 0 && value[0] == "#" ? value : "##{value}"
+  Hashtag.convert_to_hashtag(value)
+end
+
+class Stripped ; end
+accept(Stripped) do |value|
+  value.strip
 end
 
 switch [:quiet],
@@ -77,7 +94,8 @@ command :list do |list|
   list.command :friends do |list_friends|
     list_friends.flag [:in],
                       arg_name: "LOCATION",
-                      desc: "List only friends in the given location"
+                      desc: "List only friends in the given location",
+                      type: Stripped
 
     list_friends.action do |_, options|
       puts @introvert.list_friends(location_name: options[:in])
@@ -94,11 +112,13 @@ command :list do |list|
 
     list_activities.flag [:with],
                          arg_name: "NAME",
-                         desc: "List only activities involving the given friend"
+                         desc: "List only activities with the given friend",
+                         type: Stripped
 
     list_activities.flag [:in],
                          arg_name: "LOCATION",
-                         desc: "List only activities in the given location"
+                         desc: "List only activities in the given location",
+                         type: Stripped
 
     list_activities.flag [:tagged],
                          arg_name: "HASHTAG",
@@ -229,6 +249,19 @@ command :add do |add|
       @dirty = true # Mark the file for cleaning.
     end
   end
+
+  add.desc "Adds a hashtag to a friend"
+  add.arg_name "NAME HASHTAG"
+  add.command :hashtag do |add_hashtag|
+    add_hashtag.action do |_, _, args|
+      friend = @introvert.add_hashtag(
+        name: args.first,
+        hashtag: Hashtag.convert_to_hashtag(args[1])
+      )
+      @message = "Hashtag added to friend: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
 end
 
 desc "Set data about friends"
@@ -252,6 +285,19 @@ command :remove do |remove|
     remove_nickname.action do |_, _, args|
       friend = @introvert.remove_nickname(name: args.first, nickname: args[1])
       @message = "Nickname removed: \"#{friend}\""
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
+  remove.desc "Removes a hashtag to a friend"
+  remove.arg_name "NAME HASHTAG"
+  remove.command :hashtag do |remove_hashtag|
+    remove_hashtag.action do |_, _, args|
+      friend = @introvert.remove_hashtag(
+        name: args.first,
+        hashtag: Hashtag.convert_to_hashtag(args[1])
+      )
+      @message = "Hashtag removed from friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -286,7 +332,8 @@ desc "Suggest friends to do activities with"
 command :suggest do |suggest|
   suggest.flag [:in],
                arg_name: "LOCATION",
-               desc: "Suggest only friends in the given location"
+               desc: "Suggest only friends in the given location",
+               type: Stripped
 
   suggest.action do |_, options|
     suggestions = @introvert.suggest(location_name: options[:in])

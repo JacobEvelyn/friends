@@ -6,8 +6,8 @@
 
 ### Friends:
 - George Washington Carver
-- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
-- Marie Curie [Atlantis]
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] #navy #science
+- Marie Curie [Atlantis] #science
 
 ### Locations:
 - Atlantis

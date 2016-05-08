@@ -14,7 +14,6 @@ module Friends
 
     SERIALIZATION_PREFIX = "- ".freeze
     DATE_PARTITION = ": ".freeze
-    HASHTAG_REGEX = /#\p{Alnum}+/
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
