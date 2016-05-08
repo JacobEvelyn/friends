@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.20](https://github.com/JacobEvelyn/friends/tree/v0.20) (2016-05-08)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.19...v0.20)
+
+**Implemented enhancements:**
+
+- Add --tagged option to `list friends` [\#119](https://github.com/JacobEvelyn/friends/issues/119)
+- Add --verbose option to `list friends` [\#117](https://github.com/JacobEvelyn/friends/issues/117)
+- Add `list hashtags` command [\#116](https://github.com/JacobEvelyn/friends/issues/116)
+- Add hashtag capabilities to friends [\#90](https://github.com/JacobEvelyn/friends/issues/90)
+- Add hashtag capabilities to activities [\#89](https://github.com/JacobEvelyn/friends/issues/89)
+- Add location data to friends [\#66](https://github.com/JacobEvelyn/friends/issues/66)
+
+**Merged pull requests:**
+
+- Implement hashtags [\#118](https://github.com/JacobEvelyn/friends/pull/118) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.19](https://github.com/JacobEvelyn/friends/tree/v0.19) (2016-05-02)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.18...v0.19)
 
