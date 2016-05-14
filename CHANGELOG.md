@@ -1,5 +1,26 @@
 # Change Log
 
+## [Unreleased](https://github.com/JacobEvelyn/friends/tree/HEAD)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.21...HEAD)
+
+**Fixed bugs:**
+
+- Fix `undefined variable "limit"` errors [\#128](https://github.com/JacobEvelyn/friends/issues/128)
+
+## [v0.21](https://github.com/JacobEvelyn/friends/tree/v0.21) (2016-05-14)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.20...v0.21)
+
+**Implemented enhancements:**
+
+- Remove need for quotes from `friends add activity` [\#121](https://github.com/JacobEvelyn/friends/issues/121)
+- Remove need for quotes from `friends add friend` [\#120](https://github.com/JacobEvelyn/friends/issues/120)
+
+**Merged pull requests:**
+
+- Fix favorite commands \(undefined variable "limit"\) [\#126](https://github.com/JacobEvelyn/friends/pull/126) ([andypearson](https://github.com/andypearson))
+- Remove need to quote for `add friend` and `add activity` [\#123](https://github.com/JacobEvelyn/friends/pull/123) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.20](https://github.com/JacobEvelyn/friends/tree/v0.20) (2016-05-08)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.19...v0.20)
 
