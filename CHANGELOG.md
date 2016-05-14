@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/JacobEvelyn/friends/tree/HEAD)
-
-[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.21...HEAD)
+## [v0.22](https://github.com/JacobEvelyn/friends/tree/v0.22) (2016-05-14)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.21...v0.22)
 
 **Fixed bugs:**
 
