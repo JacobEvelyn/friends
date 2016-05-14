@@ -224,7 +224,7 @@ command :add do |add|
   add.arg_name "NAME"
   add.command :friend do |add_friend|
     add_friend.action do |_, _, args|
-      friend = @introvert.add_friend(name: args.first)
+      friend = @introvert.add_friend(name: args.join(" "))
       @message = "Friend added: \"#{friend.name}\""
       @dirty = true # Mark the file for cleaning.
     end
@@ -234,7 +234,7 @@ command :add do |add|
   add.arg_name "DESCRIPTION"
   add.command :activity do |add_activity|
     add_activity.action do |_, _, args|
-      activity = @introvert.add_activity(serialization: args.first)
+      activity = @introvert.add_activity(serialization: args.join(" "))
 
       # If there's no description, prompt the user for one.
       if activity.description.nil? || activity.description.empty?
