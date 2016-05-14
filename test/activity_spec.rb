@@ -430,7 +430,7 @@ describe Friends::Activity do
   end
 
   describe "#includes_location?" do
-    subject { activity.includes_location?(location: loc) }
+    subject { activity.includes_location?(loc) }
     let(:loc) { Friends::Location.new(name: "Atlantis") }
 
     describe "when the given location is in the activity" do
@@ -445,7 +445,7 @@ describe Friends::Activity do
   end
 
   describe "#includes_friend?" do
-    subject { activity.includes_friend?(friend: friend) }
+    subject { activity.includes_friend?(friend) }
 
     describe "when the given friend is in the activity" do
       let(:friend) { friend1 }
@@ -458,36 +458,36 @@ describe Friends::Activity do
     end
   end
 
-  describe "#hashtags" do
-    subject { activity.hashtags }
+  describe "#tags" do
+    subject { activity.tags }
 
-    describe "when the activity has no hashtags" do
+    describe "when the activity has no tags" do
       let(:activity) { Friends::Activity.new(str: "Enormous ball pit!") }
       it { subject.must_be :empty? }
     end
 
-    describe "when the activity has hashtags" do
-      let(:activity) { Friends::Activity.new(str: "Party! #fun #crazy #fun") }
-      it { subject.must_equal Set.new(["#fun", "#crazy"]) }
+    describe "when the activity has tags" do
+      let(:activity) { Friends::Activity.new(str: "Party! @fun @crazy @fun") }
+      it { subject.must_equal Set.new(["@fun", "@crazy"]) }
     end
   end
 
-  describe "#includes_hashtag?" do
-    subject { activity.includes_hashtag?(hashtag: hashtag) }
-    let(:activity) { Friends::Activity.new(str: "Enormous ball pit! #fun") }
+  describe "#includes_tag?" do
+    subject { activity.includes_tag?(tag) }
+    let(:activity) { Friends::Activity.new(str: "Enormous ball pit! @fun") }
 
-    describe "when the given hashtag is not in the activity" do
-      let(:hashtag) { "#garbage" }
+    describe "when the given tag is not in the activity" do
+      let(:tag) { "@garbage" }
       it { subject.must_equal false }
     end
 
-    describe "when the given word is in the activity but not as a hashtag" do
-      let(:hashtag) { "#ball" }
+    describe "when the given word is in the activity but not as a tag" do
+      let(:tag) { "@ball" }
       it { subject.must_equal false }
     end
 
-    describe "when the given hashtag is in the activity" do
-      let(:hashtag) { "#fun" }
+    describe "when the given tag is in the activity" do
+      let(:tag) { "@fun" }
       it { subject.must_equal true }
     end
   end

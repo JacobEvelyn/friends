@@ -17,7 +17,7 @@ module Friends
     def self.deserialization_regex
       # Note: this regex must be on one line because whitespace is important
       # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[#]*[^\(\[#\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<hashtags_str>(#{HASHTAG_REGEX}\s*)+))?/
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[#]*[^\(\[#\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<tags_str>(#{TAG_REGEX}\s*)+))?/
       # rubocop:enable Metrics/LineLength
     end
 
@@ -31,19 +31,19 @@ module Friends
       name:,
       nickname_str: nil,
       location_name: nil,
-      hashtags_str: nil
+      tags_str: nil
     )
       @name = name
       @nicknames = nickname_str &&
                    nickname_str.split(" #{NICKNAME_PREFIX}") ||
                    []
       @location_name = location_name
-      @hashtags = hashtags_str && hashtags_str.split(/\s+/) || []
+      @tags = tags_str && tags_str.split(/\s+/) || []
     end
 
     attr_accessor :name
     attr_accessor :location_name
-    attr_reader :hashtags
+    attr_reader :tags
 
     # @return [String] the file serialization text for the friend
     def serialize
@@ -61,25 +61,25 @@ module Friends
 
       location_str = " [#{@location_name}]" unless @location_name.nil?
 
-      hashtag_str = " #{@hashtags.join(' ')}" unless @hashtags.empty?
+      tag_str = " #{@tags.join(' ')}" unless @tags.empty?
 
-      "#{@name}#{nickname_str}#{location_str}#{hashtag_str}"
+      "#{@name}#{nickname_str}#{location_str}#{tag_str}"
     end
 
-    # Adds a hashtag, ignoring duplicates.
-    # @param hashtag [String] the hashtag to add
-    def add_hashtag(hashtag)
-      @hashtags << hashtag
-      @hashtags.uniq!
+    # Adds a tag, ignoring duplicates.
+    # @param tag [String] the tag to add, of the format: "@tag"
+    def add_tag(tag)
+      @tags << tag
+      @tags.uniq!
     end
 
-    # @param hashtag [String] the hashtag to remove
-    def remove_hashtag(hashtag)
-      unless @hashtags.include? hashtag
-        raise FriendsError, "Hashtag \"#{hashtag}\" not found for \"#{name}\""
+    # @param tag [String] the tag to remove, of the format: "@tag"
+    def remove_tag(tag)
+      unless @tags.include? tag
+        raise FriendsError, "Tag \"#{tag}\" not found for \"#{name}\""
       end
 
-      @hashtags.delete(hashtag)
+      @tags.delete(tag)
     end
 
     # Adds a nickname, ignoring duplicates.

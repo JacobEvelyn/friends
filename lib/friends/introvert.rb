@@ -158,26 +158,26 @@ module Friends
       friend
     end
 
-    # Add a hashtag to an existing friend.
+    # Add a tag to an existing friend.
     # @param name [String] the name of the friend
-    # @param hashtag [String] the hashtag to add to the friend
+    # @param tag [String] the tag to add to the friend, of the form: "@tag"
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
-    def add_hashtag(name:, hashtag:)
+    def add_tag(name:, tag:)
       friend = friend_with_name_in(name)
-      friend.add_hashtag(hashtag)
+      friend.add_tag(tag)
       friend
     end
 
-    # Remove a hashtag from an existing friend.
+    # Remove a tag from an existing friend.
     # @param name [String] the name of the friend
-    # @param hashtag [String] the hashtag to remove from the friend
+    # @param tag [String] the tag to remove from the friend, of the form: "@tag"
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @raise [FriendsError] if the friend does not have the given nickname
     # @return [Friend] the existing friend
-    def remove_hashtag(name:, hashtag:)
+    def remove_tag(name:, tag:)
       friend = friend_with_name_in(name)
-      friend.remove_hashtag(hashtag)
+      friend.remove_tag(tag)
       friend
     end
 
@@ -196,10 +196,10 @@ module Friends
     # List all friend names in the friends file.
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @param tagged [String] the name of a hashtag to filter by, or nil for
-    #   unfiltered
+    # @param tagged [String] the name of a tag to filter by (of the form:
+    #   "@tag"), or nil for unfiltered
     # @param verbose [Boolean] true iff we should output friend names with
-    #   nicknames, locations, and hashtags; false for names only
+    #   nicknames, locations, and tags; false for names only
     # @return [Array] a list of all friend names
     def list_friends(location_name:, tagged:, verbose:)
       fs = @friends
@@ -210,8 +210,8 @@ module Friends
         fs = fs.select { |friend| friend.location_name == location.name }
       end
 
-      # Filter by hashtag if one is passed.
-      fs = fs.select { |friend| friend.hashtags.include? tagged } if tagged
+      # Filter by tag if one is passed.
+      fs = fs.select { |friend| friend.tags.include? tagged } if tagged
 
       verbose ? fs.map(&:to_s) : fs.map(&:name)
     end
@@ -239,10 +239,10 @@ module Friends
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @param tagged [String] the name of a hashtag to filter by, or nil for
-    #   unfiltered
+    # @param tagged [String] the name of a tag to filter by (of the form:
+    #   "@tag"), or nil for unfiltered
     # @return [Array] a list of all activity text values
-    # @raise [FriendsError] if friend, location or hashtag cannot be found or
+    # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def list_activities(limit:, with:, location_name:, tagged:)
       acts = filtered_activities(
@@ -264,21 +264,21 @@ module Friends
     end
 
     # @param from [String] one of: ["activities", "friends", nil]
-    #   If not nil, limits the hashtags returned to only those from either
+    #   If not nil, limits the tags returned to only those from either
     #   activities or friends.
-    # @return [Array] a sorted list of all hashtags in activity descriptions
-    def list_hashtags(from:)
+    # @return [Array] a sorted list of all tags in activity descriptions
+    def list_tags(from:)
       output = Set.new
 
       unless from == "friends" # If from is "activities" or nil.
         @activities.each_with_object(output) do |activity, set|
-          set.merge(activity.hashtags)
+          set.merge(activity.tags)
         end
       end
 
       unless from == "activities" # If from is "friends" or nil.
         @friends.each_with_object(output) do |friend, set|
-          set.merge(friend.hashtags)
+          set.merge(friend.tags)
         end
       end
 
@@ -286,7 +286,7 @@ module Friends
     end
 
     # Find data points for graphing activities over time.
-    # Optionally filter by friend, location and hashtag
+    # Optionally filter by friend, location and tag
     #
     # The returned hash uses the following format:
     #   {
@@ -301,10 +301,10 @@ module Friends
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @param tagged [String] the name of a hashtag to filter by, or nil for
-    #   unfiltered
+    # @param tagged [String] the name of a tag to filter by (of the form:
+    #   "@tag"), or nil for unfiltered
     # @return [Hash{String => Integer}]
-    # @raise [FriendsError] if friend, location or hashtag cannot be found or
+    # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def graph(with:, location_name:, tagged:)
       # There is no point trying to graph no activities
@@ -463,15 +463,15 @@ module Friends
 
     private
 
-    # Filter activities by friend, location and hashtag
+    # Filter activities by friend, location and tag
     # @param with [String] the name of a friend to filter by, or nil for
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @param tagged [String] the name of a hashtag to filter by, or nil for
+    # @param tagged [String] the name of a tag to filter by, or nil for
     #   unfiltered
     # @return [Array] an array of activities
-    # @raise [FriendsError] if friend, location or hashtag cannot be found or
+    # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def filtered_activities(with:, location_name:, tagged:)
       acts = @activities
@@ -479,18 +479,18 @@ module Friends
       # Filter by friend name if argument is passed.
       unless with.nil?
         friend = friend_with_name_in(with)
-        acts = acts.select { |act| act.includes_friend?(friend: friend) }
+        acts = acts.select { |act| act.includes_friend?(friend) }
       end
 
       # Filter by location name if argument is passed.
       unless location_name.nil?
         location = location_with_name_in(location_name)
-        acts = acts.select { |act| act.includes_location?(location: location) }
+        acts = acts.select { |act| act.includes_location?(location) }
       end
 
       # Filter by tag if argument is passed.
       unless tagged.nil?
-        acts = acts.select { |act| act.includes_hashtag?(hashtag: tagged) }
+        acts = acts.select { |act| act.includes_tag?(tagged) }
       end
 
       acts
