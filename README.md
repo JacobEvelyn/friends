@@ -148,7 +148,7 @@ File cleaned: "./test/tmp/friends.md"
 - `--quiet`: Quiet output messages.
 
 ```bash
-$ friends --quiet add activity "Went rollerskating with George."
+$ friends --quiet add activity Went rollerskating with George.
 $ # No output!
 ```
 
@@ -190,7 +190,7 @@ alias friends="friends --filename '~/Dropbox/friends.md'"
 #### `add activity`
 
 ```bash
-$ friends add activity "Got lunch with Grace and George."
+$ friends add activity Got lunch with Grace and George.
 Activity added: "2015-01-04: Got lunch with Grace Hopper and George Washington Carver."
 ```
 
@@ -200,7 +200,7 @@ Nicknames will be used to match friends in activities,
 just like formal names:
 
 ```bash
-$ friends add activity "Invented debugging with The Admiral."
+$ friends add activity Invented debugging with The Admiral.
 Activity added: "2016-01-06: Invented debugging with Grace Hopper."
 ```
 
@@ -216,7 +216,7 @@ Activity added: "2016-05-01: Got lunch with Earnest Hemingway and Earnest Shackl
 And locations will be matched as well:
 
 ```bash
-$ friends add activity "Went swimming near atlantis with George."
+$ friends add activity Went swimming near atlantis with George.
 Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
 ```
 
@@ -231,7 +231,7 @@ Activity added: "2016-05-05: The office softball team wins a game! #work #exerci
 You can of course specify a date for the activity:
 
 ```bash
-$ friends add activity "Yesterday: Celebrated the new year with Marie."
+$ friends add activity Yesterday: Celebrated the new year with Marie.
 Activity added: "2014-12-31: Celebrated the new year with Marie Curie."
 ```
 
@@ -245,7 +245,7 @@ $ friends add activity 2015-11-01
 **Natural-language dates** work just fine:
 
 ```bash
-$ friends add activity 'last Monday'
+$ friends add activity last Monday
 2016-03-07: <type description here>
 ```
 
@@ -259,7 +259,7 @@ Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George ha
 #### `add friend`
 
 ```bash
-$ friends add friend "Grace Hopper"
+$ friends add friend Grace Hopper
 Friend added: "Grace Hopper"
 ```
 
