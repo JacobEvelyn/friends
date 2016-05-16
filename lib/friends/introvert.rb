@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Introvert is the internal handler for the friends script. It is designed to be
 # able to be used directly within another Ruby program, without needing to call
 # the command-line script explicitly.
@@ -10,11 +11,11 @@ require "friends/friends_error"
 
 module Friends
   class Introvert
-    DEFAULT_FILENAME = "./friends.md".freeze
-    ACTIVITIES_HEADER = "### Activities:".freeze
-    FRIENDS_HEADER = "### Friends:".freeze
-    LOCATIONS_HEADER = "### Locations:".freeze
-    GRAPH_DATE_FORMAT = "%b %Y".freeze # Used as the param for date.strftime().
+    DEFAULT_FILENAME = "./friends.md"
+    ACTIVITIES_HEADER = "### Activities:"
+    FRIENDS_HEADER = "### Friends:"
+    LOCATIONS_HEADER = "### Locations:"
+    GRAPH_DATE_FORMAT = "%b %Y" # Used as the param for date.strftime().
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME)

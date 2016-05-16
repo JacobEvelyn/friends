@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Location represents a location in the world.
 
 require "friends/regex_builder"
@@ -8,7 +9,7 @@ module Friends
   class Location
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- ".freeze
+    SERIALIZATION_PREFIX = "- "
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex

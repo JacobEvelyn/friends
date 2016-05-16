@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require "gli"
 require "paint"
@@ -27,7 +28,7 @@ class Hashtag
   # See: https://github.com/davetron5000/gli/issues/241
   def self.convert_to_hashtag(str)
     str = str.strip
-    str.size > 0 && str[0] == "#" ? str : "##{str}"
+    !str.empty? && str[0] == "#" ? str : "##{str}"
   end
 end
 
@@ -35,10 +36,8 @@ accept(Hashtag) do |value|
   Hashtag.convert_to_hashtag(value)
 end
 
-class Stripped ; end
-accept(Stripped) do |value|
-  value.strip
-end
+class Stripped; end
+accept(Stripped, &:strip)
 
 switch [:quiet],
        negatable: false,

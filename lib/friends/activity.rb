@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Activity represents an activity you've done with one or more Friends.
 
 require "chronic"
@@ -12,8 +13,8 @@ module Friends
     extend Serializable
     extend Memoist
 
-    SERIALIZATION_PREFIX = "- ".freeze
-    DATE_PARTITION = ": ".freeze
+    SERIALIZATION_PREFIX = "- "
+    DATE_PARTITION = ": "
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
@@ -97,7 +98,7 @@ module Friends
     # @return [String] if name found in description
     # @return [nil] if no change was made
     def update_friend_name(old_name:, new_name:)
-      @description.gsub!(
+      @description = @description.gsub(
         Regexp.new("(?<=\\*\\*)#{old_name}(?=\\*\\*)"),
         new_name
       )
@@ -109,7 +110,10 @@ module Friends
     # @return [String] if name found in description
     # @return [nil] if no change was made
     def update_location_name(old_name:, new_name:)
-      @description.gsub!(Regexp.new("(?<=_)#{old_name}(?=_)"), new_name)
+      @description = @description.gsub(
+        Regexp.new("(?<=_)#{old_name}(?=_)"),
+        new_name
+      )
     end
 
     # @param location [Location] the location to test

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Serializable provides functionality around serialization to the classes that
 # extend it. This includes a class method to deserialize a string and create an
 # instance of the class.

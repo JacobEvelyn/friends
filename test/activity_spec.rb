@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "./test/helper"
 
 describe Friends::Activity do

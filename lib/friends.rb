@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "friends/introvert"
 require "friends/version"
 

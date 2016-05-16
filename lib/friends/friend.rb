@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Friend represents a friend. You know, a real-life friend!
 
 require "friends"
@@ -9,8 +10,8 @@ module Friends
   class Friend
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- ".freeze
-    NICKNAME_PREFIX = "a.k.a. ".freeze
+    SERIALIZATION_PREFIX = "- "
+    NICKNAME_PREFIX = "a.k.a. "
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
