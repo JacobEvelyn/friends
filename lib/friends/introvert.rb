@@ -6,6 +6,7 @@
 
 require "friends/activity"
 require "friends/friend"
+require "friends/graph"
 require "friends/location"
 require "friends/friends_error"
 
@@ -15,7 +16,6 @@ module Friends
     ACTIVITIES_HEADER = "### Activities:"
     FRIENDS_HEADER = "### Friends:"
     LOCATIONS_HEADER = "### Locations:"
-    GRAPH_DATE_FORMAT = "%b %Y" # Used as the param for date.strftime().
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME)
@@ -242,26 +242,14 @@ module Friends
     # @param tagged [String] the name of a hashtag to filter by, or nil for
     #   unfiltered
     # @return [Array] a list of all activity text values
-    # @raise [FriendsError] if 0 or 2+ friends match the given `with` text
+    # @raise [FriendsError] if friend, location or hashtag cannot be found or
+    #   is ambiguous
     def list_activities(limit:, with:, location_name:, tagged:)
-      acts = @activities
-
-      # Filter by friend name if argument is passed.
-      unless with.nil?
-        friend = friend_with_name_in(with)
-        acts = acts.select { |act| act.includes_friend?(friend: friend) }
-      end
-
-      # Filter by location name if argument is passed.
-      unless location_name.nil?
-        location = location_with_name_in(location_name)
-        acts = acts.select { |act| act.includes_location?(location: location) }
-      end
-
-      # Filter by tag if argument is passed.
-      unless tagged.nil?
-        acts = acts.select { |act| act.includes_hashtag?(hashtag: tagged) }
-      end
+      acts = filtered_activities(
+        with: with,
+        location_name: location_name,
+        tagged: tagged
+      )
 
       # If we need to, trim the list.
       acts = acts.take(limit) unless limit.nil?
@@ -298,7 +286,7 @@ module Friends
     end
 
     # Find data points for graphing activities over time.
-    # Optionally filter by a friend to see a given relationship over time.
+    # Optionally filter by friend, location and hashtag
     #
     # The returned hash uses the following format:
     #   {
@@ -309,32 +297,30 @@ module Friends
     # The keys of the hash are all of the months (inclusive) between the first
     # and last month in which activities have been recorded.
     #
-    # @param name [String] the name of the friend to use
-    # @return [Hash{String => Fixnum}]
-    # @raise [FriendsError] if 0 or 2+ friends match the given name
-    def graph(name: nil)
-      if name
-        friend = friend_with_name_in(name) # Find the friend by name.
+    # @param with [String] the name of a friend to filter by, or nil for
+    #   unfiltered
+    # @param location_name [String] the name of a location to filter by, or nil
+    #   for unfiltered
+    # @param tagged [String] the name of a hashtag to filter by, or nil for
+    #   unfiltered
+    # @return [Hash{String => Integer}]
+    # @raise [FriendsError] if friend, location or hashtag cannot be found or
+    #   is ambiguous
+    def graph(with:, location_name:, tagged:)
+      # There is no point trying to graph no activities
+      return {} if @activities.empty?
 
-        # Filter out activities that don't include the given friend.
-        acts = @activities.select { |act| act.includes_friend?(friend: friend) }
-      else
-        acts = @activities
-      end
+      activities_to_graph = filtered_activities(
+        with: with,
+        location_name: location_name,
+        tagged: tagged
+      )
 
-      # Initialize the table of activities to have all of the months of that
-      # friend's activity range (including months in the middle of the range
-      # with no relevant activities).
-      act_table = {}
-      (acts.last.date..acts.first.date).each do |date|
-        act_table[date.strftime(GRAPH_DATE_FORMAT)] = 0
-      end
-
-      acts.each do |activity|
-        month = activity.date.strftime(GRAPH_DATE_FORMAT)
-        act_table[month] += 1
-      end
-      act_table
+      Graph.new(
+        start_date: @activities.last.date,
+        end_date: @activities.first.date,
+        activities: activities_to_graph
+      ).to_h
     end
 
     # Suggest friends to do something with.
@@ -476,6 +462,39 @@ module Friends
     end
 
     private
+
+    # Filter activities by friend, location and hashtag
+    # @param with [String] the name of a friend to filter by, or nil for
+    #   unfiltered
+    # @param location_name [String] the name of a location to filter by, or nil
+    #   for unfiltered
+    # @param tagged [String] the name of a hashtag to filter by, or nil for
+    #   unfiltered
+    # @return [Array] an array of activities
+    # @raise [FriendsError] if friend, location or hashtag cannot be found or
+    #   is ambiguous
+    def filtered_activities(with:, location_name:, tagged:)
+      acts = @activities
+
+      # Filter by friend name if argument is passed.
+      unless with.nil?
+        friend = friend_with_name_in(with)
+        acts = acts.select { |act| act.includes_friend?(friend: friend) }
+      end
+
+      # Filter by location name if argument is passed.
+      unless location_name.nil?
+        location = location_with_name_in(location_name)
+        acts = acts.select { |act| act.includes_location?(location: location) }
+      end
+
+      # Filter by tag if argument is passed.
+      unless tagged.nil?
+        acts = acts.select { |act| act.includes_hashtag?(hashtag: tagged) }
+      end
+
+      acts
+    end
 
     # @param type [Symbol] one of: [:friend, :location]
     # @param limit [Integer] the number of favorite things to return

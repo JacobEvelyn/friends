@@ -806,79 +806,100 @@ describe Friends::Introvert do
   end
 
   describe "#graph" do
-    subject { introvert.graph(name: friend_name) }
+    subject do
+      introvert.graph(
+        with: with,
+        location_name: location_name,
+        tagged: tagged
+      )
+    end
+
+    let(:with) { nil }
+    let(:location_name) { nil }
+    let(:tagged) { nil }
 
     let(:activities) do
       [
+        # With a friend
         Friends::Activity.new(
-          str: "2016-04-01: Lunch with **George Washington Carver**."
+          str: "2016-01-01: \
+            At _The Eiffel Tower_ with **George Washington Carver**."
         ),
 
-        # Create another activity with a gap of over a month between it and
-        # the next activity, so we can test that we correctly return data for
-        # months in the range with no activities.
+        # In a location
         Friends::Activity.new(
-          str: "2016-02-01: Called **George Washington Carver**."
+          str: "2016-01-01: Called **George Washington Carver**. #phone"
         ),
 
-        # Create an activity that doesn't involve our friend name.
+        # Tagged with a hashtag
         Friends::Activity.new(
-          str: "2016-01-01: Called **Betsy Ross** on the phone."
+          str: "2016-01-01: Hung out with **Betsy Ross**."
         )
       ]
     end
 
-    describe "when friend name is invalid" do
-      let(:friend_name) { "Oscar the Grouch" }
-
-      it "raises an error" do
-        proc { subject }.must_raise Friends::FriendsError
+    it "graphs activities by month" do
+      stub_activities(activities) do
+        subject.must_equal("Jan 2016" => 3)
       end
     end
 
-    describe "when friend name has more than one match" do
-      let(:friend_name) { "e" }
-
-      it "raises an error" do
-        stub_friends(friends) do
-          proc { subject }.must_raise Friends::FriendsError
-        end
+    describe "No activities" do
+      it "returns an empty graph" do
+        subject.must_equal({})
       end
     end
 
-    describe "when friend is empty" do
-      let(:friend_name) { nil }
+    describe "Filtering by friend" do
+      let(:with) { "Betsy Ross" }
 
-      it "returns a hash of months and frequencies" do
+      it "graphs activities with a friend" do
         stub_friends(friends) do
           stub_activities(activities) do
-            subject.must_equal(
-              {
-                "Jan 2016" => 1,
-                "Feb 2016" => 1,
-                "Mar 2016" => 0,
-                "Apr 2016" => 1
-              }
-            )
+            subject.must_equal("Jan 2016" => 1)
+          end
+        end
+      end
+
+      describe "when the friend does not exist" do
+        let(:with) { "Oscar the Grouch" }
+
+        it "raises an error" do
+          stub_activities(activities) do
+            proc { subject }.must_raise Friends::FriendsError
           end
         end
       end
     end
 
-    describe "when friend name is valid" do
-      let(:friend_name) { "George" }
+    describe "Filtering by location" do
+      let(:location_name) { "The Eiffel Tower" }
 
-      it "returns a hash of months and frequencies" do
-        stub_friends(friends) do
+      it "graphs activities in a location" do
+        stub_locations(locations) do
           stub_activities(activities) do
-            subject.must_equal(
-              {
-                "Feb 2016" => 1,
-                "Mar 2016" => 0,
-                "Apr 2016" => 1
-              }
-            )
+            subject.must_equal("Jan 2016" => 1)
           end
+        end
+      end
+
+      describe "when the location does not exist" do
+        let(:location_name) { "Nowhere" }
+
+        it "raises an error" do
+          stub_activities(activities) do
+            proc { subject }.must_raise Friends::FriendsError
+          end
+        end
+      end
+    end
+
+    describe "Filtering by hashtag" do
+      let(:tagged) { "#phone" }
+
+      it "graphs activities tagged with a hashtag" do
+        stub_activities(activities) do
+          subject.must_equal("Jan 2016" => 1)
         end
       end
     end
