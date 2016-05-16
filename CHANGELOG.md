@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.23](https://github.com/JacobEvelyn/friends/tree/v0.23) (2016-05-16)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.22...v0.23)
+
+**Implemented enhancements:**
+
+- Change `graph` to use `--with`, `--tagged`, and `--in` flags [\#124](https://github.com/JacobEvelyn/friends/issues/124)
+- Add `graph` command for locations [\#109](https://github.com/JacobEvelyn/friends/issues/109)
+
+**Merged pull requests:**
+
+- Allow graph to be filtered by friend, location and hashtag [\#129](https://github.com/JacobEvelyn/friends/pull/129) ([andypearson](https://github.com/andypearson))
+
 ## [v0.22](https://github.com/JacobEvelyn/friends/tree/v0.22) (2016-05-14)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.21...v0.22)
 

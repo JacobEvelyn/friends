@@ -318,17 +318,7 @@ Opening "./friends.md" in atom
 
 #### `graph`
 
-Graphs (in color!) your relationship with a given friend over time:
-
-```bash
-$ friends graph George
-Nov 2014 |█
-Dec 2014 |
-Jan 2015 |█████
-Feb 2015 |███
-```
-
-Or just graph all of your activities:
+Graphs (in color!) your activities over time:
 
 ```bash
 $ friends graph
@@ -336,6 +326,43 @@ Nov 2014 |███
 Dec 2014 |██
 Jan 2015 |███████
 Feb 2015 |█████
+```
+
+Or graph only activities with a certain friend:
+
+```bash
+$ friends graph --with George
+Nov 2014 |█
+Dec 2014 |
+Jan 2015 |█████
+Feb 2015 |███
+```
+
+Or graph only activities with a certain hashtag:
+
+```bash
+$ friends graph --tagged food
+Nov 2014 |█
+Dec 2014 |
+Jan 2015 |
+Feb 2015 |███
+```
+
+Or graph only activities in a certain location:
+
+```bash
+$ friends graph --in Paris
+Nov 2014 |█
+Dec 2014 |
+Jan 2015 |
+Feb 2015 |█
+```
+
+And you can use multiple of these flags together:
+
+```bash
+$ friends graph --in Paris --tagged food --with George
+Nov 2014 |█
 ```
 
 #### `help`
