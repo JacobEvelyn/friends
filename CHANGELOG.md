@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.24](https://github.com/JacobEvelyn/friends/tree/v0.24) (2016-05-17)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.23...v0.24)
+
+**Implemented enhancements:**
+
+- Change \#hashtags to @tags [\#122](https://github.com/JacobEvelyn/friends/issues/122)
+
+**Fixed bugs:**
+
+- Uninitialized constant Friends::Activity::Set when graphing by tag [\#133](https://github.com/JacobEvelyn/friends/issues/133)
+
+**Merged pull requests:**
+
+- Change tags to `@tag` format, auto-migrate old tags, and fix set loading issue [\#134](https://github.com/JacobEvelyn/friends/pull/134) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.23](https://github.com/JacobEvelyn/friends/tree/v0.23) (2016-05-16)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.22...v0.23)
 
