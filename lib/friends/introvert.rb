@@ -4,6 +4,8 @@
 # able to be used directly within another Ruby program, without needing to call
 # the command-line script explicitly.
 
+require "set"
+
 require "friends/activity"
 require "friends/friend"
 require "friends/graph"
