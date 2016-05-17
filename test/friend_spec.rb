@@ -81,35 +81,35 @@ describe Friends::Friend do
     end
   end
 
-  describe "#add_hashtag" do
-    subject { friend.add_hashtag("#college") }
+  describe "#add_tag" do
+    subject { friend.add_tag("@college") }
 
     it "adds the nickname" do
       subject
-      friend.hashtags.must_include("#college")
+      friend.tags.must_include("@college")
     end
 
     it "does not keep duplicates" do
       # Add the same nickname twice. Do not use `subject` because it's memoized.
-      friend.add_hashtag("#college")
-      friend.add_hashtag("#college")
+      friend.add_tag("@college")
+      friend.add_tag("@college")
 
-      friend.hashtags.must_equal ["#college"]
+      friend.tags.must_equal ["@college"]
     end
   end
 
-  describe "#remove_hashtag" do
-    subject { friend.remove_hashtag("#school") }
+  describe "@remove_tag" do
+    subject { friend.remove_tag("@school") }
 
-    describe "when the hashtag is present" do
+    describe "when the tag is present" do
       let(:friend) do
-        Friends::Friend.new(name: friend_name, hashtags_str: "#school #work")
+        Friends::Friend.new(name: friend_name, tags_str: "@school @work")
       end
 
       it "removes the nickname" do
-        friend.instance_variable_get(:@hashtags).must_equal ["#school", "#work"]
+        friend.instance_variable_get(:@tags).must_equal ["@school", "@work"]
         subject
-        friend.instance_variable_get(:@hashtags).must_equal ["#work"]
+        friend.instance_variable_get(:@tags).must_equal ["@work"]
       end
     end
 

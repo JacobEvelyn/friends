@@ -19,21 +19,21 @@ version Friends::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-class Hashtag
-  # @param str [String] of the form "hashtag" or "#hashtag"
-  # @return [String] the string, with whitespace stripped and a hashtag
+class Tag
+  # @param str [String] of the form "tag" or "@tag"
+  # @return [String] the string, with whitespace stripped and a tag
   #   prepended if there isn't one already
   # NOTE: This logic could be only in the accept block if GLI allowed type
   # conversions for arguments.
   # See: https://github.com/davetron5000/gli/issues/241
-  def self.convert_to_hashtag(str)
+  def self.convert_to_tag(str)
     str = str.strip
-    !str.empty? && str[0] == "#" ? str : "##{str}"
+    !str.empty? && str[0] == "@" ? str : "@#{str}"
   end
 end
 
-accept(Hashtag) do |value|
-  Hashtag.convert_to_hashtag(value)
+accept(Tag) do |value|
+  Tag.convert_to_tag(value)
 end
 
 class Stripped; end
@@ -97,13 +97,13 @@ command :list do |list|
                       type: Stripped
 
     list_friends.flag [:tagged],
-                      arg_name: "HASHTAG",
-                      desc: "List only friends with the given hashtag",
-                      type: Hashtag
+                      arg_name: "@TAG",
+                      desc: "List only friends with the given tag",
+                      type: Tag
 
     list_friends.switch [:verbose],
                         negatable: false,
-                        desc: "Output friend nicknames, locations, and hashtags"
+                        desc: "Output friend nicknames, locations, and tags"
 
     list_friends.action do |_, options|
       puts @introvert.list_friends(
@@ -133,9 +133,9 @@ command :list do |list|
                          type: Stripped
 
     list_activities.flag [:tagged],
-                         arg_name: "HASHTAG",
-                         desc: "List only activities with the given hashtag",
-                         type: Hashtag
+                         arg_name: "@TAG",
+                         desc: "List only activities with the given tag",
+                         type: Tag
 
     list_activities.action do |_, options|
       puts @introvert.list_activities(
@@ -154,14 +154,14 @@ command :list do |list|
     end
   end
 
-  list.desc "List all hashtags used"
-  list.command :hashtags do |list_hashtags|
-    list_hashtags.flag [:from],
+  list.desc "List all tags used"
+  list.command :tags do |list_tags|
+    list_tags.flag [:from],
                        arg_name: '"activities" or "friends" (default: both)',
-                       desc: "List only hashtags from activities or friends "\
+                       desc: "List only tags from activities or friends "\
                              "instead of both"
-    list_hashtags.action do |_, options|
-      puts @introvert.list_hashtags(from: options[:from])
+    list_tags.action do |_, options|
+      puts @introvert.list_tags(from: options[:from])
     end
   end
 
@@ -266,15 +266,15 @@ command :add do |add|
     end
   end
 
-  add.desc "Adds a hashtag to a friend"
-  add.arg_name "NAME HASHTAG"
-  add.command :hashtag do |add_hashtag|
-    add_hashtag.action do |_, _, args|
-      friend = @introvert.add_hashtag(
+  add.desc "Adds a tag to a friend"
+  add.arg_name "NAME @TAG"
+  add.command :tag do |add_tag|
+    add_tag.action do |_, _, args|
+      friend = @introvert.add_tag(
         name: args.first,
-        hashtag: Hashtag.convert_to_hashtag(args[1])
+        tag: Tag.convert_to_tag(args[1])
       )
-      @message = "Hashtag added to friend: \"#{friend}\""
+      @message = "Tag added to friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -305,15 +305,15 @@ command :remove do |remove|
     end
   end
 
-  remove.desc "Removes a hashtag to a friend"
-  remove.arg_name "NAME HASHTAG"
-  remove.command :hashtag do |remove_hashtag|
-    remove_hashtag.action do |_, _, args|
-      friend = @introvert.remove_hashtag(
+  remove.desc "Removes a tag from a friend"
+  remove.arg_name "NAME @TAG"
+  remove.command :tag do |remove_tag|
+    remove_tag.action do |_, _, args|
+      friend = @introvert.remove_tag(
         name: args.first,
-        hashtag: Hashtag.convert_to_hashtag(args[1])
+        tag: Tag.convert_to_tag(args[1])
       )
-      @message = "Hashtag removed from friend: \"#{friend}\""
+      @message = "Tag removed from friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -332,9 +332,9 @@ command :graph do |graph|
              type: Stripped
 
   graph.flag [:tagged],
-             arg_name: "HASHTAG",
-             desc: "Graph activities with the given hashtag",
-             type: Hashtag
+             arg_name: "@TAG",
+             desc: "Graph activities with the given tag",
+             type: Tag
 
   graph.action do |_, options|
     # This math is taken from Minitest's Pride plugin (the PrideLOL class).

@@ -5,6 +5,7 @@
 require "chronic"
 require "memoist"
 require "paint"
+require "set"
 
 require "friends/serializable"
 
@@ -71,7 +72,7 @@ module Friends
       end
 
       description_s = description_s.
-                      gsub(HASHTAG_REGEX, Paint['\0', :bold, :cyan])
+                      gsub(TAG_REGEX, Paint['\0', :bold, :cyan])
 
       "#{date_s}: #{description_s}"
     end
@@ -118,25 +119,25 @@ module Friends
 
     # @param location [Location] the location to test
     # @return [Boolean] true iff this activity includes the given location
-    def includes_location?(location:)
+    def includes_location?(location)
       @description.scan(/(?<=_)[^_]+(?=_)/).include? location.name
     end
 
     # @param friend [Friend] the friend to test
     # @return [Boolean] true iff this activity includes the given friend
-    def includes_friend?(friend:)
+    def includes_friend?(friend)
       friend_names.include? friend.name
     end
 
-    # @param hashtag [String] the hashtag to test, of the form "#hashtag"
-    # @return [Boolean] true iff this activity includes the given hashtag
-    def includes_hashtag?(hashtag:)
-      hashtags.include? hashtag
+    # @param tag [String] the tag to test, of the form "@tag"
+    # @return [Boolean] true iff this activity includes the given tag
+    def includes_tag?(tag)
+      tags.include? tag
     end
 
-    # @return [Set] all hashtags in this activity (including the "#")
-    def hashtags
-      Set.new(@description.scan(HASHTAG_REGEX))
+    # @return [Set] all tags in this activity (including the "@")
+    def tags
+      Set.new(@description.scan(TAG_REGEX))
     end
 
     # Find the names of all friends in this description.

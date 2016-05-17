@@ -38,7 +38,7 @@ describe Friends::Introvert do
   let(:friend_names) { ["George Washington Carver", "Betsy Ross"] }
   let(:friends) do
     friend_names.map do |name|
-      Friends::Friend.new(name: name, hashtags_str: "#test")
+      Friends::Friend.new(name: name, tags_str: "@test")
     end
   end
   let(:activities) do
@@ -146,15 +146,15 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when a hashtag has been passed" do
+    describe "when a tag has been passed" do
       let(:location_name) { nil }
-      let(:tagged) { "#superhero" }
+      let(:tagged) { "@superhero" }
       let(:verbose) { false }
       let(:friends) do
         [
           Friends::Friend.new(name: "Mark Watney"),
-          Friends::Friend.new(name: "Aquaman", hashtags_str: "#superhero"),
-          Friends::Friend.new(name: "Shark-Boy", hashtags_str: "#superhero"),
+          Friends::Friend.new(name: "Aquaman", tags_str: "@superhero"),
+          Friends::Friend.new(name: "Shark-Boy", tags_str: "@superhero"),
           Friends::Friend.new(name: "Ms. Nowhere")
         ]
       end
@@ -268,35 +268,35 @@ describe Friends::Introvert do
     end
   end
 
-  describe "#list_hashtags" do
-    subject { introvert.list_hashtags(from: from) }
+  describe "#list_tags" do
+    subject { introvert.list_tags(from: from) }
 
     let(:activities) do
       [
-        Friends::Activity.new(str: "Lunch in the park. #picnic #food"),
-        Friends::Activity.new(str: "Fancy dinner. #food #swanky")
+        Friends::Activity.new(str: "Lunch in the park. @picnic @food"),
+        Friends::Activity.new(str: "Fancy dinner. @food @swanky")
       ]
     end
 
     let(:friends) do
       [
-        Friends::Friend.new(name: "Grace Hopper", hashtags_str: "#coder #navy"),
-        Friends::Friend.new(name: "James Bond", hashtags_str: "#cool #swanky")
+        Friends::Friend.new(name: "Grace Hopper", tags_str: "@coder @navy"),
+        Friends::Friend.new(name: "James Bond", tags_str: "@cool @swanky")
       ]
     end
 
     describe "when from flag is nil" do
       let(:from) { nil }
-      it "lists all hashtags in sorted order" do
+      it "lists all tags in sorted order" do
         stub_activities(activities) do
           stub_friends(friends) do
             subject.must_equal [
-              "#coder",
-              "#cool",
-              "#food",
-              "#navy",
-              "#picnic",
-              "#swanky"
+              "@coder",
+              "@cool",
+              "@food",
+              "@navy",
+              "@picnic",
+              "@swanky"
             ]
           end
         end
@@ -305,10 +305,10 @@ describe Friends::Introvert do
 
     describe 'when from flag is "activities"' do
       let(:from) { "activities" }
-      it "lists all activity hashtags in sorted order" do
+      it "lists all activity tags in sorted order" do
         stub_activities(activities) do
           stub_friends(friends) do
-            subject.must_equal ["#food", "#picnic", "#swanky"]
+            subject.must_equal ["@food", "@picnic", "@swanky"]
           end
         end
       end
@@ -316,10 +316,10 @@ describe Friends::Introvert do
 
     describe 'when from flag is "friends"' do
       let(:from) { "friends" }
-      it "lists all friend hashtags in sorted order" do
+      it "lists all friend tags in sorted order" do
         stub_activities(activities) do
           stub_friends(friends) do
-            subject.must_equal ["#coder", "#cool", "#navy", "#swanky"]
+            subject.must_equal ["@coder", "@cool", "@navy", "@swanky"]
           end
         end
       end
@@ -497,7 +497,7 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when not filtering by a hashtag" do
+    describe "when not filtering by a tag" do
       let(:tagged) { nil }
 
       it "lists the activities" do
@@ -507,17 +507,17 @@ describe Friends::Introvert do
       end
     end
 
-    describe "when filtering by a hashtag" do
+    describe "when filtering by a tag" do
       let(:activities) do
         [
-          Friends::Activity.new(str: "Tennis after work. #exercise #tennis"),
-          Friends::Activity.new(str: "Wimbledon! #tennis"),
-          Friends::Activity.new(str: "Drinks after work. #beer")
+          Friends::Activity.new(str: "Tennis after work. @exercise @tennis"),
+          Friends::Activity.new(str: "Wimbledon! @tennis"),
+          Friends::Activity.new(str: "Drinks after work. @beer")
         ]
       end
 
-      describe "when the hashtag ('#hashtag') is not used at all" do
-        let(:tagged) { "#garbage" }
+      describe "when the tag ('@tag') is not used at all" do
+        let(:tagged) { "@garbage" }
         it "returns no results" do
           stub_activities(activities) do
             subject.must_equal []
@@ -525,18 +525,18 @@ describe Friends::Introvert do
         end
       end
 
-      describe "when the hashtag ('#hashtag') is used once" do
-        let(:tagged) { "#beer" }
-        it "returns the activity with that hashtag" do
+      describe "when the tag ('@tag') is used once" do
+        let(:tagged) { "@beer" }
+        it "returns the activity with that tag" do
           stub_activities(activities) do
             subject.must_equal [activities.last.to_s]
           end
         end
       end
 
-      describe "when the hashtag ('#hashtag') is used multiple times" do
-        let(:tagged) { "#tennis" }
-        it "returns the activities with that hashtag" do
+      describe "when the tag ('@tag') is used multiple times" do
+        let(:tagged) { "@tennis" }
+        it "returns the activities with that tag" do
           stub_activities(activities) do
             subject.must_equal activities[0..1].map(&:to_s)
           end
@@ -685,9 +685,9 @@ describe Friends::Introvert do
     end
   end
 
-  describe "#add_hashtag" do
+  describe "#add_tag" do
     subject do
-      introvert.add_hashtag(name: friend_names.first, hashtag: "#school")
+      introvert.add_tag(name: friend_names.first, tag: "@school")
     end
 
     it "returns the modified friend" do
@@ -697,13 +697,13 @@ describe Friends::Introvert do
     end
   end
 
-  describe "#remove_hashtag" do
+  describe "#remove_tag" do
     subject do
-      introvert.remove_hashtag(name: "Jeff", hashtag: "#school")
+      introvert.remove_tag(name: "Jeff", tag: "@school")
     end
 
     it "returns the modified friend" do
-      friend = Friends::Friend.new(name: "Jeff", hashtags_str: "#school")
+      friend = Friends::Friend.new(name: "Jeff", tags_str: "@school")
       stub_friends([friend]) do
         subject.must_equal friend
       end
@@ -820,18 +820,18 @@ describe Friends::Introvert do
 
     let(:activities) do
       [
-        # With a friend
+        # In a location
         Friends::Activity.new(
           str: "2016-01-01: \
             At _The Eiffel Tower_ with **George Washington Carver**."
         ),
 
-        # In a location
+        # Tagged
         Friends::Activity.new(
-          str: "2016-01-01: Called **George Washington Carver**. #phone"
+          str: "2016-01-01: Called **George Washington Carver**. @phone"
         ),
 
-        # Tagged with a hashtag
+        # With a friend
         Friends::Activity.new(
           str: "2016-01-01: Hung out with **Betsy Ross**."
         )
@@ -894,10 +894,10 @@ describe Friends::Introvert do
       end
     end
 
-    describe "Filtering by hashtag" do
-      let(:tagged) { "#phone" }
+    describe "Filtering by tag" do
+      let(:tagged) { "@phone" }
 
-      it "graphs activities tagged with a hashtag" do
+      it "graphs tagged activities" do
         stub_activities(activities) do
           subject.must_equal("Jan 2016" => 1)
         end
