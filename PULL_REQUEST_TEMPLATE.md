@@ -7,7 +7,7 @@ merge this change:
 - [ ] Code has tests as appropriate.
 - [ ] Code has been reviewed by @JacobEvelyn.
 - [ ] All tests pass on TravisCI.
-- [ ] Rubocop reports no issues.
+- [ ] Rubocop reports no issues on TravisCI.
 - [ ] The `README.md` file is updated as appropriate.
 
 Don't worry—this list will get checked off in no time!

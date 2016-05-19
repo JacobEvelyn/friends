@@ -157,9 +157,9 @@ command :list do |list|
   list.desc "List all tags used"
   list.command :tags do |list_tags|
     list_tags.flag [:from],
-                       arg_name: '"activities" or "friends" (default: both)',
-                       desc: "List only tags from activities or friends "\
-                             "instead of both"
+                   arg_name: '"activities" or "friends" (default: both)',
+                   desc: "List only tags from activities or friends instead of"\
+                         "both"
     list_tags.action do |_, options|
       puts @introvert.list_tags(from: options[:from])
     end
