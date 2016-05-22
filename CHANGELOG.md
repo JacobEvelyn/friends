@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.25](https://github.com/JacobEvelyn/friends/tree/v0.25) (2016-05-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.24...v0.25)
+
+**Fixed bugs:**
+
+- Error: stack level too deep [\#136](https://github.com/JacobEvelyn/friends/issues/136)
+
+**Closed issues:**
+
+- Remove tag-migration code for 1.0 release [\#139](https://github.com/JacobEvelyn/friends/issues/139)
+
+**Merged pull requests:**
+
+- Make tag-migration code simpler [\#138](https://github.com/JacobEvelyn/friends/pull/138) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add rubocop run to TravisCI [\#135](https://github.com/JacobEvelyn/friends/pull/135) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.24](https://github.com/JacobEvelyn/friends/tree/v0.24) (2016-05-17)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.23...v0.24)
 
