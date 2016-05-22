@@ -569,15 +569,6 @@ module Friends
         # Parse the line and update the parsing state.
         state = parse_line!(line, line_num: line_num, state: state)
       end
-
-      # Migrate old tag format (#tag) into new tag format (@tag). This code will
-      # be removed in the 1.0 release.
-      unless @friends.any? { |f| f.tags.any? } ||
-             @activities.any? { |a| a.tags.any? }
-        contents = File.read(@filename)
-        File.write(@filename, contents.gsub(/#(\p{Alnum}+)/, "@\\1"))
-        read_file
-      end
     end
 
     # Parse the given line, adding to the various internal data structures as
