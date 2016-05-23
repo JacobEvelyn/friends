@@ -1,11 +1,19 @@
 # Change Log
 
-## [v0.25](https://github.com/JacobEvelyn/friends/tree/v0.25) (2016-05-22)
-[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.24...v0.25)
+## [v0.26](https://github.com/JacobEvelyn/friends/tree/v0.26) (2016-05-23)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.25...v0.26)
 
 **Fixed bugs:**
 
+- Adding/filtering friend with tag but no nickname incorrectly counts the tag as part of the name [\#140](https://github.com/JacobEvelyn/friends/issues/140)
 - Error: stack level too deep [\#136](https://github.com/JacobEvelyn/friends/issues/136)
+
+**Merged pull requests:**
+
+- Fix deserialization for friends with tags and no nicknames [\#141](https://github.com/JacobEvelyn/friends/pull/141) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
+## [v0.25](https://github.com/JacobEvelyn/friends/tree/v0.25) (2016-05-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.24...v0.25)
 
 **Closed issues:**
 
