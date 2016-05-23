@@ -17,7 +17,7 @@ module Friends
     def self.deserialization_regex
       # Note: this regex must be on one line because whitespace is important
       # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[#]*[^\(\[#\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<tags_str>(#{TAG_REGEX}\s*)+))?/
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[@]*[^\(\[@\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<tags_str>(#{TAG_REGEX}\s*)+))?/
       # rubocop:enable Metrics/LineLength
     end
 

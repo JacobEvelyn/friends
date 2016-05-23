@@ -24,6 +24,82 @@ describe Friends::Friend do
 
       it { proc { subject }.must_raise Serializable::SerializationError }
     end
+
+    describe "when string has one nickname" do
+      let(:serialized_str) { "Guybrush Threepwood (a.k.a. Brush)" }
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it { subject.instance_variable_get(:@nicknames).must_equal ["Brush"] }
+    end
+
+    describe "when string has multiple nicknames" do
+      let(:serialized_str) { "Guybrush Threepwood (a.k.a. Brush a.k.a. Guy)" }
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it do
+        subject.instance_variable_get(:@nicknames).must_equal ["Brush", "Guy"]
+      end
+    end
+
+    describe "when string has a location" do
+      let(:serialized_str) { "Guybrush Threepwood [Plunder Island]" }
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it { subject.location_name.must_equal "Plunder Island" }
+    end
+
+    describe "when string has one tag" do
+      let(:serialized_str) { "Guybrush Threepwood @pirate" }
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it { subject.tags.must_equal ["@pirate"] }
+    end
+
+    describe "when string has multiple tags" do
+      let(:serialized_str) { "Guybrush Threepwood @pirate @swashbuckler" }
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it { subject.tags.must_equal ["@pirate", "@swashbuckler"] }
+    end
+
+    describe "when string has nicknames and tags" do
+      let(:serialized_str) do
+        "Guybrush Threepwood (a.k.a. Brush a.k.a. Guy) @pirate @swashbuckler"
+      end
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it do
+        subject.instance_variable_get(:@nicknames).must_equal ["Brush", "Guy"]
+      end
+      it { subject.tags.must_equal ["@pirate", "@swashbuckler"] }
+    end
+
+    describe "when string has nicknames and a location" do
+      let(:serialized_str) do
+        "Guybrush Threepwood (a.k.a. Brush a.k.a. Guy) [Plunder Island]"
+      end
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it do
+        subject.instance_variable_get(:@nicknames).must_equal ["Brush", "Guy"]
+      end
+      it { subject.location_name.must_equal "Plunder Island" }
+    end
+
+    describe "when string has a location and tags" do
+      let(:serialized_str) do
+        "Guybrush Threepwood [Plunder Island] @pirate @swashbuckler"
+      end
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it { subject.location_name.must_equal "Plunder Island" }
+      it { subject.tags.must_equal ["@pirate", "@swashbuckler"] }
+    end
+
+    describe "when string has nicknames, a location, and tags" do
+      let(:serialized_str) do
+        "Guybrush Threepwood (a.k.a. Brush a.k.a. Guy) [Plunder Island] "\
+          "@pirate @swashbuckler"
+      end
+      it { subject.name.must_equal "Guybrush Threepwood" }
+      it do
+        subject.instance_variable_get(:@nicknames).must_equal ["Brush", "Guy"]
+      end
+      it { subject.location_name.must_equal "Plunder Island" }
+      it { subject.tags.must_equal ["@pirate", "@swashbuckler"] }
+    end
   end
 
   describe "#new" do
