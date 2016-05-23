@@ -5,7 +5,7 @@
 Spend time with the people you care about. Introvert-tested.
 Extrovert-approved.
 
-**NOTE: Participation is encouraged! Make Issues, ask questions, make Pull
+**NOTE: Participation is encouraged! Make Issues, ask questions, submit Pull
 Requests (even if it's your first time contributing to open-source—you'll get
 lots of help), and give feedback!**
 
