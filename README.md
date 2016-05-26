@@ -1,6 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends) [![Code Climate](https://codeclimate.com/github/JacobEvelyn/friends/badges/gpa.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Test Coverage](https://codeclimate.com/github/JacobEvelyn/friends/badges/coverage.svg)](https://codeclimate.com/github/JacobEvelyn/friends) [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends) [![Inline docs](http://inch-ci.org/github/JacobEvelyn/friends.png)](http://inch-ci.org/github/JacobEvelyn/friends) [![ghit.me](https://ghit.me/badge.svg?repo=JacobEvelyn/friends)](https://ghit.me/repo/JacobEvelyn/friends)
 
-# Friends
+# `friends`
 
 Spend time with the people you care about. Introvert-tested.
 Extrovert-approved.
