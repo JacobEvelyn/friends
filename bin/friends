@@ -63,14 +63,18 @@ command :update do |update|
          Semverse::Version.coerce(Friends::VERSION)
         `gem update friends && gem cleanup friends`
         if $?.success?
-          puts Paint["Updated to friends #{remote_version}", :bold, :green]
+          @message = Paint[
+            "Updated to friends #{remote_version}", :bold, :green
+          ]
         else
-          puts Paint[
+          @message = Paint[
             "Error updating to friends version #{remote_version}", :bold, :red
           ]
         end
       else
-        puts Paint["Already up-to-date (#{Friends::VERSION})", :bold, :green]
+        @message = Paint[
+          "Already up-to-date (#{Friends::VERSION})", :bold, :green
+        ]
       end
     end
   end
@@ -429,15 +433,19 @@ command :rename do |rename|
 end
 
 # Before each command, clean up all arguments and create the global Introvert.
-pre do |global_options, _, options|
+pre do |global_options, cmd, options|
   @debug_mode = global_options[:debug]
 
   final_options = global_options.merge!(options).select do |key, _|
     [:filename].include? key
   end
 
-  @introvert = Friends::Introvert.new(final_options)
-  true
+  # If we're updating the friends program we don't need to read the friends file
+  # but we don't skip this block entirely because we might still want to enable
+  # debug mode.
+  @introvert = Friends::Introvert.new(final_options) unless cmd.name == :update
+
+  true # Continue executing the command.
 end
 
 post do |global_options|
