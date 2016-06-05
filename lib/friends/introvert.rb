@@ -49,15 +49,11 @@ module Friends
     # @raise [FriendsError] when a friend with that name is already in the file
     # @return [Friend] the added friend
     def add_friend(name:)
-      if friend_with_exact_name(name)
-        raise FriendsError, "Friend named #{name} already exists"
+      if @friends.any? { |friend| friend.name == name }
+        raise FriendsError, "Friend named \"#{name}\" already exists"
       end
 
-      begin
-        friend = Friend.deserialize(name)
-      rescue Serializable::SerializationError => e
-        raise FriendsError, e
-      end
+      friend = Friend.deserialize(name)
 
       @friends << friend
 
@@ -68,11 +64,7 @@ module Friends
     # @param serialization [String] the serialized activity
     # @return [Activity] the added activity
     def add_activity(serialization:)
-      begin
-        activity = Activity.deserialize(serialization)
-      rescue Serializable::SerializationError => e
-        raise FriendsError, e
-      end
+      activity = Activity.deserialize(serialization)
 
       activity.highlight_description(introvert: self) if activity.description
       @activities.unshift(activity)
@@ -89,11 +81,7 @@ module Friends
         raise FriendsError, "Location \"#{name}\" already exists"
       end
 
-      begin
-        location = Location.deserialize(name)
-      rescue Serializable::SerializationError => e
-        raise FriendsError, e
-      end
+      location = Location.deserialize(name)
 
       @locations << location
 
@@ -107,8 +95,8 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ locations match the given location name
     # @return [Friend] the modified friend
     def set_location(name:, location_name:)
-      friend = friend_with_name_in(name)
-      location = location_with_name_in(location_name)
+      friend = thing_with_name_in(:friend, name)
+      location = thing_with_name_in(:location, location_name)
       friend.location_name = location.name
       friend
     end
@@ -119,7 +107,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def rename_friend(old_name:, new_name:)
-      friend = friend_with_name_in(old_name)
+      friend = thing_with_name_in(:friend, old_name)
       @activities.each do |activity|
         activity.update_friend_name(old_name: friend.name, new_name: new_name)
       end
@@ -133,7 +121,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Location] the existing location
     def rename_location(old_name:, new_name:)
-      loc = location_with_name_in(old_name)
+      loc = thing_with_name_in(:location, old_name)
 
       # Update locations in activities.
       @activities.each do |activity|
@@ -155,7 +143,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def add_nickname(name:, nickname:)
-      friend = friend_with_name_in(name)
+      friend = thing_with_name_in(:friend, name)
       friend.add_nickname(nickname)
       friend
     end
@@ -166,7 +154,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @return [Friend] the existing friend
     def add_tag(name:, tag:)
-      friend = friend_with_name_in(name)
+      friend = thing_with_name_in(:friend, name)
       friend.add_tag(tag)
       friend
     end
@@ -178,7 +166,7 @@ module Friends
     # @raise [FriendsError] if the friend does not have the given nickname
     # @return [Friend] the existing friend
     def remove_tag(name:, tag:)
-      friend = friend_with_name_in(name)
+      friend = thing_with_name_in(:friend, name)
       friend.remove_tag(tag)
       friend
     end
@@ -190,7 +178,7 @@ module Friends
     # @raise [FriendsError] if the friend does not have the given nickname
     # @return [Friend] the existing friend
     def remove_nickname(name:, nickname:)
-      friend = friend_with_name_in(name)
+      friend = thing_with_name_in(:friend, name)
       friend.remove_nickname(nickname)
       friend
     end
@@ -208,7 +196,7 @@ module Friends
 
       # Filter by location if a name is passed.
       if location_name
-        location = location_with_name_in(location_name)
+        location = thing_with_name_in(:location, location_name)
         fs = fs.select { |friend| friend.location_name == location.name }
       end
 
@@ -244,9 +232,12 @@ module Friends
     # @param tagged [String] the name of a tag to filter by (of the form:
     #   "@tag"), or nil for unfiltered
     # @return [Array] a list of all activity text values
+    # @raise [ArgumentError] if limit is present but limit < 1
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def list_activities(limit:, with:, location_name:, tagged:)
+      raise ArgumentError, "Limit must be positive" if limit && limit < 1
+
       acts = filtered_activities(
         with: with,
         location_name: location_name,
@@ -338,8 +329,6 @@ module Friends
     #   for unfiltered
     # @return [Hash{String => Array<String>}]
     def suggest(location_name:)
-      set_friend_n_activities! # Set n_activities for all friends.
-
       # Filter our friends by location if necessary.
       fs = @friends
       fs = fs.select { |f| f.location_name == location_name } if location_name
@@ -368,11 +357,6 @@ module Friends
     ###################################################################
     # Methods below this are only used internally and are not tested. #
     ###################################################################
-
-    # Sets the n_activities field on each friend.
-    def set_friend_n_activities!
-      set_n_activities!(:friend)
-    end
 
     # Get a regex friend map.
     #
@@ -480,13 +464,13 @@ module Friends
 
       # Filter by friend name if argument is passed.
       unless with.nil?
-        friend = friend_with_name_in(with)
+        friend = thing_with_name_in(:friend, with)
         acts = acts.select { |act| act.includes_friend?(friend) }
       end
 
       # Filter by location name if argument is passed.
       unless location_name.nil?
-        location = location_with_name_in(location_name)
+        location = thing_with_name_in(:location, location_name)
         acts = acts.select { |act| act.includes_location?(location) }
       end
 
@@ -501,16 +485,14 @@ module Friends
     # @param type [Symbol] one of: [:friend, :location]
     # @param limit [Integer] the number of favorite things to return
     # @return [Array] a list of the favorite things' names and activity counts
+    # @raise [ArgumentError] if type is not one of: [:friend, :location]
+    # @raise [ArgumentError] if limit is < 1
     def list_favorite_things(type, limit:)
       unless [:friend, :location].include? type
-        raise FriendsError, "Type must be either :friend or :location"
+        raise ArgumentError, "Type must be either :friend or :location"
       end
 
-      if limit < 1
-        raise FriendsError, "Favorites limit must be positive"
-      end
-
-      send("set_n_activities!", type) # Set n_activities for all things.
+      raise ArgumentError, "Favorites limit must be positive" if limit < 1
 
       # Sort the results, with the most favorite thing first.
       results = instance_variable_get("@#{type}s").sort_by do |thing|
@@ -531,9 +513,10 @@ module Friends
 
     # Sets the n_activities field on each thing.
     # @param type [Symbol] one of: [:friend, :location]
+    # @raise [ArgumentError] if `type` is not one of: [:friend, :location]
     def set_n_activities!(type)
       unless [:friend, :location].include? type
-        raise FriendsError, "Type must be either :friend or :location"
+        raise ArgumentError, "Type must be either :friend or :location"
       end
 
       # Construct a hash of location name to frequency of appearance.
@@ -546,8 +529,16 @@ module Friends
 
       # Remove names that are not in the locations list.
       freq_table.each do |name, count|
-        thing = send("#{type}_with_exact_name", name)
-        thing.n_activities = count if thing # Do nothing if name isn't valid.
+        things = instance_variable_get("@#{type}s").select do |thing|
+          thing.name == name
+        end
+
+        # Do nothing if no matches found.
+        if things.size == 1
+          things.first.n_activities = count
+        elsif things.size > 1
+          raise FriendsError, "More than one #{type} named \"#{name}\""
+        end
       end
     end
 
@@ -569,6 +560,9 @@ module Friends
         # Parse the line and update the parsing state.
         state = parse_line!(line, line_num: line_num, state: state)
       end
+
+      set_n_activities!(:friend)
+      set_n_activities!(:location)
     end
 
     # Parse the given line, adding to the various internal data structures as
@@ -599,7 +593,7 @@ module Friends
 
       begin
         instance_variable_get("@#{stage.id}") << stage.klass.deserialize(line)
-      rescue FriendsError => e
+      rescue => e
         bad_line(e, line_num)
       end
 
@@ -615,67 +609,27 @@ module Friends
       ParsingStage.new(:locations, Location)
     ].freeze
 
-    # @param name [String] the name of the friend to search for
-    # @return [Friend] the friend whose name exactly matches the argument
-    # @raise [FriendsError] if more than one friend has the given name
-    def friend_with_exact_name(name)
-      results = @friends.select { |friend| friend.name == name }
-
-      case results.size
-      when 0 then nil
-      when 1 then results.first
-      else raise FriendsError, "More than one friend named #{name}"
-      end
-    end
-
-    # @param text [String] the name (or substring) of the friend to search for
-    # @return [Friend] the friend that matches
+    # @param type [Symbol] one of: [:friend, :location]
+    # @param text [String] the name (or substring) of the friend or location to
+    #   search for
+    # @return [Friend/Location] the friend or location that matches
     # @raise [FriendsError] if 0 or 2+ friends match the given text
-    def friend_with_name_in(text)
-      regex = Regexp.new(text, Regexp::IGNORECASE)
-      friends = @friends.select { |friend| friend.name.match(regex) }
+    def thing_with_name_in(type, text)
+      things = instance_variable_get("@#{type}s").select do |thing|
+        if type == :friend
+          thing.regexes_for_name.any? { |regex| regex.match(text) }
+        else
+          thing.regex_for_name.match(text)
+        end
+      end
 
-      case friends.size
-      when 1
-        # If exactly one friend matches, use that friend.
-        return friends.first
-      when 0 then raise FriendsError, "No friend found for \"#{text}\""
+      case things.size
+      when 1 then things.first # If exactly one thing matches, use that thing.
+      when 0 then raise FriendsError, "No #{type} found for \"#{text}\""
       else
         raise FriendsError,
-              "More than one friend found for \"#{text}\": "\
-                "#{friends.map(&:name).join(', ')}"
-      end
-    end
-
-    # @param name [String] the name of the location to search for
-    # @return [Location] the location whose name exactly matches the argument
-    # @raise [FriendsError] if more than one location has the given name
-    def location_with_exact_name(name)
-      results = @locations.select { |location| location.name == name }
-
-      case results.size
-      when 0 then nil
-      when 1 then results.first
-      else raise FriendsError, "More than one location named #{name}"
-      end
-    end
-
-    # @param text [String] the name (or substring) of the location to search for
-    # @return [Location] the location that matches
-    # @raise [FriendsError] if 0 or 2+ location match the given text
-    def location_with_name_in(text)
-      regex = Regexp.new(text, Regexp::IGNORECASE)
-      locations = @locations.select { |location| location.name.match(regex) }
-
-      case locations.size
-      when 1
-        # If exactly one location matches, use that location.
-        return locations.first
-      when 0 then raise FriendsError, "No location found for \"#{text}\""
-      else
-        raise FriendsError,
-              "More than one location found for \"#{text}\": "\
-                "#{locations.map(&:name).join(', ')}"
+              "More than one #{type} found for \"#{text}\": "\
+                "#{things.map(&:name).join(', ')}"
       end
     end
 

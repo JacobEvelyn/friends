@@ -37,7 +37,7 @@ module Friends
       date_s, _, description = str.partition(DATE_PARTITION)
 
       # rubocop:disable Lint/AssignmentInCondition
-      if time = Chronic.parse(date_s)
+      if time = (date_s =~ /^\d{4}-\d{2}-\d{2}$/ ? Time : Chronic).parse(date_s)
         # rubocop:enable Lint/AssignmentInCondition
         @date = time.to_date
         @description = description
@@ -211,7 +211,6 @@ module Friends
       end
 
       # Now, we compute the likelihood of each friend in the possible-match set.
-      introvert.set_friend_n_activities!
       introvert.set_likelihood_score!(
         matches: matched_friends,
         possible_matches: possible_matched_friends
