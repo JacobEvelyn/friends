@@ -14,6 +14,7 @@ describe Friends::Introvert do
   def stub_friends(val)
     old_val = introvert.instance_variable_get(:@friends)
     introvert.instance_variable_set(:@friends, val)
+    introvert.send(:set_n_activities!, :friend)
     yield
     introvert.instance_variable_set(:@friends, old_val)
   end
@@ -21,6 +22,8 @@ describe Friends::Introvert do
   def stub_activities(val)
     old_val = introvert.instance_variable_get(:@activities)
     introvert.instance_variable_set(:@activities, val)
+    introvert.send(:set_n_activities!, :friend)
+    introvert.send(:set_n_activities!, :location)
     yield
     introvert.instance_variable_set(:@activities, old_val)
   end
@@ -28,6 +31,7 @@ describe Friends::Introvert do
   def stub_locations(val)
     old_val = introvert.instance_variable_get(:@locations)
     introvert.instance_variable_set(:@locations, val)
+    introvert.send(:set_n_activities!, :location)
     yield
     introvert.instance_variable_set(:@locations, old_val)
   end
@@ -394,7 +398,7 @@ describe Friends::Introvert do
       let(:with) { "george" }
 
       describe "when there is more than one friend match" do
-        let(:friend_names) { ["George Washington Carver", "Boy George"] }
+        let(:friend_names) { ["George Washington Carver", "George Harrison"] }
 
         it "raises an error" do
           stub_friends(friends) do
