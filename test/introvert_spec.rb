@@ -83,7 +83,7 @@ describe Friends::Introvert do
     subject { introvert.clean }
 
     # Delete the file that is created each time.
-    after { File.delete(filename) if File.exists?(filename) }
+    after { File.delete(filename) if File.exist?(filename) }
 
     it "writes cleaned file" do
       sorted_friends = friends.sort

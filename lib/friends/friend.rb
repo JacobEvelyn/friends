@@ -103,7 +103,7 @@ module Friends
     # and is set by the Introvert as needed.
     attr_writer :n_activities
     def n_activities
-      @n_activities || 0
+      defined?(@n_activities) ? @n_activities : 0
     end
 
     # The likelihood_score that an activity description that matches part of
@@ -113,7 +113,7 @@ module Friends
     # introvert#set_likelihood_score! methods.
     attr_writer :likelihood_score
     def likelihood_score
-      @likelihood_score || 0
+      defined?(@likelihood_score) ? @likelihood_score : 0
     end
 
     # @return [Array] a list of all regexes to match the name in a string
