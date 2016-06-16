@@ -44,7 +44,7 @@ module Friends
     # only and is set by the Introvert as needed.
     attr_writer :n_activities
     def n_activities
-      @n_activities || 0
+      defined?(@n_activities) ? @n_activities : 0
     end
 
     private
