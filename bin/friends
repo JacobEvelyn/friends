@@ -254,7 +254,7 @@ command :add do |add|
   add.arg_name "LOCATION"
   add.command :location do |add_location|
     add_location.action do |_, _, args|
-      location = @introvert.add_location(name: args.first)
+      location = @introvert.add_location(name: args.join(" "))
       @message = "Location added: \"#{location.name}\""
       @dirty = true # Mark the file for cleaning.
     end
@@ -275,8 +275,8 @@ command :add do |add|
   add.command :tag do |add_tag|
     add_tag.action do |_, _, args|
       friend = @introvert.add_tag(
-        name: args.first,
-        tag: Tag.convert_to_tag(args[1])
+        name: args[0..-2].join(" "),
+        tag: Tag.convert_to_tag(args.last)
       )
       @message = "Tag added to friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.
@@ -314,8 +314,8 @@ command :remove do |remove|
   remove.command :tag do |remove_tag|
     remove_tag.action do |_, _, args|
       friend = @introvert.remove_tag(
-        name: args.first,
-        tag: Tag.convert_to_tag(args[1])
+        name: args[0..-2].join(" "),
+        tag: Tag.convert_to_tag(args.last)
       )
       @message = "Tag removed from friend: \"#{friend}\""
       @dirty = true # Mark the file for cleaning.

@@ -623,6 +623,16 @@ module Friends
         end
       end
 
+      # If there's more than one match with fuzzy regexes but exactly one thing
+      # with that exact name, match it.
+      if things.size > 1
+        exact_things = things.select do |thing|
+          thing.name.casecmp(text) == 0 # We ignore case for an "exact" match.
+        end
+
+        things = exact_things if exact_things.size == 1
+      end
+
       case things.size
       when 1 then things.first # If exactly one thing matches, use that thing.
       when 0 then raise FriendsError, "No #{type} found for \"#{text}\""
