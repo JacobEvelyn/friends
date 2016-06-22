@@ -8,7 +8,8 @@ These are steps for the maintainer to take to release a new version of this gem.
 3. Add a tag (`git tag -am "vX.X" vX.X`).
 4. `git push && git push --tags`
 5. `CHANGELOG_GITHUB_TOKEN=... github_changelog_generator`
-6. `git add -A && git commit -m 'Update CHANGELOG for vX.X'`
-7. `git push`
-8. `gem build friends.gemspec && gem push *.gem && rm *.gem`
-9. Celebrate!
+6. Confirm the `CHANGELOG` looks good with `git diff`
+7. `git add -A && git commit -m 'Update CHANGELOG for vX.X'`
+8. `git push`
+9. `gem build friends.gemspec && gem push *.gem && rm *.gem`
+10. Celebrate!

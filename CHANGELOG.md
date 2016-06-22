@@ -1,5 +1,28 @@
 # Change Log
 
+## [v0.27](https://github.com/JacobEvelyn/friends/tree/v0.27) (2016-06-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.26...v0.27)
+
+**Implemented enhancements:**
+
+- Allow tags to be added and removed from friends without quotes [\#148](https://github.com/JacobEvelyn/friends/issues/148)
+- Allow multi-word locations to be added without quotes [\#147](https://github.com/JacobEvelyn/friends/issues/147)
+- Speed up initialization [\#143](https://github.com/JacobEvelyn/friends/issues/143)
+- `friends update` can skip reading the friends.md file [\#137](https://github.com/JacobEvelyn/friends/issues/137)
+- Add Gemnasium badge to README [\#130](https://github.com/JacobEvelyn/friends/issues/130)
+
+**Fixed bugs:**
+
+- Commands that find a friend fail on exact text matches when there's more than one fuzzy match [\#149](https://github.com/JacobEvelyn/friends/issues/149)
+
+**Merged pull requests:**
+
+- Small improvements to UX for some commands [\#150](https://github.com/JacobEvelyn/friends/pull/150) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Bump development dependencies [\#146](https://github.com/JacobEvelyn/friends/pull/146) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Skips reading the `friends.md` file on update [\#145](https://github.com/JacobEvelyn/friends/pull/145) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Simplify code and improve performance [\#144](https://github.com/JacobEvelyn/friends/pull/144) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add Gemnasium integration with README badge [\#142](https://github.com/JacobEvelyn/friends/pull/142) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.26](https://github.com/JacobEvelyn/friends/tree/v0.26) (2016-05-23)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.25...v0.26)
 
