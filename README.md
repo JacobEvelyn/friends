@@ -271,7 +271,7 @@ Friend added: "Grace Hopper"
 #### `add tag`
 
 ```bash
-$ friends add tag "Grace Hopper" science
+$ friends add tag Grace Hopper science
 Tag added to friend: "Grace Hopper @science"
 ```
 
@@ -569,7 +569,7 @@ Paris
 Removes a specific tag from a friend:
 
 ```bash
-$ friends remove tag "Grace Hopper" fun
+$ friends remove tag Grace Hopper fun
 Tag removed from friend: "Grace Hopper (a.k.a. Amazing Grace) @OtherTag"
 ```
 
