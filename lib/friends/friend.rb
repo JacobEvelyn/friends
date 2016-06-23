@@ -47,23 +47,26 @@ module Friends
 
     # @return [String] the file serialization text for the friend
     def serialize
-      "#{SERIALIZATION_PREFIX}#{self}"
+      # Remove terminal effects for serialization.
+      Paint.unpaint("#{SERIALIZATION_PREFIX}#{self}")
     end
 
     # @return [String] a string representing the friend's name and nicknames
     def to_s
       unless @nicknames.empty?
-        nickname_str =
-          " (" +
-          @nicknames.map { |n| "#{NICKNAME_PREFIX}#{n}" }.join(" ") +
-          ")"
+        nickname_str = " (" +
+                       @nicknames.map do |nickname|
+                         "#{NICKNAME_PREFIX}#{Paint[nickname, :bold, :magenta]}"
+                       end.join(" ") + ")"
       end
 
-      location_str = " [#{@location_name}]" unless @location_name.nil?
+      unless @location_name.nil?
+        location_str = " [#{Paint[@location_name, :bold, :yellow]}]"
+      end
 
-      tag_str = " #{@tags.join(' ')}" unless @tags.empty?
+      tag_str = " #{Paint[@tags.join(' '), :bold, :cyan]}" unless @tags.empty?
 
-      "#{@name}#{nickname_str}#{location_str}#{tag_str}"
+      "#{Paint[@name, :bold]}#{nickname_str}#{location_str}#{tag_str}"
     end
 
     # Adds a tag, ignoring duplicates.

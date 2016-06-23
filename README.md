@@ -142,8 +142,9 @@ specified before the name of the command, like: `friends [flags] [command]`.
 
 These flags are:
 
+- `--colorless`: Disable output colorization and other effects.
 - `--debug`: Debug error messages with a full backtrace.
-- `--filename`: Set the location of the friends file to use (default: ./friends.md)
+- `--filename`: Set the location of the friends file to use (default: ./friends.md).
 
 ```bash
 $ friends --filename ./test/tmp/friends.md clean
