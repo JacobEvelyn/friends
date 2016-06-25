@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.28](https://github.com/JacobEvelyn/friends/tree/v0.28) (2016-06-25)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.27...v0.28)
+
+**Implemented enhancements:**
+
+- Output `list friends` in color [\#125](https://github.com/JacobEvelyn/friends/issues/125)
+
+**Merged pull requests:**
+
+- Colorize `list friends` and add --colorless flag [\#151](https://github.com/JacobEvelyn/friends/pull/151) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.27](https://github.com/JacobEvelyn/friends/tree/v0.27) (2016-06-22)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.26...v0.27)
 
