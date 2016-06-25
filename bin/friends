@@ -52,6 +52,10 @@ switch [:debug],
        negatable: false,
        desc: "Debug error messages with a full backtrace"
 
+switch [:colorless],
+       negatable: false,
+       desc: "Disable output colorization and other effects"
+
 desc "Updates the `friends` program"
 command :update do |update|
   update.action do
@@ -434,6 +438,9 @@ end
 
 # Before each command, clean up all arguments and create the global Introvert.
 pre do |global_options, cmd, options|
+  # If the --colorless flag is passed, don't do any fancy painting.
+  Paint.mode = 0 if global_options[:colorless]
+
   @debug_mode = global_options[:debug]
 
   final_options = global_options.merge!(options).select do |key, _|
