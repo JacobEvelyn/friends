@@ -55,9 +55,8 @@ lots of help), and give feedback!**
 
 ## Overview
 
-`friends` is both a Ruby library and a command-line interface that
-allows you to keep track of your relationships with the people you
-care about.
+`friends` is a command-line program that helps you to keep track of your relationships with the
+people you care about.
 
 `friends` gives you:
 - More organization around staying in touch with friends and

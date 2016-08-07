@@ -254,10 +254,10 @@ module Friends
       position = 0 # Prevent infinite looping by tracking last match position.
       loop do
         # Only make a replacement if we're not between a set of "**"s or "_"s.
-        if match.pre_match.scan("**").size % 2 == 0 &&
-           match.post_match.scan("**").size % 2 == 0 &&
-           match.pre_match.scan("_").size % 2 == 0 &&
-           match.post_match.scan("_").size % 2 == 0
+        if (match.pre_match.scan("**").size % 2).zero? &&
+           (match.post_match.scan("**").size % 2).zero? &&
+           (match.pre_match.scan("_").size % 2).zero? &&
+           (match.post_match.scan("_").size % 2).zero?
           @description = [
             match.pre_match,
             indicator,
