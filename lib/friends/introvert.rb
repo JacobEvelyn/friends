@@ -503,7 +503,7 @@ module Friends
       results.map.with_index(0) do |thing, index|
         name = thing.name.ljust(max_str_size)
         n = thing.n_activities
-        if index == 0
+        if index.zero?
           label = n == 1 ? " activity" : " activities"
         end
         parenthetical = "(#{n}#{label})"
@@ -627,7 +627,7 @@ module Friends
       # with that exact name, match it.
       if things.size > 1
         exact_things = things.select do |thing|
-          thing.name.casecmp(text) == 0 # We ignore case for an "exact" match.
+          thing.name.casecmp(text).zero? # We ignore case for an "exact" match.
         end
 
         things = exact_things if exact_things.size == 1

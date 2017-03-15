@@ -74,9 +74,6 @@ Delegate:
 DeprecatedClassMethods:
   Enabled: false
 
-DeprecatedHashMethods:
-  Enabled: false
-
 Documentation:
   Enabled: false
 
@@ -132,7 +129,7 @@ LineEndConcatenation:
   Enabled: false
 
 LineLength:
-  Max: 80
+  Max: 100
 
 LiteralInCondition:
   Enabled: false
@@ -144,6 +141,9 @@ Loop:
   Enabled: false
 
 MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
   Enabled: false
 
 ModuleFunction:

@@ -25,13 +25,15 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "chronic", "~> 0.10"
   spec.add_dependency "gli", "~> 2.12"
-  spec.add_dependency "memoist", "~> 0.14"
+  spec.add_dependency "memoist", "~> 0.15"
   spec.add_dependency "paint", "~> 1.0"
   spec.add_dependency "semverse", "~> 1.2"
 
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.5"
   spec.add_development_dependency "minitest", "~> 5.5"
+  spec.add_development_dependency "minitest-parallel_fork", "~> 1.0"
+  spec.add_development_dependency "minitest-proveit", "~> 1.0"
   spec.add_development_dependency "overcommit", "~> 0.34"
   spec.add_development_dependency "rake", "~> 11.2"
   spec.add_development_dependency "rubocop", "~> 0.40"
