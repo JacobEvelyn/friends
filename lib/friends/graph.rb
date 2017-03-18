@@ -5,13 +5,13 @@ module Friends
   class Graph
     DATE_FORMAT = "%b %Y"
 
-    # @param start_date [Date] the first month of the graph
-    # @param end_date [Date] the last month of the graph
     # @param activities [Array<Friends::Activity>] a list of activities to graph
-    def initialize(start_date:, end_date:, activities:)
-      self.start_date = start_date
-      self.end_date = end_date
-      self.activities = activities
+    def initialize(activities:)
+      @activities = activities
+      unless @activities.empty?
+        @start_date = @activities.last.date
+        @end_date = @activities.first.date
+      end
     end
 
     # Render the graph as a hash in the format:
@@ -45,7 +45,7 @@ module Friends
     #
     # @return [Hash{String => Integer}]
     def empty_graph
-      Hash[(start_date..end_date).map do |date|
+      Hash[(start_date && end_date ? (start_date..end_date) : []).map do |date|
         [format_date(date), 0]
       end]
     end

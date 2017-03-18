@@ -50,12 +50,24 @@ command :list do |list|
                          desc: "List only activities with the given tag",
                          type: Tag
 
+    list_activities.flag [:since],
+                         arg_name: "DATE",
+                         desc: "List only activities on or after the given date",
+                         type: InputDate
+
+    list_activities.flag [:until],
+                         arg_name: "DATE",
+                         desc: "List only activities before or on the given date",
+                         type: InputDate
+
     list_activities.action do |_, options|
       puts @introvert.list_activities(
         limit: options[:limit],
         with: options[:with],
         location_name: options[:in],
-        tagged: options[:tagged]
+        tagged: options[:tagged],
+        since_date: options[:since],
+        until_date: options[:until]
       )
     end
   end

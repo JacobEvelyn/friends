@@ -17,6 +17,16 @@ command :graph do |graph|
              desc: "Graph activities with the given tag",
              type: Tag
 
+  graph.flag [:since],
+             arg_name: "DATE",
+             desc: "Graph activities on or after the given date",
+             type: InputDate
+
+  graph.flag [:until],
+             arg_name: "DATE",
+             desc: "Graph activities before or on the given date",
+             type: InputDate
+
   graph.action do |_, options|
     # This math is taken from Minitest's Pride plugin (the PrideLOL class).
     PI_3 = Math::PI / 3
@@ -33,7 +43,9 @@ command :graph do |graph|
     data = @introvert.graph(
       with: options[:with],
       location_name: options[:in],
-      tagged: options[:tagged]
+      tagged: options[:tagged],
+      since_date: options[:since],
+      until_date: options[:until]
     )
 
     data.each do |month, count|

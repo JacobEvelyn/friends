@@ -54,19 +54,7 @@ Nov 2015 |█
         let(:location_name) { "paris" }
         it "matches location case-insensitively" do
           stdout_only <<-OUTPUT
-Nov 2014 |
 Dec 2014 |█
-Jan 2015 |
-Feb 2015 |
-Mar 2015 |
-Apr 2015 |
-May 2015 |
-Jun 2015 |
-Jul 2015 |
-Aug 2015 |
-Sep 2015 |
-Oct 2015 |
-Nov 2015 |
           OUTPUT
         end
       end
@@ -99,16 +87,6 @@ Nov 2015 |
 Nov 2014 |█
 Dec 2014 |
 Jan 2015 |█
-Feb 2015 |
-Mar 2015 |
-Apr 2015 |
-May 2015 |
-Jun 2015 |
-Jul 2015 |
-Aug 2015 |
-Sep 2015 |
-Oct 2015 |
-Nov 2015 |
           OUTPUT
         end
       end
@@ -119,8 +97,6 @@ Nov 2015 |
 
       it "matches tag case-sensitively" do
         stdout_only <<-OUTPUT
-Nov 2014 |
-Dec 2014 |
 Jan 2015 |█
 Feb 2015 |
 Mar 2015 |
@@ -132,6 +108,38 @@ Aug 2015 |
 Sep 2015 |
 Oct 2015 |
 Nov 2015 |█
+        OUTPUT
+      end
+    end
+
+    describe "--since" do
+      subject { run_cmd("graph --since 'January 4th 2015'") }
+
+      it "graphs activities on and after the specified date" do
+        stdout_only <<-OUTPUT
+Jan 2015 |█
+Feb 2015 |
+Mar 2015 |
+Apr 2015 |
+May 2015 |
+Jun 2015 |
+Jul 2015 |
+Aug 2015 |
+Sep 2015 |
+Oct 2015 |
+Nov 2015 |█
+        OUTPUT
+      end
+    end
+
+    describe "--after" do
+      subject { run_cmd("graph --until 'January 4th 2015'") }
+
+      it "graphs activities before and on the specified date" do
+        stdout_only <<-OUTPUT
+Nov 2014 |█
+Dec 2014 |█
+Jan 2015 |█
         OUTPUT
       end
     end
