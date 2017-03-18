@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.29](https://github.com/JacobEvelyn/friends/tree/v0.29) (2017-03-18)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.28...v0.29)
+
+**Implemented enhancements:**
+
+- Add `--since \<date\>` and `--until \<date\>` flags, and remove extraneous months from `graph` [\#153](https://github.com/JacobEvelyn/friends/issues/153)
+- Add integration tests for bin/friends? [\#127](https://github.com/JacobEvelyn/friends/issues/127)
+
+**Merged pull requests:**
+
+- Add --since and --until flags to `graph` and `list activities` [\#157](https://github.com/JacobEvelyn/friends/pull/157) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Restructuring [\#155](https://github.com/JacobEvelyn/friends/pull/155) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.28](https://github.com/JacobEvelyn/friends/tree/v0.28) (2016-06-25)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.27...v0.28)
 
