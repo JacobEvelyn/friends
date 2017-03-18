@@ -42,7 +42,7 @@ lots of help), and give feedback!**
     - `rename`
       - [`rename friend`](#rename-friend)
       - [`rename location`](#rename-location)
-    - [`set location`](#set)
+    - [`set location`](#set-location)
     - [`stats`](#stats)
     - [`suggest`](#suggest)
     - [`update`](#update)
@@ -363,10 +363,27 @@ Jan 2015 |
 Feb 2015 |█
 ```
 
+Or graph only activities on or after a certain date:
+
+```bash
+$ friends graph --since 'January 1st 2015'
+Jan 2015 |███████
+Feb 2015 |█████
+```
+
+Or graph only activities before or on a certain date:
+
+```bash
+$ friends graph --until 'January 1st 2015'
+Nov 2014 |███
+Dec 2014 |██
+Jan 2015 |███████
+```
+
 And you can use multiple of these flags together:
 
 ```bash
-$ friends graph --in Paris --tagged food --with George
+$ friends graph --in Paris --tagged food --with George --after 'September 2014'
 Nov 2014 |█
 ```
 
@@ -438,6 +455,20 @@ Or by tag:
 ```bash
 $ friends list activities --tagged food
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+```
+
+Or by date:
+
+```bash
+$ friends graph --since 'December 31st 2014'
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+```
+
+```bash
+$ friends graph --until 'December 31st 2014'
+2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
 And you can mix and match these options to your heart's content:

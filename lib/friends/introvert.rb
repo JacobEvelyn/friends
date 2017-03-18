@@ -231,17 +231,21 @@ module Friends
     #   for unfiltered
     # @param tagged [String] the name of a tag to filter by (of the form:
     #   "@tag"), or nil for unfiltered
+    # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
+    # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
     # @return [Array] a list of all activity text values
     # @raise [ArgumentError] if limit is present but limit < 1
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
-    def list_activities(limit:, with:, location_name:, tagged:)
+    def list_activities(limit:, with:, location_name:, tagged:, since_date:, until_date:)
       raise ArgumentError, "Limit must be positive" if limit && limit < 1
 
       acts = filtered_activities(
         with: with,
         location_name: location_name,
-        tagged: tagged
+        tagged: tagged,
+        since_date: since_date,
+        until_date: until_date
       )
 
       # If we need to, trim the list.
@@ -296,24 +300,21 @@ module Friends
     #   for unfiltered
     # @param tagged [String] the name of a tag to filter by (of the form:
     #   "@tag"), or nil for unfiltered
+    # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
+    # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
     # @return [Hash{String => Integer}]
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
-    def graph(with:, location_name:, tagged:)
-      # There is no point trying to graph no activities
-      return {} if @activities.empty?
-
+    def graph(with:, location_name:, tagged:, since_date:, until_date:)
       activities_to_graph = filtered_activities(
         with: with,
         location_name: location_name,
-        tagged: tagged
+        tagged: tagged,
+        since_date: since_date,
+        until_date: until_date
       )
 
-      Graph.new(
-        start_date: @activities.last.date,
-        end_date: @activities.first.date,
-        activities: activities_to_graph
-      ).to_h
+      Graph.new(activities: activities_to_graph).to_h
     end
 
     # Suggest friends to do something with.
@@ -456,10 +457,12 @@ module Friends
     #   for unfiltered
     # @param tagged [String] the name of a tag to filter by, or nil for
     #   unfiltered
+    # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
+    # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
     # @return [Array] an array of activities
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
-    def filtered_activities(with:, location_name:, tagged:)
+    def filtered_activities(with:, location_name:, tagged:, since_date:, until_date:)
       acts = @activities
 
       # Filter by friend name if argument is passed.
@@ -475,9 +478,11 @@ module Friends
       end
 
       # Filter by tag if argument is passed.
-      unless tagged.nil?
-        acts = acts.select { |act| act.includes_tag?(tagged) }
-      end
+      acts = acts.select { |act| act.includes_tag?(tagged) } unless tagged.nil?
+
+      # Filter by date if arguments are passed.
+      acts = acts.select { |act| act.date >= since_date } unless since_date.nil?
+      acts = acts.select { |act| act.date <= until_date } unless until_date.nil?
 
       acts
     end

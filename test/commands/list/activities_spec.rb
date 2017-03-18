@@ -109,5 +109,28 @@ clean_describe "list activities" do
         OUTPUT
       end
     end
+
+    describe "--since" do
+      subject { run_cmd("list activities --since 'January 4th 2015'") }
+
+      it "lists activities on and after the specified date" do
+        stdout_only <<-OUTPUT
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
+        OUTPUT
+      end
+    end
+
+    describe "--after" do
+      subject { run_cmd("list activities --until 'January 4th 2015'") }
+
+      it "lists activities before and on the specified date" do
+        stdout_only <<-OUTPUT
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
+2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
+        OUTPUT
+      end
+    end
   end
 end
