@@ -125,6 +125,9 @@ Lambda:
 LambdaCall:
   Enabled: false
 
+Layout/IndentHeredoc:
+  Enabled: false
+
 LineEndConcatenation:
   Enabled: false
 
@@ -234,6 +237,9 @@ StringLiterals:
 
 Style/MultilineBlockChain:
   Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
 
 VariableInterpolation:
   Enabled: false

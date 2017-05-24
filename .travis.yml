@@ -5,10 +5,7 @@ rvm:
 - 2.3.0
 - 2.4.0
 script:
-  - bundle exec rake test
-  - bundle exec rubocop
-addons:
-  code_climate:
-    repo_token: d744a74c96e3e5c763ed776709aff0662ac2f3e8274c01e439e09b38c8be4225
+- bundle exec rake test
+- bundle exec rubocop
 notifications:
   email: false

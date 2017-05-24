@@ -1,14 +1,24 @@
 # frozen_string_literal: true
 
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+if ENV["TRAVIS"] == "true"
+  require "simplecov"
+  require "coveralls"
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  SimpleCov.start do
+    add_filter "/test/"
+  end
+end
 
 ENV["MT_HELL"] = "1" # Forces tests to have at least one assertion to pass.
 
 require "minitest/autorun"
-require "minitest/parallel_fork"
-require "minitest/pride"
+
+# Runs tests in parallel. Also, in combination with the MT_HELL environment var
+# set above and the loading of the `minitest-proveit` gem, requires that tests
+# have at least one assertion to pass.
 require "minitest/hell"
+
+require "minitest/pride"
 require "open3"
 require "securerandom"
 

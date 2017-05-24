@@ -1,6 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+if ENV["TRAVIS"] == "true"
+  require "simplecov"
+  SimpleCov.formatter = SimpleCov::Formatter::SimpleFormatter
+  SimpleCov.command_name Process.pid
+  SimpleCov.start
+end
+
 require "gli"
 require "paint"
 require "readline"
