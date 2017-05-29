@@ -101,18 +101,7 @@ command :list do |list|
                                  type: Integer
 
       list_favorite_friends.action do |_, options|
-        favorites = @introvert.list_favorite_friends(limit: options[:limit])
-
-        if options[:limit] == 1
-          puts "Your best friend is #{favorites.first}"
-        else
-          puts "Your favorite friends:"
-
-          num_str_size = favorites.size.to_s.size + 1
-          favorites.each.with_index(1) do |name, rank|
-            puts "#{"#{rank}.".ljust(num_str_size)} #{name}"
-          end
-        end
+        @introvert.list_favorite_friends(limit: options[:limit])
       end
     end
 
@@ -125,18 +114,7 @@ command :list do |list|
                                    type: Integer
 
       list_favorite_locations.action do |_, options|
-        favorites = @introvert.list_favorite_locations(limit: options[:limit])
-
-        if options[:limit] == 1
-          puts "Your favorite location is #{favorites.first}"
-        else
-          puts "Your favorite locations:"
-
-          num_str_size = favorites.size.to_s.size + 1
-          favorites.each.with_index(1) do |name, rank|
-            puts "#{"#{rank}.".ljust(num_str_size)} #{name}"
-          end
-        end
+        @introvert.list_favorite_locations(limit: options[:limit])
       end
     end
   end

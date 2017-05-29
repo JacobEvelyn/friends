@@ -504,15 +504,42 @@ module Friends
         -thing.n_activities
       end.take(limit) # Trim the list.
 
-      max_str_size = results.map(&:name).map(&:size).max
-      results.map.with_index(0) do |thing, index|
-        name = thing.name.ljust(max_str_size)
-        n = thing.n_activities
-        if index.zero?
-          label = n == 1 ? " activity" : " activities"
+      if results.size == 1
+        favorite = results.first
+        puts "Your favorite #{type} is "\
+             "#{favorite.name} "\
+             "(#{favorite.n_activities} "\
+             "#{favorite.n_activities == 1 ? 'activity' : 'activities'})"
+      else
+        puts "Your favorite #{type}s:"
+
+        max_str_size = results.map(&:name).map(&:size).max
+
+        grouped_results = results.group_by(&:n_activities)
+
+        rank = 1
+        first = true
+        data = grouped_results.each.with_object([]) do |(n_activities, things), arr|
+          things.each do |thing|
+            name = thing.name.ljust(max_str_size)
+            if first
+              label = n_activities == 1 ? " activity" : " activities"
+              first = false
+            end
+            str = "#{name} (#{n_activities}#{label})"
+
+            arr << [rank, str]
+          end
+          rank += things.size
         end
-        parenthetical = "(#{n}#{label})"
-        "#{name} #{parenthetical}"
+
+        # We need to use `data.last.first` instead of `rank` to determine the size
+        # of the numbering prefix because `rank` will simply be the size of all
+        # elements, which may be too large if the last element in the list is a tie.
+        num_str_size = data.last.first.to_s.size + 1 unless data.empty?
+        data.each do |ranking, str|
+          puts "#{"#{ranking}.".ljust(num_str_size)} #{str}"
+        end
       end
     end
 
