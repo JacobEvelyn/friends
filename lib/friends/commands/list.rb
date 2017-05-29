@@ -12,7 +12,8 @@ command :list do |list|
     list_friends.flag [:tagged],
                       arg_name: "@TAG",
                       desc: "List only friends with the given tag",
-                      type: Tag
+                      type: Tag,
+                      multiple: true
 
     list_friends.switch [:verbose],
                         negatable: false,
@@ -38,7 +39,8 @@ command :list do |list|
     list_activities.flag [:with],
                          arg_name: "NAME",
                          desc: "List only activities with the given friend",
-                         type: Stripped
+                         type: Stripped,
+                         multiple: true
 
     list_activities.flag [:in],
                          arg_name: "LOCATION",
@@ -48,7 +50,8 @@ command :list do |list|
     list_activities.flag [:tagged],
                          arg_name: "@TAG",
                          desc: "List only activities with the given tag",
-                         type: Tag
+                         type: Tag,
+                         multiple: true
 
     list_activities.flag [:since],
                          arg_name: "DATE",

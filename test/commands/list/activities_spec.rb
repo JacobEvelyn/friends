@@ -97,6 +97,16 @@ clean_describe "list activities" do
           stdout_only "2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying"
         end
       end
+
+      describe "when more than one friend name is passed" do
+        subject { run_cmd("list activities --with #{friend_name1} --with #{friend_name2}") }
+        let(:friend_name1) { "george" }
+        let(:friend_name2) { "grace" }
+
+        it "matches all friends case-insensitively" do
+          stdout_only "2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food"
+        end
+      end
     end
 
     describe "--tagged" do
@@ -107,6 +117,32 @@ clean_describe "list activities" do
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
         OUTPUT
+      end
+
+      describe "when more than one tag is passed" do
+        subject { run_cmd("list activities --tagged #{tag1} --tagged #{tag2}") }
+        let(:tag1) { "food" }
+        let(:tag2) { "partying" }
+        let(:content) do
+          <<-FILE
+### Activities:
+- 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
+- 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
+- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
+
+### Friends:
+- George Washington Carver
+- Marie Curie [Atlantis] @science
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+FILE
+        end
+
+        it "matches all tags case-sensitively" do
+          stdout_only(
+            "2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying @food"
+          )
+        end
       end
     end
 

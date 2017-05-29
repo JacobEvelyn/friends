@@ -186,8 +186,8 @@ module Friends
     # List all friend names in the friends file.
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @param tagged [String] the name of a tag to filter by (of the form:
-    #   "@tag"), or nil for unfiltered
+    # @param tagged [Array<String>] the names of tags to filter by, or empty for
+    #   unfiltered
     # @param verbose [Boolean] true iff we should output friend names with
     #   nicknames, locations, and tags; false for names only
     # @return [Array] a list of all friend names
@@ -200,8 +200,12 @@ module Friends
         fs = fs.select { |friend| friend.location_name == location.name }
       end
 
-      # Filter by tag if one is passed.
-      fs = fs.select { |friend| friend.tags.include? tagged } if tagged
+      # Filter by tag if param is passed.
+      unless tagged.empty?
+        fs = fs.select do |friend|
+          tagged.all? { |tag| friend.tags.include? tag }
+        end
+      end
 
       verbose ? fs.map(&:to_s) : fs.map(&:name)
     end
@@ -225,12 +229,12 @@ module Friends
     # List all activity details.
     # @param limit [Integer] the number of activities to return, or nil for no
     #   limit
-    # @param with [String] the name of a friend to filter by, or nil for
+    # @param with [Array<String>] the names of friends to filter by, or empty for
     #   unfiltered
-    # @param location_name [String] the name of a location to filter by, or nil
-    #   for unfiltered
-    # @param tagged [String] the name of a tag to filter by (of the form:
-    #   "@tag"), or nil for unfiltered
+    # @param location_name [String] the name of a location to filter by, or
+    #   nil for unfiltered
+    # @param tagged [Array<String>] the names of tags to filter by, or empty for
+    #   unfiltered
     # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
     # @return [Array] a list of all activity text values
@@ -294,12 +298,12 @@ module Friends
     # The keys of the hash are all of the months (inclusive) between the first
     # and last month in which activities have been recorded.
     #
-    # @param with [String] the name of a friend to filter by, or nil for
+    # @param with [Array<String>] the names of friends to filter by, or empty for
     #   unfiltered
-    # @param location_name [String] the name of a location to filter by, or nil
-    #   for unfiltered
-    # @param tagged [String] the name of a tag to filter by (of the form:
-    #   "@tag"), or nil for unfiltered
+    # @param location_name [String] the name of a location to filter by, or
+    #   nil for unfiltered
+    # @param tagged [Array<String>] the names of tags to filter by, or empty for
+    #   unfiltered
     # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
     # @return [Hash{String => Integer}]
@@ -451,11 +455,11 @@ module Friends
     private
 
     # Filter activities by friend, location and tag
-    # @param with [String] the name of a friend to filter by, or nil for
+    # @param with [Array<String>] the names of friends to filter by, or empty for
     #   unfiltered
-    # @param location_name [String] the name of a location to filter by, or nil
-    #   for unfiltered
-    # @param tagged [String] the name of a tag to filter by, or nil for
+    # @param location_name [String] the name of a location to filter by, or
+    #   nil for unfiltered
+    # @param tagged [Array<String>] the names of tags to filter by, or empty for
     #   unfiltered
     # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
@@ -466,9 +470,11 @@ module Friends
       acts = @activities
 
       # Filter by friend name if argument is passed.
-      unless with.nil?
-        friend = thing_with_name_in(:friend, with)
-        acts = acts.select { |act| act.includes_friend?(friend) }
+      unless with.empty?
+        friends = with.map { |name| thing_with_name_in(:friend, name) }
+        acts = acts.select do |act|
+          friends.all? { |friend| act.includes_friend?(friend) }
+        end
       end
 
       # Filter by location name if argument is passed.
@@ -478,7 +484,11 @@ module Friends
       end
 
       # Filter by tag if argument is passed.
-      acts = acts.select { |act| act.includes_tag?(tagged) } unless tagged.nil?
+      unless tagged.empty?
+        acts = acts.select do |act|
+          tagged.all? { |tag| act.includes_tag?(tag) }
+        end
+      end
 
       # Filter by date if arguments are passed.
       acts = acts.select { |act| act.date >= since_date } unless since_date.nil?
