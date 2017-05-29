@@ -5,7 +5,8 @@ command :graph do |graph|
   graph.flag [:with],
              arg_name: "NAME",
              desc: "Graph activities with the given friend",
-             type: Stripped
+             type: Stripped,
+             multiple: true
 
   graph.flag [:in],
              arg_name: "LOCATION",
@@ -15,7 +16,8 @@ command :graph do |graph|
   graph.flag [:tagged],
              arg_name: "@TAG",
              desc: "Graph activities with the given tag",
-             type: Tag
+             type: Tag,
+             multiple: true
 
   graph.flag [:since],
              arg_name: "DATE",

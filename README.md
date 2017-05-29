@@ -343,6 +343,13 @@ Jan 2015 |█████
 Feb 2015 |███
 ```
 
+Or a certain group of friends:
+
+```bash
+$ friends graph --with George --with Grace
+Jan 2015 |█
+```
+
 Or graph only activities with a certain tag:
 
 ```bash
@@ -351,6 +358,13 @@ Nov 2014 |█
 Dec 2014 |
 Jan 2015 |
 Feb 2015 |███
+```
+
+Or with multiple tags:
+
+```bash
+$ friends graph --tagged @fun --tagged @work
+Jul 2017 |█
 ```
 
 Or graph only activities in a certain location:
@@ -443,6 +457,13 @@ $ friends list activities --with George
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
+Or only filter activities done with a group of friends:
+
+```bash
+$ friends list activities --with George --with Grace
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+```
+
 Or filter your activities by location:
 
 ```bash
@@ -457,16 +478,23 @@ $ friends list activities --tagged food
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 ```
 
+Or use more than one tag:
+
+```bash
+$ friends list activities --tagged @fun --tagged @work
+2017-07-04: Summer picnic with @work colleagues. @fun
+```
+
 Or by date:
 
 ```bash
-$ friends graph --since 'December 31st 2014'
+$ friends list activities --since 'December 31st 2014'
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
 ```
 
 ```bash
-$ friends graph --until 'December 31st 2014'
+$ friends list activities --until 'December 31st 2014'
 2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
@@ -474,7 +502,7 @@ $ friends graph --until 'December 31st 2014'
 And you can mix and match these options to your heart's content:
 
 ```bash
-$ friends list activities --tagged food --with Grace
+$ friends list activities --tagged food --with Grace --with George
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 ```
 
@@ -553,6 +581,13 @@ And you can also filter your friends by tag:
 $ friends list friends --tagged science
 Grace Hopper
 Marie Curie
+```
+
+You can even use more than one tag to further narrow down the list:
+
+```bash
+$ friends list friends --tagged science --tagged navy
+Grace Hopper
 ```
 
 #### `list tags`
