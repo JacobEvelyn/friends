@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Graphs activities by month
 
 module Friends

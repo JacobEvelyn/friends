@@ -24,7 +24,7 @@ module Serializable
     args = match.names.
            map { |name| { name.to_sym => match[name.to_sym] } }.
            reduce(:merge).
-           select { |_, v| !v.nil? }
+           reject { |_, v| v.nil? }
 
     new(args)
   end
