@@ -487,7 +487,7 @@ $ friends list favorite friends
 Your favorite friends:
 1. George Washington Carver (2 activities)
 2. Grace Hopper             (1)
-3. Marie Curie              (1)
+3. Marie Curie              (0)
 ```
 
 You can specify a number of favorites to show:
@@ -508,7 +508,7 @@ $ friends list favorite locations
 Your favorite locations:
 1. Atlantis (2 activities)
 2. Paris    (1)
-3. London   (1)
+3. London   (0)
 ```
 
 You can specify a number of favorites to show:

@@ -45,6 +45,69 @@ Your favorite friends:
       OUTPUT
     end
 
+    describe "when friends are tied for the same number of activities" do
+      let(:content) do
+        <<-FILE
+### Activities:
+- 2017-01-01: Did something with **Friend A**.
+- 2017-01-01: Did something with **Friend A**.
+- 2017-01-01: Did something with **Friend B**.
+- 2017-01-01: Did something with **Friend B**.
+- 2017-01-01: Did something with **Friend C**.
+- 2017-01-01: Did something with **Friend D**.
+- 2017-01-01: Did something with **Friend E**.
+- 2017-01-01: Did something with **Friend F**.
+- 2017-01-01: Did something with **Friend G**.
+- 2017-01-01: Did something with **Friend H**.
+- 2017-01-01: Did something with **Friend I**.
+- 2017-01-01: Did something with **Friend J**.
+
+### Friends:
+- Friend A
+- Friend B
+- Friend C
+- Friend D
+- Friend E
+- Friend F
+- Friend G
+- Friend H
+- Friend I
+- Friend J
+FILE
+      end
+
+      it "uses tied ranks" do
+        subject[:stderr].must_equal ""
+        subject[:status].must_equal 0
+
+        lines = subject[:stdout].split("\n")
+        lines[1].must_match(/1\. Friend (A|B)/)
+        lines[2].must_match(/1\. Friend (A|B)/)
+        lines[3].must_include "3. Friend"
+      end
+
+      it "only uses the word 'activities' for the first item, even when a tie" do
+        subject[:stderr].must_equal ""
+        subject[:status].must_equal 0
+
+        lines = subject[:stdout].split("\n")
+        lines[1].must_include "activities"
+        lines[2].wont_include "activities"
+      end
+
+      it "indents based on the highest rank number, not the number of friends" do
+        subject[:stderr].must_equal ""
+        subject[:status].must_equal 0
+
+        # Since there are 10 friends, a naive implementation would pad our output
+        # assuming the (numerically) highest rank is "10." but since the highest
+        # rank is a tie, we never display a double-digit rank, so we don't need to
+        # pad our output for double digits.
+        lines = subject[:stdout].split("\n")
+        lines.last.must_include "3. Friend"
+      end
+    end
+
     describe "--limit" do
       subject { run_cmd("list favorite friends --limit #{limit}") }
 
@@ -57,8 +120,27 @@ Your favorite friends:
 
       describe "when limit is 1" do
         let(:limit) { 1 }
-        it "outputs as a best friend" do
-          stdout_only "Your best friend is Grace Hopper (3 activities)"
+
+        it "uses correct friend pluralization" do
+          stdout_only "Your favorite friend is Grace Hopper (3 activities)"
+        end
+
+        describe "when favorite friend only has one activity" do
+          let(:content) do
+            <<-FILE
+### Activities:
+- 2017-01-01: Did some math with **Grace Hopper**.
+
+### Friends:
+- George Washington Carver
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+- Marie Curie [Atlantis] @science
+FILE
+          end
+
+          it "uses correct activity pluralization" do
+            stdout_only "Your favorite friend is Grace Hopper (1 activity)"
+          end
         end
       end
 
