@@ -6,6 +6,8 @@ clean_describe "graph" do
   subject { run_cmd("graph") }
 
   describe "when file does not exist" do
+    let(:content) { nil }
+
     it "prints no output" do
       stdout_only ""
     end

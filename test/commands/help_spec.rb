@@ -4,6 +4,7 @@ require "./test/helper"
 
 clean_describe "help" do
   subject { run_cmd("help") }
+  let(:content) { nil }
 
   describe "with no subcommand passed" do
     it "prints overall help message" do

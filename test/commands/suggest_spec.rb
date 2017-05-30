@@ -6,6 +6,8 @@ clean_describe "suggest" do
   subject { run_cmd("suggest") }
 
   describe "when file does not exist" do
+    let(:content) { nil }
+
     it "prints a no-data message" do
       stdout_only <<-FILE
 Distant friend: None found
