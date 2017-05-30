@@ -123,7 +123,6 @@ end
 def clean_describe(desc, *additional_desc, &block)
   describe desc, *additional_desc do
     let(:filename) { "test/tmp/friends#{SecureRandom.uuid}.md" }
-    let(:content) { nil }
 
     before { File.write(filename, content) unless content.nil? }
     after { File.delete(filename) if File.exist?(filename) }

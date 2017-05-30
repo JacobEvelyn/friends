@@ -6,6 +6,8 @@ clean_describe "stats" do
   subject { run_cmd("stats") }
 
   describe "when file does not exist" do
+    let(:content) { nil }
+
     it "returns the stats" do
       stdout_only <<-FILE
 Total activities: 0

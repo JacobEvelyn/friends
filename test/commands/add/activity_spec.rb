@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "date"
+
 require "./test/helper"
 
 def date_parsing_specs(test_stdout: true)

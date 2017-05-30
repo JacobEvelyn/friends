@@ -4,12 +4,15 @@ require "./test/helper"
 
 clean_describe "clean" do
   subject { run_cmd("clean") }
+  let(:content) { nil }
 
   it "outputs a message" do
     stdout_only "File cleaned: \"#{filename}\""
   end
 
   describe "when file does not exist" do
+    let(:content) { nil }
+
     it "does not create the file" do
       File.exist?(filename).must_equal false
     end

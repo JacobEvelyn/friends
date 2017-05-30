@@ -6,6 +6,8 @@ clean_describe "list favorite locations" do
   subject { run_cmd("list favorite locations") }
 
   describe "when file does not exist" do
+    let(:content) { nil }
+
     it "prints a no-data message" do
       stdout_only "Your favorite locations:"
     end

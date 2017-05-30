@@ -6,6 +6,8 @@ clean_describe "list tags" do
   subject { run_cmd("list tags") }
 
   describe "when file does not exist" do
+    let(:content) { nil }
+
     it "does not list anything" do
       stdout_only ""
     end

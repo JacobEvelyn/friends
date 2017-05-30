@@ -4,6 +4,7 @@ require "./test/helper"
 
 clean_describe "update" do
   subject { run_cmd("update") }
+  let(:content) { nil }
 
   it "prints a status message" do
     subject[:stderr].must_equal ""
