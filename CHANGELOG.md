@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.30](https://github.com/JacobEvelyn/friends/tree/v0.30) (2017-05-30)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.29...v0.30)
+
+**Implemented enhancements:**
+
+- Code coverage in README is too low [\#163](https://github.com/JacobEvelyn/friends/issues/163)
+- Improve display of favorites for ties [\#158](https://github.com/JacobEvelyn/friends/issues/158)
+- Filter activities based on more than one friend/tag/etc. [\#88](https://github.com/JacobEvelyn/friends/issues/88)
+
+**Merged pull requests:**
+
+- Be able to filter output by more than one friend or tag [\#168](https://github.com/JacobEvelyn/friends/pull/168) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Improve display of favorites for ties [\#165](https://github.com/JacobEvelyn/friends/pull/165) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Correct code coverage calculations [\#164](https://github.com/JacobEvelyn/friends/pull/164) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.29](https://github.com/JacobEvelyn/friends/tree/v0.29) (2017-03-18)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.28...v0.29)
 
