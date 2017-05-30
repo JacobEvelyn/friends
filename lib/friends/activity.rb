@@ -3,7 +3,6 @@
 # Activity represents an activity you've done with one or more Friends.
 
 require "chronic"
-require "memoist"
 require "paint"
 require "set"
 
@@ -12,7 +11,6 @@ require "friends/serializable"
 module Friends
   class Activity
     extend Serializable
-    extend Memoist
 
     SERIALIZATION_PREFIX = "- "
     DATE_PARTITION = ": "
@@ -143,16 +141,14 @@ module Friends
     # Find the names of all friends in this description.
     # @return [Array] list of all friend names in the description
     def friend_names
-      @description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
+      @_friend_names ||= @description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
     end
-    memoize :friend_names
 
     # Find the names of all locations in this description.
     # @return [Array] list of all location names in the description
     def location_names
-      @description.scan(/(?<=_)\w[^_]*(?=_)/).uniq
+      @_location_names ||= @description.scan(/(?<=_)\w[^_]*(?=_)/).uniq
     end
-    memoize :location_names
 
     private
 
