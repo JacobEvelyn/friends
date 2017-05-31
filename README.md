@@ -18,6 +18,7 @@ lots of help), and give feedback!**
   - [Core concepts](#core-concepts)
   - [Global flags](#global-flags)
   - [Syncing across multiple machines](#syncing-across-multiple-machines)
+  - [Setting reminders](#setting-reminders)
   - [Command reference](#command-reference)
     - `add`
       - [`add activity`](#add-activity)
@@ -187,6 +188,29 @@ do this for you, like so:
 ```bash
 alias friends="friends --filename '~/Dropbox/friends.md'"
 ```
+
+### Setting reminders
+
+Though `friends` has no built-in reminder functionality, it's easy to use a
+system like `cron` (Mac or Linux) or `Task Scheduler` (Windows) to set various
+reminders.
+
+For example, on a Mac, the following `crontab` configuration results in every day
+at 9:00 p.m. a Terminal tab opening, printing "Time to journal!" and then launching
+an `add activity` prompt through `friends`:
+
+```
+0 21 * * * osascript -e 'activate application "Terminal"' &> /dev/null && osascript -e 'tell application "Terminal" to do script "clear && echo Time to journal! && friends add activity"' &> /dev/null
+```
+
+Here's another example (also for Mac) of using `friends` to suggest some people to
+hang out with every Saturday morning:
+
+```
+0 10 * * 6 osascript -e 'activate application "Terminal"' &> /dev/null && osascript -e 'tell application "Terminal" to do script "clear && echo Consider hanging out with one of these friends today: && friends suggest"' &> /dev/null
+```
+
+(If you use other tools, please share and we'll add to these examples!)
 
 ### Command reference*
 
