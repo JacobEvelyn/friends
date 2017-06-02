@@ -22,13 +22,35 @@ clean_describe "graph" do
   end
 
   describe "when file has content" do
-    let(:content) { CONTENT } # Content must be sorted to avoid errors.
+    # Content must be sorted to avoid errors.
+    let(:content) do
+      <<-FILE
+### Activities:
+- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
+- 2015-01-14: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2015-01-06: Did some other things in _Paris_.
+- 2015-01-06: Did even more things in _Paris_.
+- 2015-01-05: Did even more things in _Paris_.
+- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
+- 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
+
+### Friends:
+- George Washington Carver
+- Marie Curie [Atlantis] @science
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+
+### Locations:
+- Atlantis
+- Marie's Diner
+- Paris
+      FILE
+    end
 
     it "graphs all activities" do
       stdout_only <<-OUTPUT
 Nov 2014 |█
 Dec 2014 |█
-Jan 2015 |█
+Jan 2015 |████
 Feb 2015 |
 Mar 2015 |
 Apr 2015 |
@@ -40,6 +62,16 @@ Sep 2015 |
 Oct 2015 |
 Nov 2015 |█
       OUTPUT
+    end
+
+    describe "when there are more activities than colors" do
+      let(:content) do
+        (["### Activities:"] + (["- 2017-06-01: Did something."] * 100)).join("\n")
+      end
+
+      it "displays the correct number of activities" do
+        stdout_only("Jun 2017 |" + ("█" * 100))
+      end
     end
 
     describe "--in" do
@@ -56,7 +88,19 @@ Nov 2015 |█
         let(:location_name) { "paris" }
         it "matches location case-insensitively" do
           stdout_only <<-OUTPUT
+Nov 2014 |∙|
 Dec 2014 |█
+Jan 2015 |███∙|
+Feb 2015 |
+Mar 2015 |
+Apr 2015 |
+May 2015 |
+Jun 2015 |
+Jul 2015 |
+Aug 2015 |
+Sep 2015 |
+Oct 2015 |
+Nov 2015 |∙|
           OUTPUT
         end
       end
@@ -87,8 +131,18 @@ Dec 2014 |█
         it "matches friend case-insensitively" do
           stdout_only <<-OUTPUT
 Nov 2014 |█
-Dec 2014 |
-Jan 2015 |█
+Dec 2014 |∙|
+Jan 2015 |█∙∙∙|
+Feb 2015 |
+Mar 2015 |
+Apr 2015 |
+May 2015 |
+Jun 2015 |
+Jul 2015 |
+Aug 2015 |
+Sep 2015 |
+Oct 2015 |
+Nov 2015 |∙|
           OUTPUT
         end
       end
@@ -99,7 +153,21 @@ Jan 2015 |█
         let(:friend_name2) { "grace" }
 
         it "matches all friends case-insensitively" do
-          stdout_only "Jan 2015 |█"
+          stdout_only <<-OUTPUT
+Nov 2014 |∙|
+Dec 2014 |∙|
+Jan 2015 |█∙∙∙|
+Feb 2015 |
+Mar 2015 |
+Apr 2015 |
+May 2015 |
+Jun 2015 |
+Jul 2015 |
+Aug 2015 |
+Sep 2015 |
+Oct 2015 |
+Nov 2015 |∙|
+          OUTPUT
         end
       end
     end
@@ -109,7 +177,9 @@ Jan 2015 |█
 
       it "matches tag case-sensitively" do
         stdout_only <<-OUTPUT
-Jan 2015 |█
+Nov 2014 |∙|
+Dec 2014 |█
+Jan 2015 |█∙∙∙|
 Feb 2015 |
 Mar 2015 |
 Apr 2015 |
@@ -127,33 +197,33 @@ Nov 2015 |█
         subject { run_cmd("graph --tagged #{tag1} --tagged #{tag2}") }
         let(:tag1) { "food" }
         let(:tag2) { "partying" }
-        let(:content) do
-          <<-FILE
-### Activities:
-- 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
-- 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
-- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
-
-### Friends:
-- George Washington Carver
-- Marie Curie [Atlantis] @science
-- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
-FILE
-        end
 
         it "matches all tags case-sensitively" do
-          stdout_only "Dec 2014 |█"
+          stdout_only <<-OUTPUT
+Nov 2014 |∙|
+Dec 2014 |█
+Jan 2015 |∙∙∙∙|
+Feb 2015 |
+Mar 2015 |
+Apr 2015 |
+May 2015 |
+Jun 2015 |
+Jul 2015 |
+Aug 2015 |
+Sep 2015 |
+Oct 2015 |
+Nov 2015 |∙|
+          OUTPUT
         end
       end
     end
 
     describe "--since" do
-      subject { run_cmd("graph --since 'January 4th 2015'") }
+      subject { run_cmd("graph --since 'January 6th 2015'") }
 
       it "graphs activities on and after the specified date" do
         stdout_only <<-OUTPUT
-Jan 2015 |█
+Jan 2015 |███
 Feb 2015 |
 Mar 2015 |
 Apr 2015 |
@@ -168,14 +238,36 @@ Nov 2015 |█
       end
     end
 
-    describe "--after" do
-      subject { run_cmd("graph --until 'January 4th 2015'") }
+    describe "--until" do
+      subject { run_cmd("graph --until 'January 6th 2015'") }
 
       it "graphs activities before and on the specified date" do
         stdout_only <<-OUTPUT
 Nov 2014 |█
 Dec 2014 |█
-Jan 2015 |█
+Jan 2015 |███
+        OUTPUT
+      end
+    end
+
+    describe "combining filters" do
+      subject { run_cmd("graph --since 'January 6th 2015' --with Grace") }
+
+      it "only shows other activities within the same period as the filtered ones" do
+        # If we just rounded to the month, there would be three unfiltered activities in
+        # January displayed (due to the one on 1/5/2015). Instead, we correctly display two.
+        stdout_only <<-OUTPUT
+Jan 2015 |█∙∙|
+Feb 2015 |
+Mar 2015 |
+Apr 2015 |
+May 2015 |
+Jun 2015 |
+Jul 2015 |
+Aug 2015 |
+Sep 2015 |
+Oct 2015 |
+Nov 2015 |█
         OUTPUT
       end
     end

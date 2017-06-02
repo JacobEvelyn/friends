@@ -30,29 +30,12 @@ command :graph do |graph|
              type: InputDate
 
   graph.action do |_, options|
-    # This math is taken from Minitest's Pride plugin (the PrideLOL class).
-    PI_3 = Math::PI / 3
-
-    colors = (0...(6 * 7)).map do |n|
-      n *= 1.0 / 6
-      r  = (3 * Math.sin(n) + 3).to_i
-      g  = (3 * Math.sin(n + 2 * PI_3) + 3).to_i
-      b  = (3 * Math.sin(n + 4 * PI_3) + 3).to_i
-
-      [r, g, b].map { |c| c * 51 }
-    end
-
-    data = @introvert.graph(
+    @introvert.graph(
       with: options[:with],
       location_name: options[:in],
       tagged: options[:tagged],
       since_date: options[:since],
       until_date: options[:until]
     )
-
-    data.each do |month, count|
-      print "#{month} |"
-      puts colors.take(count).map { |rgb| Paint["█", rgb] }.join
-    end
   end
 end

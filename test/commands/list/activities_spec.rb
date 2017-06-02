@@ -159,7 +159,7 @@ FILE
       end
     end
 
-    describe "--after" do
+    describe "--until" do
       subject { run_cmd("list activities --until 'January 4th 2015'") }
 
       it "lists activities before and on the specified date" do
