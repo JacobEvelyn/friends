@@ -310,7 +310,7 @@ module Friends
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def graph(with:, location_name:, tagged:, since_date:, until_date:)
-      activities_to_graph = filtered_activities(
+      filtered_activities_to_graph = filtered_activities(
         with: with,
         location_name: location_name,
         tagged: tagged,
@@ -318,7 +318,24 @@ module Friends
         until_date: until_date
       )
 
-      Graph.new(activities: activities_to_graph).to_h
+      # If the user wants to graph in a specific date range, we explicitly
+      # limit our output to that date range. We don't just use the date range
+      # of the first and last `filtered_activities_to_graph` because those
+      # activities might not include others in the full range (for instance,
+      # if only one filtered activity matches a query, we don't want to only
+      # show unfiltered activities that occurred on that specific day).
+      all_activities_to_graph = filtered_activities(
+        with: [],
+        location_name: nil,
+        tagged: [],
+        since_date: since_date,
+        until_date: until_date
+      )
+
+      Graph.new(
+        filtered_activities: filtered_activities_to_graph,
+        all_activities: all_activities_to_graph
+      ).draw
     end
 
     # Suggest friends to do something with.

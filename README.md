@@ -125,10 +125,10 @@ The `friends.md` Markdown file that stores all of your data contains:
 
 ```markdown
 ### Activities:
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
-- 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
-- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
-- 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
+- 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+- 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
+- 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
+- 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
 ```
 
 See the example
@@ -220,7 +220,7 @@ hang out with every Saturday morning:
 
 ```bash
 $ friends add activity Got lunch with Grace and George.
-Activity added: "2015-01-04: Got lunch with Grace Hopper and George Washington Carver."
+Activity added: "2018-01-04: Got lunch with Grace Hopper and George Washington Carver."
 ```
 
 `friends` will **automatically** figure out which "Grace" and "George" you're referring to, *even if you're friends with lots of different Graces and Georges*.
@@ -230,7 +230,7 @@ just like formal names:
 
 ```bash
 $ friends add activity Invented debugging with The Admiral.
-Activity added: "2016-01-06: Invented debugging with Grace Hopper."
+Activity added: "2017-01-06: Invented debugging with Grace Hopper."
 ```
 
 You can also use the first initial of a last name instead of the whole thing.
@@ -239,14 +239,14 @@ them) based on whether you're in the middle of a sentence or not:
 
 ```bash
 $ friends add activity Got lunch with Earnest H and Earnest S. in the park. Man, I like Earnest H. but really love Earnest S.
-Activity added: "2016-05-01: Got lunch with Earnest Hemingway and Earnest Shackleton in the park. Man, I like Earnest Hemingway but really love Earnest Shackleton."
+Activity added: "2017-05-01: Got lunch with Earnest Hemingway and Earnest Shackleton in the park. Man, I like Earnest Hemingway but really love Earnest Shackleton."
 ```
 
 And locations will be matched as well:
 
 ```bash
 $ friends add activity Went swimming near atlantis with George.
-Activity added: "2016-01-06: Went swimming near Atlantis with George Washington Carver."
+Activity added: "2017-01-06: Went swimming near Atlantis with George Washington Carver."
 ```
 
 Tags will be colored if they're provided (though this README can't display
@@ -254,35 +254,35 @@ color so you'll just have to have faith here):
 
 ```bash
 $ friends add activity The office softball team wins a game! @work @exercise
-Activity added: "2016-05-05: The office softball team wins a game! @work @exercise"
+Activity added: "2017-05-05: The office softball team wins a game! @work @exercise"
 ```
 
 You can of course specify a date for the activity:
 
 ```bash
 $ friends add activity Yesterday: Celebrated the new year with Marie.
-Activity added: "2014-12-31: Celebrated the new year with Marie Curie."
+Activity added: "2017-12-31: Celebrated the new year with Marie Curie."
 ```
 
 Or get an **interactive prompt** by just typing `friends add activity`, with or without a date specified:
 
 ```bash
-$ friends add activity 2015-11-01
-2015-11-01: <type description here>
+$ friends add activity 2018-11-01
+2018-11-01: <type description here>
 ```
 
 **Natural-language dates** work just fine:
 
 ```bash
 $ friends add activity last Monday
-2016-03-07: <type description here>
+2017-03-07: <type description here>
 ```
 
 You can escape the names of friends you don't want `friends` to match with a backslash:
 
 ```bash
-$ friends add activity "2015-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
-Activity added: "2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
+$ friends add activity "2018-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
+Activity added: "2018-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
 ```
 
 #### `add friend`
@@ -351,78 +351,88 @@ Graphs (in color!) your activities over time:
 
 ```bash
 $ friends graph
-Nov 2014 |███
-Dec 2014 |██
-Jan 2015 |███████
-Feb 2015 |█████
+Nov 2017 |███
+Dec 2017 |██
+Jan 2018 |███████
+Feb 2018 |█████
 ```
 
 Or graph only activities with a certain friend:
 
 ```bash
 $ friends graph --with George
-Nov 2014 |█
-Dec 2014 |
-Jan 2015 |█████
-Feb 2015 |███
+Nov 2017 |█∙∙|
+Dec 2017 |∙∙|
+Jan 2018 |█████∙∙|
+Feb 2018 |███∙∙|
 ```
 
-Or a certain group of friends:
+The dots represent the total activities that month, so you can get a feel for the
+proportion of activities with that friend vs. the total you've logged.
+
+You can also graph a certain group of friends:
 
 ```bash
 $ friends graph --with George --with Grace
-Jan 2015 |█
+Nov 2017 |∙∙∙|
+Dec 2017 |∙∙|
+Jan 2018 |█∙∙∙∙∙∙|
+Feb 2018 |∙∙∙∙∙|
 ```
 
 Or graph only activities with a certain tag:
 
 ```bash
 $ friends graph --tagged food
-Nov 2014 |█
-Dec 2014 |
-Jan 2015 |
-Feb 2015 |███
+Nov 2017 |█∙∙|
+Dec 2017 |∙∙|
+Jan 2018 |∙∙∙∙∙∙∙|
+Feb 2018 |███∙∙|
 ```
 
 Or with multiple tags:
 
 ```bash
 $ friends graph --tagged @fun --tagged @work
-Jul 2017 |█
+Nov 2017 |∙∙∙|
+Dec 2017 |█∙|
+Jan 2018 |∙∙∙∙∙∙∙|
+Feb 2018 |█∙∙∙∙|
 ```
 
 Or graph only activities in a certain location:
 
 ```bash
 $ friends graph --in Paris
-Nov 2014 |█
-Dec 2014 |
-Jan 2015 |
-Feb 2015 |█
+Nov 2017 |█∙∙|
+Dec 2017 |∙∙|
+Jan 2018 |∙∙∙∙∙∙∙|
+Feb 2018 |█∙∙∙∙|
 ```
 
 Or graph only activities on or after a certain date:
 
 ```bash
-$ friends graph --since 'January 1st 2015'
-Jan 2015 |███████
-Feb 2015 |█████
+$ friends graph --since 'January 1st 2018'
+Jan 2018 |███████
+Feb 2018 |█████
 ```
 
 Or graph only activities before or on a certain date:
 
 ```bash
-$ friends graph --until 'January 1st 2015'
-Nov 2014 |███
-Dec 2014 |██
-Jan 2015 |███████
+$ friends graph --until 'January 1st 2018'
+Nov 2017 |███
+Dec 2017 |██
+Jan 2018 |███████
 ```
 
 And you can use multiple of these flags together:
 
 ```bash
-$ friends graph --in Paris --tagged food --with George --after 'September 2014'
-Nov 2014 |█
+$ friends graph --in Paris --tagged food --with George --since 'Jan 2018'
+Jan 2018 |∙∙∙∙∙∙∙|
+Fen 2017 |█∙∙∙∙|
 ```
 
 #### `help`
@@ -460,74 +470,74 @@ Lists recent activities:
 
 ```bash
 $ friends list activities
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
 You can adjust how many activities are shown:
 
 ```bash
 $ friends list activities --limit 2
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
 ```
 
 Or only list the activities you did with a certain friend:
 
 ```bash
 $ friends list activities --with George
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
 Or only filter activities done with a group of friends:
 
 ```bash
 $ friends list activities --with George --with Grace
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 ```
 
 Or filter your activities by location:
 
 ```bash
 $ friends list activities --in "New York"
-2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
 ```
 
 Or by tag:
 
 ```bash
 $ friends list activities --tagged food
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 ```
 
 Or use more than one tag:
 
 ```bash
 $ friends list activities --tagged @fun --tagged @work
-2017-07-04: Summer picnic with @work colleagues. @fun
+2018-07-04: Summer picnic with @work colleagues. @fun
 ```
 
 Or by date:
 
 ```bash
-$ friends list activities --since 'December 31st 2014'
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+$ friends list activities --since 'December 31st 2017'
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
 ```
 
 ```bash
-$ friends list activities --until 'December 31st 2014'
-2014-12-31: Celebrated the new year with Marie Curie in New York City. @partying
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
+$ friends list activities --until 'December 31st 2017'
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
 And you can mix and match these options to your heart's content:
 
 ```bash
 $ friends list activities --tagged food --with Grace --with George
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 ```
 
 #### `list favorite friends`

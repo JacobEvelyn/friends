@@ -89,6 +89,7 @@ def ensure_trailing_newline_unless_empty(str)
 end
 
 def stdout_only(expected)
+  puts subject[:stderr] unless subject[:stderr] == ""
   subject[:stdout].must_equal ensure_trailing_newline_unless_empty(expected)
   subject[:stderr].must_equal ""
   subject[:status].must_equal 0
