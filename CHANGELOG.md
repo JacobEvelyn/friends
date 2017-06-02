@@ -1,5 +1,28 @@
 # Change Log
 
+## [v0.31](https://github.com/JacobEvelyn/friends/tree/v0.31) (2017-06-02)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.30...v0.31)
+
+**Implemented enhancements:**
+
+- Change graph commands to display filtered graphs within total [\#171](https://github.com/JacobEvelyn/friends/issues/171)
+
+**Fixed bugs:**
+
+- Graph does not display more than 42 activities per month [\#172](https://github.com/JacobEvelyn/friends/issues/172)
+
+**Closed issues:**
+
+- Reduce dependencies [\#167](https://github.com/JacobEvelyn/friends/issues/167)
+- Add standalone distribution [\#160](https://github.com/JacobEvelyn/friends/issues/160)
+- Integrate with cron for regular reminders [\#56](https://github.com/JacobEvelyn/friends/issues/56)
+
+**Merged pull requests:**
+
+- Improve graph command [\#174](https://github.com/JacobEvelyn/friends/pull/174) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Remove Memoist dependency and bump gem dependencies [\#170](https://github.com/JacobEvelyn/friends/pull/170) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Remove warnings when running tests [\#169](https://github.com/JacobEvelyn/friends/pull/169) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.30](https://github.com/JacobEvelyn/friends/tree/v0.30) (2017-05-30)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.29...v0.30)
 
@@ -8,6 +31,10 @@
 - Code coverage in README is too low [\#163](https://github.com/JacobEvelyn/friends/issues/163)
 - Improve display of favorites for ties [\#158](https://github.com/JacobEvelyn/friends/issues/158)
 - Filter activities based on more than one friend/tag/etc. [\#88](https://github.com/JacobEvelyn/friends/issues/88)
+
+**Closed issues:**
+
+- Reduce warnings [\#166](https://github.com/JacobEvelyn/friends/issues/166)
 
 **Merged pull requests:**
 
