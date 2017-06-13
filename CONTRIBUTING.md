@@ -12,7 +12,7 @@ that's great as well!
 2. Fork the repository (https://github.com/JacobEvelyn/friends/fork).
 3. Clone your forked repository.
 4. From within the repository directory, run:
-`bundle install && overcommit --install`
+`bundle install`
 5. Create your feature branch
 (`git checkout -b my-new-feature`).
 6. Make your changes. Add or modify tests if necessary!
@@ -20,32 +20,13 @@ that's great as well!
 existing style and commenting patterns. You can run the local version of the
 `friends` script with `bundle exec bin/friends`.
 7. Update the `README.md` as necessary to include your changes.
+8. Check your changes for code style by running `bundle exec rubocop .` in
+the repository directory. You may see output indicating that some lines
+differ from the style guidelines. Change your code so that Rubocop gives
+no warnings or errors (and don't hesitate to reach out if you don't know how!—this practice is meant to keep the code clean but it shouldn't be 
+scary and it's totally fine to need help!).
 8. Commit your changes
-(`git commit -am "Add some feature"`). You should see
-output from
-[`overcommit`](https://github.com/brigade/overcommit) as
-it runs commit hooks that looks something like this:
-
-  ```
-  Running pre-commit hooks
-  Analyzing with RuboCop......................................[RuboCop] OK
-
-  ✓ All pre-commit hooks passed
-
-  Running commit-msg hooks
-  Checking subject capitalization..................[CapitalizedSubject] OK
-  Checking subject line.............................[SingleLineSubject] OK
-  Checking text width.......................................[TextWidth] OK
-  Checking for trailing periods in subject.............[TrailingPeriod] OK
-
-  ✓ All commit-msg hooks passed
-  ```
-
-  If any of the commit hook checks fail, fix them if you
-  can but don't hesitate to reach out if you don't know
-  how! This practice is meant to keep the code clean but
-  it shouldn't be scary and it's totally fine to need
-  help!
+(`git commit -am "Add some feature"`).
 9. Push your changes to GitHub, and open a Pull Request.
 10. Your code will be reviewed and merged as quickly as
 possible!
