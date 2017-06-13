@@ -11,8 +11,8 @@ it's yours! If you already have something to work on,
 that's great as well!
 2. Fork the repository (https://github.com/JacobEvelyn/friends/fork).
 3. Clone your forked repository.
-4. From within the repository directory, run:
-`bundle install`
+4. From within the repository directory, run
+`bundle install` to install all dependencies needed for development.
 5. Create your feature branch
 (`git checkout -b my-new-feature`).
 6. Make your changes. Add or modify tests if necessary!
