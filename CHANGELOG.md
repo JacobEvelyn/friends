@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.32](https://github.com/JacobEvelyn/friends/tree/v0.32) (2017-07-25)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.31...v0.32)
+
+**Fixed bugs:**
+
+- Incorrect version of `gli` specified in gemspec [\#178](https://github.com/JacobEvelyn/friends/issues/178)
+
+**Merged pull requests:**
+
+- Fix gli dependency [\#179](https://github.com/JacobEvelyn/friends/pull/179) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.31](https://github.com/JacobEvelyn/friends/tree/v0.31) (2017-06-02)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.30...v0.31)
 
