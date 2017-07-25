@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.1"
 
   spec.add_dependency "chronic", "~> 0.10"
-  spec.add_dependency "gli", "~> 2.12"
+  spec.add_dependency "gli", "~> 2.14"
   spec.add_dependency "paint", "~> 2.0"
   spec.add_dependency "semverse", "~> 2.0"
 
