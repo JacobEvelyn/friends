@@ -29,11 +29,30 @@ def date_parsing_specs(test_stdout: true)
       it { stdout_only "Activity added: \"2017-03-02: #{description}\"" } if test_stdout
     end
 
-    describe "when date is natural language" do
+    describe "when date is natural language and in full" do
       let(:date) { "February 23rd, 2017" }
 
       it { line_added "- 2017-02-23: #{description}" }
       it { stdout_only "Activity added: \"2017-02-23: #{description}\"" } if test_stdout
+    end
+
+    describe "when date is natural language and only month and day" do
+      mocked_time = Time.new(2017, 8, 1) # First of August
+      let(:date) { "February 23" }
+
+      Time.stub :now, mocked_time do
+        # Infers it means the last february not the next
+        it { line_added "- 2017-02-23: #{description}" }
+        it { stdout_only "Activity added: \"2017-02-23: #{description}\"" } if test_stdout
+      end
+
+      let(:date) { "23 February" }
+
+      Time.stub :now, mocked_time do
+        # Infers it means the last february not the next
+        it { line_added "- 2017-02-23: #{description}" }
+        it { stdout_only "Activity added: \"2017-02-23: #{description}\"" } if test_stdout
+      end
     end
   end
 end
