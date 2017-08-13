@@ -34,9 +34,15 @@ module Friends
       # Partition lets us parse "Today" and "Today: I awoke." identically.
       date_s, _, description = str.partition(DATE_PARTITION)
 
-      # rubocop:disable Lint/AssignmentInCondition
-      if time = (date_s =~ /^\d{4}-\d{2}-\d{2}$/ ? Time : Chronic).parse(date_s)
-        # rubocop:enable Lint/AssignmentInCondition
+      time = if date_s =~ /^\d{4}-\d{2}-\d{2}$/
+               Time.parse(date_s)
+             else
+               # If the user inputed a non YYYY-MM-DD format, asssume
+               # it is in the past
+               Chronic.parse(date_s, { context: :past })
+             end
+
+      if time
         @date = time.to_date
         @description = description
       else
