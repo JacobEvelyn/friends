@@ -29,11 +29,24 @@ def date_parsing_specs(test_stdout: true)
       it { stdout_only "Activity added: \"2017-03-02: #{description}\"" } if test_stdout
     end
 
-    describe "when date is natural language" do
+    describe "when date is natural language and in full" do
       let(:date) { "February 23rd, 2017" }
 
       it { line_added "- 2017-02-23: #{description}" }
       it { stdout_only "Activity added: \"2017-02-23: #{description}\"" } if test_stdout
+    end
+
+    describe "when date is natural language and only month and day" do
+      # We use two days rather than just one to avoid strange behavior around
+      # edge cases when the test is being run right around midnight.
+      let(:two_days_in_seconds) { 2 * 24 * 60 * 60 }
+      let(:raw_date) { Time.now + two_days_in_seconds }
+      let(:date) { raw_date.strftime("%B %d") }
+      let(:expected_year) { raw_date.strftime("%Y").to_i - 1 }
+      let(:expected_date_str) { "#{expected_year}-#{raw_date.strftime('%m-%d')}" }
+
+      it { line_added "- #{expected_date_str}: #{description}" }
+      it { stdout_only "Activity added: \"#{expected_date_str}: #{description}\"" } if test_stdout
     end
   end
 end
