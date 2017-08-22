@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.33](https://github.com/JacobEvelyn/friends/tree/v0.33) (2017-08-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.32...v0.33)
+
+**Merged pull requests:**
+
+- Prevent dates without years from being in the future [\#181](https://github.com/JacobEvelyn/friends/pull/181) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.32](https://github.com/JacobEvelyn/friends/tree/v0.32) (2017-07-25)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.31...v0.32)
 
