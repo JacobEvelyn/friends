@@ -34,9 +34,28 @@ module Friends
       # Partition lets us parse "Today" and "Today: I awoke." identically.
       date_s, _, description = str.partition(DATE_PARTITION)
 
-      # rubocop:disable Lint/AssignmentInCondition
-      if time = (date_s =~ /^\d{4}-\d{2}-\d{2}$/ ? Time : Chronic).parse(date_s)
-        # rubocop:enable Lint/AssignmentInCondition
+      time = if date_s =~ /^\d{4}-\d{2}-\d{2}$/
+               Time.parse(date_s)
+             else
+               # If the user inputed a non YYYY-MM-DD format, asssume
+               # it is in the past.
+               past_time = Chronic.parse(date_s, context: :past)
+
+               # If there's no year, Chronic will sometimes parse the date
+               # as being the next occurrence of that date in the future.
+               # Instead, we want to subtract one year to make it the last
+               # occurrence of the date in the past.
+               # NOTE: This is a hacky workaround for the fact that
+               # Chronic's `context: :past` doesn't actually work. We should
+               # remove this when that behavior is fixed.
+               if past_time && past_time > Time.now
+                 Time.local(past_time.year - 1, past_time.month, past_time.day)
+               else
+                 past_time
+               end
+             end
+
+      if time
         @date = time.to_date
         @description = description
       else
