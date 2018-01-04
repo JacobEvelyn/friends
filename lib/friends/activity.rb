@@ -12,8 +12,8 @@ module Friends
   class Activity
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- "
-    DATE_PARTITION = ": "
+    SERIALIZATION_PREFIX = "- ".freeze
+    DATE_PARTITION = ": ".freeze
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex

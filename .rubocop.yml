@@ -1,277 +1,50 @@
-AbcSize:
-  Enabled: false
-
-AccessorMethodName:
-  Enabled: false
-
-Alias:
-  Enabled: false
-
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.1
 
-AmbiguousOperator:
-  Enabled: false
-
-AmbiguousRegexpLiteral:
-  Enabled: false
-
-ArrayJoin:
-  Enabled: false
-
-AsciiComments:
-  Enabled: false
-
-AsciiIdentifiers:
-  Enabled: false
-
-AssignmentInCondition:
-  Enabled: true
-
-Attr:
-  Enabled: false
-
-BlockNesting:
-  Enabled: false
-
-BracesAroundHashParameters:
-  Enabled: false
-
-CaseEquality:
-  Enabled: false
-
-CharacterLiteral:
-  Enabled: false
-
-ClassLength:
-  Enabled: false
-
-ClassVars:
-  Enabled: false
-
-CollectionMethods:
-  PreferredMethods:
-    find: detect
-    reduce: inject
-    collect: map
-    find_all: select
-
-ColonMethodCall:
-  Enabled: false
-
-CommentAnnotation:
-  Enabled: false
-
-ConditionPosition:
-  Enabled: false
-
-CyclomaticComplexity:
-  Enabled: false
-
-Delegate:
-  Enabled: false
-
-DeprecatedClassMethods:
-  Enabled: false
-
-Documentation:
-  Enabled: false
-
-DotPosition:
+Layout/DotPosition:
   EnforcedStyle: trailing
-
-DoubleNegation:
-  Enabled: false
-
-ElseLayout:
-  Enabled: false
-
-EmptyLiteral:
-  Enabled: false
-
-Encoding:
-  Enabled: false
-
-EvenOdd:
-  Enabled: false
-
-FileName:
-  Enabled: false
-
-FlipFlop:
-  Enabled: false
-
-FormatString:
-  Enabled: false
-
-GlobalVars:
-  Enabled: false
-
-HandleExceptions:
-  Enabled: false
-
-IfUnlessModifier:
-  Enabled: false
-
-IfWithSemicolon:
-  Enabled: false
-
-Lambda:
-  Enabled: false
-
-LambdaCall:
-  Enabled: false
 
 Layout/IndentHeredoc:
   Enabled: false
 
-LineEndConcatenation:
-  Enabled: false
-
-LineLength:
-  Max: 100
-
-LiteralInCondition:
-  Enabled: false
-
-LiteralInInterpolation:
-  Enabled: false
-
-Loop:
-  Enabled: false
-
-MethodLength:
+Metrics/AbcSize:
   Enabled: false
 
 Metrics/BlockLength:
   Enabled: false
 
-ModuleFunction:
+Metrics/ClassLength:
   Enabled: false
 
-MutableConstant:
-  Enabled: true
-
-NegatedIf:
+Metrics/CyclomaticComplexity:
   Enabled: false
 
-NegatedWhile:
+Metrics/LineLength:
+  Max: 100
+
+Metrics/MethodLength:
   Enabled: false
 
-Next:
+Metrics/ParameterLists:
   Enabled: false
 
-NilComparison:
+Metrics/PerceivedComplexity:
   Enabled: false
 
-Not:
+Naming/AccessorMethodName:
   Enabled: false
 
-NumericLiterals:
+Style/Documentation:
   Enabled: false
-
-OneLineConditional:
-  Enabled: false
-
-OpMethod:
-  Enabled: false
-
-ParameterLists:
-  Enabled: false
-
-ParenthesesAsGroupedExpression:
-  Enabled: false
-
-PerceivedComplexity:
-  Enabled: false
-
-PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%': '{}'
-
-PerlBackrefs:
-  Enabled: false
-
-PredicateName:
-  NamePrefixBlacklist:
-    - is_
-
-Proc:
-  Enabled: false
-
-Rails:
-  Enabled: false
-
-RaiseArgs:
-  Enabled: false
-
-RedundantReturn:
-  AllowMultipleReturnValues: true
-
-RegexpLiteral:
-  Enabled: false
-
-RequireParentheses:
-  Enabled: false
-
-SelfAssignment:
-  Enabled: false
-
-SignalException:
-  EnforcedStyle: only_raise
-
-SingleLineBlockParams:
-  Enabled: false
-
-SingleLineMethods:
-  Enabled: false
-
-SpecialGlobalVars:
-  Enabled: false
-
-StringLiterals:
-  EnforcedStyle: double_quotes
 
 Style/MultilineBlockChain:
   Enabled: false
 
+Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
 Style/SymbolArray:
   EnforcedStyle: brackets
-
-VariableInterpolation:
-  Enabled: false
-
-TrailingCommaInArguments:
-  Enabled: true
-
-TrailingCommaInLiteral:
-  Enabled: true
-
-TrivialAccessors:
-  Enabled: false
-
-UnderscorePrefixedVariableName:
-  Enabled: false
-
-VariableInterpolation:
-  Enabled: false
-
-Void:
-  Enabled: false
-
-WhenThen:
-  Enabled: false
-
-WhileUntilModifier:
-  Enabled: false
-
-WordArray:
-  Enabled: false
-
-GuardClause:
-  Enabled: false
-
-# Renaming `has_something?` to `something?` obfuscates whether it is a "is-a" or
-# # a "has-a" relationship.
-PredicateName:
-  Enabled: false

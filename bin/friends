@@ -16,7 +16,7 @@ require "semverse"
 require "friends/introvert"
 require "friends/version"
 
-include GLI::App
+include GLI::App # rubocop:disable Style/MixinUsage
 
 program_desc "Spend time with the people you care about. Introvert-tested. "\
   "Extrovert-approved."
@@ -104,11 +104,9 @@ end
 
 # If an error is raised, print the message to STDERR and exit the program.
 on_error do |error|
-  if @debug_mode
-    raise error
-  else
-    abort "Error: #{error}"
-  end
+  raise error if @debug_mode
+
+  abort "Error: #{error}"
 end
 
 # Run the program and return the exit code corresponding to its success.

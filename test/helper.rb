@@ -24,7 +24,7 @@ require "securerandom"
 
 require "friends"
 
-CONTENT = <<-FILE
+CONTENT = <<-FILE.freeze
 ### Activities:
 - 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
@@ -43,7 +43,7 @@ CONTENT = <<-FILE
 FILE
 
 # This is CONTENT but with activities, friends, and locations unsorted.
-SCRAMBLED_CONTENT = <<-FILE
+SCRAMBLED_CONTENT = <<-FILE.freeze
 ### Activities:
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food

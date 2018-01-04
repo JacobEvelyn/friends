@@ -4,16 +4,17 @@
 
 module Friends
   class Graph
-    DATE_FORMAT = "%b %Y"
+    DATE_FORMAT = "%b %Y".freeze # rubocop:disable Style/FormatStringToken
 
     # @param activities [Array<Friends::Activity>] a list of activities to graph
     def initialize(filtered_activities:, all_activities:)
       @filtered_activities = filtered_activities
       @all_activities = all_activities
-      unless @all_activities.empty?
-        @start_date = @all_activities.last.date
-        @end_date = @all_activities.first.date
-      end
+
+      return if @all_activities.empty?
+
+      @start_date = @all_activities.last.date
+      @end_date = @all_activities.first.date
     end
 
     # Prints the graph to STDOUT, with colors.

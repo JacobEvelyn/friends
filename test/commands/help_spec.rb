@@ -37,7 +37,7 @@ clean_describe "help" do
   describe "with an invalid subcommand passed" do
     subject { run_cmd("help garbage") }
 
-    # FIXME uncomment!!!
+    # FIXME: uncomment!!!
     # Waiting for: https://github.com/davetron5000/gli/issues/255
     # it "prints an error message" do
     #   stderr_only "error: Unknown command 'garbage'.  Use 'friends help' for a list of commands."

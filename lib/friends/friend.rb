@@ -10,8 +10,8 @@ module Friends
   class Friend
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- "
-    NICKNAME_PREFIX = "a.k.a. "
+    SERIALIZATION_PREFIX = "- ".freeze
+    NICKNAME_PREFIX = "a.k.a. ".freeze
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
@@ -60,9 +60,7 @@ module Friends
                        end.join(" ") + ")"
       end
 
-      unless @location_name.nil?
-        location_str = " [#{Paint[@location_name, :bold, :yellow]}]"
-      end
+      location_str = " [#{Paint[@location_name, :bold, :yellow]}]" unless @location_name.nil?
 
       tag_str = " #{Paint[@tags.join(' '), :bold, :cyan]}" unless @tags.empty?
 
@@ -78,9 +76,7 @@ module Friends
 
     # @param tag [String] the tag to remove, of the format: "@tag"
     def remove_tag(tag)
-      unless @tags.include? tag
-        raise FriendsError, "Tag \"#{tag}\" not found for \"#{name}\""
-      end
+      raise FriendsError, "Tag \"#{tag}\" not found for \"#{name}\"" unless @tags.include? tag
 
       @tags.delete(tag)
     end

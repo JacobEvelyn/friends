@@ -14,10 +14,10 @@ require "friends/friends_error"
 
 module Friends
   class Introvert
-    DEFAULT_FILENAME = "./friends.md"
-    ACTIVITIES_HEADER = "### Activities:"
-    FRIENDS_HEADER = "### Friends:"
-    LOCATIONS_HEADER = "### Locations:"
+    DEFAULT_FILENAME = "./friends.md".freeze
+    ACTIVITIES_HEADER = "### Activities:".freeze
+    FRIENDS_HEADER = "### Friends:".freeze
+    LOCATIONS_HEADER = "### Locations:".freeze
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename: DEFAULT_FILENAME)
@@ -652,7 +652,7 @@ module Friends
 
       begin
         instance_variable_get("@#{stage.id}") << stage.klass.deserialize(line)
-      rescue => e
+      rescue => e # rubocop:disable Style/RescueStandardError
         bad_line(e, line_num)
       end
 

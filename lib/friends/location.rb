@@ -9,7 +9,7 @@ module Friends
   class Location
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- "
+    SERIALIZATION_PREFIX = "- ".freeze
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
