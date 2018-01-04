@@ -1,5 +1,19 @@
-[![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends) [![Dependency Status](https://gemnasium.com/badges/github.com/JacobEvelyn/friends.svg)](https://gemnasium.com/github.com/JacobEvelyn/friends)
- [![Coverage Status](https://coveralls.io/repos/github/JacobEvelyn/friends/badge.svg)](https://coveralls.io/github/JacobEvelyn/friends) [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends) [![Readme Score](http://readme-score-api.herokuapp.com/score.svg?url=JacobEvelyn/friends&bust=1)](http://clayallsopp.github.io/readme-score?url=JacobEvelyn/friends) [![Inline docs](http://inch-ci.org/github/JacobEvelyn/friends.png)](http://inch-ci.org/github/JacobEvelyn/friends) [![Gem](https://img.shields.io/gem/dt/friends.svg)](https://rubygems.org/gems/friends)
+[![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
+[![Dependency Status](https://gemnasium.com/badges/github.com/JacobEvelyn/friends.svg)](https://gemnasium.com/github.com/JacobEvelyn/friends)
+[![Coverage Status](https://coveralls.io/repos/github/JacobEvelyn/friends/badge.svg)](https://coveralls.io/github/JacobEvelyn/friends)
+[![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends)
+[![Readme Score](http://readme-score-api.herokuapp.com/score.svg?url=JacobEvelyn/friends&bust=1)](http://clayallsopp.github.io/readme-score?url=JacobEvelyn/friends)
+[![Inline docs](http://inch-ci.org/github/JacobEvelyn/friends.png)](http://inch-ci.org/github/JacobEvelyn/friends)
+[![Gem](https://img.shields.io/gem/dt/friends.svg)](https://rubygems.org/gems/friends)
+
+`friends` is a volunteer project. If you find it useful, please consider
+making a small donation to show me you appreciate its continued development.
+
+[![Donate via OpenCollective](https://opencollective.com/friends/contributors/badge.svg)](https://opencollective.com/friends)
+[![Donate via Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/jacobevelyn/donate)
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jacobevelyn%40gmail%2ecom&lc=US&item_name=Development%20of%20JacobEvelyn%2ffriends%20%28GitHub%20repository%29&no_note=0¤cy_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest)
+[![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=jacobevelyn&url=https://github.com/JacobEvelyn/friends&title=friends&tags=github&category=software)
+[![Donate bitcoin](https://img.shields.io/badge/donate-bitcoin-green.svg)](bitcoin:1CFu6gWpmS89EnitPPdYssZhFMRWx5qhW4?amount=0.00066812&message=Donation%20for%20friends%20development)
 
 # `friends`
 
@@ -12,47 +26,47 @@ lots of help), and give feedback!**
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Core concepts](#core-concepts)
-  - [Global flags](#global-flags)
-  - [Syncing across multiple machines](#syncing-across-multiple-machines)
-  - [Setting reminders](#setting-reminders)
-  - [Command reference](#command-reference)
-    - `add`
-      - [`add activity`](#add-activity)
-      - [`add friend`](#add-friend)
-      - [`add tag`](#add-tag)
-      - [`add location`](#add-location)
-      - [`add nickname`](#add-nickname)
-    - [`clean`](#clean)
-    - [`graph`](#graph)
-    - [`help`](#help)
-    - `list`
-      - [`list activities`](#list-activities)
-      - `list favorite`
-        - [`list favorite friends`](#list-favorite-friends)
-        - [`list favorite locations`](#list-favorite-locations)
-      - [`list friends`](#list-friends)
-      - [`list tags`](#list-tags)
-      - [`list locations`](#list-locations)
-    - `remove`
-      - [`remove tag`](#remove-tag)
-      - [`remove nickname`](#remove-nickname)
-    - `rename`
-      - [`rename friend`](#rename-friend)
-      - [`rename location`](#rename-location)
-    - [`set location`](#set-location)
-    - [`stats`](#stats)
-    - [`suggest`](#suggest)
-    - [`update`](#update)
-- [Other documentation](#other-documentation)
-- [Contributing (it's encouraged!)](#contributing-its-encouraged)
-- [Code of Conduct](#code-of-conduct)
-- [License](#license)
+* [Overview](#overview)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Core concepts](#core-concepts)
+  * [Global flags](#global-flags)
+  * [Syncing across multiple machines](#syncing-across-multiple-machines)
+  * [Setting reminders](#setting-reminders)
+  * [Command reference](#command-reference)
+    * `add`
+      * [`add activity`](#add-activity)
+      * [`add friend`](#add-friend)
+      * [`add tag`](#add-tag)
+      * [`add location`](#add-location)
+      * [`add nickname`](#add-nickname)
+    * [`clean`](#clean)
+    * [`graph`](#graph)
+    * [`help`](#help)
+    * `list`
+      * [`list activities`](#list-activities)
+      * `list favorite`
+        * [`list favorite friends`](#list-favorite-friends)
+        * [`list favorite locations`](#list-favorite-locations)
+      * [`list friends`](#list-friends)
+      * [`list tags`](#list-tags)
+      * [`list locations`](#list-locations)
+    * `remove`
+      * [`remove tag`](#remove-tag)
+      * [`remove nickname`](#remove-nickname)
+    * `rename`
+      * [`rename friend`](#rename-friend)
+      * [`rename location`](#rename-location)
+    * [`set location`](#set-location)
+    * [`stats`](#stats)
+    * [`suggest`](#suggest)
+    * [`update`](#update)
+* [Other documentation](#other-documentation)
+* [Contributing (it's encouraged!)](#contributing-its-encouraged)
+* [Code of Conduct](#code-of-conduct)
+* [License](#license)
 
-----
+---
 
 ## Overview
 
@@ -60,21 +74,22 @@ lots of help), and give feedback!**
 people you care about.
 
 `friends` gives you:
-- More organization around staying in touch with friends and
+
+* More organization around staying in touch with friends and
   family.
-- A way to track the ebbs and flows of your relationships over
+* A way to track the ebbs and flows of your relationships over
   time.
-- Suggestions for who to call or hang out with when you have free
+* Suggestions for who to call or hang out with when you have free
   time, whether it's fifteen minutes or an entire weekend.
-- A low-cost way to record and remember big moments in your life.
+* A low-cost way to record and remember big moments in your life.
 
 Its philosophy emphasizes:
 
-- **Simplicity**—it should be quick and easy to use.
-- **Transparency**—all data is stored in a human-readable Markdown file. No
+* **Simplicity**—it should be quick and easy to use.
+* **Transparency**—all data is stored in a human-readable Markdown file. No
   proprietary formats here! And in addition to being open-source, `friends` is
   very much open to new ideas. Contribute!
-- **Intelligence**—specify dates with English phrases like "yesterday." Specify
+* **Intelligence**—specify dates with English phrases like "yesterday." Specify
   friends with their first names, even when you're friends with many *Joanne*s. `friends` will figure it out.
 
 ## Installation
@@ -91,44 +106,47 @@ Easy, huh?
 
 `friends` is structured around several different types of things:
 
-- **Activities**: The things you do. Each activity has a date associated with
-  it. Activities may optionally contain any number of *friends*, *locations*,
-  and *tags*.
-- **Friends**: The people you do *activities* with. Each friend has a name and,
+* **Activities**: The things you do. Each activity has a date associated with
+  it. Activities may optionally contain any number of _friends_, _locations_,
+  and _tags_.
+* **Friends**: The people you do _activities_ with. Each friend has a name and,
   optionally, one or several nicknames. (Examples: `John`, `Grace Hopper`)
-- **Locations**: The places in which *activities* happen. (Examples: `Paris`,
+* **Locations**: The places in which _activities_ happen. (Examples: `Paris`,
   `Marie's Diner`)
-- **Tags**: A way to categorize your *activities* with tags of your
+* **Tags**: A way to categorize your _activities_ with tags of your
   choosing. (Examples: `@exercise`, `@school`)
 
 The `friends.md` Markdown file that stores all of your data contains:
 
-- an alphabetical list of all locations:
+* an alphabetical list of all locations:
 
 ```markdown
 ### Locations:
-- Atlantis
-- Marie's Diner
-- Paris
+
+* Atlantis
+* Marie's Diner
+* Paris
 ```
 
-- an alphabetical list of all friends and their nicknames and locations:
+* an alphabetical list of all friends and their nicknames and locations:
 
 ```markdown
 ### Friends:
-- George Washington Carver
-- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
-- Marie Curie [Atlantis]
+
+* George Washington Carver
+* Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
+* Marie Curie [Atlantis]
 ```
 
-- and an ordered list of all activities:
+* and an ordered list of all activities:
 
 ```markdown
 ### Activities:
-- 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
-- 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
-- 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
-- 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
+
+* 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+* 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
+* 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
+* 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
 ```
 
 See the example
@@ -142,16 +160,16 @@ specified before the name of the command, like: `friends [flags] [command]`.
 
 These flags are:
 
-- `--colorless`: Disable output colorization and other effects.
-- `--debug`: Debug error messages with a full backtrace.
-- `--filename`: Set the location of the friends file to use (default: ./friends.md).
+* `--colorless`: Disable output colorization and other effects.
+* `--debug`: Debug error messages with a full backtrace.
+* `--filename`: Set the location of the friends file to use (default: ./friends.md).
 
 ```bash
 $ friends --filename ./test/tmp/friends.md clean
 File cleaned: "./test/tmp/friends.md"
 ```
 
-- `--quiet`: Quiet output messages.
+* `--quiet`: Quiet output messages.
 
 ```bash
 $ friends --quiet add activity Went rollerskating with George.
@@ -160,8 +178,8 @@ $ # No output!
 
 In addition, these flags may be used without any command:
 
-- `--help`: Show the help menu. This is equivalent to `friends help`.
-Help menus are available for all levels of commands:
+* `--help`: Show the help menu. This is equivalent to `friends help`.
+  Help menus are available for all levels of commands:
 
 ```bash
 $ friends --help
@@ -175,7 +193,7 @@ $ friends list --help
 $ friends list activities --help
 ```
 
-- `--version`: Show the `friends` program version.
+* `--version`: Show the `friends` program version.
 
 ### Syncing across multiple machines
 
@@ -212,9 +230,9 @@ hang out with every Saturday morning:
 
 (If you use other tools, please share and we'll add to these examples!)
 
-### Command reference*
+### Command reference\*
 
-*Note that the command-line output is colored, which this README cannot show.
+\*Note that the command-line output is colored, which this README cannot show.
 
 #### `add activity`
 
@@ -223,7 +241,7 @@ $ friends add activity Got lunch with Grace and George.
 Activity added: "2018-01-04: Got lunch with Grace Hopper and George Washington Carver."
 ```
 
-`friends` will **automatically** figure out which "Grace" and "George" you're referring to, *even if you're friends with lots of different Graces and Georges*.
+`friends` will **automatically** figure out which "Grace" and "George" you're referring to, _even if you're friends with lots of different Graces and Georges_.
 
 Nicknames will be used to match friends in activities,
 just like formal names:
@@ -746,7 +764,7 @@ Updated to friends 0.17
 
 ## Other documentation
 
-In case you're *really* interested, we have documentation on
+In case you're _really_ interested, we have documentation on
 [RubyDoc](http://www.rubydoc.info/github/JacobEvelyn/friends).
 
 ## Contributing (it's encouraged!)
@@ -759,6 +777,9 @@ quickly. And if you'd like to do the implementing yourself, see the
 
 A big big thanks to all of this project's lovely
 [contributors](https://github.com/JacobEvelyn/friends/graphs/contributors)!
+
+Another way to contribute is to make a donation (see the buttons at the top
+of this `README`!
 
 ## Code of Conduct
 
