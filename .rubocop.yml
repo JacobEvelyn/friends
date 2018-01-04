@@ -116,9 +116,6 @@ IfUnlessModifier:
 IfWithSemicolon:
   Enabled: false
 
-InvalidCharacterLiteral:
-  Enabled: false
-
 Lambda:
   Enabled: false
 
