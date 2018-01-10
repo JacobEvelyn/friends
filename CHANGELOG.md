@@ -1,9 +1,20 @@
 # Change Log
 
+## [v0.34](https://github.com/JacobEvelyn/friends/tree/v0.34) (2018-01-10)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.33...v0.34)
+
+**Implemented enhancements:**
+
+- Newer activities should always appear above older activities on the same date [\#184](https://github.com/JacobEvelyn/friends/issues/184)
+
+**Merged pull requests:**
+
+- Always sort activities stably within a date [\#185](https://github.com/JacobEvelyn/friends/pull/185) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.33](https://github.com/JacobEvelyn/friends/tree/v0.33) (2017-08-22)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.32...v0.33)
 
-**Merged pull requests:**
+**Implemented enhancements:**
 
 - Prevent dates without years from being in the future [\#181](https://github.com/JacobEvelyn/friends/pull/181) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
