@@ -25,6 +25,8 @@ clean_describe "clean" do
       file_equals <<-FILE
 ### Activities:
 
+### Notes:
+
 ### Friends:
 
 ### Locations:
@@ -33,10 +35,30 @@ clean_describe "clean" do
   end
 
   describe "when file has content" do
-    let(:content) { SCRAMBLED_CONTENT }
+    describe "when content is formatted correctly" do
+      let(:content) { SCRAMBLED_CONTENT }
 
-    it "writes the file with contents sorted" do
-      file_equals CONTENT
+      it "writes the file with contents sorted" do
+        file_equals CONTENT
+      end
+    end
+
+    describe "when a header is malformed" do
+      let(:content) do
+        <<-FILE
+### Activities:
+
+### Garbage:
+
+### Friends:
+
+### Locations:
+        FILE
+      end
+
+      it "prints an error message" do
+        stderr_only 'Error: Expected "a valid header" on line 3'
+      end
     end
   end
 end
