@@ -328,7 +328,9 @@ clean_describe "add activity" do
     let(:content) do
       <<-FILE
 ### Activities:
+- 2018-01-01: Activity one year later.
 - 2017-01-01: Activity 1.
+- 2016-01-01: Activity one year earlier.
 
 ### Friends:
 
@@ -337,19 +339,22 @@ FILE
     end
 
     subject do
-      run_cmd("add activity 2017-01-01: Activity 2.")
-      run_cmd("add activity 2017-01-01: Activity 3.")
-      run_cmd("add activity 2017-01-01: Activity 4.")
+      4.times do |i|
+        run_cmd("add activity 2017-01-01: Activity #{i + 2}.")
+      end
     end
 
     it "orders dates by insertion time" do
       subject
       File.read(filename).must_equal <<-FILE
 ### Activities:
+- 2018-01-01: Activity one year later.
+- 2017-01-01: Activity 5.
 - 2017-01-01: Activity 4.
 - 2017-01-01: Activity 3.
 - 2017-01-01: Activity 2.
 - 2017-01-01: Activity 1.
+- 2016-01-01: Activity one year earlier.
 
 ### Friends:
 

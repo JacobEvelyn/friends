@@ -32,7 +32,7 @@ module Friends
     def clean
       File.open(@filename, "w") do |file|
         file.puts(ACTIVITIES_HEADER)
-        @activities.sort.each { |act| file.puts(act.serialize) }
+        stable_sort(@activities).each { |act| file.puts(act.serialize) }
         file.puts # Blank line separating activities from friends.
         file.puts(FRIENDS_HEADER)
         @friends.sort.each { |friend| file.puts(friend.serialize) }
@@ -470,6 +470,12 @@ module Friends
     end
 
     private
+
+    # @param arr [Array] an unsorted array
+    # @return [Array] a stably-sorted array
+    def stable_sort(arr)
+      arr.sort_by.with_index { |x, idx| [x, idx] }
+    end
 
     # Filter activities by friend, location and tag
     # @param with [Array<String>] the names of friends to filter by, or empty for
