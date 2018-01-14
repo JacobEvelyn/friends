@@ -7,6 +7,7 @@
 require "set"
 
 require "friends/activity"
+require "friends/note"
 require "friends/friend"
 require "friends/graph"
 require "friends/location"
@@ -16,6 +17,7 @@ module Friends
   class Introvert
     DEFAULT_FILENAME = "./friends.md".freeze
     ACTIVITIES_HEADER = "### Activities:".freeze
+    NOTES_HEADER = "### Notes:".freeze
     FRIENDS_HEADER = "### Friends:".freeze
     LOCATIONS_HEADER = "### Locations:".freeze
 
@@ -33,7 +35,10 @@ module Friends
       File.open(@filename, "w") do |file|
         file.puts(ACTIVITIES_HEADER)
         stable_sort(@activities).each { |act| file.puts(act.serialize) }
-        file.puts # Blank line separating activities from friends.
+        file.puts # Blank line separating activities from notes.
+        file.puts(NOTES_HEADER)
+        stable_sort(@notes).each { |note| file.puts(note.serialize) }
+        file.puts # Blank line separating notes from friends.
         file.puts(FRIENDS_HEADER)
         @friends.sort.each { |friend| file.puts(friend.serialize) }
         file.puts # Blank line separating friends from locations.
@@ -64,12 +69,20 @@ module Friends
     # @param serialization [String] the serialized activity
     # @return [Activity] the added activity
     def add_activity(serialization:)
-      activity = Activity.deserialize(serialization)
+      Activity.deserialize(serialization).tap do |activity|
+        activity.highlight_description(introvert: self) if activity.description
+        @activities.unshift(activity)
+      end
+    end
 
-      activity.highlight_description(introvert: self) if activity.description
-      @activities.unshift(activity)
-
-      activity # Return the added activity.
+    # Add a note.
+    # @param serialization [String] the serialized note
+    # @return [Note] the added note
+    def add_note(serialization:)
+      Note.deserialize(serialization).tap do |note|
+        note.highlight_description(introvert: self) if note.description
+        @notes.unshift(note)
+      end
     end
 
     # Add a location.
@@ -226,36 +239,16 @@ module Friends
       list_favorite_things(:location, limit: limit)
     end
 
-    # List all activity details.
-    # @param limit [Integer] the number of activities to return, or nil for no
-    #   limit
-    # @param with [Array<String>] the names of friends to filter by, or empty for
-    #   unfiltered
-    # @param location_name [String] the name of a location to filter by, or
-    #   nil for unfiltered
-    # @param tagged [Array<String>] the names of tags to filter by, or empty for
-    #   unfiltered
-    # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
-    # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
-    # @return [Array] a list of all activity text values
-    # @raise [ArgumentError] if limit is present but limit < 1
-    # @raise [FriendsError] if friend, location or tag cannot be found or
-    #   is ambiguous
-    def list_activities(limit:, with:, location_name:, tagged:, since_date:, until_date:)
-      raise ArgumentError, "Limit must be positive" if limit && limit < 1
+    # See `list_events` for all of the parameters we can pass.
+    # @return [Array] a list of all activities' text values
+    def list_activities(**args)
+      list_events(events: @activities, **args)
+    end
 
-      acts = filtered_activities(
-        with: with,
-        location_name: location_name,
-        tagged: tagged,
-        since_date: since_date,
-        until_date: until_date
-      )
-
-      # If we need to, trim the list.
-      acts = acts.take(limit) unless limit.nil?
-
-      acts.map(&:to_s)
+    # See `list_events` for all of the parameters we can pass.
+    # @return [Array] a list of all notes' text values
+    def list_notes(**args)
+      list_events(events: @notes, **args)
     end
 
     # List all location names in the friends file.
@@ -264,20 +257,26 @@ module Friends
       @locations.map(&:name)
     end
 
-    # @param from [String] one of: ["activities", "friends", nil]
-    #   If not nil, limits the tags returned to only those from either
-    #   activities or friends.
+    # @param from [Array] containing any of: ["activities", "friends", "notes"]
+    #   If not empty, limits the tags returned to only those from either
+    #   activities, notes, or friends.
     # @return [Array] a sorted list of all tags in activity descriptions
     def list_tags(from:)
       output = Set.new
 
-      unless from == "friends" # If from is "activities" or nil.
+      if from.empty? || from.include?("activities")
         @activities.each_with_object(output) do |activity, set|
           set.merge(activity.tags)
         end
       end
 
-      unless from == "activities" # If from is "friends" or nil.
+      if from.empty? || from.include?("notes")
+        @notes.each_with_object(output) do |note, set|
+          set.merge(note.tags)
+        end
+      end
+
+      if from.empty? || from.include?("friends")
         @friends.each_with_object(output) do |friend, set|
           set.merge(friend.tags)
         end
@@ -310,7 +309,8 @@ module Friends
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def graph(with:, location_name:, tagged:, since_date:, until_date:)
-      filtered_activities_to_graph = filtered_activities(
+      filtered_activities_to_graph = filtered_events(
+        events: @activities,
         with: with,
         location_name: location_name,
         tagged: tagged,
@@ -324,7 +324,8 @@ module Friends
       # activities might not include others in the full range (for instance,
       # if only one filtered activity matches a query, we don't want to only
       # show unfiltered activities that occurred on that specific day).
-      all_activities_to_graph = filtered_activities(
+      all_activities_to_graph = filtered_events(
+        events: @activities,
         with: [],
         location_name: nil,
         tagged: [],
@@ -461,15 +462,65 @@ module Friends
       @activities.size
     end
 
+    # @return [Integer] the total number of locations
+    def total_locations
+      @locations.size
+    end
+
+    # @return [Integer] the total number of notes
+    def total_notes
+      @notes.size
+    end
+
+    # @return [Integer] the total number of tags
+    def total_tags
+      list_tags(from: []).size
+    end
+
     # @return [Integer] the number of days elapsed between
     #   the first and last activity
     def elapsed_days
-      return 0 if @activities.size < 2
-      sorted_activities = @activities.sort
-      (sorted_activities.first.date - sorted_activities.last.date).to_i
+      events = @activities + @notes
+      return 0 if events.size < 2
+      sorted_events = events.sort
+      (sorted_events.first.date - sorted_events.last.date).to_i
     end
 
     private
+
+    # List all event details.
+    # @param events [Array<Event>] the base events to list, either @activities or @notes
+    # @param limit [Integer] the number of events to return, or nil for no
+    #   limit
+    # @param with [Array<String>] the names of friends to filter by, or empty for
+    #   unfiltered
+    # @param location_name [String] the name of a location to filter by, or
+    #   nil for unfiltered
+    # @param tagged [Array<String>] the names of tags to filter by, or empty for
+    #   unfiltered
+    # @param since_date [Date] a date on or after which to find events, or nil for unfiltered
+    # @param until_date [Date] a date before or on which to find events, or nil for unfiltered
+    # @return [Array] a list of all event (activity or note) text values
+    # @raise [ArgumentError] if limit is present but limit < 1
+    # @raise [FriendsError] if friend, location or tag cannot be found or
+    #   is ambiguous
+    def list_events(events:, limit:, with:, location_name:, tagged:, since_date:, until_date:)
+      raise ArgumentError, "Limit must be positive" if limit && limit < 1
+
+      events = filtered_events(
+        events: events,
+        with: with,
+        location_name: location_name,
+        tagged: tagged,
+        since_date: since_date,
+        until_date: until_date
+      )
+
+      # If we need to, trim the list.
+      events = events.take(limit) unless limit.nil?
+
+      events.map(&:to_s)
+    end
 
     # @param arr [Array] an unsorted array
     # @return [Array] a stably-sorted array
@@ -478,6 +529,7 @@ module Friends
     end
 
     # Filter activities by friend, location and tag
+    # @param events [Array<Event>] the base events to list, either @activities or @notes
     # @param with [Array<String>] the names of friends to filter by, or empty for
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or
@@ -489,35 +541,33 @@ module Friends
     # @return [Array] an array of activities
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
-    def filtered_activities(with:, location_name:, tagged:, since_date:, until_date:)
-      acts = @activities
-
+    def filtered_events(events:, with:, location_name:, tagged:, since_date:, until_date:)
       # Filter by friend name if argument is passed.
       unless with.empty?
         friends = with.map { |name| thing_with_name_in(:friend, name) }
-        acts = acts.select do |act|
-          friends.all? { |friend| act.includes_friend?(friend) }
+        events = events.select do |event|
+          friends.all? { |friend| event.includes_friend?(friend) }
         end
       end
 
       # Filter by location name if argument is passed.
       unless location_name.nil?
         location = thing_with_name_in(:location, location_name)
-        acts = acts.select { |act| act.includes_location?(location) }
+        events = events.select { |event| event.includes_location?(location) }
       end
 
       # Filter by tag if argument is passed.
       unless tagged.empty?
-        acts = acts.select do |act|
-          tagged.all? { |tag| act.includes_tag?(tag) }
+        events = events.select do |event|
+          tagged.all? { |tag| event.includes_tag?(tag) }
         end
       end
 
       # Filter by date if arguments are passed.
-      acts = acts.select { |act| act.date >= since_date } unless since_date.nil?
-      acts = acts.select { |act| act.date <= until_date } unless until_date.nil?
+      events = events.select { |event| event.date >= since_date } unless since_date.nil?
+      events = events.select { |event| event.date <= until_date } unless until_date.nil?
 
-      acts
+      events
     end
 
     # @param type [Symbol] one of: [:friend, :location]
@@ -612,6 +662,7 @@ module Friends
     def read_file
       @friends = []
       @activities = []
+      @notes = []
       @locations = []
 
       return unless File.exist?(@filename)
@@ -650,7 +701,7 @@ module Friends
         end
 
         # If we made it here, we couldn't recognize a header.
-        bad_line("Couldn't parse line.", line_num)
+        bad_line("a valid header", line_num)
       end
 
       # If we made it this far, we're parsing objects in a class.
@@ -670,6 +721,7 @@ module Friends
     ParsingStage = Struct.new(:id, :klass)
     PARSING_STAGES = [
       ParsingStage.new(:activities, Activity),
+      ParsingStage.new(:notes, Note),
       ParsingStage.new(:friends, Friend),
       ParsingStage.new(:locations, Location)
     ].freeze

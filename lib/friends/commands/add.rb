@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-desc "Adds a friend (or nickname), activity, or location"
+desc "Adds a friend (or nickname), activity, note, or location"
 command :add do |add|
   add.desc "Adds a friend"
   add.arg_name "NAME"
@@ -12,20 +12,22 @@ command :add do |add|
     end
   end
 
-  add.desc "Adds an activity"
-  add.arg_name "DESCRIPTION"
-  add.command :activity do |add_activity|
-    add_activity.action do |_, _, args|
-      activity = @introvert.add_activity(serialization: args.join(" "))
+  [:activity, :note].each do |event|
+    add.desc "Adds #{event == :note ? 'a' : 'an'} #{event}"
+    add.arg_name "DESCRIPTION"
+    add.command event do |add_event|
+      add_event.action do |_, _, args|
+        event_obj = @introvert.send("add_#{event}", serialization: args.join(" "))
 
-      # If there's no description, prompt the user for one.
-      if activity.description.nil? || activity.description.empty?
-        activity.description = Readline.readline(activity.to_s)
-        activity.highlight_description(introvert: @introvert)
+        # If there's no description, prompt the user for one.
+        if event_obj.description.nil? || event_obj.description.empty?
+          event_obj.description = Readline.readline(event_obj.to_s)
+          event_obj.highlight_description(introvert: @introvert)
+        end
+
+        @message = "#{event.to_s.capitalize} added: \"#{event_obj}\""
+        @dirty = true # Mark the file for cleaning.
       end
-
-      @message = "Activity added: \"#{activity}\""
-      @dirty = true # Mark the file for cleaning.
     end
   end
 

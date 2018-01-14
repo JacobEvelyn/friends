@@ -4,6 +4,10 @@
 - 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
 - 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
 
+### Notes:
+- 2018-06-15: **Grace Hopper** found out she's getting a big Naval Academy building named after her. @navy
+- 2017-06-06: **Marie Curie** just got accepted into a PhD program in _Paris_. @school
+
 ### Friends:
 - George Washington Carver
 - Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
