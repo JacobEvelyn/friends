@@ -37,6 +37,7 @@ lots of help), and give feedback!**
   * [Command reference](#command-reference)
     * `add`
       * [`add activity`](#add-activity)
+      * [`add note`](#add-note)
       * [`add friend`](#add-friend)
       * [`add tag`](#add-tag)
       * [`add location`](#add-location)
@@ -46,6 +47,7 @@ lots of help), and give feedback!**
     * [`help`](#help)
     * `list`
       * [`list activities`](#list-activities)
+      * [`list notes`](#list-notes)
       * `list favorite`
         * [`list favorite friends`](#list-favorite-friends)
         * [`list favorite locations`](#list-favorite-locations)
@@ -116,6 +118,8 @@ Easy, huh?
   `Marie's Diner`)
 * **Tags**: A way to categorize your _activities_ with tags of your
   choosing. (Examples: `@exercise`, `@school`)
+* **Notes**: Any additional information you want to record about a _friend_
+  or _location_. (Example: `John and Jane got engaged.`)
 
 The `friends.md` Markdown file that stores all of your data contains:
 
@@ -123,31 +127,36 @@ The `friends.md` Markdown file that stores all of your data contains:
 
 ```markdown
 ### Locations:
-
-* Atlantis
-* Marie's Diner
-* Paris
+- Atlantis
+- Marie's Diner
+- Paris
 ```
 
 * an alphabetical list of all friends and their nicknames and locations:
 
 ```markdown
 ### Friends:
-
-* George Washington Carver
-* Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
-* Marie Curie [Atlantis]
+- George Washington Carver
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
+- Marie Curie [Atlantis]
 ```
 
-* and an ordered list of all activities:
+* an ordered list of all activities:
 
 ```markdown
 ### Activities:
+- 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+- 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
+- 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
+- 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
+```
 
-* 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
-* 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
-* 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
-* 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
+* and an ordered list of all notes:
+
+```markdown
+### Notes:
+- 2018-06-15: **Grace Hopper** found out she's getting a big Naval Academy building named after her. @navy
+- 2017-06-06: **Marie Curie** just got accepted into a PhD program in _Paris_. @school
 ```
 
 See the example
@@ -163,7 +172,7 @@ These flags are:
 
 * `--colorless`: Disable output colorization and other effects.
 * `--debug`: Debug error messages with a full backtrace.
-* `--filename`: Set the location of the friends file to use (default: ./friends.md).
+* `--filename`: Set the location of the friends file to use (default: `./friends.md`).
 
 ```bash
 $ friends --filename ./test/tmp/friends.md clean
@@ -303,6 +312,24 @@ You can escape the names of friends you don't want `friends` to match with a bac
 $ friends add activity "2018-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
 Activity added: "2018-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
 ```
+
+#### `add note`
+
+Notes can be added exactly like activities, either on one line:
+
+```bash
+$ friends add note Yesterday: Marie got accepted into a PhD program
+Note added: "2017-12-31: Marie Curie got accepted into a PhD program"
+```
+
+Or with a prompt:
+
+```bash
+$ friends add note last Monday
+2017-03-07: <type description here>
+```
+
+And just like with `add activity`, dates, friends, locations, nicknames, and tags will all be intelligently matched.
 
 #### `add friend`
 
@@ -559,6 +586,16 @@ $ friends list activities --tagged food --with Grace --with George
 2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 ```
 
+#### `list notes`
+
+You can list notes the same way you list activities:
+
+```bash
+$ friends list notes --tagged school --with Marie
+2017-03-12: Marie Curie completed her PhD in record time. @school
+2015-06-06: Marie Curie just got accepted into a PhD program in Paris. @school
+```
+
 #### `list favorite friends`
 
 Lists your "favorite" friends (by total number of activities):
@@ -672,6 +709,25 @@ $ friends list tags --from friends
 @swanky
 ```
 
+Or only tags from notes:
+
+```bash
+$ friends list tags --from notes
+@navy
+@school
+```
+
+Or only tags from two out of three:
+
+```bash
+$ friends list tags --from activities --from friends
+@dancing
+@food
+@navy
+@school
+@swanky
+```
+
 #### `list locations`
 
 Lists all of the locations you've added, in alphabetical order::
@@ -732,7 +788,10 @@ Gives you your lifetime usage stats:
 $ friends stats
 Total activities: 4
 Total friends: 3
-Total time elapsed: 5 days
+Total locations: 3
+Total notes: 4
+Total tags: 5
+Total time elapsed: 848 days
 ```
 
 #### `suggest`
@@ -780,7 +839,7 @@ A big big thanks to all of this project's lovely
 [contributors](https://github.com/JacobEvelyn/friends/graphs/contributors)!
 
 Another way to contribute is to make a donation (see the buttons at the top
-of this `README`!
+of this `README`)!
 
 ## Code of Conduct
 

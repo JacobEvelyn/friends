@@ -5,18 +5,18 @@ require "date"
 require "./test/helper"
 require "./test/add_event_helper"
 
-clean_describe "add activity" do
+clean_describe "add note" do
   let(:content) { CONTENT }
 
   describe "date ordering" do
     let(:content) do
       <<-FILE
 ### Activities:
-- 2018-01-01: Activity one year later.
-- 2017-01-01: Activity 1.
-- 2016-01-01: Activity one year earlier.
 
 ### Notes:
+- 2018-01-01: Note one year later.
+- 2017-01-01: Note 1.
+- 2016-01-01: Note one year earlier.
 
 ### Friends:
 
@@ -26,7 +26,7 @@ FILE
 
     subject do
       4.times do |i|
-        run_cmd("add activity 2017-01-01: Activity #{i + 2}.")
+        run_cmd("add note 2017-01-01: Note #{i + 2}.")
       end
     end
 
@@ -34,15 +34,15 @@ FILE
       subject
       File.read(filename).must_equal <<-FILE
 ### Activities:
-- 2018-01-01: Activity one year later.
-- 2017-01-01: Activity 5.
-- 2017-01-01: Activity 4.
-- 2017-01-01: Activity 3.
-- 2017-01-01: Activity 2.
-- 2017-01-01: Activity 1.
-- 2016-01-01: Activity one year earlier.
 
 ### Notes:
+- 2018-01-01: Note one year later.
+- 2017-01-01: Note 5.
+- 2017-01-01: Note 4.
+- 2017-01-01: Note 3.
+- 2017-01-01: Note 2.
+- 2017-01-01: Note 1.
+- 2016-01-01: Note one year earlier.
 
 ### Friends:
 
@@ -51,5 +51,5 @@ FILE
     end
   end
 
-  parsing_specs(event: :activity)
+  parsing_specs(event: :note)
 end

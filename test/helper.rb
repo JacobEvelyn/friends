@@ -31,6 +31,12 @@ CONTENT = <<-FILE.freeze
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
 - 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
 
+### Notes:
+- 2017-03-12: **Marie Curie** completed her PhD in record time. @school
+- 2015-06-15: **Grace Hopper** found out she's getting a big Naval Academy building named after her. @navy
+- 2015-06-06: **Marie Curie** just got accepted into a PhD program in _Paris_. @school
+- 2015-01-04: **Grace Hopper** and **George Washington Carver** both won an award.
+
 ### Friends:
 - George Washington Carver
 - Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
@@ -49,6 +55,12 @@ SCRAMBLED_CONTENT = <<-FILE.freeze
 - 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
 - 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
+
+### Notes:
+- 2015-01-04: **Grace Hopper** and **George Washington Carver** both won an award.
+- 2015-06-06: **Marie Curie** just got accepted into a PhD program in _Paris_. @school
+- 2017-03-12: **Marie Curie** completed her PhD in record time. @school
+- 2015-06-15: **Grace Hopper** found out she's getting a big Naval Academy building named after her. @navy
 
 ### Friends:
 - George Washington Carver

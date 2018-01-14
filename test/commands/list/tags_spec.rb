@@ -31,6 +31,7 @@ clean_describe "list tags" do
 @food
 @navy
 @partying
+@school
 @science
       OUTPUT
     end
@@ -46,12 +47,35 @@ clean_describe "list tags" do
       end
     end
 
+    describe "--from notes" do
+      subject { run_cmd("list tags --from notes") }
+
+      it "lists unique tags from notes" do
+        stdout_only <<-OUTPUT
+@navy
+@school
+        OUTPUT
+      end
+    end
+
     describe "--from friends" do
       subject { run_cmd("list tags --from friends") }
 
       it "lists unique tags from friends" do
         stdout_only <<-OUTPUT
 @navy
+@science
+        OUTPUT
+      end
+    end
+
+    describe "with more than one --from flag" do
+      subject { run_cmd("list tags --from friends --from notes") }
+
+      it "lists unique tags from friends and notes" do
+        stdout_only <<-OUTPUT
+@navy
+@school
 @science
         OUTPUT
       end
