@@ -31,7 +31,7 @@ clean_describe "set location" do
       let(:friend_name) { "Marie" }
 
       it "prints correct output" do
-        stdout_only "Marie Curie's location set to: Paris"
+        stdout_only "Marie Curie's location set to: \"Paris\""
       end
 
       it "updates existing location" do
@@ -43,7 +43,7 @@ clean_describe "set location" do
       let(:friend_name) { "George" }
 
       it "prints correct output" do
-        stdout_only "George Washington Carver's location set to: Paris"
+        stdout_only "George Washington Carver's location set to: \"Paris\""
       end
 
       it "adds a location" do

@@ -72,34 +72,30 @@ switch [:colorless],
 commands_from "friends/commands"
 
 # Before each command, clean up all arguments and create the global Introvert.
-pre do |global_options, cmd, options|
+pre do |global_options, cmd|
   # If the --colorless flag is passed, don't do any fancy painting.
   Paint.mode = 0 if global_options[:colorless]
 
   @debug_mode = global_options[:debug]
 
-  final_options = global_options.merge!(options).select do |key, _|
-    [:filename].include? key
-  end
-
   # If we're updating the friends program we don't need to read the friends file
   # but we don't skip this block entirely because we might still want to enable
-  # debug mode.
-  @introvert = Friends::Introvert.new(final_options) unless cmd.name == :update
+  # debug mode. If we're in a `friends edit` command we wait to initialize the
+  # @introvert until the command block when the system call has exited
+  # successfully.
+  unless [:update, :edit].include? cmd.name
+    @introvert = Friends::Introvert.new(
+      filename: global_options[:filename],
+      quiet: global_options[:quiet]
+    )
+  end
 
   true # Continue executing the command.
 end
 
-post do |global_options|
+post do
   # After each command, clean the file if we have modifications to make.
-  filename = @introvert.clean if @dirty
-
-  # This is a special-case piece of code that lets us print a message that
-  # includes the filename when `friends clean` is called.
-  @message = "File cleaned: \"#{filename}\"" if @clean_command
-
-  # Print the output message (if there is one) unless --quiet is passed.
-  puts @message unless @message.nil? || global_options[:quiet]
+  @introvert.clean(clean_command: @clean_command) if @dirty
 end
 
 # If an error is raised, print the message to STDERR and exit the program.

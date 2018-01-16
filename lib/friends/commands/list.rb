@@ -20,7 +20,7 @@ command :list do |list|
                         desc: "Output friend nicknames, locations, and tags"
 
     list_friends.action do |_, options|
-      puts @introvert.list_friends(
+      @introvert.list_friends(
         location_name: options[:in],
         tagged: options[:tagged],
         verbose: options[:verbose]
@@ -65,7 +65,7 @@ command :list do |list|
                        type: InputDate
 
       list_events.action do |_, options|
-        puts @introvert.send(
+        @introvert.send(
           "list_#{events}",
           limit: options[:limit],
           with: options[:with],
@@ -81,7 +81,7 @@ command :list do |list|
   list.desc "List all locations"
   list.command :locations do |list_locations|
     list_locations.action do
-      puts @introvert.list_locations
+      @introvert.list_locations
     end
   end
 
@@ -93,7 +93,7 @@ command :list do |list|
                          "all three",
                    multiple: true
     list_tags.action do |_, options|
-      puts @introvert.list_tags(from: options[:from])
+      @introvert.list_tags(from: options[:from])
     end
   end
 

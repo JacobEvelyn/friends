@@ -2,7 +2,7 @@
 
 desc "Updates the `friends` program"
 command :update do |update|
-  update.action do
+  update.action do |global_options|
     # rubocop:disable Lint/AssignmentInCondition
     if match = `gem search friends`.match(/^friends\s\(([^\)]+)\)$/)
       # rubocop:enable Lint/AssignmentInCondition
@@ -10,19 +10,18 @@ command :update do |update|
       if Semverse::Version.coerce(remote_version) >
          Semverse::Version.coerce(Friends::VERSION)
         `gem update friends && gem cleanup friends`
-        @message = if $?.success?
-                     Paint[
-                       "Updated to friends #{remote_version}", :bold, :green
-                     ]
-                   else
-                     Paint[
-                       "Error updating to friends version #{remote_version}", :bold, :red
-                     ]
-                   end
+
+        unless global_options[:quiet]
+          if $?.success?
+            puts Paint["Updated to friends #{remote_version}", :bold, :green]
+          else
+            puts Paint["Error updating to friends version #{remote_version}", :bold, :red]
+          end
+        end
       else
-        @message = Paint[
-          "Already up-to-date (#{Friends::VERSION})", :bold, :green
-        ]
+        unless global_options[:quiet]
+          puts Paint["Already up-to-date (#{Friends::VERSION})", :bold, :green]
+        end
       end
     end
   end

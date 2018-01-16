@@ -15,15 +15,16 @@ require "friends/friends_error"
 
 module Friends
   class Introvert
-    DEFAULT_FILENAME = "./friends.md".freeze
     ACTIVITIES_HEADER = "### Activities:".freeze
     NOTES_HEADER = "### Notes:".freeze
     FRIENDS_HEADER = "### Friends:".freeze
     LOCATIONS_HEADER = "### Locations:".freeze
 
     # @param filename [String] the name of the friends Markdown file
-    def initialize(filename: DEFAULT_FILENAME)
+    # @param quiet [Boolean] true iff we should suppress all STDOUT output
+    def initialize(filename:, quiet:)
       @filename = filename
+      @quiet = quiet
 
       # Read in the input file. It's easier to do this now and optimize later
       # than try to overly be clever about what we read and write.
@@ -31,7 +32,25 @@ module Friends
     end
 
     # Write out the friends file with cleaned/sorted data.
-    def clean
+    # @param clean_command [Boolean] true iff the command the user
+    #   executed is `friends clean`; false if this is called as the
+    #   result of another command
+    def clean(clean_command:)
+      friend_names = Set.new(@friends.map(&:name))
+      location_names = Set.new(@locations.map(&:name))
+
+      # Iterate through all events and add missing friends and
+      # locations.
+      (@activities + @notes).each do |event|
+        event.friend_names.each do |name|
+          add_friend(name: name) unless friend_names.include? name
+        end
+
+        event.location_names.each do |name|
+          add_location(name: name) unless location_names.include? name
+        end
+      end
+
       File.open(@filename, "w") do |file|
         file.puts(ACTIVITIES_HEADER)
         stable_sort(@activities).each { |act| file.puts(act.serialize) }
@@ -46,13 +65,14 @@ module Friends
         @locations.sort.each { |location| file.puts(location.serialize) }
       end
 
-      @filename
+      # This is a special-case piece of code that lets us print a message that
+      # includes the filename when `friends clean` is called.
+      safe_puts "File cleaned: \"#{@filename}\"" if clean_command
     end
 
     # Add a friend.
     # @param name [String] the name of the friend to add
     # @raise [FriendsError] when a friend with that name is already in the file
-    # @return [Friend] the added friend
     def add_friend(name:)
       if @friends.any? { |friend| friend.name == name }
         raise FriendsError, "Friend named \"#{name}\" already exists"
@@ -62,32 +82,45 @@ module Friends
 
       @friends << friend
 
-      friend # Return the added friend.
+      safe_puts "Friend added: \"#{friend.name}\""
     end
 
     # Add an activity.
     # @param serialization [String] the serialized activity
-    # @return [Activity] the added activity
     def add_activity(serialization:)
       Activity.deserialize(serialization).tap do |activity|
-        activity.highlight_description(introvert: self) if activity.description
+        # If there's no description, prompt the user for one.
+        if activity.description.nil? || activity.description.empty?
+          activity.description = Readline.readline(activity.to_s)
+        end
+
+        activity.highlight_description(introvert: self)
+
         @activities.unshift(activity)
+
+        safe_puts "Activity added: \"#{activity}\""
       end
     end
 
     # Add a note.
     # @param serialization [String] the serialized note
-    # @return [Note] the added note
     def add_note(serialization:)
       Note.deserialize(serialization).tap do |note|
-        note.highlight_description(introvert: self) if note.description
+        # If there's no description, prompt the user for one.
+        if note.description.nil? || note.description.empty?
+          note.description = Readline.readline(note.to_s)
+        end
+
+        note.highlight_description(introvert: self)
+
         @notes.unshift(note)
+
+        safe_puts "Note added: \"#{note}\""
       end
     end
 
     # Add a location.
     # @param name [String] the serialized location
-    # @return [Location] the added location
     # @raise [FriendsError] if a location with that name already exists
     def add_location(name:)
       if @locations.any? { |location| location.name == name }
@@ -98,7 +131,7 @@ module Friends
 
       @locations << location
 
-      location # Return the added location.
+      safe_puts "Location added: \"#{location.name}\"" # Return the added location.
     end
 
     # Set a friend's location.
@@ -106,39 +139,38 @@ module Friends
     # @param location_name [String] the name of an existing location
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @raise [FriendsError] if 0 or 2+ locations match the given location name
-    # @return [Friend] the modified friend
     def set_location(name:, location_name:)
       friend = thing_with_name_in(:friend, name)
       location = thing_with_name_in(:location, location_name)
       friend.location_name = location.name
-      friend
+
+      safe_puts "#{friend.name}'s location set to: \"#{location.name}\""
     end
 
     # Rename an existing friend.
     # @param old_name [String] the name of the friend
     # @param new_name [String] the new name of the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
-    # @return [Friend] the existing friend
     def rename_friend(old_name:, new_name:)
       friend = thing_with_name_in(:friend, old_name)
-      @activities.each do |activity|
-        activity.update_friend_name(old_name: friend.name, new_name: new_name)
+      (@activities + @notes).each do |event|
+        event.update_friend_name(old_name: friend.name, new_name: new_name)
       end
       friend.name = new_name
-      friend
+
+      safe_puts "Name changed: \"#{friend}\""
     end
 
     # Rename an existing location.
     # @param old_name [String] the name of the location
     # @param new_name [String] the new name of the location
     # @raise [FriendsError] if 0 or 2+ friends match the given name
-    # @return [Location] the existing location
     def rename_location(old_name:, new_name:)
       loc = thing_with_name_in(:location, old_name)
 
-      # Update locations in activities.
-      @activities.each do |activity|
-        activity.update_location_name(old_name: loc.name, new_name: new_name)
+      # Update locations in activities and notes.
+      (@activities + @notes).each do |event|
+        event.update_location_name(old_name: loc.name, new_name: new_name)
       end
 
       # Update locations of friends.
@@ -147,29 +179,30 @@ module Friends
       end
 
       loc.name = new_name # Update location itself.
-      loc
+
+      safe_puts "Location renamed: \"#{loc.name}\""
     end
 
     # Add a nickname to an existing friend.
     # @param name [String] the name of the friend
     # @param nickname [String] the nickname to add to the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
-    # @return [Friend] the existing friend
     def add_nickname(name:, nickname:)
       friend = thing_with_name_in(:friend, name)
       friend.add_nickname(nickname)
-      friend
+
+      safe_puts "Nickname added: \"#{friend}\""
     end
 
     # Add a tag to an existing friend.
     # @param name [String] the name of the friend
     # @param tag [String] the tag to add to the friend, of the form: "@tag"
     # @raise [FriendsError] if 0 or 2+ friends match the given name
-    # @return [Friend] the existing friend
     def add_tag(name:, tag:)
       friend = thing_with_name_in(:friend, name)
       friend.add_tag(tag)
-      friend
+
+      safe_puts "Tag added to friend: \"#{friend}\""
     end
 
     # Remove a tag from an existing friend.
@@ -177,11 +210,11 @@ module Friends
     # @param tag [String] the tag to remove from the friend, of the form: "@tag"
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @raise [FriendsError] if the friend does not have the given nickname
-    # @return [Friend] the existing friend
     def remove_tag(name:, tag:)
       friend = thing_with_name_in(:friend, name)
       friend.remove_tag(tag)
-      friend
+
+      safe_puts "Tag removed from friend: \"#{friend}\""
     end
 
     # Remove a nickname from an existing friend.
@@ -189,11 +222,11 @@ module Friends
     # @param nickname [String] the nickname to remove from the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     # @raise [FriendsError] if the friend does not have the given nickname
-    # @return [Friend] the existing friend
     def remove_nickname(name:, nickname:)
       friend = thing_with_name_in(:friend, name)
       friend.remove_nickname(nickname)
-      friend
+
+      safe_puts "Nickname removed: \"#{friend}\""
     end
 
     # List all friend names in the friends file.
@@ -203,7 +236,6 @@ module Friends
     #   unfiltered
     # @param verbose [Boolean] true iff we should output friend names with
     #   nicknames, locations, and tags; false for names only
-    # @return [Array] a list of all friend names
     def list_friends(location_name:, tagged:, verbose:)
       fs = @friends
 
@@ -220,69 +252,41 @@ module Friends
         end
       end
 
-      verbose ? fs.map(&:to_s) : fs.map(&:name)
+      safe_puts(verbose ? fs.map(&:to_s) : fs.map(&:name))
     end
 
     # List your favorite friends.
     # @param limit [Integer] the number of favorite friends to return
-    # @return [Array] a list of the favorite friends' names and activity
-    #   counts
     def list_favorite_friends(limit:)
       list_favorite_things(:friend, limit: limit)
     end
 
     # List your favorite friends.
     # @param limit [Integer] the number of favorite locations to return
-    # @return [Array] a list of the favorite locations' names and activity
-    #   counts
     def list_favorite_locations(limit:)
       list_favorite_things(:location, limit: limit)
     end
 
     # See `list_events` for all of the parameters we can pass.
-    # @return [Array] a list of all activities' text values
     def list_activities(**args)
       list_events(events: @activities, **args)
     end
 
     # See `list_events` for all of the parameters we can pass.
-    # @return [Array] a list of all notes' text values
     def list_notes(**args)
       list_events(events: @notes, **args)
     end
 
     # List all location names in the friends file.
-    # @return [Array] a list of all location names
     def list_locations
-      @locations.map(&:name)
+      safe_puts @locations.map(&:name)
     end
 
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
     #   If not empty, limits the tags returned to only those from either
     #   activities, notes, or friends.
-    # @return [Array] a sorted list of all tags in activity descriptions
     def list_tags(from:)
-      output = Set.new
-
-      if from.empty? || from.include?("activities")
-        @activities.each_with_object(output) do |activity, set|
-          set.merge(activity.tags)
-        end
-      end
-
-      if from.empty? || from.include?("notes")
-        @notes.each_with_object(output) do |note, set|
-          set.merge(note.tags)
-        end
-      end
-
-      if from.empty? || from.include?("friends")
-        @friends.each_with_object(output) do |friend, set|
-          set.merge(friend.tags)
-        end
-      end
-
-      output.sort_by(&:downcase)
+      safe_puts tags(from: from).sort_by(&:downcase)
     end
 
     # Find data points for graphing activities over time.
@@ -305,7 +309,6 @@ module Friends
     #   unfiltered
     # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
-    # @return [Hash{String => Integer}]
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def graph(with:, location_name:, tagged:, since_date:, until_date:)
@@ -350,7 +353,6 @@ module Friends
     #
     # @param location_name [String] the name of a location to filter by, or nil
     #   for unfiltered
-    # @return [Hash{String => Array<String>}]
     def suggest(location_name:)
       # Filter our friends by location if necessary.
       fs = @friends
@@ -359,22 +361,25 @@ module Friends
       # Sort our friends, with the least favorite friend first.
       sorted_friends = fs.sort_by(&:n_activities)
 
-      output = Hash.new { |h, k| h[k] = [] }
-
       # Set initial value in case there are no friends and the while loop is
       # never entered.
-      output[:distant] = []
+      distant_friend_names = []
 
       # First, get not-so-good friends.
       while !sorted_friends.empty? && sorted_friends.first.n_activities < 2
-        output[:distant] << sorted_friends.shift.name
+        distant_friend_names << sorted_friends.shift.name
       end
 
-      output[:moderate] = sorted_friends.slice!(0, sorted_friends.size * 3 / 4).
-                          map!(&:name)
-      output[:close] = sorted_friends.map!(&:name)
+      moderate_friend_names = sorted_friends.slice!(0, sorted_friends.size * 3 / 4).
+                              map!(&:name)
+      close_friend_names = sorted_friends.map!(&:name)
 
-      output
+      safe_puts "Distant friend: "\
+                "#{Paint[distant_friend_names.sample || 'None found', :bold, :magenta]}"
+      safe_puts "Moderate friend: "\
+                "#{Paint[moderate_friend_names.sample || 'None found', :bold, :magenta]}"
+      safe_puts "Close friend: "\
+                "#{Paint[close_friend_names.sample || 'None found', :bold, :magenta]}"
     end
 
     ###################################################################
@@ -452,41 +457,50 @@ module Friends
       end
     end
 
-    # @return [Integer] the total number of friends
-    def total_friends
-      @friends.size
-    end
+    def stats
+      safe_puts "Total activities: #{@activities.size}"
+      safe_puts "Total friends: #{@friends.size}"
+      safe_puts "Total locations: #{@locations.size}"
+      safe_puts "Total notes: #{@notes.size}"
+      safe_puts "Total tags: #{tags.size}"
 
-    # @return [Integer] the total number of activities
-    def total_activities
-      @activities.size
-    end
-
-    # @return [Integer] the total number of locations
-    def total_locations
-      @locations.size
-    end
-
-    # @return [Integer] the total number of notes
-    def total_notes
-      @notes.size
-    end
-
-    # @return [Integer] the total number of tags
-    def total_tags
-      list_tags(from: []).size
-    end
-
-    # @return [Integer] the number of days elapsed between
-    #   the first and last activity
-    def elapsed_days
       events = @activities + @notes
-      return 0 if events.size < 2
-      sorted_events = events.sort
-      (sorted_events.first.date - sorted_events.last.date).to_i
+
+      elapsed_days = if events.size < 2
+                       0
+                     else
+                       sorted_events = events.sort
+                       (sorted_events.first.date - sorted_events.last.date).to_i
+                     end
+
+      safe_puts "Total time elapsed: #{elapsed_days} day#{'s' if elapsed_days != 1}"
     end
 
     private
+
+    # Print the message unless we're in `quiet` mode.
+    # @param str [String] a message to print
+    def safe_puts(str)
+      puts str unless @quiet
+    end
+
+    # @param from [Array] containing any of: ["activities", "friends", "notes"]
+    #   If not empty, limits the tags returned to only those from either
+    #   activities, notes, or friends.
+    # @return [Set] the set of tags present in the given things
+    def tags(from: [])
+      Set.new.tap do |output|
+        if from.empty? || from.include?("activities")
+          @activities.each { |activity| output.merge(activity.tags) }
+        end
+
+        @notes.each { |note| output.merge(note.tags) } if from.empty? || from.include?("notes")
+
+        if from.empty? || from.include?("friends")
+          @friends.each { |friend| output.merge(friend.tags) }
+        end
+      end
+    end
 
     # List all event details.
     # @param events [Array<Event>] the base events to list, either @activities or @notes
@@ -500,7 +514,6 @@ module Friends
     #   unfiltered
     # @param since_date [Date] a date on or after which to find events, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find events, or nil for unfiltered
-    # @return [Array] a list of all event (activity or note) text values
     # @raise [ArgumentError] if limit is present but limit < 1
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
@@ -519,7 +532,7 @@ module Friends
       # If we need to, trim the list.
       events = events.take(limit) unless limit.nil?
 
-      events.map(&:to_s)
+      safe_puts events.map(&:to_s)
     end
 
     # @param arr [Array] an unsorted array
@@ -538,7 +551,7 @@ module Friends
     #   unfiltered
     # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
-    # @return [Array] an array of activities
+    # @return [Array] an array of activities or notes
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
     def filtered_events(events:, with:, location_name:, tagged:, since_date:, until_date:)
@@ -572,7 +585,6 @@ module Friends
 
     # @param type [Symbol] one of: [:friend, :location]
     # @param limit [Integer] the number of favorite things to return
-    # @return [Array] a list of the favorite things' names and activity counts
     # @raise [ArgumentError] if type is not one of: [:friend, :location]
     # @raise [ArgumentError] if limit is < 1
     def list_favorite_things(type, limit:)
@@ -589,12 +601,12 @@ module Friends
 
       if results.size == 1
         favorite = results.first
-        puts "Your favorite #{type} is "\
-             "#{favorite.name} "\
-             "(#{favorite.n_activities} "\
-             "#{favorite.n_activities == 1 ? 'activity' : 'activities'})"
+        safe_puts "Your favorite #{type} is "\
+                  "#{favorite.name} "\
+                  "(#{favorite.n_activities} "\
+                  "#{favorite.n_activities == 1 ? 'activity' : 'activities'})"
       else
-        puts "Your favorite #{type}s:"
+        safe_puts "Your favorite #{type}s:"
 
         max_str_size = results.map(&:name).map(&:size).max
 
@@ -621,7 +633,7 @@ module Friends
         # elements, which may be too large if the last element in the list is a tie.
         num_str_size = data.last.first.to_s.size + 1 unless data.empty?
         data.each do |ranking, str|
-          puts "#{"#{ranking}.".ljust(num_str_size)} #{str}"
+          safe_puts "#{"#{ranking}.".ljust(num_str_size)} #{str}"
         end
       end
     end

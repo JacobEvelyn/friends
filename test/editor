@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+# This is an example "editor" used to test the `friends edit` command.
+# It inserts a new activity into the second line of the file, allowing
+# us to test that friends and locations added in an `edit` command are
+# subsequently added during the `clean` stage after the editor closes.
+
+filename = ARGV[0]
+current_file_contents = File.read(filename).split("\n")
+File.open(filename, "w") do |file|
+  file.puts current_file_contents[0]
+  file.puts "- 2014-12-15: I just had a possible **Bigfoot** sighting! "\
+            "I think I may have seen **Bigfoot** in the _Mysterious Mountains_."
+  file.puts current_file_contents.drop(1)
+end

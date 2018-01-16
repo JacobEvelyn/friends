@@ -13,6 +13,9 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: false
 
+Metrics/BlockNesting:
+  Enabled: false
+
 Metrics/ClassLength:
   Enabled: false
 
