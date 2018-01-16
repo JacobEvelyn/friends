@@ -54,6 +54,7 @@ lots of help), and give feedback!**
       * [`list friends`](#list-friends)
       * [`list tags`](#list-tags)
       * [`list locations`](#list-locations)
+      * [Advanced searching](#advanced-searching)
     * `remove`
       * [`remove tag`](#remove-tag)
       * [`remove nickname`](#remove-nickname)
@@ -738,6 +739,41 @@ Atlantis
 New York City
 Paris
 ```
+
+#### Advanced searching
+
+Since `friends` is a command-line program, we can easily support
+more complex searching by piping the output of a `list` command
+through a command-line tool like `grep`.
+
+For instance, to see all of the notes containing the string `PhD`:
+
+```bash
+$ friends list notes | grep PhD
+2017-07-01: Marie Curie just got accepted into a PhD program.
+2017-06-10: John Doe is finishing his PhD.
+2013-06-10: John Doe is just starting his PhD.
+```
+
+And you can combine this with the normal filter options provided
+by `friends`, like this:
+
+```bash
+$ friends list notes --with John --since 'January 1st 2015' | grep PhD
+2017-06-10: John Doe is finishing his PhD.
+```
+
+Note that `grep` has some handy flags, like `--ignore-case`/`-i`, and
+`--color=always`, to help customize your search:
+
+```bash
+$ friends list notes --with John --since 'January 1st 2015' | grep -i PhD
+2017-06-10: John Doe is finishing his PhD.
+2016-06-01: I think John Doe is hoping to finish his phD about a year from now.
+```
+
+These `grep` flags might be slightly different depending on which version of
+`grep` you have installed.
 
 #### `remove tag`
 
