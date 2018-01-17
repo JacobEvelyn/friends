@@ -48,6 +48,13 @@ clean_describe "rename friend" do
       FILE
     end
 
+    it "updates friend name in notes" do
+      line_changed(
+        "- 2015-01-04: **Grace Hopper** and **George Washington Carver** both won an award.",
+        "- 2015-01-04: **Grace Hopper** and **George Washington** both won an award."
+      )
+    end
+
     it "prints an output message" do
       stdout_only 'Name changed: "George Washington"'
     end

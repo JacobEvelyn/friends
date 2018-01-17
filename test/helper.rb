@@ -79,9 +79,9 @@ def filename; end
 
 def subject; end
 
-def run_cmd(command, **args)
+def run_cmd(command, env_vars: "", **args)
   stdout, stderr, status = Open3.capture3(
-    "bundle exec bin/friends --colorless --filename #{filename} #{command}",
+    "#{env_vars} bundle exec bin/friends --colorless --filename #{filename} #{command}",
     **args
   )
   {

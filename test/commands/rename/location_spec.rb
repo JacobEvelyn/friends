@@ -29,6 +29,14 @@ clean_describe "rename location" do
       )
     end
 
+    it "updates location name in notes" do
+      line_changed(
+        "- 2015-06-06: **Marie Curie** just got accepted into a PhD program in _Paris_. @school",
+        "- 2015-06-06: **Marie Curie** just got accepted into a PhD program in "\
+        "_Ville Lumière_. @school"
+      )
+    end
+
     it "updates location name for friends" do
       line_changed(
         "- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science",

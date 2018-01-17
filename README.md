@@ -314,6 +314,22 @@ $ friends add activity "2018-11-01: Grace and I went to \Marie's Diner. \George 
 Activity added: "2018-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
 ```
 
+And if an activity contains friends or locations you haven't yet added, you can simply
+denote them with the signifiers found in the `friends.md` file (`**`s around friends,
+and `_`s around locations), and `friends` will automatically add the friends or locations
+that are missing:
+
+```bash
+$ friends add activity "2018-11-01: I got to meet **Oprah Winfrey** in _Chicago_ today."
+Activity added: "2018-11-01: I got to meet Oprah Winfrey in Chicago today."
+Friend added: "Oprah Winfrey"
+Location added: "Chicago"
+```
+
+This is really handy for when you have an activity involving a friend or location that
+you can't remember if you've already added. Just use the signifiers and
+they'll be added if necessary!
+
 #### `add note`
 
 Notes can be added exactly like activities, either on one line:
@@ -330,7 +346,20 @@ $ friends add note last Monday
 2017-03-07: <type description here>
 ```
 
-And just like with `add activity`, dates, friends, locations, nicknames, and tags will all be intelligently matched.
+And just like with `add activity`, dates, friends, locations, nicknames, and tags will all be
+intelligently matched. In addition, as with `add activity` you can use the `**`/`_` signifiers
+around friend and location names and they'll be added if necessary:
+
+```bash
+$ friends add note "2018-11-01: **Oprah Winfrey** grew up in _Chicago_."
+Activity added: "2018-11-01: Oprah Winfrey grew up in Chicago."
+Friend added: "Oprah Winfrey"
+Location added: "Chicago"
+```
+
+This is really handy for when you have a note involving a friend or location that
+you can't remember if you've already added. Just use the signifiers and
+they'll be added if necessary!
 
 #### `add friend`
 
@@ -372,7 +401,9 @@ File cleaned: "./friends.md"
 ```
 
 This command is useful after manual editing of the file, for re-ordering its
-contents.
+contents and adding any missing friends or locations that are found in
+activities or notes. Note that `friends clean` is automatically called after
+the editor in `friends edit` is closed.
 
 #### `edit`
 
@@ -380,16 +411,42 @@ Allows you to manually edit the file:
 
 ```bash
 $ friends edit
-Opening "./friends.md" in vim
+Opening "./friends.md" with "vim"
 ```
 
-The file is opened with the command specified by the `$EDITOR` environment
+The file is opened with the command specified by the `EDITOR` environment
 variable, falling back to `vim` if it is not set:
 
 ```bash
-$ export EDITOR=atom
+$ export EDITOR='atom --wait'
 $ friends edit
-Opening "./friends.md" in atom
+Opening "./friends.md" with "atom --wait"
+```
+
+Note that when setting your own `EDITOR` value, if you like to use
+an editor like Atom, VS Code, or Sublime Text, you should first make
+sure you have the command-line tool for your editor (`atom`, `code`,
+or `subl`) installed correctly so you can open your editor from the
+command line. Then, when setting `EDITOR`, make sure to use the
+`--wait` flag (as in the example above), which will allow `friends`
+to be able to run the `clean` command (see below).
+
+After the editor has been closed, `friends` will automatically run the
+`clean` command to re-organize the file and add any friends or locations
+you've referenced in activities or notes that have not been added to the
+file. This means that, similar to the `add activity` and `add note`
+commands, you can add lines like:
+
+```markdown
+- 2018-01-01: I just met **Oprah Winfrey** in _Chicago_!
+```
+
+And if that friend or location isn't already present it'll be added:
+
+```bash
+Friend added: "Oprah Winfrey"
+Location added: "Chicago"
+File cleaned: "./friends.md\"
 ```
 
 #### `graph`
@@ -800,12 +857,16 @@ $ friends rename friend "Grace Hopper" "Grace Brewster Murray Hopper"
 Name changed: "Grace Brewster Murray Hopper (a.k.a. Amazing Grace)"
 ```
 
+This will update that friend's name in all notes and activities.
+
 #### `rename location`
 
 ```bash
 $ friends rename location Paris "Paris, France"
 Location renamed: "Paris, France"
 ```
+
+This will update that location's name in all notes and activities.
 
 #### `set location`
 

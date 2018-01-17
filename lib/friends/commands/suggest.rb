@@ -8,13 +8,6 @@ command :suggest do |suggest|
                type: Stripped
 
   suggest.action do |_, options|
-    suggestions = @introvert.suggest(location_name: options[:in])
-
-    puts "Distant friend: "\
-      "#{Paint[suggestions[:distant].sample || 'None found', :bold, :magenta]}"
-    puts "Moderate friend: "\
-      "#{Paint[suggestions[:moderate].sample || 'None found', :bold, :magenta]}"
-    puts "Close friend: "\
-      "#{Paint[suggestions[:close].sample || 'None found', :bold, :magenta]}"
+    @introvert.suggest(location_name: options[:in])
   end
 end

@@ -6,8 +6,7 @@ command :set do |set|
   set.arg_name "NAME LOCATION"
   set.command :location do |set_location|
     set_location.action do |_, _, args|
-      friend = @introvert.set_location(name: args.first, location_name: args[1])
-      @message = "#{friend.name}'s location set to: #{friend.location_name}"
+      @introvert.set_location(name: args.first, location_name: args[1])
       @dirty = true # Mark the file for cleaning.
     end
   end

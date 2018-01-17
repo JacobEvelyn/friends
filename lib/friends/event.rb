@@ -156,13 +156,13 @@ module Friends
     # Find the names of all friends in this description.
     # @return [Array] list of all friend names in the description
     def friend_names
-      @_friend_names ||= @description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
+      @description.scan(/(?<=\*\*)\w[^\*]*(?=\*\*)/).uniq
     end
 
     # Find the names of all locations in this description.
     # @return [Array] list of all location names in the description
     def location_names
-      @_location_names ||= @description.scan(/(?<=_)\w[^_]*(?=_)/).uniq
+      @description.scan(/(?<=_)\w[^_]*(?=_)/).uniq
     end
 
     private
