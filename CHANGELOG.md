@@ -10,6 +10,26 @@ making a small donation to show me you appreciate its continued development.
 [![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=jacobevelyn&url=https://github.com/JacobEvelyn/friends&title=friends&tags=github&category=software)
 [![Donate bitcoin](https://img.shields.io/badge/donate-Bitcoin-green.svg)](https://nrobinson2000.github.io/donate-bitcoin?address=1CFu6gWpmS89EnitPPdYssZhFMRWx5qhW4&amount=10&name=support-friends-development)
 
+## [v0.36](https://github.com/JacobEvelyn/friends/tree/v0.36) (2018-01-17)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.35...v0.36)
+
+**Implemented enhancements:**
+
+- Parse friends.md and generate lists of friends/locations from the activities [\#182](https://github.com/JacobEvelyn/friends/issues/182)
+
+**Fixed bugs:**
+
+- `rename friend` and `rename location` do not correctly update existing notes [\#189](https://github.com/JacobEvelyn/friends/issues/189)
+
+**Closed issues:**
+
+- Add `grep` examples to the README [\#183](https://github.com/JacobEvelyn/friends/issues/183)
+
+**Merged pull requests:**
+
+- Add ability to add new friends and locations from events [\#190](https://github.com/JacobEvelyn/friends/pull/190) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add advanced search \(grep\) examples to README [\#188](https://github.com/JacobEvelyn/friends/pull/188) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.35](https://github.com/JacobEvelyn/friends/tree/v0.35) (2018-01-14)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.34...v0.35)
 
