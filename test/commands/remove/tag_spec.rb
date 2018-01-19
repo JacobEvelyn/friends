@@ -41,11 +41,22 @@ clean_describe "remove tag" do
       let(:tag) { "science" }
 
       it "removes tag from friend" do
-        line_changed "- Marie Curie [Atlantis] @science", "- Marie Curie [Atlantis]"
+        line_changed "- Marie Curie [Atlantis] @science",
+                     "- Marie Curie [Atlantis]"
       end
 
       it "prints an output message" do
         stdout_only 'Tag removed from friend: "Marie Curie [Atlantis]"'
+      end
+
+      describe "when tag has colons and dashes" do
+        let(:friend_name) { "Stanislav Petrov" }
+        let(:tag) { "doesnt-trust-computers:military-uses" }
+
+        it "removes tag from friend" do
+          stdout_only 'Tag removed from friend: "Stanislav Petrov (a.k.a. Stan) '\
+                      '@doesnt-trust-computers"'
+        end
       end
 
       describe "when tag is passed with @" do

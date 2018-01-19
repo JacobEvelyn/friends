@@ -31,6 +31,8 @@ clean_describe "list friends" do
 George Washington Carver
 Marie Curie
 Grace Hopper
+Stanislav Petrov
+Norman Borlaug
       OUTPUT
     end
 
@@ -42,6 +44,8 @@ Grace Hopper
 George Washington Carver
 Marie Curie [Atlantis] @science
 Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+Stanislav Petrov (a.k.a. Stan) @doesnt-trust-computers @doesnt-trust-computers:military-uses
+Norman Borlaug (a.k.a. Norm) @science @science:outdoors @science:outdoors:agronomy
         OUTPUT
       end
     end
@@ -71,6 +75,7 @@ Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
         stdout_only <<-OUTPUT
 Marie Curie
 Grace Hopper
+Norman Borlaug
         OUTPUT
       end
 
@@ -96,6 +101,16 @@ FILE
 Grace Hopper
 Neil Armstrong
         OUTPUT
+        end
+      end
+
+      describe "when a tag is passed with colons and dashes" do
+        subject { run_cmd("list friends --tagged doesnt-trust-computers:military-uses") }
+
+        it "matches tag" do
+          stdout_only <<-OUTPUT
+Stanislav Petrov
+          OUTPUT
         end
       end
     end

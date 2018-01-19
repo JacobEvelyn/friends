@@ -30,6 +30,7 @@ clean_describe "list activities" do
       stdout_only <<-OUTPUT
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
+2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
 2014-11-15: Talked to George Washington Carver on the phone for an hour.
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
       OUTPUT
@@ -155,6 +156,7 @@ FILE
         stdout_only <<-OUTPUT
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
+2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
         OUTPUT
       end
     end

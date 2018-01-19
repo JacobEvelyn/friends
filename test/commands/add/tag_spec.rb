@@ -29,35 +29,42 @@ clean_describe "add tag" do
 
   describe "when friend name has one match" do
     let(:friend_name) { "George" }
-    let(:tag) { "school" }
+    let(:tag) { "school:tuskegee-institute" }
 
     it "adds tag to friend" do
-      line_changed "- George Washington Carver", "- George Washington Carver @school"
+      line_changed(
+        "- George Washington Carver",
+        "- George Washington Carver @school:tuskegee-institute"
+      )
     end
 
     it "prints an output message" do
-      stdout_only 'Tag added to friend: "George Washington Carver @school"'
+      stdout_only 'Tag added to friend: "George Washington Carver @school:tuskegee-institute"'
     end
 
     describe "when tag is passed with @" do
-      let(:tag) { "@school" }
+      let(:tag) { "@school:tuskegee-institute" }
 
       it "adds tag to friend" do
-        line_changed "- George Washington Carver", "- George Washington Carver @school"
+        line_changed(
+          "- George Washington Carver",
+          "- George Washington Carver @school:tuskegee-institute"
+        )
       end
 
       it "prints an output message" do
-        stdout_only 'Tag added to friend: "George Washington Carver @school"'
+        stdout_only 'Tag added to friend: "George Washington Carver @school:tuskegee-institute"'
       end
     end
 
     describe "when friend already has tags" do
       let(:friend_name) { "Marie" }
+      let(:tag) { "school:ecole-normale-superieure" }
 
       it "allows for multiple tags" do
         line_changed(
           "- Marie Curie [Atlantis] @science",
-          "- Marie Curie [Atlantis] @science @school"
+          "- Marie Curie [Atlantis] @science @school:ecole-normale-superieure"
         )
       end
     end

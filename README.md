@@ -118,7 +118,7 @@ Easy, huh?
 * **Locations**: The places in which _activities_ happen. (Examples: `Paris`,
   `Marie's Diner`)
 * **Tags**: A way to categorize your _activities_ with tags of your
-  choosing. (Examples: `@exercise`, `@school`)
+  choosing. Tags may contain colons and hyphens inside them. (Examples: `@exercise:running`, `@school`, `@science:indoors:agronomy-with-hydroponics`)
 * **Notes**: Any additional information you want to record about a _friend_
   or _location_. (Example: `John and Jane got engaged.`)
 
@@ -282,8 +282,8 @@ Tags will be colored if they're provided (though this README can't display
 color so you'll just have to have faith here):
 
 ```bash
-$ friends add activity The office softball team wins a game! @work @exercise
-Activity added: "2017-05-05: The office softball team wins a game! @work @exercise"
+$ friends add activity The office softball team wins a game! @work @exercise:sports
+Activity added: "2017-05-05: The office softball team wins a game! @work @exercise:sports"
 ```
 
 You can of course specify a date for the activity:
@@ -575,7 +575,7 @@ Lists recent activities:
 ```bash
 $ friends list activities
 2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying:ball-drop
 2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
@@ -584,7 +584,7 @@ You can adjust how many activities are shown:
 ```bash
 $ friends list activities --limit 2
 2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying:ball-drop
 ```
 
 Or only list the activities you did with a certain friend:
@@ -606,7 +606,7 @@ Or filter your activities by location:
 
 ```bash
 $ friends list activities --in "New York"
-2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying:ball-drop
 ```
 
 Or by tag:
@@ -628,12 +628,12 @@ Or by date:
 ```bash
 $ friends list activities --since 'December 31st 2017'
 2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying:ball-drop
 ```
 
 ```bash
 $ friends list activities --until 'December 31st 2017'
-2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying
+2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying:ball-drop
 2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
