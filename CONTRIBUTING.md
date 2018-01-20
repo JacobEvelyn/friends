@@ -5,7 +5,7 @@ If you're reading this, it means you want to contribute to this project. Hooray!
 Here's what to do:
 
 1. If you're looking for a task to work on, check the
-["up-for-grabs" Issues](https://github.com/JacobEvelyn/friends/labels/upforgrabs). If you see something there that catches your
+["up-for-grabs" issues](https://github.com/JacobEvelyn/friends/labels/upforgrabs). If you see something there that catches your
 eye, leave a comment indicating you'll work on it and
 it's yours! If you already have something to work on,
 that's great as well!
@@ -27,14 +27,14 @@ no warnings or errors (and don't hesitate to reach out if you don't know how!—
 scary and it's totally fine to need help!).
 8. Commit your changes
 (`git commit -am "Add some feature"`).
-9. Push your changes to GitHub, and open a Pull Request.
+9. Push your changes to GitHub, and open a pull request.
 10. Your code will be reviewed and merged as quickly as
 possible!
 11. Check yourself out on the [contributors page](https://github.com/JacobEvelyn/friends/graphs/contributors)! Look at how cool you are!
 
 If you have any questions at all or get stuck on any step,
 don't hesitate to
-[open a GitHub Issue](https://github.com/JacobEvelyn/friends/issues/new)!
+[open a GitHub issue](https://github.com/JacobEvelyn/friends/issues/new)!
 I'll respond as quickly as I can, and I'm friendly! I
 promise I don't bite. 😊
 

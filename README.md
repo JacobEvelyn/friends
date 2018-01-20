@@ -21,8 +21,8 @@ making a small donation to show me you appreciate its continued development.
 Spend time with the people you care about. Introvert-tested.
 Extrovert-approved.
 
-**NOTE: Participation is encouraged! Make Issues, ask questions, submit Pull
-Requests (even if it's your first time contributing to open-source—you'll get
+**NOTE: Participation is encouraged! Make issues, ask questions, submit pull
+requests (even if it's your first time contributing to open-source—you'll get
 lots of help), and give feedback!**
 
 ## Table of Contents
@@ -927,7 +927,7 @@ In case you're _really_ interested, we have documentation on
 ## Contributing (it's encouraged!)
 
 If you have an idea,
-[make a GitHub Issue](https://github.com/JacobEvelyn/friends/issues/new)!
+[make a GitHub issue](https://github.com/JacobEvelyn/friends/issues/new)!
 Suggestions are very very welcome, and usually are implemented very
 quickly. And if you'd like to do the implementing yourself, see the
 [contributing guide](https://github.com/JacobEvelyn/friends/blob/master/CONTRIBUTING.md).
