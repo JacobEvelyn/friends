@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
+ [![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
 [![Dependency Status](https://gemnasium.com/badges/github.com/JacobEvelyn/friends.svg)](https://gemnasium.com/github.com/JacobEvelyn/friends)
 [![Coverage Status](https://coveralls.io/repos/github/JacobEvelyn/friends/badge.svg)](https://coveralls.io/github/JacobEvelyn/friends)
 [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends)
@@ -9,7 +9,7 @@
 `friends` is a volunteer project. If you find it useful, please consider
 making a small donation to show me you appreciate its continued development.
 
-[![Donate via OpenCollective](https://opencollective.com/friends/contributors/badge.svg)](https://opencollective.com/friends)
+[![Backers on Open Collective](https://opencollective.com/friends/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/friends/sponsors/badge.svg)](#sponsors)
 [![Support via Patreon](https://img.shields.io/badge/support-Patreon-green.svg)](https://www.patreon.com/jacobevelyn)
 [![Donate via Liberapay](https://img.shields.io/badge/donate-Liberapay-green.svg)](https://liberapay.com/jacobevelyn/donate)
 [![Donate via PayPal](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jacobevelyn%40gmail%2ecom&lc=US&item_name=Development%20of%20JacobEvelyn%2ffriends%20%28GitHub%20repository%29&no_note=0¤cy_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest)
@@ -935,13 +935,40 @@ quickly. And if you'd like to do the implementing yourself, see the
 A big big thanks to all of this project's lovely
 [contributors](https://github.com/JacobEvelyn/friends/graphs/contributors)!
 
+<a href="graphs/contributors"><img src="https://opencollective.com/friends/contributors.svg?width=890" /></a>
+
 Another way to contribute is to make a donation (see the buttons at the top
 of this `README`)!
+
+### Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/friends#backer)]
+
+<a href="https://opencollective.com/friends#backers" target="_blank"><img src="https://opencollective.com/friends/backers.svg?width=890"></a>
+
+
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/friends#sponsor)]
+
+<a href="https://opencollective.com/friends/sponsor/0/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/1/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/2/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/3/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/4/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/5/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/6/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/7/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/8/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/friends/sponsor/9/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/9/avatar.svg"></a>
+
 
 ## Code of Conduct
 
 Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/master/CODE_OF_CONDUCT.md).
 If you're a polite, reasonable person you won't have any issues!
+
+
 
 ## License
 
