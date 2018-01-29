@@ -1,4 +1,4 @@
- [![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
+[![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
 [![Dependency Status](https://gemnasium.com/badges/github.com/JacobEvelyn/friends.svg)](https://gemnasium.com/github.com/JacobEvelyn/friends)
 [![Coverage Status](https://coveralls.io/repos/github/JacobEvelyn/friends/badge.svg)](https://coveralls.io/github/JacobEvelyn/friends)
 [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends)
@@ -7,14 +7,18 @@
 [![Gem](https://img.shields.io/gem/dt/friends.svg)](https://rubygems.org/gems/friends)
 
 `friends` is a volunteer project. If you find it useful, please consider
-making a small donation to show me you appreciate its continued development.
+making a small donation (🙏) to show you appreciate its continued development.
 
-[![Backers on Open Collective](https://opencollective.com/friends/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/friends/sponsors/badge.svg)](#sponsors)
+👇 Donate with these buttons! 👇
+
+[![Backers on Open Collective](<https://opencollective.com/friends/backers_(Open_Collective)/badge.svg>)](#backers) [![Sponsors on Open Collective](<https://opencollective.com/friends/sponsors_(Open_Collective)/badge.svg>)](#sponsors)
 [![Support via Patreon](https://img.shields.io/badge/support-Patreon-green.svg)](https://www.patreon.com/jacobevelyn)
 [![Donate via Liberapay](https://img.shields.io/badge/donate-Liberapay-green.svg)](https://liberapay.com/jacobevelyn/donate)
 [![Donate via PayPal](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jacobevelyn%40gmail%2ecom&lc=US&item_name=Development%20of%20JacobEvelyn%2ffriends%20%28GitHub%20repository%29&no_note=0¤cy_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHostedGuest)
 [![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=jacobevelyn&url=https://github.com/JacobEvelyn/friends&title=friends&tags=github&category=software)
 [![Donate bitcoin](https://img.shields.io/badge/donate-Bitcoin-green.svg)](https://nrobinson2000.github.io/donate-bitcoin?address=1CFu6gWpmS89EnitPPdYssZhFMRWx5qhW4&amount=10&name=support-friends-development)
+
+👆 Donate with these buttons! 👆
 
 # `friends`
 
@@ -933,7 +937,7 @@ quickly. And if you'd like to do the implementing yourself, see the
 [contributing guide](https://github.com/JacobEvelyn/friends/blob/master/CONTRIBUTING.md).
 
 A big big thanks to all of this project's lovely
-[contributors](https://github.com/JacobEvelyn/friends/graphs/contributors)!
+[contributors](https://github.com/JacobEvelyn/friends/graphs/contributors):
 
 <a href="graphs/contributors"><img src="https://opencollective.com/friends/contributors.svg?width=890" /></a>
 
@@ -942,10 +946,9 @@ of this `README`)!
 
 ### Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/friends#backer)]
+Thank you to all backers! 🙏 [[Become a backer](https://opencollective.com/friends#backer)]
 
 <a href="https://opencollective.com/friends#backers" target="_blank"><img src="https://opencollective.com/friends/backers.svg?width=890"></a>
-
 
 ### Sponsors
 
@@ -962,13 +965,10 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/friends/sponsor/8/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/friends/sponsor/9/website" target="_blank"><img src="https://opencollective.com/friends/sponsor/9/avatar.svg"></a>
 
-
 ## Code of Conduct
 
 Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/master/CODE_OF_CONDUCT.md).
 If you're a polite, reasonable person you won't have any issues!
-
-
 
 ## License
 
