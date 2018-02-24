@@ -28,11 +28,16 @@ clean_describe "list tags" do
 
     it "lists unique tags" do
       stdout_only <<-OUTPUT
+@doesnt-trust-computers
+@doesnt-trust-computers:military-uses
 @food
 @navy
 @partying
 @school
 @science
+@science:indoors:agronomy-with-hydroponics
+@science:outdoors
+@science:outdoors:agronomy
       OUTPUT
     end
 
@@ -43,6 +48,7 @@ clean_describe "list tags" do
         stdout_only <<-OUTPUT
 @food
 @partying
+@science:indoors:agronomy-with-hydroponics
         OUTPUT
       end
     end
@@ -63,8 +69,12 @@ clean_describe "list tags" do
 
       it "lists unique tags from friends" do
         stdout_only <<-OUTPUT
+@doesnt-trust-computers
+@doesnt-trust-computers:military-uses
 @navy
 @science
+@science:outdoors
+@science:outdoors:agronomy
         OUTPUT
       end
     end
@@ -74,9 +84,13 @@ clean_describe "list tags" do
 
       it "lists unique tags from friends and notes" do
         stdout_only <<-OUTPUT
+@doesnt-trust-computers
+@doesnt-trust-computers:military-uses
 @navy
 @school
 @science
+@science:outdoors
+@science:outdoors:agronomy
         OUTPUT
       end
     end

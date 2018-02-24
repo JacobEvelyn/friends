@@ -34,6 +34,7 @@ clean_describe "rename friend" do
 
     it "updates friend name in activities" do
       run_cmd("list activities")[:stdout].must_equal <<-FILE
+2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
 2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
@@ -41,6 +42,7 @@ clean_describe "rename friend" do
       FILE
       subject
       run_cmd("list activities")[:stdout].must_equal <<-FILE
+2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
 2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
 2015-01-04: Got lunch with Grace Hopper and George Washington. @food
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying

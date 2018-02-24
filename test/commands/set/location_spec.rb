@@ -35,7 +35,8 @@ clean_describe "set location" do
       end
 
       it "updates existing location" do
-        line_changed "- Marie Curie [Atlantis] @science", "- Marie Curie [Paris] @science"
+        line_changed "- Marie Curie [Atlantis] @science",
+                     "- Marie Curie [Paris] @science"
       end
     end
 

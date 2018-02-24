@@ -40,12 +40,12 @@ Total time elapsed: 0 days
 
     it "returns the content" do
       stdout_only <<-OUTPUT
-Total activities: 4
-Total friends: 3
+Total activities: 5
+Total friends: 5
 Total locations: 3
 Total notes: 4
-Total tags: 5
-Total time elapsed: 848 days
+Total tags: 10
+Total time elapsed: 1179 days
       OUTPUT
     end
 
