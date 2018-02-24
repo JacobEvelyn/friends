@@ -14,6 +14,19 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+
+## [v0.37](https://github.com/JacobEvelyn/friends/tree/v0.37) (2018-02-24)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.36...v0.37)
+
+**Implemented enhancements:**
+
+- Allow \(some\) punctuation in tags [\#186](https://github.com/JacobEvelyn/friends/issues/186)
+
+**Merged pull requests:**
+
+- Activating Open Collective [\#193](https://github.com/JacobEvelyn/friends/pull/193) ([monkeywithacupcake](https://github.com/monkeywithacupcake))
+- Dashes and colons [\#191](https://github.com/JacobEvelyn/friends/pull/191) ([adiabatic](https://github.com/adiabatic))
+
 ## [v0.36](https://github.com/JacobEvelyn/friends/tree/v0.36) (2018-01-17)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.35...v0.36)
 
