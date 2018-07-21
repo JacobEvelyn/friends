@@ -6,7 +6,7 @@ command :add do |add|
   add.arg_name "NAME"
   add.command :friend do |add_friend|
     add_friend.action do |_, _, args|
-      @introvert.add_friend(name: args.join(" "))
+      @introvert.add_friend(name: args.join(" ").strip)
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -16,7 +16,7 @@ command :add do |add|
     add.arg_name "DESCRIPTION"
     add.command event do |add_event|
       add_event.action do |_, _, args|
-        @introvert.send("add_#{event}", serialization: args.join(" "))
+        @introvert.send("add_#{event}", serialization: args.join(" ").strip)
         @dirty = true # Mark the file for cleaning.
       end
     end
@@ -26,7 +26,7 @@ command :add do |add|
   add.arg_name "LOCATION"
   add.command :location do |add_location|
     add_location.action do |_, _, args|
-      @introvert.add_location(name: args.join(" "))
+      @introvert.add_location(name: args.join(" ").strip)
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -35,7 +35,7 @@ command :add do |add|
   add.arg_name "NAME NICKNAME"
   add.command :nickname do |add_nickname|
     add_nickname.action do |_, _, args|
-      @introvert.add_nickname(name: args.first, nickname: args[1])
+      @introvert.add_nickname(name: args.first.strip, nickname: args[1].strip)
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -46,7 +46,7 @@ command :add do |add|
     add_tag.action do |_, _, args|
       @introvert.add_tag(
         name: args[0..-2].join(" "),
-        tag: Tag.convert_to_tag(args.last)
+        tag: Tag.convert_to_tag(args.last.strip)
       )
       @dirty = true # Mark the file for cleaning.
     end

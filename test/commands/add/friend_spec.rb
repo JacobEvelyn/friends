@@ -7,6 +7,14 @@ clean_describe "add friend" do
 
   let(:content) { CONTENT }
 
+  describe "when friend name is blank" do
+    let(:friend_name) { "' '" }
+
+    it "prints an error message" do
+      stderr_only 'Error: Expected "[Friend Name]"'
+    end
+  end
+
   describe "when there is an existing friend with that name" do
     let(:friend_name) { "George Washington Carver" }
 

@@ -7,6 +7,14 @@ clean_describe "add location" do
 
   let(:content) { CONTENT }
 
+  describe "when location name is blank" do
+    let(:location_name) { "' '" }
+
+    it "prints an error message" do
+      stderr_only 'Error: Expected "[Location Name]"'
+    end
+  end
+
   describe "when there is an existing location with that name" do
     let(:location_name) { "Paris" }
 

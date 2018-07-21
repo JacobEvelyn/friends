@@ -29,22 +29,33 @@ clean_describe "add nickname" do
 
   describe "when friend name has one match" do
     let(:friend_name) { "George" }
-    let(:nickname) { "Georgie" }
 
-    it "adds nickname to friend" do
-      line_changed "- George Washington Carver", "- George Washington Carver (a.k.a. Georgie)"
+    describe "when nickname is blank" do
+      let(:nickname) { "' '" }
+
+      it "prints an error message" do
+        stderr_only "Error: Nickname cannot be blank"
+      end
     end
 
-    it "updates parenthetical in file when friend has existing nicknames" do
-      run_cmd("add nickname #{friend_name} 'Mr. Peanut'")
-      line_changed(
-        "- George Washington Carver (a.k.a. Mr. Peanut)",
-        "- George Washington Carver (a.k.a. Mr. Peanut a.k.a. Georgie)"
-      )
-    end
+    describe "when nickname is not blank" do
+      let(:nickname) { "Georgie" }
 
-    it "prints an output message" do
-      stdout_only 'Nickname added: "George Washington Carver (a.k.a. Georgie)"'
+      it "adds nickname to friend" do
+        line_changed "- George Washington Carver", "- George Washington Carver (a.k.a. Georgie)"
+      end
+
+      it "updates parenthetical in file when friend has existing nicknames" do
+        run_cmd("add nickname #{friend_name} 'Mr. Peanut'")
+        line_changed(
+          "- George Washington Carver (a.k.a. Mr. Peanut)",
+          "- George Washington Carver (a.k.a. Mr. Peanut a.k.a. Georgie)"
+        )
+      end
+
+      it "prints an output message" do
+        stdout_only 'Nickname added: "George Washington Carver (a.k.a. Georgie)"'
+      end
     end
   end
 end
