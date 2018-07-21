@@ -1,5 +1,11 @@
 AllCops:
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.2
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Layout/ClosingHeredocIndentation:
+  Enabled: false
 
 Layout/DotPosition:
   EnforcedStyle: trailing

@@ -4,7 +4,7 @@
 if ENV["TRAVIS"] == "true"
   require "simplecov"
   SimpleCov.formatter = SimpleCov::Formatter::SimpleFormatter
-  SimpleCov.command_name Process.pid
+  SimpleCov.command_name Process.pid.to_s
   SimpleCov.start
 end
 
