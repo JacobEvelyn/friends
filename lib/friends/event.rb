@@ -232,9 +232,9 @@ module Friends
         # If we find a match, take the most likely and replace all instances of
         # the matching text with that friend's name.
         description_matches(regex: regex, replace: true, indicator: "**") do
-          friend_list.sort_by do |friend|
+          friend_list.min_by do |friend|
             [-friend.likelihood_score, -friend.n_activities]
-          end.first.name
+          end.name
         end
       end
 

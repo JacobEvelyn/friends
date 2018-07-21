@@ -91,7 +91,9 @@ module Friends
       Activity.deserialize(serialization).tap do |activity|
         # If there's no description, prompt the user for one.
         if activity.description.nil? || activity.description.empty?
-          activity.description = Readline.readline(activity.to_s)
+          activity.description = Readline.readline(activity.to_s).to_s.strip
+
+          raise FriendsError, "Blank activity not added" if activity.description.empty?
         end
 
         activity.highlight_description(introvert: self)
@@ -108,7 +110,9 @@ module Friends
       Note.deserialize(serialization).tap do |note|
         # If there's no description, prompt the user for one.
         if note.description.nil? || note.description.empty?
-          note.description = Readline.readline(note.to_s)
+          note.description = Readline.readline(note.to_s).to_s.strip
+
+          raise FriendsError, "Blank note not added" if note.description.empty?
         end
 
         note.highlight_description(introvert: self)
@@ -188,6 +192,8 @@ module Friends
     # @param nickname [String] the nickname to add to the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     def add_nickname(name:, nickname:)
+      raise FriendsError, "Nickname cannot be blank" if nickname.empty?
+
       friend = thing_with_name_in(:friend, name)
       friend.add_nickname(nickname)
 
@@ -199,6 +205,8 @@ module Friends
     # @param tag [String] the tag to add to the friend, of the form: "@tag"
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     def add_tag(name:, tag:)
+      raise FriendsError, "Tag cannot be blank" if tag == "@"
+
       friend = thing_with_name_in(:friend, name)
       friend.add_tag(tag)
 

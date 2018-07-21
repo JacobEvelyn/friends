@@ -51,6 +51,18 @@ def description_parsing_specs(test_stdout: true)
   describe "description parsing" do
     let(:date) { Date.today.strftime }
 
+    unless test_stdout
+      describe "when description is blank" do
+        let(:description) { "  " }
+
+        it "prints an error message" do
+          subject[:stderr].must_equal(
+            ensure_trailing_newline_unless_empty("Error: Blank #{event} not added")
+          )
+        end
+      end
+    end
+
     describe "when description includes a friend's full name (case insensitive)" do
       let(:description) { "Lunch with grace hopper." }
 
@@ -372,6 +384,7 @@ FILE
 end
 
 def parsing_specs(event:)
+  let(:event) { event.to_s }
   let(:capitalized_event) { event.to_s.capitalize }
 
   describe "when given a date and a description in the command" do
