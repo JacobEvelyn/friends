@@ -287,6 +287,35 @@ FILE
       end
     end
 
+    describe "when description has a friend's full name which is another friend's first name" do
+      let(:description) { "Hung out with Elizabeth for most of the day." }
+
+      # Make sure "Elizabeth II" is a better friend than just "Elizabeth" to
+      # ensure our result isn't due to chance.
+      let(:content) do
+        <<-FILE
+### Activities:
+- 2018-08-05: Royal picnic with **Elizabeth II**.
+
+### Notes:
+
+### Friends:
+- Elizabeth
+- Elizabeth II
+
+### Locations:
+FILE
+      end
+
+      it { line_added "- #{date}: Hung out with **Elizabeth** for most of the day." }
+      if test_stdout
+        it do
+          stdout_only "#{capitalized_event} added: \"#{date}: "\
+                      "Hung out with Elizabeth for most of the day.\""
+        end
+      end
+    end
+
     describe "when description has a name with multiple friend matches" do
       describe "when there is useful context from past activities" do
         let(:description) { "Met John + Elizabeth." }
