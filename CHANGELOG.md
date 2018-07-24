@@ -14,6 +14,20 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.38](https://github.com/JacobEvelyn/friends/tree/v0.38) (2018-07-24)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.37...v0.38)
+
+**Implemented enhancements:**
+
+- Give matching priority to first name-only people [\#202](https://github.com/JacobEvelyn/friends/issues/202)
+- Don't allow blank activities, friend names, tags, locations, or notes [\#198](https://github.com/JacobEvelyn/friends/issues/198)
+
+**Merged pull requests:**
+
+- Give name-matching priority to full-text matches [\#203](https://github.com/JacobEvelyn/friends/pull/203) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Prevent the addition of blank events, names, and locations [\#200](https://github.com/JacobEvelyn/friends/pull/200) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix Rubocop errors [\#196](https://github.com/JacobEvelyn/friends/pull/196) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v0.37](https://github.com/JacobEvelyn/friends/tree/v0.37) (2018-02-24)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.36...v0.37)
