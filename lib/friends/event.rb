@@ -192,14 +192,16 @@ module Friends
     # more information see the comments below and the
     # introvert#set_likelihood_score! method.
     def highlight_friends(introvert:)
+      ## STEP 1
       # Split the regex friend map into two maps: one for names with only one
       # friend match and another for ambiguous names
       definite_map, ambiguous_map =
-        introvert.regex_friend_map.partition { |_, arr| arr.size == 1 }
+        introvert.regex_friend_map.partition { |_, arr| arr.size == 1 }.map(&:to_h)
 
+      ## STEP 2
       matched_friends = []
 
-      # First, we find all of the unambiguous matches, and make those
+      # We find all of the unambiguous matches, and make those
       # substitutions.
       definite_map.each do |regex, friend_list|
         # If we find a match, add the friend to the matched list and replace all
@@ -211,6 +213,36 @@ module Friends
         end
       end
 
+      ## STEP 3
+      # Now, we look through the ambiguous matches to find any where
+      # the matched text is the entire friend's name, and make those
+      # replacements too. ("Elizabeth" as a whole name should take
+      # precedence over "Elizabeth Cady Stanton" even if the latter
+      # is a better friend, because otherwise it's hard to just get
+      # your friend "Elizabeth" to match.)
+      full_name_regexes = []
+
+      ambiguous_map.each do |regex, friend_list|
+        smallest_name_friend = friend_list.min_by(&:name)
+        smallest_name = smallest_name_friend.name
+
+        # If one friend's name is contained within all of the other friend
+        # names within the regex group, we assume that that friend's name
+        # is the entire matched text (like "Elizabeth" in the above example).
+        next unless friend_list.all? { |friend| friend.name.include? smallest_name }
+
+        description_matches(regex: regex, replace: true, indicator: "**") do
+          matched_friends << smallest_name_friend
+          smallest_name
+        end
+
+        full_name_regexes << regex
+      end
+
+      # Delete all of regexes from STEP 3 substitutions.
+      full_name_regexes.each { |regex| ambiguous_map.delete(regex) }
+
+      ## STEP 4
       possible_matched_friends = []
 
       # Now, we look at regex matches that are ambiguous.
@@ -238,6 +270,7 @@ module Friends
         end
       end
 
+      ## STEP 5
       # Lastly, we remove any backslashes, as these are used to escape friends'
       # names that we don't want to match.
       @description = @description.delete("\\")
