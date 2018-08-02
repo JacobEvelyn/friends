@@ -14,6 +14,17 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.39](https://github.com/JacobEvelyn/friends/tree/v0.39) (2018-08-02)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.38...v0.39)
+
+**Fixed bugs:**
+
+- Don't treat multiple additions of the same friend in `friends edit` as conflicting friends [\#199](https://github.com/JacobEvelyn/friends/issues/199)
+
+**Merged pull requests:**
+
+- Correctly handle duplicate new friends/locations when editing [\#204](https://github.com/JacobEvelyn/friends/pull/204) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.38](https://github.com/JacobEvelyn/friends/tree/v0.38) (2018-07-24)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.37...v0.38)
 
