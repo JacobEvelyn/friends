@@ -43,11 +43,17 @@ module Friends
       # locations.
       (@activities + @notes).each do |event|
         event.friend_names.each do |name|
-          add_friend(name: name) unless friend_names.include? name
+          unless friend_names.include? name
+            add_friend(name: name)
+            friend_names << name
+          end
         end
 
         event.location_names.each do |name|
-          add_location(name: name) unless location_names.include? name
+          unless location_names.include? name
+            add_location(name: name)
+            location_names << name
+          end
         end
       end
 

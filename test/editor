@@ -9,7 +9,13 @@ filename = ARGV[0]
 current_file_contents = File.read(filename).split("\n")
 File.open(filename, "w") do |file|
   file.puts current_file_contents[0]
+
+  # We add two activities that contain the same new friend and new
+  # location, to test that this doesn't crash `friends edit` as
+  # previously happened.
   file.puts "- 2014-12-15: I just had a possible **Bigfoot** sighting! "\
             "I think I may have seen **Bigfoot** in the _Mysterious Mountains_."
+  file.puts "- 2014-12-16: Okay, yep, I definitely just saw **Bigfoot** in "\
+            "the _Mysterious Mountains_!"
   file.puts current_file_contents.drop(1)
 end
