@@ -1,5 +1,4 @@
 [![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
-[![Dependency Status](https://gemnasium.com/badges/github.com/JacobEvelyn/friends.svg)](https://gemnasium.com/github.com/JacobEvelyn/friends)
 [![Coverage Status](https://coveralls.io/repos/github/JacobEvelyn/friends/badge.svg)](https://coveralls.io/github/JacobEvelyn/friends)
 [![Build Status](https://travis-ci.org/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.org/JacobEvelyn/friends)
 [![Readme Score](http://readme-score-api.herokuapp.com/score.svg?url=JacobEvelyn/friends&bust=1)](http://clayallsopp.github.io/readme-score?url=JacobEvelyn/friends)
