@@ -14,6 +14,17 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.42](https://github.com/JacobEvelyn/friends/tree/v0.42) (2018-09-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.41...v0.42)
+
+**Fixed bugs:**
+
+- `friends update` prints error message [\#207](https://github.com/JacobEvelyn/friends/issues/207)
+
+**Merged pull requests:**
+
+- Fix uninitialized constant error with `friends update` [\#208](https://github.com/JacobEvelyn/friends/pull/208) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.41](https://github.com/JacobEvelyn/friends/tree/v0.41) (2018-09-22)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.40...v0.41)
 
