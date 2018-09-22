@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "friends/post_install_message"
+
 desc "Updates the `friends` program"
 command :update do |update|
   update.action do |global_options|
