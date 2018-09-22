@@ -14,6 +14,7 @@ command :update do |update|
         unless global_options[:quiet]
           if $?.success?
             puts Paint["Updated to friends #{remote_version}", :bold, :green]
+            puts Friends::POST_INSTALL_MESSAGE
           else
             puts Paint["Error updating to friends version #{remote_version}", :bold, :red]
           end
@@ -21,6 +22,7 @@ command :update do |update|
       else
         unless global_options[:quiet]
           puts Paint["Already up-to-date (#{Friends::VERSION})", :bold, :green]
+          puts Friends::POST_INSTALL_MESSAGE
         end
       end
     end

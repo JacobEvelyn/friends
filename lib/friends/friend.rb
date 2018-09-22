@@ -2,7 +2,7 @@
 
 # Friend represents a friend. You know, a real-life friend!
 
-require "friends"
+require "friends/tag_regex"
 require "friends/regex_builder"
 require "friends/serializable"
 

@@ -7,6 +7,7 @@ require "chronic"
 require "paint"
 require "set"
 
+require "friends/tag_regex"
 require "friends/serializable"
 
 module Friends
