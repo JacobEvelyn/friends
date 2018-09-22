@@ -14,6 +14,9 @@ Gem::Specification.new do |spec|
                              "Introvert-tested. Extrovert-approved."
   spec.homepage             = "https://github.com/JacobEvelyn/friends"
   spec.license              = "MIT"
+  spec.post_install_message = "friends is a volunteer project. If you find it useful, please "\
+                              "consider making a small donation:\n\t"\
+                              "https://github.com/JacobEvelyn/friends#contributing-its-encouraged"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = ["friends"]

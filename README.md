@@ -96,9 +96,11 @@ Its philosophy emphasizes:
 - **Simplicity**—it should be quick and easy to use.
 - **Transparency**—all data is stored in a human-readable Markdown file. No
   proprietary formats here! And in addition to being open-source, `friends` is
-  very much open to new ideas. Contribute!
+  very much open to new ideas. Please
+  [contribute](https://github.com/JacobEvelyn/friends#contributing-its-encouraged)!
 - **Intelligence**—specify dates with English phrases like "yesterday." Specify
-  friends with their first names, even when you're friends with many *Joanne*s. `friends` will figure it out.
+  friends with their first names, even when you're friends with many *Joanne*s.
+  `friends` will figure it out.
 
 ## Installation
 
