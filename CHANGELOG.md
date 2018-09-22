@@ -14,6 +14,17 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.40](https://github.com/JacobEvelyn/friends/tree/v0.40) (2018-09-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.39...v0.40)
+
+**Implemented enhancements:**
+
+- Page all output, and remove --limit options [\#156](https://github.com/JacobEvelyn/friends/issues/156)
+
+**Merged pull requests:**
+
+- Page all output, and remove --limit options [\#205](https://github.com/JacobEvelyn/friends/pull/205) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.39](https://github.com/JacobEvelyn/friends/tree/v0.39) (2018-08-02)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.38...v0.39)
 
@@ -38,7 +49,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Give name-matching priority to full-text matches [\#203](https://github.com/JacobEvelyn/friends/pull/203) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Prevent the addition of blank events, names, and locations [\#200](https://github.com/JacobEvelyn/friends/pull/200) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Fix Rubocop errors [\#196](https://github.com/JacobEvelyn/friends/pull/196) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot[bot]](https://github.com/marketplace/dependabot))
 
 ## [v0.37](https://github.com/JacobEvelyn/friends/tree/v0.37) (2018-02-24)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.36...v0.37)
@@ -469,6 +480,10 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 - Error: undefined method `n\_activities' for nil:NilClass [\#44](https://github.com/JacobEvelyn/friends/issues/44)
 - Documentation link doesn't work [\#43](https://github.com/JacobEvelyn/friends/issues/43)
+
+**Closed issues:**
+
+- Edit friend information from command line [\#47](https://github.com/JacobEvelyn/friends/issues/47)
 
 **Merged pull requests:**
 
