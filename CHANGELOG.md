@@ -14,6 +14,13 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.41](https://github.com/JacobEvelyn/friends/tree/v0.41) (2018-09-22)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.40...v0.41)
+
+**Merged pull requests:**
+
+- Improve post-install message and rearrange constants [\#206](https://github.com/JacobEvelyn/friends/pull/206) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.40](https://github.com/JacobEvelyn/friends/tree/v0.40) (2018-09-22)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.39...v0.40)
 
