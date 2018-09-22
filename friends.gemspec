@@ -2,7 +2,9 @@
 
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require "friends/version"
+require "friends/post_install_message"
 
 Gem::Specification.new do |spec|
   spec.name                 = "friends"
@@ -14,9 +16,7 @@ Gem::Specification.new do |spec|
                              "Introvert-tested. Extrovert-approved."
   spec.homepage             = "https://github.com/JacobEvelyn/friends"
   spec.license              = "MIT"
-  spec.post_install_message = "friends is a volunteer project. If you find it useful, please "\
-                              "consider making a small donation:\n\t"\
-                              "https://github.com/JacobEvelyn/friends#contributing-its-encouraged"
+  spec.post_install_message = Friends::POST_INSTALL_MESSAGE
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = ["friends"]
