@@ -30,48 +30,49 @@ lots of help), and give feedback!**
 
 ## Table of Contents
 
-* [Overview](#overview)
-* [Installation](#installation)
-* [Usage](#usage)
-  * [Core concepts](#core-concepts)
-  * [Global flags](#global-flags)
-  * [Syncing across multiple machines](#syncing-across-multiple-machines)
-  * [Setting reminders](#setting-reminders)
-  * [Command reference](#command-reference)
-    * `add`
-      * [`add activity`](#add-activity)
-      * [`add note`](#add-note)
-      * [`add friend`](#add-friend)
-      * [`add tag`](#add-tag)
-      * [`add location`](#add-location)
-      * [`add nickname`](#add-nickname)
-    * [`clean`](#clean)
-    * [`graph`](#graph)
-    * [`help`](#help)
-    * `list`
-      * [`list activities`](#list-activities)
-      * [`list notes`](#list-notes)
-      * `list favorite`
-        * [`list favorite friends`](#list-favorite-friends)
-        * [`list favorite locations`](#list-favorite-locations)
-      * [`list friends`](#list-friends)
-      * [`list tags`](#list-tags)
-      * [`list locations`](#list-locations)
-      * [Advanced searching](#advanced-searching)
-    * `remove`
-      * [`remove tag`](#remove-tag)
-      * [`remove nickname`](#remove-nickname)
-    * `rename`
-      * [`rename friend`](#rename-friend)
-      * [`rename location`](#rename-location)
-    * [`set location`](#set-location)
-    * [`stats`](#stats)
-    * [`suggest`](#suggest)
-    * [`update`](#update)
-* [Other documentation](#other-documentation)
-* [Contributing (it's encouraged!)](#contributing-its-encouraged)
-* [Code of Conduct](#code-of-conduct)
-* [License](#license)
+- [Overview](#overview)
+- [Installation](#installation)
+- [A note on output](#a-note-on-output)
+- [Usage](#usage)
+  - [Core concepts](#core-concepts)
+  - [Global flags](#global-flags)
+  - [Syncing across multiple machines](#syncing-across-multiple-machines)
+  - [Setting reminders](#setting-reminders)
+  - [Command reference](#command-reference)
+    - `add`
+      - [`add activity`](#add-activity)
+      - [`add note`](#add-note)
+      - [`add friend`](#add-friend)
+      - [`add tag`](#add-tag)
+      - [`add location`](#add-location)
+      - [`add nickname`](#add-nickname)
+    - [`clean`](#clean)
+    - [`graph`](#graph)
+    - [`help`](#help)
+    - `list`
+      - [`list activities`](#list-activities)
+      - [`list notes`](#list-notes)
+      - `list favorite`
+        - [`list favorite friends`](#list-favorite-friends)
+        - [`list favorite locations`](#list-favorite-locations)
+      - [`list friends`](#list-friends)
+      - [`list tags`](#list-tags)
+      - [`list locations`](#list-locations)
+      - [Advanced searching](#advanced-searching)
+    - `remove`
+      - [`remove tag`](#remove-tag)
+      - [`remove nickname`](#remove-nickname)
+    - `rename`
+      - [`rename friend`](#rename-friend)
+      - [`rename location`](#rename-location)
+    - [`set location`](#set-location)
+    - [`stats`](#stats)
+    - [`suggest`](#suggest)
+    - [`update`](#update)
+- [Other documentation](#other-documentation)
+- [Contributing (it's encouraged!)](#contributing-its-encouraged)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
 
 ---
 
@@ -82,21 +83,21 @@ people you care about.
 
 `friends` gives you:
 
-* More organization around staying in touch with friends and
+- More organization around staying in touch with friends and
   family.
-* A way to track the ebbs and flows of your relationships over
+- A way to track the ebbs and flows of your relationships over
   time.
-* Suggestions for who to call or hang out with when you have free
+- Suggestions for who to call or hang out with when you have free
   time, whether it's fifteen minutes or an entire weekend.
-* A low-cost way to record and remember big moments in your life.
+- A low-cost way to record and remember big moments in your life.
 
 Its philosophy emphasizes:
 
-* **Simplicity**—it should be quick and easy to use.
-* **Transparency**—all data is stored in a human-readable Markdown file. No
+- **Simplicity**—it should be quick and easy to use.
+- **Transparency**—all data is stored in a human-readable Markdown file. No
   proprietary formats here! And in addition to being open-source, `friends` is
   very much open to new ideas. Contribute!
-* **Intelligence**—specify dates with English phrases like "yesterday." Specify
+- **Intelligence**—specify dates with English phrases like "yesterday." Specify
   friends with their first names, even when you're friends with many *Joanne*s. `friends` will figure it out.
 
 ## Installation
@@ -107,58 +108,80 @@ $ gem install friends
 
 Easy, huh?
 
+## A note on output
+
+To make its output easier to view and work with, `friends` "pages" its output.
+This means that when it has a lot to print it will let you scroll up or down
+in your terminal to view all of it.
+
+By default, `friends` tries to use the `less -RFX` command for paging, which should
+be available on most systems, and if that is not available falls back to simply
+printing the output. However, you can set a different pager by setting the `FRIENDS_PAGER`
+environment variable. If you have `less`
+[version 530](http://www.greenwoodsoftware.com/less/news.530.html) or later
+[we recommend using](https://unix.stackexchange.com/a/432254/181957#comment784324_432254)
+this instead:
+
+```bash
+FRIENDS_PAGER="less -RF"
+```
+
 ## Usage
 
 ### Core concepts
 
 `friends` is structured around several different types of things:
 
-* **Activities**: The things you do. Each activity has a date associated with
+- **Activities**: The things you do. Each activity has a date associated with
   it. Activities may optionally contain any number of _friends_, _locations_,
   and _tags_.
-* **Friends**: The people you do _activities_ with. Each friend has a name and,
+- **Friends**: The people you do _activities_ with. Each friend has a name and,
   optionally, one or several nicknames. (Examples: `John`, `Grace Hopper`)
-* **Locations**: The places in which _activities_ happen. (Examples: `Paris`,
+- **Locations**: The places in which _activities_ happen. (Examples: `Paris`,
   `Marie's Diner`)
-* **Tags**: A way to categorize your _activities_ with tags of your
+- **Tags**: A way to categorize your _activities_ with tags of your
   choosing. Tags may contain colons and hyphens inside them. (Examples: `@exercise:running`, `@school`, `@science:indoors:agronomy-with-hydroponics`)
-* **Notes**: Any additional information you want to record about a _friend_
+- **Notes**: Any additional information you want to record about a _friend_
   or _location_. (Example: `John and Jane got engaged.`)
 
 The `friends.md` Markdown file that stores all of your data contains:
 
-* an alphabetical list of all locations:
+- an alphabetical list of all locations:
 
 ```markdown
 ### Locations:
+
 - Atlantis
 - Marie's Diner
 - Paris
 ```
 
-* an alphabetical list of all friends and their nicknames and locations:
+- an alphabetical list of all friends and their nicknames and locations:
 
 ```markdown
 ### Friends:
+
 - George Washington Carver
 - Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris]
 - Marie Curie [Atlantis]
 ```
 
-* an ordered list of all activities:
+- an ordered list of all activities:
 
 ```markdown
 ### Activities:
+
 - 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
 - 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
 - 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
 - 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
 ```
 
-* and an ordered list of all notes:
+- and an ordered list of all notes:
 
 ```markdown
 ### Notes:
+
 - 2018-06-15: **Grace Hopper** found out she's getting a big Naval Academy building named after her. @navy
 - 2017-06-06: **Marie Curie** just got accepted into a PhD program in _Paris_. @school
 ```
@@ -174,16 +197,16 @@ specified before the name of the command, like: `friends [flags] [command]`.
 
 These flags are:
 
-* `--colorless`: Disable output colorization and other effects.
-* `--debug`: Debug error messages with a full backtrace.
-* `--filename`: Set the location of the friends file to use (default: `./friends.md`).
+- `--colorless`: Disable output colorization and other effects.
+- `--debug`: Debug error messages with a full backtrace.
+- `--filename`: Set the location of the friends file to use (default: `./friends.md`).
 
 ```bash
 $ friends --filename ./test/tmp/friends.md clean
 File cleaned: "./test/tmp/friends.md"
 ```
 
-* `--quiet`: Quiet output messages.
+- `--quiet`: Quiet output messages.
 
 ```bash
 $ friends --quiet add activity Went rollerskating with George.
@@ -192,7 +215,7 @@ $ # No output!
 
 In addition, these flags may be used without any command:
 
-* `--help`: Show the help menu. This is equivalent to `friends help`.
+- `--help`: Show the help menu. This is equivalent to `friends help`.
   Help menus are available for all levels of commands:
 
 ```bash
@@ -207,7 +230,7 @@ $ friends list --help
 $ friends list activities --help
 ```
 
-* `--version`: Show the `friends` program version.
+- `--version`: Show the `friends` program version.
 
 ### Syncing across multiple machines
 
@@ -582,15 +605,7 @@ $ friends list activities
 2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
-You can adjust how many activities are shown:
-
-```bash
-$ friends list activities --limit 2
-2018-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2017-12-31: Celebrated the new year with Marie Curie in New York City. @partying:ball-drop
-```
-
-Or only list the activities you did with a certain friend:
+You can list the activities you did with a certain friend:
 
 ```bash
 $ friends list activities --with George
@@ -598,7 +613,7 @@ $ friends list activities --with George
 2017-11-15: Talked to George Washington Carver on the phone for an hour.
 ```
 
-Or only filter activities done with a group of friends:
+Or only activities done with a group of friends:
 
 ```bash
 $ friends list activities --with George --with Grace
@@ -669,15 +684,6 @@ Your favorite friends:
 3. Marie Curie              (0)
 ```
 
-You can specify a number of favorites to show:
-
-```bash
-$ friends list favorite friends --limit 2
-Your favorite friends:
-1. George Washington Carver (2 activities)
-2. Grace Hopper             (1)
-```
-
 #### `list favorite locations`
 
 Lists your "favorite" locations (by total number of activities):
@@ -688,15 +694,6 @@ Your favorite locations:
 1. Atlantis (2 activities)
 2. Paris    (1)
 3. London   (0)
-```
-
-You can specify a number of favorites to show:
-
-```bash
-$ friends list favorite locations --limit 2
-Your favorite locations:
-1. Atlantis (2 activities)
-2. Paris    (1)
 ```
 
 #### `list friends`

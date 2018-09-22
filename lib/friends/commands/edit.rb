@@ -10,10 +10,7 @@ command :edit do |edit|
 
     # Mark the file for cleaning once the editor was closed correctly.
     if Kernel.system("#{editor} #{filename}")
-      @introvert = Friends::Introvert.new(
-        filename: global_options[:filename],
-        quiet: global_options[:quiet]
-      )
+      @introvert = Friends::Introvert.new(filename: global_options[:filename])
       @clean_command = true
       @dirty = true
     elsif !global_options[:quiet]

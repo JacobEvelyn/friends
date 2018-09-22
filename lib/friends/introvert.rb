@@ -5,6 +5,7 @@
 # the command-line script explicitly.
 
 require "set"
+require "tty/pager"
 
 require "friends/activity"
 require "friends/note"
@@ -21,15 +22,16 @@ module Friends
     LOCATIONS_HEADER = "### Locations:".freeze
 
     # @param filename [String] the name of the friends Markdown file
-    # @param quiet [Boolean] true iff we should suppress all STDOUT output
-    def initialize(filename:, quiet:)
+    def initialize(filename:)
       @filename = filename
-      @quiet = quiet
+      @output = []
 
       # Read in the input file. It's easier to do this now and optimize later
       # than try to overly be clever about what we read and write.
       read_file
     end
+
+    attr_reader :output
 
     # Write out the friends file with cleaned/sorted data.
     # @param clean_command [Boolean] true iff the command the user
@@ -73,7 +75,7 @@ module Friends
 
       # This is a special-case piece of code that lets us print a message that
       # includes the filename when `friends clean` is called.
-      safe_puts "File cleaned: \"#{@filename}\"" if clean_command
+      @output << "File cleaned: \"#{@filename}\"" if clean_command
     end
 
     # Add a friend.
@@ -88,7 +90,7 @@ module Friends
 
       @friends << friend
 
-      safe_puts "Friend added: \"#{friend.name}\""
+      @output << "Friend added: \"#{friend.name}\""
     end
 
     # Add an activity.
@@ -106,7 +108,7 @@ module Friends
 
         @activities.unshift(activity)
 
-        safe_puts "Activity added: \"#{activity}\""
+        @output << "Activity added: \"#{activity}\""
       end
     end
 
@@ -125,7 +127,7 @@ module Friends
 
         @notes.unshift(note)
 
-        safe_puts "Note added: \"#{note}\""
+        @output << "Note added: \"#{note}\""
       end
     end
 
@@ -141,7 +143,7 @@ module Friends
 
       @locations << location
 
-      safe_puts "Location added: \"#{location.name}\"" # Return the added location.
+      @output << "Location added: \"#{location.name}\"" # Return the added location.
     end
 
     # Set a friend's location.
@@ -154,7 +156,7 @@ module Friends
       location = thing_with_name_in(:location, location_name)
       friend.location_name = location.name
 
-      safe_puts "#{friend.name}'s location set to: \"#{location.name}\""
+      @output << "#{friend.name}'s location set to: \"#{location.name}\""
     end
 
     # Rename an existing friend.
@@ -168,7 +170,7 @@ module Friends
       end
       friend.name = new_name
 
-      safe_puts "Name changed: \"#{friend}\""
+      @output << "Name changed: \"#{friend}\""
     end
 
     # Rename an existing location.
@@ -190,7 +192,7 @@ module Friends
 
       loc.name = new_name # Update location itself.
 
-      safe_puts "Location renamed: \"#{loc.name}\""
+      @output << "Location renamed: \"#{loc.name}\""
     end
 
     # Add a nickname to an existing friend.
@@ -203,7 +205,7 @@ module Friends
       friend = thing_with_name_in(:friend, name)
       friend.add_nickname(nickname)
 
-      safe_puts "Nickname added: \"#{friend}\""
+      @output << "Nickname added: \"#{friend}\""
     end
 
     # Add a tag to an existing friend.
@@ -216,7 +218,7 @@ module Friends
       friend = thing_with_name_in(:friend, name)
       friend.add_tag(tag)
 
-      safe_puts "Tag added to friend: \"#{friend}\""
+      @output << "Tag added to friend: \"#{friend}\""
     end
 
     # Remove a tag from an existing friend.
@@ -228,7 +230,7 @@ module Friends
       friend = thing_with_name_in(:friend, name)
       friend.remove_tag(tag)
 
-      safe_puts "Tag removed from friend: \"#{friend}\""
+      @output << "Tag removed from friend: \"#{friend}\""
     end
 
     # Remove a nickname from an existing friend.
@@ -240,7 +242,7 @@ module Friends
       friend = thing_with_name_in(:friend, name)
       friend.remove_nickname(nickname)
 
-      safe_puts "Nickname removed: \"#{friend}\""
+      @output << "Nickname removed: \"#{friend}\""
     end
 
     # List all friend names in the friends file.
@@ -266,19 +268,17 @@ module Friends
         end
       end
 
-      safe_puts(verbose ? fs.map(&:to_s) : fs.map(&:name))
+      (verbose ? fs.map(&:to_s) : fs.map(&:name)).each { |line| @output << line }
     end
 
     # List your favorite friends.
-    # @param limit [Integer] the number of favorite friends to return
-    def list_favorite_friends(limit:)
-      list_favorite_things(:friend, limit: limit)
+    def list_favorite_friends
+      list_favorite_things(:friend)
     end
 
     # List your favorite friends.
-    # @param limit [Integer] the number of favorite locations to return
-    def list_favorite_locations(limit:)
-      list_favorite_things(:location, limit: limit)
+    def list_favorite_locations
+      list_favorite_things(:location)
     end
 
     # See `list_events` for all of the parameters we can pass.
@@ -293,26 +293,20 @@ module Friends
 
     # List all location names in the friends file.
     def list_locations
-      safe_puts @locations.map(&:name)
+      @locations.each { |location| @output << location.name }
     end
 
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
     #   If not empty, limits the tags returned to only those from either
     #   activities, notes, or friends.
     def list_tags(from:)
-      safe_puts tags(from: from).sort_by(&:downcase)
+      tags(from: from).sort_by(&:downcase).each { |tag| @output << tag }
     end
 
-    # Find data points for graphing activities over time.
+    # Graph activities over time.
     # Optionally filter by friend, location and tag
     #
-    # The returned hash uses the following format:
-    #   {
-    #     "Jan 2015" => 3, # The number of activities during each month.
-    #     "Feb 2015" => 0,
-    #     "Mar 2015" => 9
-    #   }
-    # The keys of the hash are all of the months (inclusive) between the first
+    # The graph displays all of the months (inclusive) between the first
     # and last month in which activities have been recorded.
     #
     # @param with [Array<String>] the names of friends to filter by, or empty for
@@ -353,7 +347,7 @@ module Friends
       Graph.new(
         filtered_activities: filtered_activities_to_graph,
         all_activities: all_activities_to_graph
-      ).draw
+      ).output.each { |line| @output << line }
     end
 
     # Suggest friends to do something with.
@@ -388,12 +382,12 @@ module Friends
                               map!(&:name)
       close_friend_names = sorted_friends.map!(&:name)
 
-      safe_puts "Distant friend: "\
-                "#{Paint[distant_friend_names.sample || 'None found', :bold, :magenta]}"
-      safe_puts "Moderate friend: "\
-                "#{Paint[moderate_friend_names.sample || 'None found', :bold, :magenta]}"
-      safe_puts "Close friend: "\
-                "#{Paint[close_friend_names.sample || 'None found', :bold, :magenta]}"
+      @output << "Distant friend: "\
+                 "#{Paint[distant_friend_names.sample || 'None found', :bold, :magenta]}"
+      @output << "Moderate friend: "\
+                 "#{Paint[moderate_friend_names.sample || 'None found', :bold, :magenta]}"
+      @output << "Close friend: "\
+                 "#{Paint[close_friend_names.sample || 'None found', :bold, :magenta]}"
     end
 
     ###################################################################
@@ -472,12 +466,6 @@ module Friends
     end
 
     def stats
-      safe_puts "Total activities: #{@activities.size}"
-      safe_puts "Total friends: #{@friends.size}"
-      safe_puts "Total locations: #{@locations.size}"
-      safe_puts "Total notes: #{@notes.size}"
-      safe_puts "Total tags: #{tags.size}"
-
       events = @activities + @notes
 
       elapsed_days = if events.size < 2
@@ -487,16 +475,15 @@ module Friends
                        (sorted_events.first.date - sorted_events.last.date).to_i
                      end
 
-      safe_puts "Total time elapsed: #{elapsed_days} day#{'s' if elapsed_days != 1}"
+      @output << "Total activities: #{@activities.size}"
+      @output << "Total friends: #{@friends.size}"
+      @output << "Total locations: #{@locations.size}"
+      @output << "Total notes: #{@notes.size}"
+      @output << "Total tags: #{tags.size}"
+      @output << "Total time elapsed: #{elapsed_days} day#{'s' if elapsed_days != 1}"
     end
 
     private
-
-    # Print the message unless we're in `quiet` mode.
-    # @param str [String] a message to print
-    def safe_puts(str)
-      puts str unless @quiet
-    end
 
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
     #   If not empty, limits the tags returned to only those from either
@@ -518,8 +505,6 @@ module Friends
 
     # List all event details.
     # @param events [Array<Event>] the base events to list, either @activities or @notes
-    # @param limit [Integer] the number of events to return, or nil for no
-    #   limit
     # @param with [Array<String>] the names of friends to filter by, or empty for
     #   unfiltered
     # @param location_name [String] the name of a location to filter by, or
@@ -528,12 +513,9 @@ module Friends
     #   unfiltered
     # @param since_date [Date] a date on or after which to find events, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find events, or nil for unfiltered
-    # @raise [ArgumentError] if limit is present but limit < 1
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
-    def list_events(events:, limit:, with:, location_name:, tagged:, since_date:, until_date:)
-      raise ArgumentError, "Limit must be positive" if limit && limit < 1
-
+    def list_events(events:, with:, location_name:, tagged:, since_date:, until_date:)
       events = filtered_events(
         events: events,
         with: with,
@@ -543,10 +525,7 @@ module Friends
         until_date: until_date
       )
 
-      # If we need to, trim the list.
-      events = events.take(limit) unless limit.nil?
-
-      safe_puts events.map(&:to_s)
+      events.each { |event| @output << event.to_s }
     end
 
     # @param arr [Array] an unsorted array
@@ -598,57 +577,45 @@ module Friends
     end
 
     # @param type [Symbol] one of: [:friend, :location]
-    # @param limit [Integer] the number of favorite things to return
     # @raise [ArgumentError] if type is not one of: [:friend, :location]
-    # @raise [ArgumentError] if limit is < 1
-    def list_favorite_things(type, limit:)
+    def list_favorite_things(type)
       unless [:friend, :location].include? type
         raise ArgumentError, "Type must be either :friend or :location"
       end
 
-      raise ArgumentError, "Favorites limit must be positive" if limit < 1
-
       # Sort the results, with the most favorite thing first.
       results = instance_variable_get("@#{type}s").sort_by do |thing|
         -thing.n_activities
-      end.take(limit) # Trim the list.
+      end
 
-      if results.size == 1
-        favorite = results.first
-        safe_puts "Your favorite #{type} is "\
-                  "#{favorite.name} "\
-                  "(#{favorite.n_activities} "\
-                  "#{favorite.n_activities == 1 ? 'activity' : 'activities'})"
-      else
-        safe_puts "Your favorite #{type}s:"
+      @output << "Your favorite #{type}s:"
 
-        max_str_size = results.map(&:name).map(&:size).max
+      max_str_size = results.map(&:name).map(&:size).max
 
-        grouped_results = results.group_by(&:n_activities)
+      grouped_results = results.group_by(&:n_activities)
 
-        rank = 1
-        first = true
-        data = grouped_results.each.with_object([]) do |(n_activities, things), arr|
-          things.each do |thing|
-            name = thing.name.ljust(max_str_size)
-            if first
-              label = n_activities == 1 ? " activity" : " activities"
-              first = false
-            end
-            str = "#{name} (#{n_activities}#{label})"
-
-            arr << [rank, str]
+      rank = 1
+      first = true
+      data = grouped_results.each.with_object([]) do |(n_activities, things), arr|
+        things.each do |thing|
+          name = thing.name.ljust(max_str_size)
+          if first
+            label = n_activities == 1 ? " activity" : " activities"
+            first = false
           end
-          rank += things.size
-        end
+          str = "#{name} (#{n_activities}#{label})"
 
-        # We need to use `data.last.first` instead of `rank` to determine the size
-        # of the numbering prefix because `rank` will simply be the size of all
-        # elements, which may be too large if the last element in the list is a tie.
-        num_str_size = data.last.first.to_s.size + 1 unless data.empty?
-        data.each do |ranking, str|
-          safe_puts "#{"#{ranking}.".ljust(num_str_size)} #{str}"
+          arr << [rank, str]
         end
+        rank += things.size
+      end
+
+      # We need to use `data.last.first` instead of `rank` to determine the size
+      # of the numbering prefix because `rank` will simply be the size of all
+      # elements, which may be too large if the last element in the list is a tie.
+      num_str_size = data.last.first.to_s.size + 1 unless data.empty?
+      data.each do |ranking, str|
+        @output << "#{"#{ranking}.".ljust(num_str_size)} #{str}"
       end
     end
 

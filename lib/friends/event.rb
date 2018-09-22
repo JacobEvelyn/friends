@@ -291,7 +291,9 @@ module Friends
     def description_matches(regex:, replace:, indicator:)
       # rubocop:disable Lint/AssignmentInCondition
       return unless match = @description.match(regex) # Abort if no match.
+
       # rubocop:enable Lint/AssignmentInCondition
+
       str = yield # It's important to execute the block even if not replacing.
       return unless replace # Only continue if we want to replace text.
 

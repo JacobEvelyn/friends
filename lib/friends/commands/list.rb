@@ -31,12 +31,6 @@ command :list do |list|
   [:activities, :notes].each do |events|
     list.desc "Lists all #{events}"
     list.command events do |list_events|
-      list_events.flag [:limit],
-                       arg_name: "NUMBER",
-                       desc: "The number of #{events} to return",
-                       default_value: 10,
-                       type: Integer
-
       list_events.flag [:with],
                        arg_name: "NAME",
                        desc: "List only #{events} with the given friend",
@@ -67,7 +61,6 @@ command :list do |list|
       list_events.action do |_, options|
         @introvert.send(
           "list_#{events}",
-          limit: options[:limit],
           with: options[:with],
           location_name: options[:in],
           tagged: options[:tagged],
@@ -101,27 +94,15 @@ command :list do |list|
   list.command :favorite do |list_favorite|
     list_favorite.desc "List favorite friends"
     list_favorite.command :friends do |list_favorite_friends|
-      list_favorite_friends.flag [:limit],
-                                 arg_name: "NUMBER",
-                                 desc: "The number of friends to return",
-                                 default_value: 10,
-                                 type: Integer
-
-      list_favorite_friends.action do |_, options|
-        @introvert.list_favorite_friends(limit: options[:limit])
+      list_favorite_friends.action do
+        @introvert.list_favorite_friends
       end
     end
 
     list_favorite.desc "List favorite locations"
     list_favorite.command :locations do |list_favorite_locations|
-      list_favorite_locations.flag [:limit],
-                                   arg_name: "NUMBER",
-                                   desc: "The number of locations to return",
-                                   default_value: 10,
-                                   type: Integer
-
-      list_favorite_locations.action do |_, options|
-        @introvert.list_favorite_locations(limit: options[:limit])
+      list_favorite_locations.action do
+        @introvert.list_favorite_locations
       end
     end
   end
