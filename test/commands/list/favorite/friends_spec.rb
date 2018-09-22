@@ -109,53 +109,5 @@ FILE
         lines.last.must_include "3. Friend"
       end
     end
-
-    describe "--limit" do
-      subject { run_cmd("list favorite friends --limit #{limit}") }
-
-      describe "when limit is less than 1" do
-        let(:limit) { 0 }
-        it "prints an error message" do
-          stderr_only "Error: Favorites limit must be positive"
-        end
-      end
-
-      describe "when limit is 1" do
-        let(:limit) { 1 }
-
-        it "uses correct friend pluralization" do
-          stdout_only "Your favorite friend is Grace Hopper (3 activities)"
-        end
-
-        describe "when favorite friend only has one activity" do
-          let(:content) do
-            <<-FILE
-### Activities:
-- 2017-01-01: Did some math with **Grace Hopper**.
-
-### Friends:
-- George Washington Carver
-- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
-- Marie Curie [Atlantis] @science
-FILE
-          end
-
-          it "uses correct activity pluralization" do
-            stdout_only "Your favorite friend is Grace Hopper (1 activity)"
-          end
-        end
-      end
-
-      describe "when limit is greater than 1" do
-        let(:limit) { 2 }
-        it "limits output to the number specified" do
-          stdout_only <<-OUTPUT
-Your favorite friends:
-1. Grace Hopper             (3 activities)
-2. George Washington Carver (2)
-          OUTPUT
-        end
-      end
-    end
   end
 end

@@ -35,27 +35,6 @@ clean_describe "list notes" do
       OUTPUT
     end
 
-    describe "--limit" do
-      subject { run_cmd("list notes --limit #{limit}") }
-
-      describe "when limit is less than 1" do
-        let(:limit) { 0 }
-        it "prints an error message" do
-          stderr_only "Error: Limit must be positive"
-        end
-      end
-
-      describe "when limit is 1 or greater" do
-        let(:limit) { 2 }
-        it "limits output to the number specified" do
-          stdout_only <<-OUTPUT
-2015-01-04: Grace Hopper and George Washington Carver both won an award.
-2015-06-06: Marie Curie just got accepted into a PhD program in Paris. @school
-          OUTPUT
-        end
-      end
-    end
-
     describe "--in" do
       subject { run_cmd("list notes --in #{location_name}") }
 

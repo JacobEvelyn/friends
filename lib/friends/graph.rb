@@ -17,9 +17,9 @@ module Friends
       @end_date = @all_activities.first.date
     end
 
-    # Prints the graph to STDOUT, with colors.
-    def draw
-      to_h.each do |month, (filtered_count, total_count)|
+    # @return [Array<String>] the output to print, with colors
+    def output
+      to_h.map do |month, (filtered_count, total_count)|
         str = "#{month} |"
         str += Array.new(filtered_count) do |count|
           Paint["█", color(count)]
@@ -29,8 +29,9 @@ module Friends
             Paint["∙", color(filtered_count + count)]
           end.join + Paint["|", color(total_count + 1)]
         end
-        puts str
-      end
+
+        str
+      end.reverse!
     end
 
     private

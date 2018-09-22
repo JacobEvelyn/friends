@@ -114,58 +114,5 @@ FILE
         lines.last.must_include "3. Location"
       end
     end
-
-    describe "--limit" do
-      subject { run_cmd("list favorite locations --limit #{limit}") }
-
-      describe "when limit is less than 1" do
-        let(:limit) { 0 }
-        it "prints an error message" do
-          stderr_only "Error: Favorites limit must be positive"
-        end
-      end
-
-      describe "when limit is 1" do
-        let(:limit) { 1 }
-
-        it "uses correct location pluralization" do
-          stdout_only "Your favorite location is Marie's Diner (2 activities)"
-        end
-
-        describe "when favorite location only has one activity" do
-          let(:content) do
-            <<-FILE
-### Activities:
-- 2017-01-01: Did some math with **Grace Hopper** at _Marie's Diner_.
-
-### Friends:
-- George Washington Carver
-- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
-- Marie Curie [Atlantis] @science
-
-### Locations:
-- Atlantis
-- Marie's Diner
-- Paris
-FILE
-          end
-
-          it "uses correct activity pluralization" do
-            stdout_only "Your favorite location is Marie's Diner (1 activity)"
-          end
-        end
-      end
-
-      describe "when limit is greater than 1" do
-        let(:limit) { 2 }
-        it "limits output to the number specified" do
-          stdout_only <<-OUTPUT
-Your favorite locations:
-1. Marie's Diner (2 activities)
-2. Paris         (1)
-          OUTPUT
-        end
-      end
-    end
   end
 end

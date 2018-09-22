@@ -36,27 +36,6 @@ clean_describe "list activities" do
       OUTPUT
     end
 
-    describe "--limit" do
-      subject { run_cmd("list activities --limit #{limit}") }
-
-      describe "when limit is less than 1" do
-        let(:limit) { 0 }
-        it "prints an error message" do
-          stderr_only "Error: Limit must be positive"
-        end
-      end
-
-      describe "when limit is 1 or greater" do
-        let(:limit) { 2 }
-        it "limits output to the number specified" do
-          stdout_only <<-OUTPUT
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
-          OUTPUT
-        end
-      end
-    end
-
     describe "--in" do
       subject { run_cmd("list activities --in #{location_name}") }
 

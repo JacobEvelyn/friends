@@ -76,6 +76,7 @@ pre do |global_options, cmd|
   # If the --colorless flag is passed, don't do any fancy painting.
   Paint.mode = 0 if global_options[:colorless]
 
+  @quiet_mode = global_options[:quiet]
   @debug_mode = global_options[:debug]
 
   # If we're updating the friends program we don't need to read the friends file
@@ -84,10 +85,7 @@ pre do |global_options, cmd|
   # @introvert until the command block when the system call has exited
   # successfully.
   unless [:update, :edit].include? cmd.name
-    @introvert = Friends::Introvert.new(
-      filename: global_options[:filename],
-      quiet: global_options[:quiet]
-    )
+    @introvert = Friends::Introvert.new(filename: global_options[:filename])
   end
 
   true # Continue executing the command.
@@ -96,6 +94,17 @@ end
 post do
   # After each command, clean the file if we have modifications to make.
   @introvert.clean(clean_command: @clean_command) if @dirty
+
+  if @introvert && !@quiet_mode
+    begin
+      IO.popen(ENV["FRIENDS_PAGER"] || "less -RFX", "w") { |pipe| pipe.puts @introvert.output }
+    rescue Errno::ENOENT
+      # If the pager is not installed, just print the output.
+      puts @introvert.output
+    rescue Errno::EPIPE # rubocop:disable Lint/HandleExceptions
+      # Occurs when quitting the pager.
+    end
+  end
 end
 
 # If an error is raised, print the message to STDERR and exit the program.
