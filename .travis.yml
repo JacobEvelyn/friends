@@ -5,6 +5,9 @@ rvm:
 - 2.3.0
 - 2.4.0
 - 2.5.0
+branches:
+  only:
+  - master
 script:
 - bundle exec rake test
 - bundle exec rubocop
