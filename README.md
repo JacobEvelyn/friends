@@ -932,7 +932,7 @@ If you have an idea,
 [make a GitHub issue](https://github.com/JacobEvelyn/friends/issues/new)!
 Suggestions are very very welcome, and usually are implemented very
 quickly. And if you'd like to do the implementing yourself, see the
-[contributing guide](https://github.com/JacobEvelyn/friends/blob/master/CONTRIBUTING.md).
+[contributing guide](https://github.com/JacobEvelyn/friends/blob/master/.github/CONTRIBUTING.md).
 
 A big big thanks to all of this project's lovely
 [contributors](https://github.com/JacobEvelyn/friends/graphs/contributors):
