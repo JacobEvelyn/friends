@@ -131,7 +131,7 @@ module Friends
       # We check nicknames before first names because nicknames may contain
       # first names, as in "Amazing Grace" being a nickname for Grace Hopper.
       [
-        chunks,
+        chunks, # Match a full name with the highest priority.
         *@nicknames.map { |n| [n] },
 
         # Match a first name followed by a last name initial, period, and then
@@ -139,16 +139,16 @@ module Friends
         # the "Jake E." part of something like "Jake E. and I went skiing." This
         # allows us to correctly count the period as part of the name when it's
         # in the middle of a sentence.
-        [chunks.first, "#{chunks.last[0]}\.(?=#{splitter}(?-i)[a-z])"],
+        ([chunks.first, "#{chunks.last[0]}\.(?=#{splitter}(?-i)[a-z])"] if chunks.size > 1),
 
         # If the above doesn't match, we check for just the first name and then
         # a last name initial. This matches the "Jake E" part of something like
         # "I went skiing with Jake E." This allows us to correctly exclude the
         # period from the name when it's at the end of a sentence.
-        [chunks.first, chunks.last[0]],
+        ([chunks.first, chunks.last[0]] if chunks.size > 1),
 
-        [chunks.first]
-      ].map do |words|
+        *(1..chunks.size - 1).map { |i| chunks.take(i) }.reverse
+      ].compact.map do |words|
         Friends::RegexBuilder.regex(words.join(splitter))
       end
     end

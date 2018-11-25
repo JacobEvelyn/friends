@@ -1,15 +1,19 @@
 language: ruby
 rvm:
-- 2.1.0
-- 2.2.0
-- 2.3.0
-- 2.4.0
-- 2.5.0
+  - 2.1.0
+  - 2.2.0
+  - 2.3.0
+  - 2.4.0 # 2.5.0 is tested below
 branches:
   only:
-  - master
+    - master
 script:
-- bundle exec rake test
-- bundle exec rubocop
+  - bundle exec rake test
+matrix:
+  include:
+    - rvm: 2.5.0
+      script:
+        - bundle exec rake test
+        - gem install rubocop && rubocop
 notifications:
   email: false
