@@ -258,6 +258,59 @@ FILE
       end
     end
 
+    describe "when a friend's first and middle name matches two other friends' first names" do
+      let(:description) { "Met Martin Luther." }
+
+      # Make sure "Martin Jones" and "Luther Jones" are closer friends than
+      # "Martin Luther King" so we know our test result isn't due to chance.
+      let(:content) do
+        <<-FILE
+### Activities:
+- 2018-01-01: Singing with **Martin Jones**.
+- 2018-01-01: Dancing with **Luther Jones**.
+
+### Notes:
+
+### Friends:
+- Luther Jones
+- Martin Jones
+- Martin Luther King
+
+### Locations:
+FILE
+      end
+
+      it { line_added "- #{date}: Met **Martin Luther King**." }
+      if test_stdout
+        it { stdout_only "#{capitalized_event} added: \"#{date}: Met Martin Luther King.\"" }
+      end
+    end
+
+    describe "when a friend has a first name only" do
+      # We want to explicitly check that the first-name last-initial behavior
+      # doesn't kick in here and match "Alejandra A" when the friend has no
+      # last name.
+      let(:description) { "Met Alejandra a few times." }
+
+      let(:content) do
+        <<-FILE
+### Activities:
+
+### Notes:
+
+### Friends:
+- Alejandra
+
+### Locations:
+FILE
+      end
+
+      it { line_added "- #{date}: Met **Alejandra** a few times." }
+      if test_stdout
+        it { stdout_only "#{capitalized_event} added: \"#{date}: Met Alejandra a few times.\"" }
+      end
+    end
+
     describe "when description has a friend's name with leading asterisks" do
       let(:description) { "Lunch with **Grace Hopper." }
 
