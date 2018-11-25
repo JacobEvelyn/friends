@@ -14,6 +14,26 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.43](https://github.com/JacobEvelyn/friends/tree/v0.43) (2018-11-25)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.42...v0.43)
+
+**Implemented enhancements:**
+
+- Improve matches for friends with only first names [\#215](https://github.com/JacobEvelyn/friends/issues/215)
+- Better match friends with middle names [\#213](https://github.com/JacobEvelyn/friends/issues/213)
+
+**Closed issues:**
+
+- When specifying a file that does not exist, prompt to create it instead of aborting [\#214](https://github.com/JacobEvelyn/friends/issues/214)
+- Dependabot can't evaluate your Ruby dependency files [\#211](https://github.com/JacobEvelyn/friends/issues/211)
+- Sqlite as a backing datastore [\#210](https://github.com/JacobEvelyn/friends/issues/210)
+- Generate Searchable Static Site [\#209](https://github.com/JacobEvelyn/friends/issues/209)
+
+**Merged pull requests:**
+
+- Improve friend name matching for various edge cases [\#216](https://github.com/JacobEvelyn/friends/pull/216) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix contributing guide link [\#212](https://github.com/JacobEvelyn/friends/pull/212) ([Nitemice](https://github.com/Nitemice))
+
 ## [v0.42](https://github.com/JacobEvelyn/friends/tree/v0.42) (2018-09-22)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.41...v0.42)
 
@@ -67,7 +87,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Give name-matching priority to full-text matches [\#203](https://github.com/JacobEvelyn/friends/pull/203) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Prevent the addition of blank events, names, and locations [\#200](https://github.com/JacobEvelyn/friends/pull/200) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Fix Rubocop errors [\#196](https://github.com/JacobEvelyn/friends/pull/196) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot[bot]](https://github.com/marketplace/dependabot))
+- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v0.37](https://github.com/JacobEvelyn/friends/tree/v0.37) (2018-02-24)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.36...v0.37)
