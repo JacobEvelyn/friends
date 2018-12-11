@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "chronic", "~> 0.10"
   spec.add_dependency "gli", "~> 2.14"
   spec.add_dependency "paint", "~> 2.0"
-  spec.add_dependency "semverse", "~> 2.0"
+  spec.add_dependency "semverse", ">= 2", "< 4"
   spec.add_dependency "tty-pager", "~> 0.11"
 
   spec.add_development_dependency "bundler", "~> 1.6"
