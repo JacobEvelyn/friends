@@ -58,7 +58,7 @@ switch [:quiet],
 
 flag [:filename],
      arg_name: "FILENAME",
-     default_value: "./friends.md",
+     default_value: "~/friends.md",
      desc: "Set the location of the friends file"
 
 switch [:debug],

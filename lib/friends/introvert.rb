@@ -59,7 +59,7 @@ module Friends
         end
       end
 
-      File.open(@filename, "w") do |file|
+      File.open(File.expand_path(@filename), "w") do |file|
         file.puts(ACTIVITIES_HEADER)
         stable_sort(@activities).each { |act| file.puts(act.serialize) }
         file.puts # Blank line separating activities from notes.
