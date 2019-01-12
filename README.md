@@ -201,7 +201,7 @@ These flags are:
 
 - `--colorless`: Disable output colorization and other effects.
 - `--debug`: Debug error messages with a full backtrace.
-- `--filename`: Set the location of the friends file to use (default: `./friends.md`).
+- `--filename`: Set the location of the friends file to use (default: `~/friends.md`).
 
 ```bash
 $ friends --filename ./test/tmp/friends.md clean
@@ -425,7 +425,7 @@ Reads and re-writes the `friends.md` file:
 
 ```bash
 $ friends clean
-File cleaned: "./friends.md"
+File cleaned: "~/friends.md"
 ```
 
 This command is useful after manual editing of the file, for re-ordering its
@@ -439,7 +439,7 @@ Allows you to manually edit the file:
 
 ```bash
 $ friends edit
-Opening "./friends.md" with "vim"
+Opening "~/friends.md" with "vim"
 ```
 
 The file is opened with the command specified by the `EDITOR` environment
@@ -448,7 +448,7 @@ variable, falling back to `vim` if it is not set:
 ```bash
 $ export EDITOR='atom --wait'
 $ friends edit
-Opening "./friends.md" with "atom --wait"
+Opening "~/friends.md" with "atom --wait"
 ```
 
 Note that when setting your own `EDITOR` value, if you like to use
@@ -474,7 +474,7 @@ And if that friend or location isn't already present it'll be added:
 ```bash
 Friend added: "Oprah Winfrey"
 Location added: "Chicago"
-File cleaned: "./friends.md\"
+File cleaned: "~/friends.md"
 ```
 
 #### `graph`
