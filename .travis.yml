@@ -1,9 +1,10 @@
 language: ruby
 rvm:
-  - 2.1.0
-  - 2.2.0
-  - 2.3.0
-  - 2.4.0 # 2.5.0 is tested below
+  - 2.1
+  - 2.2
+  - 2.3
+  - 2.4
+  - 2.5 # 2.6 is tested below
 branches:
   only:
     - master
@@ -11,7 +12,7 @@ script:
   - bundle exec rake test
 matrix:
   include:
-    - rvm: 2.5.0
+    - rvm: 2.6
       script:
         - bundle exec rake test
         - gem install rubocop && rubocop
