@@ -14,6 +14,27 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.44](https://github.com/JacobEvelyn/friends/tree/v0.44) (2019-01-12)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.43...v0.44)
+
+**Implemented enhancements:**
+
+- Test against Ruby 2.6 [\#224](https://github.com/JacobEvelyn/friends/issues/224)
+- Default filename should be ~/friends.md instead of ./friends.md [\#197](https://github.com/JacobEvelyn/friends/issues/197)
+
+**Closed issues:**
+
+- Dependabot can't resolve your Ruby dependency files [\#221](https://github.com/JacobEvelyn/friends/issues/221)
+- Dependabot can't resolve your Ruby dependency files [\#220](https://github.com/JacobEvelyn/friends/issues/220)
+- Dependabot can't resolve your Ruby dependency files [\#219](https://github.com/JacobEvelyn/friends/issues/219)
+- Dependabot can't resolve your Ruby dependency files [\#218](https://github.com/JacobEvelyn/friends/issues/218)
+
+**Merged pull requests:**
+
+- Test against Ruby 2.6 [\#225](https://github.com/JacobEvelyn/friends/pull/225) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Change default from ./friends.md to ~/friends.md [\#223](https://github.com/JacobEvelyn/friends/pull/223) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Update semverse requirement from ~\> 2.0 to \>= 2, \< 4 [\#217](https://github.com/JacobEvelyn/friends/pull/217) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v0.43](https://github.com/JacobEvelyn/friends/tree/v0.43) (2018-11-25)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.42...v0.43)
 
