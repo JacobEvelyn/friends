@@ -269,9 +269,9 @@ Nov 2014 |∙|
     end
 
     describe "--tagged" do
-      subject { run_cmd("graph#{' --unscaled' if unscaled} --tagged food") }
+      subject { run_cmd("graph#{' --unscaled' if unscaled} --tagged Food") }
 
-      it "matches tag case-sensitively and scales the graph" do
+      it "matches tag case-insensitively and scales the graph" do
         stdout_only <<-OUTPUT
 Nov 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
@@ -292,7 +292,7 @@ Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
       describe "--unscaled" do
         let(:unscaled) { true }
 
-        it "matches tag case-sensitively and does not scale graph" do
+        it "matches tag case-insensitively and does not scale graph" do
           stdout_only <<-OUTPUT
 Nov 2015 |█
 Oct 2015 |
@@ -313,10 +313,10 @@ Nov 2014 |∙|
 
       describe "when more than one tag is passed" do
         subject { run_cmd("graph#{' --unscaled' if unscaled} --tagged #{tag1} --tagged #{tag2}") }
-        let(:tag1) { "food" }
-        let(:tag2) { "partying" }
+        let(:tag1) { "Food" }
+        let(:tag2) { "PARTYING" }
 
-        it "matches all tags case-sensitively and scales the graph" do
+        it "matches all tags case-insensitively and scales the graph" do
           stdout_only <<-OUTPUT
 Nov 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
@@ -337,7 +337,7 @@ Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
         describe "--unscaled" do
           let(:unscaled) { true }
 
-          it "matches all tags case-sensitively and does not scale graph" do
+          it "matches all tags case-insensitively and does not scale graph" do
             stdout_only <<-OUTPUT
 Nov 2015 |∙|
 Oct 2015 |

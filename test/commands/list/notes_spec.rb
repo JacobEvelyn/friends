@@ -95,9 +95,9 @@ clean_describe "list notes" do
     end
 
     describe "--tagged" do
-      subject { run_cmd("list notes --tagged school") }
+      subject { run_cmd("list notes --tagged School") }
 
-      it "matches tag case-sensitively" do
+      it "matches tag case-insensitively" do
         stdout_only <<-OUTPUT
 2015-06-06: Marie Curie just got accepted into a PhD program in Paris. @school
 2017-03-12: Marie Curie completed her PhD in record time. @school
@@ -106,8 +106,8 @@ clean_describe "list notes" do
 
       describe "when more than one tag is passed" do
         subject { run_cmd("list notes --tagged #{tag1} --tagged #{tag2}") }
-        let(:tag1) { "science" }
-        let(:tag2) { "school" }
+        let(:tag1) { "Science" }
+        let(:tag2) { "SCHOOL" }
         let(:content) do
           <<-FILE
 ### Notes:
@@ -123,7 +123,7 @@ clean_describe "list notes" do
 FILE
         end
 
-        it "matches all tags case-sensitively" do
+        it "matches all tags case-insensitively" do
           stdout_only <<-OUTPUT
 2015-11-01: Grace Hopper just started a PhD program. @school @science
 2014-12-31: Marie Curie completed her PhD today! @science @school
