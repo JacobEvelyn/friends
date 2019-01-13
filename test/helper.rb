@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if ENV["TRAVIS"] == "true"
+if ENV["TRAVIS"] == "true" && ENV["CODE_COVERAGE"] == "true"
   require "simplecov"
   require "coveralls"
   SimpleCov.formatter = Coveralls::SimpleCov::Formatter

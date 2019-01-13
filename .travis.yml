@@ -5,9 +5,6 @@ rvm:
   - 2.3
   - 2.4
   - 2.5 # 2.6 is tested below
-branches:
-  only:
-    - master
 script:
   - bundle exec rake test
 matrix:
@@ -16,5 +13,10 @@ matrix:
       script:
         - bundle exec rake test
         - gem install rubocop && rubocop
+      env:
+        - CODE_COVERAGE=true
+branches:
+  only:
+    - master # Always run on the master branch
 notifications:
   email: false
