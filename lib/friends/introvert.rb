@@ -264,7 +264,7 @@ module Friends
       # Filter by tag if param is passed.
       unless tagged.empty?
         fs = fs.select do |friend|
-          tagged.all? { |tag| friend.tags.include? tag }
+          tagged.all? { |tag| friend.tags.map(&:downcase).include? tag.downcase }
         end
       end
 

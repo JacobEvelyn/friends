@@ -69,9 +69,9 @@ Norman Borlaug (a.k.a. Norm) @science @science:outdoors @science:outdoors:agrono
     end
 
     describe "--tagged" do
-      subject { run_cmd("list friends --tagged science") }
+      subject { run_cmd("list friends --tagged scIence") }
 
-      it "matches tag case-sensitively" do
+      it "matches tag case-insensitively" do
         stdout_only <<-OUTPUT
 Marie Curie
 Grace Hopper
@@ -81,8 +81,8 @@ Norman Borlaug
 
       describe "when more than one tag is passed" do
         subject { run_cmd("list friends --tagged #{tag1} --tagged #{tag2}") }
-        let(:tag1) { "science" }
-        let(:tag2) { "navy" }
+        let(:tag1) { "Science" }
+        let(:tag2) { "NAVY" }
         let(:content) do
           <<-FILE
 ### Activities:
@@ -96,7 +96,7 @@ Norman Borlaug
 FILE
         end
 
-        it "matches all tags case-sensitively" do
+        it "matches all tags case-insensitively" do
           stdout_only <<-OUTPUT
 Grace Hopper
 Neil Armstrong

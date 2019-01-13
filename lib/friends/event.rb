@@ -146,12 +146,12 @@ module Friends
     # @param tag [String] the tag to test, of the form "@tag"
     # @return [Boolean] true iff this activity includes the given tag
     def includes_tag?(tag)
-      tags.include? tag
+      tags.include? tag.downcase
     end
 
     # @return [Set] all tags in this activity (including the "@")
     def tags
-      Set.new(@description.scan(TAG_REGEX))
+      Set.new(@description.scan(TAG_REGEX).map(&:downcase))
     end
 
     # Find the names of all friends in this description.

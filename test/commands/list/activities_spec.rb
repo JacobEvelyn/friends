@@ -92,9 +92,9 @@ clean_describe "list activities" do
     end
 
     describe "--tagged" do
-      subject { run_cmd("list activities --tagged food") }
+      subject { run_cmd("list activities --tagged FOOD") }
 
-      it "matches tag case-sensitively" do
+      it "matches tag case-insensitively" do
         stdout_only <<-OUTPUT
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
@@ -103,8 +103,8 @@ clean_describe "list activities" do
 
       describe "when more than one tag is passed" do
         subject { run_cmd("list activities --tagged #{tag1} --tagged #{tag2}") }
-        let(:tag1) { "food" }
-        let(:tag2) { "partying" }
+        let(:tag1) { "Food" }
+        let(:tag2) { "PARTYING" }
         let(:content) do
           <<-FILE
 ### Activities:
@@ -120,7 +120,7 @@ clean_describe "list activities" do
 FILE
         end
 
-        it "matches all tags case-sensitively" do
+        it "matches all tags case-insensitively" do
           stdout_only(
             "2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying @food"
           )
