@@ -29,13 +29,18 @@ command :graph do |graph|
              desc: "Graph activities before or on the given date",
              type: InputDate
 
+  graph.switch [:unscaled],
+               negatable: false,
+               desc: "Do not scale the bars in the graph"
+
   graph.action do |_, options|
     @introvert.graph(
       with: options[:with],
       location_name: options[:in],
       tagged: options[:tagged],
       since_date: options[:since],
-      until_date: options[:until]
+      until_date: options[:until],
+      unscaled: options[:unscaled]
     )
   end
 end

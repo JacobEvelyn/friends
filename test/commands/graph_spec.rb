@@ -3,7 +3,8 @@
 require "./test/helper"
 
 clean_describe "graph" do
-  subject { run_cmd("graph") }
+  subject { run_cmd("graph#{' --unscaled' if unscaled}") }
+  let(:unscaled) { false }
 
   describe "when file does not exist" do
     let(:content) { nil }
@@ -46,8 +47,29 @@ clean_describe "graph" do
       FILE
     end
 
-    it "graphs all activities" do
+    it "graphs all activities, scaled" do
       stdout_only <<-OUTPUT
+Nov 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |████████████████████
+Dec 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+      OUTPUT
+    end
+
+    describe "--unscaled" do
+      let(:unscaled) { true }
+
+      it "graphs all activities, unscaled" do
+        stdout_only <<-OUTPUT
 Nov 2015 |█
 Oct 2015 |
 Sep 2015 |
@@ -61,13 +83,15 @@ Feb 2015 |
 Jan 2015 |████
 Dec 2014 |█
 Nov 2014 |█
-      OUTPUT
+        OUTPUT
+      end
     end
 
     describe "when there are more activities than colors" do
       let(:content) do
         (["### Activities:"] + (["- 2017-06-01: Did something."] * 100)).join("\n")
       end
+      let(:unscaled) { true }
 
       it "displays the correct number of activities" do
         stdout_only("Jun 2017 |" + ("█" * 100))
@@ -75,7 +99,7 @@ Nov 2014 |█
     end
 
     describe "--in" do
-      subject { run_cmd("graph --in #{location_name}") }
+      subject { run_cmd("graph#{' --unscaled' if unscaled} --in #{location_name}") }
 
       describe "when location does not exist" do
         let(:location_name) { "Garbage" }
@@ -86,8 +110,30 @@ Nov 2014 |█
 
       describe "when location exists" do
         let(:location_name) { "paris" }
-        it "matches location case-insensitively" do
+
+        it "matches location case-insensitively and scales the graph" do
           stdout_only <<-OUTPUT
+Nov 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |███████████████∙∙∙∙∙|
+Dec 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+          OUTPUT
+        end
+
+        describe "--unscaled" do
+          let(:unscaled) { true }
+
+          it "matches location case-insensitively and does not scale graph" do
+            stdout_only <<-OUTPUT
 Nov 2015 |∙|
 Oct 2015 |
 Sep 2015 |
@@ -101,13 +147,14 @@ Feb 2015 |
 Jan 2015 |███∙|
 Dec 2014 |█
 Nov 2014 |∙|
-          OUTPUT
+            OUTPUT
+          end
         end
       end
     end
 
     describe "--with" do
-      subject { run_cmd("graph --with #{friend_name}") }
+      subject { run_cmd("graph#{' --unscaled' if unscaled} --with #{friend_name}") }
 
       describe "when friend does not exist" do
         let(:friend_name) { "Garbage" }
@@ -128,8 +175,29 @@ Nov 2014 |∙|
       describe "when friend name matches one friend" do
         let(:friend_name) { "george" }
 
-        it "matches friend case-insensitively" do
+        it "matches friend case-insensitively and scales the graph" do
           stdout_only <<-OUTPUT
+Nov 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+          OUTPUT
+        end
+
+        describe "--unscaled" do
+          let(:unscaled) { true }
+
+          it "matches friend case-insensitively and does not scale graph" do
+            stdout_only <<-OUTPUT
 Nov 2015 |∙|
 Oct 2015 |
 Sep 2015 |
@@ -143,17 +211,44 @@ Feb 2015 |
 Jan 2015 |█∙∙∙|
 Dec 2014 |∙|
 Nov 2014 |█
-          OUTPUT
+            OUTPUT
+          end
         end
       end
 
       describe "when more than one friend name is passed" do
-        subject { run_cmd("graph --with #{friend_name1} --with #{friend_name2}") }
+        subject do
+          run_cmd(
+            "graph#{' --unscaled' if unscaled} --with #{friend_name1} --with #{friend_name2}"
+          )
+        end
+
         let(:friend_name1) { "george" }
         let(:friend_name2) { "grace" }
 
-        it "matches all friends case-insensitively" do
+        it "matches all friends case-insensitively and scales the graph" do
           stdout_only <<-OUTPUT
+Nov 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+          OUTPUT
+        end
+
+        describe "--unscaled" do
+          let(:unscaled) { true }
+
+          it "matches all friends case-insensitively and does not scale graph" do
+            stdout_only <<-OUTPUT
 Nov 2015 |∙|
 Oct 2015 |
 Sep 2015 |
@@ -167,16 +262,38 @@ Feb 2015 |
 Jan 2015 |█∙∙∙|
 Dec 2014 |∙|
 Nov 2014 |∙|
-          OUTPUT
+            OUTPUT
+          end
         end
       end
     end
 
     describe "--tagged" do
-      subject { run_cmd("graph --tagged food") }
+      subject { run_cmd("graph#{' --unscaled' if unscaled} --tagged food") }
 
-      it "matches tag case-sensitively" do
+      it "matches tag case-sensitively and scales the graph" do
         stdout_only <<-OUTPUT
+Nov 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+        OUTPUT
+      end
+
+      describe "--unscaled" do
+        let(:unscaled) { true }
+
+        it "matches tag case-sensitively and does not scale graph" do
+          stdout_only <<-OUTPUT
 Nov 2015 |█
 Oct 2015 |
 Sep 2015 |
@@ -191,15 +308,37 @@ Jan 2015 |█∙∙∙|
 Dec 2014 |█
 Nov 2014 |∙|
         OUTPUT
+        end
       end
 
       describe "when more than one tag is passed" do
-        subject { run_cmd("graph --tagged #{tag1} --tagged #{tag2}") }
+        subject { run_cmd("graph#{' --unscaled' if unscaled} --tagged #{tag1} --tagged #{tag2}") }
         let(:tag1) { "food" }
         let(:tag2) { "partying" }
 
-        it "matches all tags case-sensitively" do
+        it "matches all tags case-sensitively and scales the graph" do
           stdout_only <<-OUTPUT
+Nov 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+          OUTPUT
+        end
+
+        describe "--unscaled" do
+          let(:unscaled) { true }
+
+          it "matches all tags case-sensitively and does not scale graph" do
+            stdout_only <<-OUTPUT
 Nov 2015 |∙|
 Oct 2015 |
 Sep 2015 |
@@ -213,16 +352,36 @@ Feb 2015 |
 Jan 2015 |∙∙∙∙|
 Dec 2014 |█
 Nov 2014 |∙|
-          OUTPUT
+            OUTPUT
+          end
         end
       end
     end
 
     describe "--since" do
-      subject { run_cmd("graph --since 'January 6th 2015'") }
+      subject { run_cmd("graph#{' --unscaled' if unscaled} --since 'January 6th 2015'") }
 
-      it "graphs activities on and after the specified date" do
+      it "graphs activities on and after the specified date and scales the graph" do
         stdout_only <<-OUTPUT
+Nov 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |███████████████∙∙∙∙∙|
+        OUTPUT
+      end
+
+      describe "--unscaled" do
+        let(:unscaled) { true }
+
+        it "graphs activities on and after the specified date and does not scale graph" do
+          stdout_only <<-OUTPUT
 Nov 2015 |█
 Oct 2015 |
 Sep 2015 |
@@ -233,30 +392,68 @@ May 2015 |
 Apr 2015 |
 Mar 2015 |
 Feb 2015 |
-Jan 2015 |███
-        OUTPUT
+Jan 2015 |███∙|
+          OUTPUT
+        end
       end
     end
 
     describe "--until" do
-      subject { run_cmd("graph --until 'January 6th 2015'") }
+      subject { run_cmd("graph#{' --unscaled' if unscaled} --until 'January 6th 2015'") }
 
-      it "graphs activities before and on the specified date" do
+      it "graphs activities before and on the specified date and scales the graph" do
         stdout_only <<-OUTPUT
-Jan 2015 |███
+Jan 2015 |███████████████∙∙∙∙∙|
+Dec 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2014 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+        OUTPUT
+      end
+
+      describe "--unscaled" do
+        let(:unscaled) { true }
+
+        it "graphs activities before and on the specified date and does not scale graph" do
+          stdout_only <<-OUTPUT
+Jan 2015 |███∙|
 Dec 2014 |█
 Nov 2014 |█
-        OUTPUT
+          OUTPUT
+        end
       end
     end
 
     describe "combining filters" do
-      subject { run_cmd("graph --since 'January 6th 2015' --with Grace") }
+      subject do
+        run_cmd("graph#{' --unscaled' if unscaled} --since 'January 6th 2015' --with Grace")
+      end
 
-      it "only shows other activities within the same period as the filtered ones" do
+      it "only shows other activities within the same period as the filtered ones and scales the "\
+         "graph" do
         # If we just rounded to the month, there would be three unfiltered activities in
         # January displayed (due to the one on 1/5/2015). Instead, we correctly display two.
         stdout_only <<-OUTPUT
+Nov 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jul 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jun 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+May 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Apr 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Mar 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Feb 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+        OUTPUT
+      end
+
+      describe "--unscaled" do
+        let(:unscaled) { true }
+
+        it "only shows other activities within the same period as the filtered ones and does not "\
+           "scale graph" do
+          # If we just rounded to the month, there would be three unfiltered activities in
+          # January displayed (due to the one on 1/5/2015). Instead, we correctly display two.
+          stdout_only <<-OUTPUT
 Nov 2015 |█
 Oct 2015 |
 Sep 2015 |
@@ -267,8 +464,9 @@ May 2015 |
 Apr 2015 |
 Mar 2015 |
 Feb 2015 |
-Jan 2015 |█∙∙|
-        OUTPUT
+Jan 2015 |█∙∙∙|
+          OUTPUT
+        end
       end
     end
   end
