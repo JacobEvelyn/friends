@@ -483,86 +483,97 @@ Graphs (in color!) your activities over time:
 
 ```bash
 $ friends graph
-Nov 2017 |███
-Dec 2017 |██
-Jan 2018 |███████
-Feb 2018 |█████
+Feb 2018 |██████∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |████████████████████
+Dec 2017 |███∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |█████████∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
-Or graph only activities with a certain friend:
+By default, graphs are scaled relative to the month with the most activities.
+You can also show the unscaled graph:
+
+```bash
+$ friends graph --unscaled
+Feb 2018 |██
+Jan 2018 |███████
+Dec 2017 |█
+Nov 2017 |███
+```
+
+You can graph only activities with a certain friend:
 
 ```bash
 $ friends graph --with George
-Nov 2017 |█∙∙|
-Dec 2017 |∙∙|
-Jan 2018 |█████∙∙|
-Feb 2018 |███∙∙|
+Feb 2018 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |█████████████████∙∙∙|
+Dec 2017 |███∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |██████∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
-The dots represent the total activities that month, so you can get a feel for the
+The dots represent the total activities of each month, so you can get a feel for the
 proportion of activities with that friend vs. the total you've logged.
 
 You can also graph a certain group of friends:
 
 ```bash
 $ friends graph --with George --with Grace
-Nov 2017 |∙∙∙|
-Dec 2017 |∙∙|
-Jan 2018 |█∙∙∙∙∙∙|
-Feb 2018 |∙∙∙∙∙|
+Feb 2018 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |███████████∙∙∙∙∙∙∙∙∙|
+Dec 2017 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |███∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
 Or graph only activities with a certain tag:
 
 ```bash
 $ friends graph --tagged food
-Nov 2017 |█∙∙|
-Dec 2017 |∙∙|
-Jan 2018 |∙∙∙∙∙∙∙|
-Feb 2018 |███∙∙|
+Feb 2018 |██████∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |█████████∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2017 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
 Or with multiple tags:
 
 ```bash
-$ friends graph --tagged @fun --tagged @work
-Nov 2017 |∙∙∙|
-Dec 2017 |█∙|
-Jan 2018 |∙∙∙∙∙∙∙|
-Feb 2018 |█∙∙∙∙|
+$ friends graph --tagged fun --tagged work
+Feb 2018 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |█∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2017 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |█∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
 Or graph only activities in a certain location:
 
 ```bash
 $ friends graph --in Paris
-Nov 2017 |█∙∙|
-Dec 2017 |∙∙|
-Jan 2018 |∙∙∙∙∙∙∙|
-Feb 2018 |█∙∙∙∙|
+Feb 2018 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Dec 2017 |███∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
 Or graph only activities on or after a certain date:
 
 ```bash
-$ friends graph --since 'January 1st 2018'
-Jan 2018 |███████
-Feb 2018 |█████
+$ friends graph --since 'January 21st 2018'
+Feb 2018 |███████∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Jan 2018 |█∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
 Or graph only activities before or on a certain date:
 
 ```bash
 $ friends graph --until 'January 1st 2018'
-Nov 2017 |███
-Dec 2017 |██
-Jan 2018 |███████
+Jan 2018 |█████████████∙∙∙∙∙∙∙|
+Dec 2017 |███∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2017 |█████████∙∙∙∙∙∙∙∙∙∙∙|
 ```
 
 And you can use multiple of these flags together:
 
 ```bash
-$ friends graph --in Paris --tagged food --with George --since 'Jan 2018'
+$ friends graph --unscaled --in Paris --tagged food --with George --since 'Jan 2018'
 Jan 2018 |∙∙∙∙∙∙∙|
 Fen 2017 |█∙∙∙∙|
 ```
@@ -639,7 +650,7 @@ $ friends list activities --tagged food
 Or use more than one tag:
 
 ```bash
-$ friends list activities --tagged @fun --tagged @work
+$ friends list activities --tagged fun --tagged work
 2018-07-04: Summer picnic with @work colleagues. @fun
 ```
 

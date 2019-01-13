@@ -317,9 +317,11 @@ module Friends
     #   unfiltered
     # @param since_date [Date] a date on or after which to find activities, or nil for unfiltered
     # @param until_date [Date] a date before or on which to find activities, or nil for unfiltered
+    # @param unscaled [Boolean] true iff we should show the absolute size of bars in the graph
+    #   rather than a scaled version
     # @raise [FriendsError] if friend, location or tag cannot be found or
     #   is ambiguous
-    def graph(with:, location_name:, tagged:, since_date:, until_date:)
+    def graph(with:, location_name:, tagged:, since_date:, until_date:, unscaled:)
       filtered_activities_to_graph = filtered_events(
         events: @activities,
         with: with,
@@ -340,13 +342,18 @@ module Friends
         with: [],
         location_name: nil,
         tagged: [],
-        since_date: since_date,
-        until_date: until_date
+
+        # By including all activities for the "fencepost" months in our totals,
+        # we prevent those months from being always "full" in the graph
+        # because all filtered events will match the criteria.
+        since_date: (since_date.prev_day(since_date.day - 1) if since_date),
+        until_date: (until_date.prev_day(until_date.day - 1).next_month.prev_day if until_date)
       )
 
       Graph.new(
         filtered_activities: filtered_activities_to_graph,
-        all_activities: all_activities_to_graph
+        all_activities: all_activities_to_graph,
+        unscaled: unscaled
       ).output.each { |line| @output << line }
     end
 
