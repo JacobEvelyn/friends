@@ -9,6 +9,7 @@ merge this change:
 - [ ] Code has tests as appropriate.
 - [ ] Code has been reviewed by @JacobEvelyn.
 - [ ] All tests pass on Travis CI.
+- [ ] Code coverage remains high.
 - [ ] Rubocop reports no issues on Travis CI.
 - [ ] The `README.md` file is updated as appropriate.
 

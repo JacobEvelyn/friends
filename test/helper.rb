@@ -2,8 +2,8 @@
 
 if ENV["TRAVIS"] == "true" && ENV["CODE_COVERAGE"] == "true"
   require "simplecov"
-  require "coveralls"
-  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
   SimpleCov.start do
     add_filter "/test/"
   end
