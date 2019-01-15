@@ -14,6 +14,21 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.45](https://github.com/JacobEvelyn/friends/tree/v0.45) (2019-01-15)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.44...v0.45)
+
+**Implemented enhancements:**
+
+- Match tags case-insensitively [\#226](https://github.com/JacobEvelyn/friends/issues/226)
+- Add `friends graph --unscaled` [\#201](https://github.com/JacobEvelyn/friends/issues/201)
+
+**Merged pull requests:**
+
+- Switch from Coveralls to Codecov [\#230](https://github.com/JacobEvelyn/friends/pull/230) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Match tags case-insensitively [\#229](https://github.com/JacobEvelyn/friends/pull/229) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Only compute code coverage once per Travis run [\#228](https://github.com/JacobEvelyn/friends/pull/228) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Scale graphs by default [\#227](https://github.com/JacobEvelyn/friends/pull/227) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.44](https://github.com/JacobEvelyn/friends/tree/v0.44) (2019-01-12)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.43...v0.44)
 
