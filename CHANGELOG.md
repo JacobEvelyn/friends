@@ -14,6 +14,17 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.46](https://github.com/JacobEvelyn/friends/tree/v0.46) (2019-01-27)
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.45...v0.46)
+
+**Fixed bugs:**
+
+- Data overwritten when --filename is not specified [\#231](https://github.com/JacobEvelyn/friends/issues/231)
+
+**Merged pull requests:**
+
+- Fix file-reading issues with default file [\#232](https://github.com/JacobEvelyn/friends/pull/232) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.45](https://github.com/JacobEvelyn/friends/tree/v0.45) (2019-01-15)
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.44...v0.45)
 
