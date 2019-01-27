@@ -139,8 +139,8 @@ def line_added(expected)
   lines.size.must_equal(n_initial_lines + 1) # Line was added, not changed.
 end
 
-def clean_describe(desc, *additional_desc, &block)
-  describe desc, *additional_desc do
+def clean_describe(desc, &block)
+  describe desc do
     let(:filename) { "test/tmp/friends#{SecureRandom.uuid}.md" }
 
     before { File.write(filename, content) unless content.nil? }

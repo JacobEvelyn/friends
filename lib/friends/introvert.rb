@@ -23,7 +23,8 @@ module Friends
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename:)
-      @filename = filename
+      @user_facing_filename = filename
+      @expanded_filename = File.expand_path(filename)
       @output = []
 
       # Read in the input file. It's easier to do this now and optimize later
@@ -59,7 +60,7 @@ module Friends
         end
       end
 
-      File.open(File.expand_path(@filename), "w") do |file|
+      File.open(@expanded_filename, "w") do |file|
         file.puts(ACTIVITIES_HEADER)
         stable_sort(@activities).each { |act| file.puts(act.serialize) }
         file.puts # Blank line separating activities from notes.
@@ -75,7 +76,7 @@ module Friends
 
       # This is a special-case piece of code that lets us print a message that
       # includes the filename when `friends clean` is called.
-      @output << "File cleaned: \"#{@filename}\"" if clean_command
+      @output << "File cleaned: \"#{@user_facing_filename}\"" if clean_command
     end
 
     # Add a friend.
@@ -665,12 +666,12 @@ module Friends
       @notes = []
       @locations = []
 
-      return unless File.exist?(@filename)
+      return unless File.exist?(@expanded_filename)
 
       state = :unknown
 
       # Loop through all lines in the file and process them.
-      File.foreach(@filename).with_index(1) do |line, line_num|
+      File.foreach(@expanded_filename).with_index(1) do |line, line_num|
         line.chomp! # Remove trailing newline from each line.
 
         # Parse the line and update the parsing state.
