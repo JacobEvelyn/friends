@@ -26,7 +26,8 @@ Extrovert-approved.
 
 **NOTE: Participation is encouraged! Make issues, ask questions, submit pull
 requests (even if it's your first time contributing to open-source—you'll get
-lots of help), and give feedback!**
+lots of help), and give feedback! This project is
+[very much alive](https://github.com/JacobEvelyn/friends/issues/233)!**
 
 ## Table of Contents
 
