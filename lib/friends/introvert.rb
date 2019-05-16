@@ -710,8 +710,8 @@ module Friends
 
       begin
         instance_variable_get("@#{stage.id}") << stage.klass.deserialize(line)
-      rescue => e # rubocop:disable Style/RescueStandardError
-        bad_line(e, line_num)
+      rescue => ex # rubocop:disable Style/RescueStandardError
+        bad_line(ex, line_num)
       end
 
       state

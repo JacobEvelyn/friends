@@ -12,7 +12,7 @@ matrix:
     - rvm: 2.6
       script:
         - bundle exec rake test
-        - gem install --no-document rubocop && rubocop
+        - gem install --no-document rubocop -v 0.67 && rubocop
       env:
         - CODE_COVERAGE=true
 branches:

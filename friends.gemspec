@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.email                = ["jacobevelyn@gmail.com"]
   spec.summary              = "Spend time with the people you care about."
   spec.description          = "Spend time with the people you care about. "\
-                             "Introvert-tested. Extrovert-approved."
+                              "Introvert-tested. Extrovert-approved."
   spec.homepage             = "https://github.com/JacobEvelyn/friends"
   spec.license              = "MIT"
   spec.post_install_message = Friends::POST_INSTALL_MESSAGE
