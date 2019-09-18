@@ -10,8 +10,8 @@ module Friends
   class Friend
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- ".freeze
-    NICKNAME_PREFIX = "a.k.a. ".freeze
+    SERIALIZATION_PREFIX = "- "
+    NICKNAME_PREFIX = "a.k.a. "
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
@@ -34,11 +34,10 @@ module Friends
       tags_str: nil
     )
       @name = name
-      @nicknames = nickname_str &&
-                   nickname_str.split(" #{NICKNAME_PREFIX}") ||
+      @nicknames = nickname_str&.split(" #{NICKNAME_PREFIX}") ||
                    []
       @location_name = location_name
-      @tags = tags_str && tags_str.split(/\s+/) || []
+      @tags = tags_str&.split(/\s+/) || []
     end
 
     attr_accessor :name

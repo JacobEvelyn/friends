@@ -49,7 +49,7 @@ accept(Stripped, &:strip)
 class InputDate; end
 accept(InputDate) do |value|
   time = Chronic.parse(value)
-  time && time.to_date
+  time&.to_date
 end
 
 switch [:quiet],

@@ -24,7 +24,7 @@ require "securerandom"
 
 require "friends"
 
-CONTENT = <<-FILE.freeze
+CONTENT = <<-FILE
 ### Activities:
 - 2018-02-06: @science:indoors:agronomy-with-hydroponics: **Norman Borlaug** and **George Washington Carver** scored a tour of _Atlantis_' hydroponics gardens through wetplants@example.org and they took me along.
 - 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
@@ -52,7 +52,7 @@ CONTENT = <<-FILE.freeze
 FILE
 
 # This is CONTENT but with activities, friends, and locations unsorted.
-SCRAMBLED_CONTENT = <<-FILE.freeze
+SCRAMBLED_CONTENT = <<-FILE
 ### Activities:
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # This is an example "editor" used to test the `friends edit` command.
 # It inserts a new activity into the second line of the file, allowing

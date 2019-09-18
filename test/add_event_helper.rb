@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def date_parsing_specs(test_stdout: true)
   describe "date parsing" do
     let(:description) { "Test." }
