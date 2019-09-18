@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "./lib/friends/post_install_message"
 require "./test/helper"
 
 clean_describe "update" do
