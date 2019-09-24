@@ -33,10 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "semverse", ">= 2", "< 4"
   spec.add_dependency "tty-pager", "~> 0.11"
 
-  spec.add_development_dependency "bundler", ">= 1.6"
-  spec.add_development_dependency "codecov", "~> 0.1.14"
   spec.add_development_dependency "minitest", "~> 5.5"
   spec.add_development_dependency "minitest-proveit", "~> 1.0"
   spec.add_development_dependency "rake", "~> 12.3"
-  spec.add_development_dependency "simplecov", "~> 0.14"
 end

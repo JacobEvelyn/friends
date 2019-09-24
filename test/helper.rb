@@ -108,35 +108,35 @@ end
 
 def stdout_only(expected)
   puts subject[:stderr] unless subject[:stderr] == ""
-  subject[:stdout].must_equal ensure_trailing_newline_unless_empty(expected)
-  subject[:stderr].must_equal ""
-  subject[:status].must_equal 0
+  value(subject[:stdout]).must_equal ensure_trailing_newline_unless_empty(expected)
+  value(subject[:stderr]).must_equal ""
+  value(subject[:status]).must_equal 0
 end
 
 def stderr_only(expected)
-  subject[:stdout].must_equal ""
-  subject[:stderr].must_equal ensure_trailing_newline_unless_empty(expected)
-  subject[:status].must_be :>, 0
+  value(subject[:stdout]).must_equal ""
+  value(subject[:stderr]).must_equal ensure_trailing_newline_unless_empty(expected)
+  value(subject[:status]).must_be :>, 0
 end
 
 def file_equals(expected)
   subject
-  File.read(filename).must_equal expected
+  value(File.read(filename)).must_equal expected
 end
 
 def line_changed(expected_old, expected_new)
   index = File.read(filename).split("\n").index(expected_old)
-  index.must_be_kind_of Numeric # Not nil, so we know that `expected_old` was found.
+  value(index).must_be_kind_of Numeric # Not nil, so we know that `expected_old` was found.
   subject
-  File.read(filename).split("\n")[index].must_equal expected_new
+  value(File.read(filename).split("\n")[index]).must_equal expected_new
 end
 
 def line_added(expected)
   n_initial_lines = File.read(filename).split("\n").size
   subject
   lines = File.read(filename).split("\n")
-  lines.index(expected).must_be_kind_of Numeric # Not nil, so we know that `expected` was found.
-  lines.size.must_equal(n_initial_lines + 1) # Line was added, not changed.
+  value(lines.index(expected)).must_be_kind_of Numeric # Not nil, so we know `expected` was found.
+  value(lines.size).must_equal(n_initial_lines + 1) # Line was added, not changed.
 end
 
 def clean_describe(desc, &block)

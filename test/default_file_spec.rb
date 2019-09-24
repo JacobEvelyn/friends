@@ -18,14 +18,14 @@ if ENV["TRAVIS"] == "true"
     # https://github.com/JacobEvelyn/friends/issues/231
     it "creates a new file and adds to it multiple times" do
       # File does not exist at first.
-      File.exist?(filename).must_equal false
+      value(File.exist?(filename)).must_equal false
 
       `bundle exec bin/friends add friend Mohandas Karamchand Gandhi`
       `bundle exec bin/friends add friend Sojourner Truth`
       `bundle exec bin/friends add activity 1859-11-30: Lunch with **Harriet Tubman** in _Auburn_.`
       `bundle exec bin/friends add note "1851-05-29: Sojourner Truth's speech"`
 
-      File.read(filename).must_equal <<-FILE
+      value(File.read(filename)).must_equal <<-FILE
 ### Activities:
 - 1859-11-30: Lunch with **Harriet Tubman** in _Auburn_.
 

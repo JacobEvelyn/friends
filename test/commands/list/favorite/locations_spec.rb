@@ -84,34 +84,34 @@ FILE
       end
 
       it "uses tied ranks" do
-        subject[:stderr].must_equal ""
-        subject[:status].must_equal 0
+        value(subject[:stderr]).must_equal ""
+        value(subject[:status]).must_equal 0
 
         lines = subject[:stdout].split("\n")
-        lines[1].must_match(/1\. Location (A|B)/)
-        lines[2].must_match(/1\. Location (A|B)/)
-        lines[3].must_include "3. Location"
+        value(lines[1]).must_match(/1\. Location (A|B)/)
+        value(lines[2]).must_match(/1\. Location (A|B)/)
+        value(lines[3]).must_include "3. Location"
       end
 
       it "only uses the word 'activities' for the first item, even when a tie" do
-        subject[:stderr].must_equal ""
-        subject[:status].must_equal 0
+        value(subject[:stderr]).must_equal ""
+        value(subject[:status]).must_equal 0
 
         lines = subject[:stdout].split("\n")
-        lines[1].must_include "activities"
-        lines[2].wont_include "activities"
+        value(lines[1]).must_include "activities"
+        value(lines[2]).wont_include "activities"
       end
 
       it "indents based on the highest rank number, not the number of locations" do
-        subject[:stderr].must_equal ""
-        subject[:status].must_equal 0
+        value(subject[:stderr]).must_equal ""
+        value(subject[:status]).must_equal 0
 
         # Since there are 10 friends, a naive implementation would pad our output
         # assuming the (numerically) highest rank is "10." but since the highest
         # rank is a tie, we never display a double-digit rank, so we don't need to
         # pad our output for double digits.
         lines = subject[:stdout].split("\n")
-        lines.last.must_include "3. Location"
+        value(lines.last).must_include "3. Location"
       end
     end
   end

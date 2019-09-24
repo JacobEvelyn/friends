@@ -8,15 +8,17 @@ clean_describe "help" do
 
   describe "with no subcommand passed" do
     it "prints overall help message" do
-      subject[:stderr].must_equal ""
-      subject[:status].must_equal 0
-      [
-        "NAME",
-        "SYNOPSIS",
-        "VERSION",
-        "GLOBAL OPTIONS",
-        "COMMANDS"
-      ].all? { |msg| subject[:stdout].include? msg }.must_equal true
+      value(subject[:stderr]).must_equal ""
+      value(subject[:status]).must_equal 0
+      value(
+        [
+          "NAME",
+          "SYNOPSIS",
+          "VERSION",
+          "GLOBAL OPTIONS",
+          "COMMANDS"
+        ].all? { |msg| subject[:stdout].include? msg }
+      ).must_equal true
     end
   end
 
@@ -24,13 +26,15 @@ clean_describe "help" do
     subject { run_cmd("help graph") }
 
     it "prints subcommand help message" do
-      subject[:stderr].must_equal ""
-      subject[:status].must_equal 0
-      [
-        "NAME",
-        "SYNOPSIS",
-        "COMMAND OPTIONS"
-      ].all? { |msg| subject[:stdout].include? msg }.must_equal true
+      value(subject[:stderr]).must_equal ""
+      value(subject[:status]).must_equal 0
+      value(
+        [
+          "NAME",
+          "SYNOPSIS",
+          "COMMAND OPTIONS"
+        ].all? { |msg| subject[:stdout].include? msg }
+      ).must_equal true
     end
   end
 
