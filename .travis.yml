@@ -5,16 +5,14 @@ rvm:
   - 2.3
   - 2.4
   - 2.5 # 2.6 is tested below
-bundler_args: --without development
 script:
   - bundle exec rake test
 matrix:
   include:
     - rvm: 2.6
-      bundler_args: --with development
       script:
         - bundle exec rake test
-        - bundle exec rubocop
+        - gem install --no-document rubocop -v 0.67 && rubocop
       env:
         - CODE_COVERAGE=true
 branches:
