@@ -32,7 +32,7 @@ FILE
 
     it "orders dates by insertion time" do
       subject
-      File.read(filename).must_equal <<-FILE
+      value(File.read(filename)).must_equal <<-FILE
 ### Activities:
 
 ### Notes:

@@ -3,6 +3,7 @@
 
 if ENV["TRAVIS"] == "true" && ENV["CODE_COVERAGE"] == "true"
   require "simplecov"
+  SimpleCov.print_error_status = false
   SimpleCov.formatter = SimpleCov::Formatter::SimpleFormatter
   SimpleCov.command_name Process.pid.to_s
   SimpleCov.start

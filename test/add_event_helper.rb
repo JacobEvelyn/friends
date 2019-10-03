@@ -56,7 +56,7 @@ def description_parsing_specs(test_stdout: true)
         let(:description) { "  " }
 
         it "prints an error message" do
-          subject[:stderr].must_equal(
+          value(subject[:stderr]).must_equal(
             ensure_trailing_newline_unless_empty("Error: Blank #{event} not added")
           )
         end

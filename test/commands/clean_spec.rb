@@ -15,7 +15,7 @@ clean_describe "clean" do
     let(:content) { nil }
 
     it "does not create the file" do
-      File.exist?(filename).must_equal false
+      value(File.exist?(filename)).must_equal false
     end
   end
 
