@@ -52,8 +52,38 @@ clean_describe "list activities" do
           stdout_only "2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying"
         end
       end
-    end
 
+      describe "when implicit location is set" do
+        let(:location_name) { "atlantis" }
+        let(:content) do
+          <<-FILE
+### Activities:
+- 2015-01-30: Went to a museum with **George Washington Carver**.
+- 2015-01-29: moved to _Paris_.
+- 2015-01-01: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
+- 2014-12-30: Moved to _Atlantis_.
+- 2014-12-29: Talked to **George Washington Carver** on the phone for an hour.
+
+### Friends:
+- George Washington Carver
+- Marie Curie [Atlantis] @science
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+
+### Locations:
+- Atlantis
+- Paris
+          FILE
+        end
+
+        it "matches location case-insensitively" do
+          stdout_only <<-OUTPUT
+2015-01-01: Got lunch with Grace Hopper and George Washington Carver. @food
+2014-12-30: Moved to Atlantis.
+        OUTPUT
+        end
+      end
+    end
     describe "--with" do
       subject { run_cmd("list activities --with #{friend_name}") }
 

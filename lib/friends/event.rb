@@ -64,6 +64,7 @@ module Friends
 
     attr_reader :date
     attr_accessor :description
+    attr_writer :implicit_location
 
     # @return [String] the command-line display text for the activity
     def to_s
@@ -132,9 +133,13 @@ module Friends
     end
 
     # @param location [Location] the location to test
-    # @return [Boolean] true iff this activity includes the given location
+    # @return [Boolean] true if activity has location in description or it equals implicit location
     def includes_location?(location)
-      @description.scan(/(?<=_)[^_]+(?=_)/).include? location.name
+      location_in_description?(location) || location_is_implicit?(location)
+    end
+
+    def moved_to_location
+      @description[/(?<=[mM]oved to _)\w[^_]*(?=_)/]
     end
 
     # @param friend [Friend] the friend to test
@@ -162,8 +167,13 @@ module Friends
 
     # Find the names of all locations in this description.
     # @return [Array] list of all location names in the description
-    def location_names
+    def description_location_names
       @description.scan(/(?<=_)\w[^_]*(?=_)/).uniq
+    end
+
+    # @return [Array] list of all location names in either description or implicit_location
+    def location_names
+      @implicit_location ? [@implicit_location] : description_location_names
     end
 
     private
@@ -329,6 +339,14 @@ module Friends
     # Default sorting for an array of activities is reverse-date.
     def <=>(other)
       other.date <=> date
+    end
+
+    def location_in_description?(location)
+      description_location_names.include? location.name
+    end
+
+    def location_is_implicit?(location)
+      @implicit_location == location.name
     end
   end
 end
