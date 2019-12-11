@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
 
 `friends` is a volunteer project. If you find it useful, please consider
 making a small donation (🙏) to show you appreciate its continued development.
@@ -14,7 +14,27 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 👆 Donate with these buttons! 👆
 
+## [v0.47](https://github.com/JacobEvelyn/friends/tree/v0.47) (2019-12-11)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.46...v0.47)
+
+**Implemented enhancements:**
+
+- Add default locations [\#152](https://github.com/JacobEvelyn/friends/issues/152)
+
+**Fixed bugs:**
+
+- Tests are failing in `master` [\#238](https://github.com/JacobEvelyn/friends/issues/238)
+
+**Merged pull requests:**
+
+- 152/add set home command to set your own location [\#243](https://github.com/JacobEvelyn/friends/pull/243) ([shen-sat](https://github.com/shen-sat))
+- Separate optional test dependencies with Gemfiles [\#239](https://github.com/JacobEvelyn/friends/pull/239) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Add `bundle exec` to readme in section for running tests [\#237](https://github.com/JacobEvelyn/friends/pull/237) ([shen-sat](https://github.com/shen-sat))
+- Pin RuboCop version for Travis tests [\#234](https://github.com/JacobEvelyn/friends/pull/234) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.46](https://github.com/JacobEvelyn/friends/tree/v0.46) (2019-01-27)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.45...v0.46)
 
 **Fixed bugs:**
@@ -26,6 +46,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Fix file-reading issues with default file [\#232](https://github.com/JacobEvelyn/friends/pull/232) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.45](https://github.com/JacobEvelyn/friends/tree/v0.45) (2019-01-15)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.44...v0.45)
 
 **Implemented enhancements:**
@@ -41,6 +62,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Scale graphs by default [\#227](https://github.com/JacobEvelyn/friends/pull/227) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.44](https://github.com/JacobEvelyn/friends/tree/v0.44) (2019-01-12)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.43...v0.44)
 
 **Implemented enhancements:**
@@ -59,9 +81,10 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 - Test against Ruby 2.6 [\#225](https://github.com/JacobEvelyn/friends/pull/225) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Change default from ./friends.md to ~/friends.md [\#223](https://github.com/JacobEvelyn/friends/pull/223) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Update semverse requirement from ~\> 2.0 to \>= 2, \< 4 [\#217](https://github.com/JacobEvelyn/friends/pull/217) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update semverse requirement from ~\> 2.0 to \>= 2, \< 4 [\#217](https://github.com/JacobEvelyn/friends/pull/217) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [v0.43](https://github.com/JacobEvelyn/friends/tree/v0.43) (2018-11-25)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.42...v0.43)
 
 **Implemented enhancements:**
@@ -82,6 +105,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Fix contributing guide link [\#212](https://github.com/JacobEvelyn/friends/pull/212) ([Nitemice](https://github.com/Nitemice))
 
 ## [v0.42](https://github.com/JacobEvelyn/friends/tree/v0.42) (2018-09-22)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.41...v0.42)
 
 **Fixed bugs:**
@@ -93,6 +117,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Fix uninitialized constant error with `friends update` [\#208](https://github.com/JacobEvelyn/friends/pull/208) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.41](https://github.com/JacobEvelyn/friends/tree/v0.41) (2018-09-22)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.40...v0.41)
 
 **Merged pull requests:**
@@ -100,6 +125,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Improve post-install message and rearrange constants [\#206](https://github.com/JacobEvelyn/friends/pull/206) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.40](https://github.com/JacobEvelyn/friends/tree/v0.40) (2018-09-22)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.39...v0.40)
 
 **Implemented enhancements:**
@@ -111,6 +137,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Page all output, and remove --limit options [\#205](https://github.com/JacobEvelyn/friends/pull/205) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.39](https://github.com/JacobEvelyn/friends/tree/v0.39) (2018-08-02)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.38...v0.39)
 
 **Fixed bugs:**
@@ -122,6 +149,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Correctly handle duplicate new friends/locations when editing [\#204](https://github.com/JacobEvelyn/friends/pull/204) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.38](https://github.com/JacobEvelyn/friends/tree/v0.38) (2018-07-24)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.37...v0.38)
 
 **Implemented enhancements:**
@@ -134,9 +162,10 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Give name-matching priority to full-text matches [\#203](https://github.com/JacobEvelyn/friends/pull/203) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Prevent the addition of blank events, names, and locations [\#200](https://github.com/JacobEvelyn/friends/pull/200) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Fix Rubocop errors [\#196](https://github.com/JacobEvelyn/friends/pull/196) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update rake requirement to ~\> 12.3 [\#194](https://github.com/JacobEvelyn/friends/pull/194) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
 
 ## [v0.37](https://github.com/JacobEvelyn/friends/tree/v0.37) (2018-02-24)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.36...v0.37)
 
 **Implemented enhancements:**
@@ -149,6 +178,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Dashes and colons [\#191](https://github.com/JacobEvelyn/friends/pull/191) ([adiabatic](https://github.com/adiabatic))
 
 ## [v0.36](https://github.com/JacobEvelyn/friends/tree/v0.36) (2018-01-17)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.35...v0.36)
 
 **Implemented enhancements:**
@@ -169,17 +199,15 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add advanced search \(grep\) examples to README [\#188](https://github.com/JacobEvelyn/friends/pull/188) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.35](https://github.com/JacobEvelyn/friends/tree/v0.35) (2018-01-14)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.34...v0.35)
 
 **Implemented enhancements:**
 
 - Add notes [\#175](https://github.com/JacobEvelyn/friends/issues/175)
 
-**Merged pull requests:**
-
-- Add ability to add notes [\#187](https://github.com/JacobEvelyn/friends/pull/187) ([JacobEvelyn](https://github.com/JacobEvelyn))
-
 ## [v0.34](https://github.com/JacobEvelyn/friends/tree/v0.34) (2018-01-10)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.33...v0.34)
 
 **Implemented enhancements:**
@@ -191,6 +219,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Always sort activities stably within a date [\#185](https://github.com/JacobEvelyn/friends/pull/185) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.33](https://github.com/JacobEvelyn/friends/tree/v0.33) (2017-08-22)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.32...v0.33)
 
 **Implemented enhancements:**
@@ -198,6 +227,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Prevent dates without years from being in the future [\#181](https://github.com/JacobEvelyn/friends/pull/181) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.32](https://github.com/JacobEvelyn/friends/tree/v0.32) (2017-07-25)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.31...v0.32)
 
 **Fixed bugs:**
@@ -209,6 +239,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Fix gli dependency [\#179](https://github.com/JacobEvelyn/friends/pull/179) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.31](https://github.com/JacobEvelyn/friends/tree/v0.31) (2017-06-02)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.30...v0.31)
 
 **Implemented enhancements:**
@@ -232,6 +263,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Remove warnings when running tests [\#169](https://github.com/JacobEvelyn/friends/pull/169) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.30](https://github.com/JacobEvelyn/friends/tree/v0.30) (2017-05-30)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.29...v0.30)
 
 **Implemented enhancements:**
@@ -251,6 +283,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Correct code coverage calculations [\#164](https://github.com/JacobEvelyn/friends/pull/164) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.29](https://github.com/JacobEvelyn/friends/tree/v0.29) (2017-03-18)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.28...v0.29)
 
 **Implemented enhancements:**
@@ -264,6 +297,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Restructuring [\#155](https://github.com/JacobEvelyn/friends/pull/155) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.28](https://github.com/JacobEvelyn/friends/tree/v0.28) (2016-06-25)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.27...v0.28)
 
 **Implemented enhancements:**
@@ -275,6 +309,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Colorize `list friends` and add --colorless flag [\#151](https://github.com/JacobEvelyn/friends/pull/151) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.27](https://github.com/JacobEvelyn/friends/tree/v0.27) (2016-06-22)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.26...v0.27)
 
 **Implemented enhancements:**
@@ -298,6 +333,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add Gemnasium integration with README badge [\#142](https://github.com/JacobEvelyn/friends/pull/142) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.26](https://github.com/JacobEvelyn/friends/tree/v0.26) (2016-05-23)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.25...v0.26)
 
 **Fixed bugs:**
@@ -308,8 +344,10 @@ making a small donation (🙏) to show you appreciate its continued development.
 **Merged pull requests:**
 
 - Fix deserialization for friends with tags and no nicknames [\#141](https://github.com/JacobEvelyn/friends/pull/141) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Make tag-migration code simpler [\#138](https://github.com/JacobEvelyn/friends/pull/138) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.25](https://github.com/JacobEvelyn/friends/tree/v0.25) (2016-05-22)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.24...v0.25)
 
 **Closed issues:**
@@ -318,10 +356,10 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 **Merged pull requests:**
 
-- Make tag-migration code simpler [\#138](https://github.com/JacobEvelyn/friends/pull/138) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Add rubocop run to TravisCI [\#135](https://github.com/JacobEvelyn/friends/pull/135) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.24](https://github.com/JacobEvelyn/friends/tree/v0.24) (2016-05-17)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.23...v0.24)
 
 **Implemented enhancements:**
@@ -337,6 +375,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Change tags to `@tag` format, auto-migrate old tags, and fix set loading issue [\#134](https://github.com/JacobEvelyn/friends/pull/134) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.23](https://github.com/JacobEvelyn/friends/tree/v0.23) (2016-05-16)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.22...v0.23)
 
 **Implemented enhancements:**
@@ -349,6 +388,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Allow graph to be filtered by friend, location and hashtag [\#129](https://github.com/JacobEvelyn/friends/pull/129) ([andypearson](https://github.com/andypearson))
 
 ## [v0.22](https://github.com/JacobEvelyn/friends/tree/v0.22) (2016-05-14)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.21...v0.22)
 
 **Fixed bugs:**
@@ -356,6 +396,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Fix `undefined variable "limit"` errors [\#128](https://github.com/JacobEvelyn/friends/issues/128)
 
 ## [v0.21](https://github.com/JacobEvelyn/friends/tree/v0.21) (2016-05-14)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.20...v0.21)
 
 **Implemented enhancements:**
@@ -369,6 +410,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Remove need to quote for `add friend` and `add activity` [\#123](https://github.com/JacobEvelyn/friends/pull/123) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.20](https://github.com/JacobEvelyn/friends/tree/v0.20) (2016-05-08)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.19...v0.20)
 
 **Implemented enhancements:**
@@ -385,6 +427,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Implement hashtags [\#118](https://github.com/JacobEvelyn/friends/pull/118) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.19](https://github.com/JacobEvelyn/friends/tree/v0.19) (2016-05-02)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.18...v0.19)
 
 **Implemented enhancements:**
@@ -396,6 +439,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add `list favorite locations` command [\#115](https://github.com/JacobEvelyn/friends/pull/115) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.18](https://github.com/JacobEvelyn/friends/tree/v0.18) (2016-05-02)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.17...v0.18)
 
 **Implemented enhancements:**
@@ -416,6 +460,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Organize documentation in README [\#110](https://github.com/JacobEvelyn/friends/pull/110) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.17](https://github.com/JacobEvelyn/friends/tree/v0.17) (2016-03-28)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.16...v0.17)
 
 **Implemented enhancements:**
@@ -439,6 +484,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add documentation for `graph` and `stats` commands [\#102](https://github.com/JacobEvelyn/friends/pull/102) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.16](https://github.com/JacobEvelyn/friends/tree/v0.16) (2016-03-23)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.15...v0.16)
 
 **Implemented enhancements:**
@@ -450,9 +496,11 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Allow `graph` without arguments to graph all activities \(Closes \#83\) [\#85](https://github.com/JacobEvelyn/friends/pull/85) ([andypearson](https://github.com/andypearson))
 
 ## [v0.15](https://github.com/JacobEvelyn/friends/tree/v0.15) (2016-03-11)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.14...v0.15)
 
 ## [v0.14](https://github.com/JacobEvelyn/friends/tree/v0.14) (2016-03-11)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.13...v0.14)
 
 **Implemented enhancements:**
@@ -464,6 +512,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Allow natural-language dates [\#82](https://github.com/JacobEvelyn/friends/pull/82) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.13](https://github.com/JacobEvelyn/friends/tree/v0.13) (2016-01-21)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.12...v0.13)
 
 **Fixed bugs:**
@@ -480,6 +529,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Update RuboCop and fix many offenses [\#79](https://github.com/JacobEvelyn/friends/pull/79) ([codyjroberts](https://github.com/codyjroberts))
 
 ## [v0.12](https://github.com/JacobEvelyn/friends/tree/v0.12) (2016-01-16)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.11...v0.12)
 
 **Implemented enhancements:**
@@ -493,6 +543,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add rename friend [\#75](https://github.com/JacobEvelyn/friends/pull/75) ([codyjroberts](https://github.com/codyjroberts))
 
 ## [v0.11](https://github.com/JacobEvelyn/friends/tree/v0.11) (2016-01-13)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.10...v0.11)
 
 **Fixed bugs:**
@@ -506,6 +557,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Fix bug in how dates are deserialized [\#73](https://github.com/JacobEvelyn/friends/pull/73) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.10](https://github.com/JacobEvelyn/friends/tree/v0.10) (2016-01-12)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.9...v0.10)
 
 **Implemented enhancements:**
@@ -532,6 +584,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Remove require\_relative from codebase [\#59](https://github.com/JacobEvelyn/friends/pull/59) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.9](https://github.com/JacobEvelyn/friends/tree/v0.9) (2016-01-07)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.8...v0.9)
 
 **Implemented enhancements:**
@@ -543,6 +596,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add stats command [\#55](https://github.com/JacobEvelyn/friends/pull/55) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.8](https://github.com/JacobEvelyn/friends/tree/v0.8) (2016-01-06)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.7...v0.8)
 
 **Implemented enhancements:**
@@ -559,6 +613,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Add badgefury.io badge [\#49](https://github.com/JacobEvelyn/friends/pull/49) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.7](https://github.com/JacobEvelyn/friends/tree/v0.7) (2016-01-05)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.6...v0.7)
 
 **Fixed bugs:**
@@ -576,6 +631,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Update README URLs based on HTTP redirects [\#46](https://github.com/JacobEvelyn/friends/pull/46) ([ReadmeCritic](https://github.com/ReadmeCritic))
 
 ## [v0.6](https://github.com/JacobEvelyn/friends/tree/v0.6) (2016-01-03)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.5...v0.6)
 
 **Merged pull requests:**
@@ -583,6 +639,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Test versions [\#41](https://github.com/JacobEvelyn/friends/pull/41) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.5](https://github.com/JacobEvelyn/friends/tree/v0.5) (2016-01-03)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.4...v0.5)
 
 **Fixed bugs:**
@@ -594,9 +651,11 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Make activities on same day chronologically ordered [\#38](https://github.com/JacobEvelyn/friends/pull/38) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.4](https://github.com/JacobEvelyn/friends/tree/v0.4) (2015-11-14)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.3...v0.4)
 
 ## [v0.3](https://github.com/JacobEvelyn/friends/tree/v0.3) (2015-11-11)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.2...v0.3)
 
 **Implemented enhancements:**
@@ -608,12 +667,15 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Auto-update? [\#8](https://github.com/JacobEvelyn/friends/issues/8)
 
 ## [v0.2](https://github.com/JacobEvelyn/friends/tree/v0.2) (2015-11-08)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.1...v0.2)
 
 ## [v0.1](https://github.com/JacobEvelyn/friends/tree/v0.1) (2015-11-03)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.6...v0.1)
 
 ## [v0.0.6](https://github.com/JacobEvelyn/friends/tree/v0.0.6) (2015-06-28)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.5...v0.0.6)
 
 **Implemented enhancements:**
@@ -621,9 +683,11 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Have robustness around name extraction from activities [\#21](https://github.com/JacobEvelyn/friends/issues/21)
 
 ## [v0.0.5](https://github.com/JacobEvelyn/friends/tree/v0.0.5) (2015-06-28)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.4...v0.0.5)
 
 ## [v0.0.4](https://github.com/JacobEvelyn/friends/tree/v0.0.4) (2015-06-01)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.3...v0.0.4)
 
 **Merged pull requests:**
@@ -631,6 +695,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Bump version to 0.0.3 [\#33](https://github.com/JacobEvelyn/friends/pull/33) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.0.3](https://github.com/JacobEvelyn/friends/tree/v0.0.3) (2015-05-28)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.2...v0.0.3)
 
 **Merged pull requests:**
@@ -639,6 +704,7 @@ making a small donation (🙏) to show you appreciate its continued development.
 - Improve friend matching code [\#31](https://github.com/JacobEvelyn/friends/pull/31) ([JacobEvelyn](https://github.com/JacobEvelyn))
 
 ## [v0.0.2](https://github.com/JacobEvelyn/friends/tree/v0.0.2) (2015-01-11)
+
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.0.1...v0.0.2)
 
 **Implemented enhancements:**
@@ -661,7 +727,6 @@ making a small donation (🙏) to show you appreciate its continued development.
 **Merged pull requests:**
 
 - Improve documentation [\#30](https://github.com/JacobEvelyn/friends/pull/30) ([JacobEvelyn](https://github.com/JacobEvelyn))
-- Add confirm messages and --quiet switch [\#29](https://github.com/JacobEvelyn/friends/pull/29) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Put activities above friends in file [\#26](https://github.com/JacobEvelyn/friends/pull/26) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Make friend matching case-insensitive. [\#24](https://github.com/JacobEvelyn/friends/pull/24) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Basic add-activity feature in place [\#22](https://github.com/JacobEvelyn/friends/pull/22) ([JacobEvelyn](https://github.com/JacobEvelyn))
@@ -674,5 +739,8 @@ making a small donation (🙏) to show you appreciate its continued development.
 
 ## [v0.0.1](https://github.com/JacobEvelyn/friends/tree/v0.0.1) (2014-12-11)
 
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/6e3c48fa21712027b5bfa06f744a1953b5df2303...v0.0.1)
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
