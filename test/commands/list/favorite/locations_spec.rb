@@ -114,5 +114,36 @@ FILE
         value(lines.last).must_include "3. Location"
       end
     end
+
+    describe "when implied locations are set" do
+      let(:content) do
+        <<-FILE
+### Activities:
+- 2015-01-30: Went to a museum with **George Washington Carver**.
+- 2015-01-29: moved to _Paris_.
+- 2015-01-01: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
+- 2014-12-30: Moved to _Atlantis_.
+- 2014-12-29: Talked to **George Washington Carver** on the phone for an hour.
+
+### Friends:
+- George Washington Carver
+- Marie Curie [Atlantis] @science
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+
+### Locations:
+- Atlantis
+- Paris
+        FILE
+      end
+
+      it "lists locations in order of decreasing activity" do
+        stdout_only <<-OUTPUT
+Your favorite locations:
+1. Paris    (3 activities)
+2. Atlantis (2)
+        OUTPUT
+      end
+    end
   end
 end

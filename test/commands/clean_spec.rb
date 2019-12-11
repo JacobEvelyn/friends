@@ -74,6 +74,7 @@ clean_describe "clean" do
           <<-CONTENT
 ### Activities:
 - 2017-01-01: Celebrated the new year in _Paris_ with **Marie Curie** and her husband **Pierre Curie**. **Marie Curie** loves _Paris_!
+- 2016-12-31: Moved to _London_.
 
 ### Notes:
 - 2017-01-01: I just learned that **Jacques Cousteau** is thinking about moving from _Gironde_ to _The Lost City of Atlantis_ (_Gironde_ did seem a bit too terrestrial for him).
@@ -90,6 +91,7 @@ clean_describe "clean" do
           file_equals <<-CONTENT
 ### Activities:
 - 2017-01-01: Celebrated the new year in _Paris_ with **Marie Curie** and her husband **Pierre Curie**. **Marie Curie** loves _Paris_!
+- 2016-12-31: Moved to _London_.
 
 ### Notes:
 - 2017-01-01: I just learned that **Jacques Cousteau** is thinking about moving from _Gironde_ to _The Lost City of Atlantis_ (_Gironde_ did seem a bit too terrestrial for him).
@@ -102,6 +104,7 @@ clean_describe "clean" do
 
 ### Locations:
 - Gironde
+- London
 - NYC
 - Paris
 - The Lost City of Atlantis
@@ -113,6 +116,7 @@ clean_describe "clean" do
 Friend added: \"Marie Curie\"
 Friend added: \"Pierre Curie\"
 Location added: \"Paris\"
+Location added: \"London\"
 Friend added: \"Jacques Cousteau\"
 Location added: \"Gironde\"
 Location added: \"The Lost City of Atlantis\"

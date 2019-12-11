@@ -52,7 +52,7 @@ module Friends
           end
         end
 
-        event.location_names.each do |name|
+        event.description_location_names.each do |name|
           unless location_names.include? name
             add_location(name: name)
             location_names << name
@@ -658,6 +658,14 @@ module Friends
       end
     end
 
+    def set_implicit_locations!
+      implicit_location = nil
+      @activities.reverse_each do |activity|
+        implicit_location = activity.moved_to_location if activity.moved_to_location
+        activity.implicit_location = implicit_location if activity.description_location_names.empty?
+      end
+    end
+
     # Process the friends.md file and store its contents in internal data
     # structures.
     def read_file
@@ -677,6 +685,7 @@ module Friends
         # Parse the line and update the parsing state.
         state = parse_line!(line, line_num: line_num, state: state)
       end
+      set_implicit_locations!
 
       set_n_activities!(:friend)
       set_n_activities!(:location)
