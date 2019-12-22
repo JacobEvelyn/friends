@@ -59,10 +59,10 @@ clean_describe "list activities" do
           <<-FILE
 ### Activities:
 - 2015-01-30: Went to a museum with **George Washington Carver**.
-- 2015-01-29: moved to _Paris_.
+- 2015-01-29: Moved to _Paris_.
 - 2015-01-01: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
-- 2014-12-30: Moved to _Atlantis_.
+- 2014-12-30: Went to _Atlantis_.
 - 2014-12-29: Talked to **George Washington Carver** on the phone for an hour.
 
 ### Friends:
@@ -79,7 +79,7 @@ clean_describe "list activities" do
         it "matches location case-insensitively" do
           stdout_only <<-OUTPUT
 2015-01-01: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-12-30: Moved to Atlantis.
+2014-12-30: Went to Atlantis.
         OUTPUT
         end
       end
