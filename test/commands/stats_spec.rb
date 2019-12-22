@@ -42,7 +42,7 @@ Total time elapsed: 0 days
       stdout_only <<-OUTPUT
 Total activities: 5
 Total friends: 5
-Total locations: 3
+Total locations: 2
 Total notes: 4
 Total tags: 10
 Total time elapsed: 1179 days

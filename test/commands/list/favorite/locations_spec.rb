@@ -25,8 +25,8 @@ clean_describe "list favorite locations" do
     let(:content) do
       <<-FILE
 ### Activities:
-- 2017-01-01: **Grace Hopper** and I went to _Marie's Diner_ for breakfast.
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
+- 2017-01-01: **Grace Hopper** and I went to _London_.
+- 2015-11-01: **Grace Hopper** and I went to _London_ and ate fish and chips. George had to cancel at the last minute. @food
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
 - 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
@@ -38,7 +38,7 @@ clean_describe "list favorite locations" do
 
 ### Locations:
 - Atlantis
-- Marie's Diner
+- London
 - Paris
 FILE
     end
@@ -46,9 +46,9 @@ FILE
     it "lists locations in order of decreasing activity" do
       stdout_only <<-OUTPUT
 Your favorite locations:
-1. Marie's Diner (2 activities)
-2. Paris         (1)
-3. Atlantis      (0)
+1. London   (2 activities)
+2. Paris    (1)
+3. Atlantis (0)
       OUTPUT
     end
 

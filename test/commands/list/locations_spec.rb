@@ -30,7 +30,6 @@ clean_describe "list locations" do
       stdout_only <<-OUTPUT
 Paris
 Atlantis
-Marie's Diner
       OUTPUT
     end
   end
