@@ -51,5 +51,39 @@ FILE
     end
   end
 
+  describe "adding default location" do
+    subject { run_cmd("add activity 2017-01-01: Moved to Paris") }
+    let(:content) do
+      <<-FILE
+### Activities:
+- 2016-01-01: #{activity}.
+
+### Notes:
+
+### Friends:
+
+### Locations:
+- Paris
+FILE
+    end
+
+    describe "when default location has not been set before" do
+      let(:activity) { "Had dinner in _Paris_" }
+
+      it 'prints "Default location added" output message' do
+        value(subject[:stdout].include? 'Default location set to: "Paris"').must_equal true 
+      end
+    end
+
+    describe "when default location has already been set" do
+      let(:activity) { "Went to _Paris_ for a holiday" }
+
+      it 'does not print "Default location added" output message' do
+        value(subject[:stdout].include? 'Default location set to: "Paris"').must_equal false 
+      end
+    end    
+
+  end
+
   parsing_specs(event: :activity)
 end

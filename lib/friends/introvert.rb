@@ -110,6 +110,7 @@ module Friends
         @activities.unshift(activity)
 
         @output << "Activity added: \"#{activity}\""
+        @output << "Default location set to: \"#{activity.default_location}\"" if activity.default_location && (@activities - [activity]).none? { |activity| activity.default_location }  
       end
     end
 
