@@ -449,15 +449,15 @@ FILE
     end
 
     describe "when description contains both names and locations" do
-      let(:description) { "Grace and I went to Atlantis and then Paris for lunch with George." }
+      let(:description) { "Grace and I visited Atlantis and then Paris for lunch with George." }
 
       it do
-        line_added "- #{date}: **Grace Hopper** and I went to _Atlantis_ and then _Paris_ for "\
+        line_added "- #{date}: **Grace Hopper** and I visited _Atlantis_ and then _Paris_ for "\
                    "lunch with **George Washington Carver**."
       end
       if test_stdout
         it do
-          stdout_only "#{capitalized_event} added: \"#{date}: Grace Hopper and I went to "\
+          stdout_only "#{capitalized_event} added: \"#{date}: Grace Hopper and I visited "\
                       "Atlantis and then Paris for lunch with George Washington Carver.\""
         end
       end
