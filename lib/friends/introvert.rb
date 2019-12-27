@@ -110,7 +110,9 @@ module Friends
         @activities.unshift(activity)
 
         @output << "Activity added: \"#{activity}\""
-        @output << "Default location set to: \"#{activity.default_location}\"" if activity.default_location && (@activities - [activity]).none? { |activity| activity.default_location }  
+        if is_activity_setting_default_location?(activity)
+        	@output << "Default location set to: \"#{activity.default_location}\"" 
+        end
       end
     end
 
@@ -777,6 +779,14 @@ module Friends
     # @raise [FriendsError] with a constructed message
     def bad_line(expected, line_num)
       raise FriendsError, "Expected \"#{expected}\" on line #{line_num}"
+    end
+
+    # Check if an activity is setting a specific default location for the first time.
+    # @param expected [Activity] the activity to check
+    # @return [Boolean]
+    def is_activity_setting_default_location?(activity)
+    	previous_activities = @activities - [activity]
+    	activity.default_location && previous_activities.none? { |activity| activity.default_location }
     end
   end
 end
