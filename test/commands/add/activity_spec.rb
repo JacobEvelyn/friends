@@ -71,7 +71,7 @@ FILE
       let(:activity) { "Had dinner in _Paris_" }
 
       it 'prints "Default location added" output message' do
-        value(subject[:stdout].include? 'Default location set to: "Paris"').must_equal true 
+        value(subject[:stdout].must_include 'Default location set to: "Paris"')
       end
     end
 
@@ -79,7 +79,7 @@ FILE
       let(:activity) { "Went to _Paris_ for a holiday" }
 
       it 'does not print "Default location added" output message' do
-        value(subject[:stdout].include? 'Default location set to: "Paris"').must_equal false 
+        value(subject[:stdout].wont_include 'Default location set to: "Paris"')
       end
     end    
 
