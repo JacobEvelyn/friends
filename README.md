@@ -47,6 +47,7 @@ lots of help), and give feedback! This project is
       - [`add tag`](#add-tag)
       - [`add location`](#add-location)
       - [`add nickname`](#add-nickname)
+      - [Adding a default location](#adding-a-default-location)
     - [`clean`](#clean)
     - [`graph`](#graph)
     - [`help`](#help)
@@ -417,6 +418,31 @@ $ friends add nickname "Grace Hopper" "The Admiral"
 Nickname added: "Grace Hopper (a.k.a. The Admiral)
 $ friends add nickname "Grace Hopper" "Amazing Grace"
 Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
+```
+
+#### Add a default location
+
+You can set a default location in`friends`. Thereafter, whenever an activity is added and does not mention a location, the activity will be automatically 'tagged' with the default location.
+
+To set a default location, use the phrase `to location` (eg `moved to Paris`), when adding an activity:
+
+```bash
+$ friends add activity Moved to Paris
+Activity added: "2018-01-04: Moved to Paris”
+Default location added: “Paris”
+```
+
+Then, when subsequent activities are added without an explicit location, friends will automatically tag the activity with the default location:
+
+```bash
+$ friends add activity Went to a cafe with George
+Activity added: "2018-01-04: Went to a cafe with George
+```
+
+```bash
+$ friends list activities --in “Paris”
+2018-01-04: Went to a cafe with George
+2018-01-04: Moved to Paris
 ```
 
 #### `clean`
