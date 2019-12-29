@@ -71,7 +71,7 @@ FILE
       let(:activity) { "Had dinner in _Paris_" }
 
       it 'prints "Default location added" output message' do
-        value(subject[:stdout].must_include 'Default location set to: "Paris"')
+        value(subject[:stdout].must_include('Default location set to: "Paris"'))
       end
     end
 
@@ -79,10 +79,9 @@ FILE
       let(:activity) { "Went to _Paris_ for a holiday" }
 
       it 'does not print "Default location added" output message' do
-        value(subject[:stdout].wont_include 'Default location set to: "Paris"')
+        value(subject[:stdout].wont_include('Default location set to: "Paris"'))
       end
-    end    
-
+    end
   end
 
   parsing_specs(event: :activity)
