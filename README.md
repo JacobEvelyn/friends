@@ -421,7 +421,7 @@ $ friends add nickname "Grace Hopper" "Amazing Grace"
 Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
 ```
 
-#### Add a default location
+#### Setting a default location
 
 You can set a default location in`friends`. Thereafter, whenever an activity is added and does not mention a location, the activity will be automatically 'tagged' with the default location.
 
