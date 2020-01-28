@@ -27,7 +27,7 @@ clean_describe "graph" do
     let(:content) do
       <<-FILE
 ### Activities:
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
+- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
 - 2015-01-14: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2015-01-06: Did some other things in _Paris_.
 - 2015-01-06: Did even more things in _Paris_.
@@ -273,7 +273,7 @@ Nov 2014 |∙|
 
       it "matches tag case-insensitively and scales the graph" do
         stdout_only <<-OUTPUT
-Nov 2015 |█████∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
+Nov 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 Oct 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 Sep 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 Aug 2015 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
@@ -291,10 +291,10 @@ Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 
       describe "--unscaled" do
         let(:unscaled) { true }
-
+        
         it "matches tag case-insensitively and does not scale graph" do
           stdout_only <<-OUTPUT
-Nov 2015 |█
+Nov 2015 |∙|
 Oct 2015 |
 Sep 2015 |
 Aug 2015 |

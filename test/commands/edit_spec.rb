@@ -78,7 +78,7 @@ Not cleaning file: "#{filename}" ("exit 1 #" did not exit successfully)
       <<-EXPECTED_CONTENT
 ### Activities:
 - 2018-02-06: @science:indoors:agronomy-with-hydroponics: **Norman Borlaug** and **George Washington Carver** scored a tour of _Atlantis_' hydroponics gardens through wetplants@example.org and they took me along.
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
+- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
 - 2014-12-16: Okay, yep, I definitely just saw **Bigfoot** in the _Mysterious Mountains_!
