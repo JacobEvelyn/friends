@@ -27,7 +27,7 @@ require "friends"
 CONTENT = <<-FILE.freeze
 ### Activities:
 - 2018-02-06: @science:indoors:agronomy-with-hydroponics: **Norman Borlaug** and **George Washington Carver** scored a tour of _Atlantis_' hydroponics gardens through wetplants@example.org and they took me along.
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+- 2015-11-01: **Grace Hopper** and I went to _Martha's Vineyard_. George had to cancel at the last minute.
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
 - 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
@@ -47,7 +47,7 @@ CONTENT = <<-FILE.freeze
 
 ### Locations:
 - Atlantis
-- Marie's Diner
+- Martha's Vineyard
 - Paris
 FILE
 
@@ -55,7 +55,7 @@ FILE
 SCRAMBLED_CONTENT = <<-FILE.freeze
 ### Activities:
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+- 2015-11-01: **Grace Hopper** and I went to _Martha's Vineyard_. George had to cancel at the last minute.
 - 2018-02-06: @science:indoors:agronomy-with-hydroponics: **Norman Borlaug** and **George Washington Carver** scored a tour of _Atlantis_' hydroponics gardens through wetplants@example.org and they took me along.
 - 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying
@@ -76,7 +76,7 @@ SCRAMBLED_CONTENT = <<-FILE.freeze
 ### Locations:
 - Paris
 - Atlantis
-- Marie's Diner
+- Martha's Vineyard
 FILE
 
 # Define these methods so they can be referenced in the methods below. They'll be overridden in
