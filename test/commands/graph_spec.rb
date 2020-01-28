@@ -27,7 +27,7 @@ clean_describe "graph" do
     let(:content) do
       <<-FILE
 ### Activities:
-- 2015-11-01: **Grace Hopper** and I went to Marie's Diner. George had to cancel at the last minute. @food
+- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
 - 2015-01-14: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
 - 2015-01-06: Did some other things in _Paris_.
 - 2015-01-06: Did even more things in _Paris_.
@@ -42,6 +42,7 @@ clean_describe "graph" do
 
 ### Locations:
 - Atlantis
+- Marie's Diner
 - Paris
       FILE
     end

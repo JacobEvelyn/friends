@@ -142,7 +142,7 @@ FRIENDS_PAGER="less -RF"
 - **Friends**: The people you do _activities_ with. Each friend has a name and,
   optionally, one or several nicknames. (Examples: `John`, `Grace Hopper`)
 - **Locations**: The places in which _activities_ happen. (Examples: `Paris`,
-  `Atlantis`)
+  `Marie's Diner`)
 - **Tags**: A way to categorize your _activities_ with tags of your
   choosing. Tags may contain colons and hyphens inside them. (Examples: `@exercise:running`, `@school`, `@science:indoors:agronomy-with-hydroponics`)
 - **Notes**: Any additional information you want to record about a _friend_
@@ -156,6 +156,7 @@ The `friends.md` Markdown file that stores all of your data contains:
 ### Locations:
 
 - Atlantis
+- Marie's Diner
 - Paris
 ```
 
@@ -174,7 +175,7 @@ The `friends.md` Markdown file that stores all of your data contains:
 ```markdown
 ### Activities:
 
-- 2018-11-01: **Grace Hopper** and I went to Marie's Diner. George had to cancel at the last minute.
+- 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
 - 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
 - 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
 - 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
