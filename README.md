@@ -423,27 +423,22 @@ Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
 
 #### Setting a default location
 
-You can set a default location in`friends`. Thereafter, whenever an activity is added and does not mention a location, the activity will be automatically 'tagged' with the default location.
-
-To set a default location, use the phrase `to location` (eg `moved to Paris`), when adding an activity:
+When an activity includes the phrase to \_LOCATION\_ (e.g., Took a plane to \_Paris\_), all future activities that have no explicit location will be associated with that location:
 
 ```bash
-$ friends add activity Moved to Paris
-Activity added: "2018-01-04: Moved to Paris”
-Default location added: “Paris”
-```
-
-Then, when subsequent activities are added without an explicit location, friends will automatically tag the activity with the default location:
-
-```bash
-$ friends add activity Went to a cafe with George
-Activity added: "2018-01-04: Went to a cafe with George
+$ friends add activity Took a plane to _Paris_
+Activity added: "2020-01-04: Took a plane to Paris"
+Default location set to: "Paris"
+$ friends add activity Ate lunch at a charming café
+Activity added: "2020-01-04: Ate lunch at a charming café"
+$ friends add activity Left the city to go to _Chamonix_
+Activity added: "2020-01-04: Left the city to go to Chamonix"
 ```
 
 ```bash
-$ friends list activities --in “Paris”
-2018-01-04: Went to a cafe with George
-2018-01-04: Moved to Paris
+$ friends list activities --in Paris
+2019-01-04: Ate lunch at a charming café
+2019-01-04: Took a plane to Paris
 ```
 
 #### `clean`
