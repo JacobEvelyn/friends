@@ -110,8 +110,15 @@ module Friends
         @activities.unshift(activity)
 
         @output << "Activity added: \"#{activity}\""
-        if activity_sets_default_location?(activity)
-          @output << "Default location set to: \"#{activity.default_location}\""
+        
+        if activity_sets_default_location_for_the_first_time?(activity)
+          @output << "Default location set to: \"#{activity.default_location}\"" 
+        end
+
+        previous_activities = @activities - [activity]
+        current_default_location = activity.default_location 
+        if ( previous_activities.any? { |a| a.default_location == current_default_location } )
+          @output << "Default location already set to: \"#{activity.default_location}\""
         end
       end
     end
@@ -784,7 +791,7 @@ module Friends
     # Check if an activity is setting a specific default location for the first time.
     # @param expected [Activity] the activity to check
     # @return [Boolean]
-    def activity_sets_default_location?(activity)
+    def activity_sets_default_location_for_the_first_time?(activity)
       previous_activities = @activities - [activity]
       activity.default_location && previous_activities.none?(&:default_location)
     end

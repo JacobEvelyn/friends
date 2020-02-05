@@ -52,11 +52,33 @@ FILE
   end
 
   describe "adding default location" do
-    subject { run_cmd("add activity 2017-01-01: Moved to Paris") }
+    subject { run_cmd("add activity 2017-01-01: Moved to _Paris_") }
+
+    describe "when default location has not been set before" do
     let(:content) do
       <<-FILE
 ### Activities:
-- 2016-01-01: #{activity}.
+- 2016-01-01: Had dinner in _Berlin_.
+
+### Notes:
+
+### Friends:
+
+### Locations:
+- Berlin
+FILE
+    end
+
+      it 'prints "Default location set to" output message' do
+        value(subject[:stdout].must_include('Default location set to: "Paris"'))
+      end
+    end
+
+    describe "when default location has already been set" do
+    let(:content) do
+      <<-FILE
+### Activities:
+- 2016-01-01: Flew to _Paris_.
 
 ### Notes:
 
@@ -67,19 +89,8 @@ FILE
 FILE
     end
 
-    describe "when default location has not been set before" do
-      let(:activity) { "Had dinner in _Paris_" }
-
-      it 'prints "Default location set to" output message' do
-        value(subject[:stdout].must_include('Default location set to: "Paris"'))
-      end
-    end
-
-    describe "when default location has already been set" do
-      let(:activity) { "Went to _Paris_ for a holiday" }
-
-      it 'does not print "Default location added" output message' do
-        value(subject[:stdout].wont_include('Default location set to: "Paris"'))
+      focus; it 'prints "Default location already set to" output message' do
+        value(subject[:stdout].must_include('Default location already set to: "Paris"'))
       end
     end
   end
