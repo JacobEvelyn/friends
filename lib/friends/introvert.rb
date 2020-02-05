@@ -111,15 +111,7 @@ module Friends
 
         @output << "Activity added: \"#{activity}\""
         
-        if activity_sets_default_location_for_the_first_time?(activity)
-          @output << "Default location set to: \"#{activity.default_location}\"" 
-        end
-
-        previous_activities = @activities - [activity]
-        current_default_location = activity.default_location 
-        if ( previous_activities.any? { |a| a.default_location == current_default_location } )
-          @output << "Default location already set to: \"#{activity.default_location}\""
-        end
+        decide_default_location_output(activity) if activity.default_location
       end
     end
 
@@ -788,12 +780,28 @@ module Friends
       raise FriendsError, "Expected \"#{expected}\" on line #{line_num}"
     end
 
+    def decide_default_location_output(activity)
+
+      previous_activities = @activities - [activity]
+      if activity_sets_default_location_for_the_first_time?(previous_activities)
+        @output << "Default location set to: \"#{activity.default_location}\""
+      end 
+      if activity_sets_default_location_immediately_again?(activity, previous_activities)
+        @output << "Default location already set to: \"#{activity.default_location}\""
+      end
+    end
+
+
     # Check if an activity is setting a specific default location for the first time.
     # @param expected [Activity] the activity to check
     # @return [Boolean]
-    def activity_sets_default_location_for_the_first_time?(activity)
-      previous_activities = @activities - [activity]
-      activity.default_location && previous_activities.none?(&:default_location)
+    def activity_sets_default_location_for_the_first_time?(previous_activities)
+      previous_activities.none?(&:default_location)
+    end
+
+    def activity_sets_default_location_immediately_again?(activity, previous_activities)
+      current_default_location = activity.default_location 
+      previous_activities.any? { |a| a.default_location == current_default_location }
     end
   end
 end

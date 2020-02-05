@@ -89,7 +89,7 @@ FILE
 FILE
     end
 
-      focus; it 'prints "Default location already set to" output message' do
+      it 'prints "Default location already set to" output message' do
         value(subject[:stdout].must_include('Default location already set to: "Paris"'))
       end
     end
