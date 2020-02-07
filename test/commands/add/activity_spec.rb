@@ -74,7 +74,29 @@ FILE
       end
     end
 
-    describe "when default location has already been set" do
+    describe "when default location has been set two default locations ago" do
+    let(:content) do
+      <<-FILE
+### Activities:
+- 2016-01-01: Moved to _Berlin_.
+- 2015-01-01: Flew to _Paris_.
+
+### Notes:
+
+### Friends:
+
+### Locations:
+- Berlin
+- Paris
+FILE
+    end
+
+      focus; it 'prints "Default location set to" output message' do
+        value(subject[:stdout].must_include('Default location set to: "Paris"'))
+      end
+    end
+
+    describe "when default location has already been set immediately before" do
     let(:content) do
       <<-FILE
 ### Activities:
