@@ -91,7 +91,7 @@ FILE
 FILE
     end
 
-      focus; it 'prints "Default location set to" output message' do
+      it 'prints "Default location set to" output message' do
         value(subject[:stdout].must_include('Default location set to: "Paris"'))
       end
     end
