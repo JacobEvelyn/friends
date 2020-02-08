@@ -781,41 +781,31 @@ module Friends
     end
 
     def decide_default_location_output(activity)
-
+      str = "Default location "
       previous_activities = @activities - [activity]
-      if activity_sets_default_location_for_the_first_time?(previous_activities) || activity_sets_default_location_again_after_another_default_location?(activity, previous_activities)
-        @output << "Default location set to: \"#{activity.default_location}\""
-      end 
-      if activity_sets_default_location_immediately_again?(activity, previous_activities)
-        @output << "Default location already set to: \"#{activity.default_location}\""
+      
+      if last_default_location_same_as_current_default_location?(activity, previous_activities)
+        str += "already "
       end
+
+      str += "set to: \"#{activity.default_location}\""
+
+      @output << str
     end
 
-
+    def last_default_location_same_as_current_default_location?(activity, previous_activities)
+      last_default_location_activity = previous_activities.select {|a| a.default_location }.first
+      if last_default_location_activity
+        last_default_location_activity.default_location == activity.default_location
+      end
+    end
+    
     # Check if an activity is setting a specific default location for the first time.
     # @param expected [Activity] the activity to check
     # @return [Boolean]
-    def activity_sets_default_location_for_the_first_time?(previous_activities)
-      previous_activities.none?(&:default_location)
-    end
+    # def no_previous_default_locations?(previous_activities)
+    #   previous_activities.none?(&:default_location)
+    # end
 
-    def activity_sets_default_location_immediately_again?(activity, previous_activities)
-      current_default_location = activity.default_location 
-      previous_activities.any? { |a| a.default_location == current_default_location }
-    end
-
-    def activity_sets_default_location_again_after_another_default_location?(activity, previous_activities)
-      var = false
-      previous_activity_with_current_default_location = nil
-      previous_activities.each {|a| previous_activity_with_current_default_location = a if a.default_location == activity.default_location}
-      if previous_activity_with_current_default_location
-        previous_activities.each do |act|
-          if act.default_location && act.default_location != activity.default_location && act.date > previous_activity_with_current_default_location.date
-            var = true
-          end
-        end
-      end
-      return var
-    end
   end
 end

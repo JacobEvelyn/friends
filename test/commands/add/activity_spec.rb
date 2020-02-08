@@ -54,7 +54,7 @@ FILE
   describe "adding default location" do
     subject { run_cmd("add activity 2017-01-01: Moved to _Paris_") }
 
-    describe "when default location has not been set before" do
+    describe "when a default location has never been set before" do
     let(:content) do
       <<-FILE
 ### Activities:
@@ -69,12 +69,15 @@ FILE
 FILE
     end
 
-      it 'prints "Default location set to" output message' do
-        value(subject[:stdout].must_include('Default location set to: "Paris"'))
+      focus; it 'prints "Default location set to" output message' do
+        stdout_for_testing = strip_out_activity(subject[:stdout])
+        
+        stdout_for_testing.size.must_equal 1
+        value(stdout_for_testing.must_include('Default location set to: "Paris"'))
       end
     end
 
-    describe "when default location has been set two default locations ago" do
+    describe "when current default location was already set before the last default location" do
     let(:content) do
       <<-FILE
 ### Activities:
@@ -91,12 +94,15 @@ FILE
 FILE
     end
 
-      it 'prints "Default location set to" output message' do
-        value(subject[:stdout].must_include('Default location set to: "Paris"'))
+      focus; it 'prints "Default location set to" output message' do
+        stdout_for_testing = strip_out_activity(subject[:stdout])
+        
+        stdout_for_testing.size.must_equal 1
+        value(stdout_for_testing.must_include('Default location set to: "Paris"'))
       end
     end
 
-    describe "when default location has already been set immediately before" do
+    describe "when current default location is the same as the last default location" do
     let(:content) do
       <<-FILE
 ### Activities:
@@ -111,11 +117,20 @@ FILE
 FILE
     end
 
-      it 'prints "Default location already set to" output message' do
-        value(subject[:stdout].must_include('Default location already set to: "Paris"'))
+      focus; it 'prints "Default location already set to" output message' do
+        stdout_for_testing = strip_out_activity(subject[:stdout])
+
+        stdout_for_testing.size.must_equal 1
+        value(stdout_for_testing.must_include('Default location already set to: "Paris"'))
       end
     end
   end
 
   parsing_specs(event: :activity)
+
+private
+  def strip_out_activity(output)
+    lines = output.split("\n")
+    lines.reject {|line| !line.include?("Default")}
+  end
 end
