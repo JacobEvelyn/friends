@@ -52,10 +52,11 @@ FILE
   end
 
   describe "adding default location" do
-    subject { run_cmd("add activity 2017-01-01: Moved to _Paris_") }
+    describe "when it is the lastest activity" do
+      subject { run_cmd("add activity Moved to _Paris_") }
 
-    describe "when a default location has never been set before" do
-    let(:content) do
+      describe "when a default location has never been set before" do
+      let(:content) do
       <<-FILE
 ### Activities:
 - 2016-01-01: Had dinner in _Berlin_.
@@ -67,22 +68,21 @@ FILE
 ### Locations:
 - Berlin
 FILE
-    end
-
-      focus; it 'prints "Default location set to" output message' do
-        stdout_for_testing = strip_out_activity(subject[:stdout])
-        
-        stdout_for_testing.size.must_equal 1
-        value(stdout_for_testing.must_include('Default location set to: "Paris"'))
       end
-    end
 
-    describe "when current default location was already set before the last default location" do
-    let(:content) do
+        focus; it 'prints "Default location set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
+          
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location set to: "Paris"'))
+        end
+      end
+
+      describe "when current default location is different to the last default location" do
+      let(:content) do
       <<-FILE
 ### Activities:
 - 2016-01-01: Moved to _Berlin_.
-- 2015-01-01: Flew to _Paris_.
 
 ### Notes:
 
@@ -90,20 +90,19 @@ FILE
 
 ### Locations:
 - Berlin
-- Paris
 FILE
-    end
-
-      focus; it 'prints "Default location set to" output message' do
-        stdout_for_testing = strip_out_activity(subject[:stdout])
-        
-        stdout_for_testing.size.must_equal 1
-        value(stdout_for_testing.must_include('Default location set to: "Paris"'))
       end
-    end
 
-    describe "when current default location is the same as the last default location" do
-    let(:content) do
+        focus; it 'prints "Default location set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
+          
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location set to: "Paris"'))
+        end
+      end
+
+      describe "when current default location is the same as the last default location" do
+      let(:content) do
       <<-FILE
 ### Activities:
 - 2016-01-01: Flew to _Paris_.
@@ -115,13 +114,40 @@ FILE
 ### Locations:
 - Paris
 FILE
+      end
+
+        focus; it 'prints "Default location already set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
+
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location already set to: "Paris"'))
+        end
+      end
     end
+    describe 'when it is not the latest activity' do
+      subject { run_cmd("add activity 1999-01-01: Moved to _Paris_") }
 
-      focus; it 'prints "Default location already set to" output message' do
-        stdout_for_testing = strip_out_activity(subject[:stdout])
+      describe 'when a default location has never been set before' do
+      let(:content) do
+      <<-FILE
+### Activities:
+- 2016-01-01: Visited my favourite cafe.
 
-        stdout_for_testing.size.must_equal 1
-        value(stdout_for_testing.must_include('Default location already set to: "Paris"'))
+### Notes:
+
+### Friends:
+
+### Locations:
+FILE
+      end
+
+        focus;it 'prints "Default location from [DATE] to present set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
+
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location from 1999-01-01 to present set to: "Paris"'))
+        end
+
       end
     end
   end

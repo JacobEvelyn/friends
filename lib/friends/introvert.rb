@@ -781,11 +781,19 @@ module Friends
     end
 
     def decide_default_location_output(activity)
+      @activities = stable_sort(@activities)
+      existing_activities = @activities - [activity]
       str = "Default location "
-      previous_activities = @activities - [activity]
-      
-      if last_default_location_same_as_current_default_location?(activity, previous_activities)
-        str += "already "
+
+
+      if @activities.first == activity
+        if last_default_location_same_as_current_default_location?(activity, existing_activities)
+          str += "already "
+        end
+      else
+        if existing_activities.none?(&:default_location)
+          str += "from #{activity.date} to present "
+        end
       end
 
       str += "set to: \"#{activity.default_location}\""
@@ -793,18 +801,18 @@ module Friends
       @output << str
     end
 
-    def last_default_location_same_as_current_default_location?(activity, previous_activities)
-      last_default_location_activity = previous_activities.select {|a| a.default_location }.first
+    def last_default_location_same_as_current_default_location?(activity, existing_activities)
+      last_default_location_activity = existing_activities.select {|a| a.default_location }.first
       if last_default_location_activity
         last_default_location_activity.default_location == activity.default_location
       end
     end
-    
+
     # Check if an activity is setting a specific default location for the first time.
     # @param expected [Activity] the activity to check
     # @return [Boolean]
-    # def no_previous_default_locations?(previous_activities)
-    #   previous_activities.none?(&:default_location)
+    # def no_previous_default_locations?(existing_activities)
+    #   existing_activities.none?(&:default_location)
     # end
 
   end
