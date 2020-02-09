@@ -124,6 +124,7 @@ FILE
         end
       end
     end
+
     describe 'when it is not the latest activity' do
       subject { run_cmd("add activity 1999-01-01: Moved to _Paris_") }
 
@@ -173,6 +174,33 @@ FILE
         value(stdout_for_testing.must_include('Default location from 1980-01-01 to present already set to: "Paris"'))
       end
 
+      end
+
+      describe 'when default location precedes a different default location' do
+      let(:content) do
+      <<-FILE
+### Activities:
+- 2016-01-01: Flew to _Berlin_.
+
+### Notes:
+
+### Friends:
+
+### Locations:
+- Berlin
+FILE
+      end
+
+      focus;it 'prints "Default location from [DATE] to [DATE] set to" output message' do
+        stdout_for_testing = strip_out_activity(subject[:stdout])
+
+        stdout_for_testing.size.must_equal 1
+        value(stdout_for_testing.must_include('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"'))
+      end
+
+      end
+
+      describe 'when default location precdes a different default location and proceeds the same default location' do
       end
     end
   end

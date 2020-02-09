@@ -784,12 +784,14 @@ module Friends
       @activities = stable_sort(@activities)
       existing_activities = @activities - [activity]
 
-      str = "Default location "
+      str = "Default location"
       if activity != @activities.first
-        str += "from #{earliest_default_activity_date(activity, existing_activities)} to present "
+        str += " from #{earliest_default_activity_date(activity, existing_activities)} to"
+        str += " #{next_activity_date_with_different_default_location(activity, existing_activities) || 'present'}"
       end
-      str += "already " if last_default_location_same_as_added_default_location?(activity, existing_activities)
-      str += "set to: \"#{activity.default_location}\""
+
+      str += " already" if last_default_location_same_as_added_default_location?(activity, existing_activities)
+      str += " set to: \"#{activity.default_location}\""
 
       @output << str
     end
@@ -807,6 +809,15 @@ module Friends
         return last_default_location_activity.date
       else
         return activity.date
+      end
+    end
+
+    def next_activity_date_with_different_default_location(activity, existing_activities)
+      next_default_location_activity = existing_activities.select {|a| a.default_location && (a.date > activity.date) }.first
+      if next_default_location_activity
+        return next_default_location_activity.date
+      else
+        return nil
       end
     end
 
