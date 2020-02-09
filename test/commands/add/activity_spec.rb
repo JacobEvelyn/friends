@@ -56,8 +56,8 @@ FILE
       subject { run_cmd("add activity Moved to _Paris_") }
 
       describe "when a default location has never been set before" do
-      let(:content) do
-      <<-FILE
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Had dinner in _Berlin_.
 
@@ -68,19 +68,19 @@ FILE
 ### Locations:
 - Berlin
 FILE
-      end
+        end
 
-        focus; it 'prints "Default location set to" output message' do
+        it 'prints "Default location set to" output message' do
           stdout_for_testing = strip_out_activity(subject[:stdout])
-          
+
           stdout_for_testing.size.must_equal 1
           value(stdout_for_testing.must_include('Default location set to: "Paris"'))
         end
       end
 
       describe "when current default location is different to the last default location" do
-      let(:content) do
-      <<-FILE
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Moved to _Berlin_.
 
@@ -91,19 +91,19 @@ FILE
 ### Locations:
 - Berlin
 FILE
-      end
+        end
 
-        focus; it 'prints "Default location set to" output message' do
+        it 'prints "Default location set to" output message' do
           stdout_for_testing = strip_out_activity(subject[:stdout])
-          
+
           stdout_for_testing.size.must_equal 1
           value(stdout_for_testing.must_include('Default location set to: "Paris"'))
         end
       end
 
       describe "when current default location is the same as the last default location" do
-      let(:content) do
-      <<-FILE
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Flew to _Paris_.
 
@@ -114,9 +114,9 @@ FILE
 ### Locations:
 - Paris
 FILE
-      end
+        end
 
-        focus; it 'prints "Default location already set to" output message' do
+        it 'prints "Default location already set to" output message' do
           stdout_for_testing = strip_out_activity(subject[:stdout])
 
           stdout_for_testing.size.must_equal 1
@@ -125,12 +125,12 @@ FILE
       end
     end
 
-    describe 'when it is not the latest activity' do
+    describe "when it is not the latest activity" do
       subject { run_cmd("add activity 1999-01-01: Moved to _Paris_") }
 
-      describe 'when a default location has never been set before' do
-      let(:content) do
-      <<-FILE
+      describe "when a default location has never been set before" do
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Visited my favourite cafe.
 
@@ -140,20 +140,19 @@ FILE
 
 ### Locations:
 FILE
-      end
+        end
 
-        focus;it 'prints "Default location from [DATE] to present set to" output message' do
+        it 'prints "Default location from [DATE] to present set to" output message' do
           stdout_for_testing = strip_out_activity(subject[:stdout])
 
           stdout_for_testing.size.must_equal 1
           value(stdout_for_testing.must_include('Default location from 1999-01-01 to present set to: "Paris"'))
         end
-
       end
 
-      describe 'when default location is the same as the preceding default location' do
-      let(:content) do
-      <<-FILE
+      describe "when default location is the same as the preceding default location" do
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Visited my favourite cafe.
 - 1980-01-01: Flew to _Paris_.
@@ -165,20 +164,19 @@ FILE
 ### Locations:
 - Paris
 FILE
+        end
+
+        it 'prints "Default location from [DATE] to present already set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
+
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location from 1980-01-01 to present already set to: "Paris"'))
+        end
       end
 
-      focus;it 'prints "Default location from [DATE] to present already set to" output message' do
-        stdout_for_testing = strip_out_activity(subject[:stdout])
-
-        stdout_for_testing.size.must_equal 1
-        value(stdout_for_testing.must_include('Default location from 1980-01-01 to present already set to: "Paris"'))
-      end
-
-      end
-
-      describe 'when default location precedes a different default location' do
-      let(:content) do
-      <<-FILE
+      describe "when default location precedes a different default location" do
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Flew to _Berlin_.
 
@@ -189,20 +187,19 @@ FILE
 ### Locations:
 - Berlin
 FILE
+        end
+
+        it 'prints "Default location from [DATE] to [DATE] set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
+
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"'))
+        end
       end
 
-      focus;it 'prints "Default location from [DATE] to [DATE] set to" output message' do
-        stdout_for_testing = strip_out_activity(subject[:stdout])
-
-        stdout_for_testing.size.must_equal 1
-        value(stdout_for_testing.must_include('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"'))
-      end
-
-      end
-
-      describe 'when default location precdes a different default location and proceeds the same default location' do
-      let(:content) do
-      <<-FILE
+      describe "when default location precdes a different default location and proceeds the same default location" do
+        let(:content) do
+          <<-FILE
 ### Activities:
 - 2016-01-01: Flew to _Berlin_.
 - 1980-01-01: Flew to _Paris_.
@@ -214,24 +211,24 @@ FILE
 ### Locations:
 - Berlin
 FILE
-      end
+        end
 
-      focus;it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
-        stdout_for_testing = strip_out_activity(subject[:stdout])
+        it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
+          stdout_for_testing = strip_out_activity(subject[:stdout])
 
-        stdout_for_testing.size.must_equal 1
-        value(stdout_for_testing.must_include('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"'))
-      end
-
+          stdout_for_testing.size.must_equal 1
+          value(stdout_for_testing.must_include('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"'))
+        end
       end
     end
   end
 
   parsing_specs(event: :activity)
 
-private
+  private
+
   def strip_out_activity(output)
     lines = output.split("\n")
-    lines.reject {|line| !line.include?("Default")}
+    lines.select { |line| line.include?("Default") }
   end
 end

@@ -291,7 +291,7 @@ Nov 2014 |∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙∙|
 
       describe "--unscaled" do
         let(:unscaled) { true }
-        
+
         it "matches tag case-insensitively and does not scale graph" do
           stdout_only <<-OUTPUT
 Nov 2015 |∙|

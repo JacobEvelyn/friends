@@ -110,7 +110,7 @@ module Friends
         @activities.unshift(activity)
 
         @output << "Activity added: \"#{activity}\""
-        
+
         decide_default_location_output(activity) if activity.default_location
       end
     end
@@ -797,14 +797,14 @@ module Friends
     end
 
     def last_default_location_same_as_added_default_location?(activity, existing_activities)
-      last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
+      last_default_location_activity = existing_activities.select { |a| a.default_location && (a.date < activity.date) }.first
       if last_default_location_activity
         last_default_location_activity.default_location == activity.default_location
       end
     end
 
     def earliest_default_activity_date(activity, existing_activities)
-      last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
+      last_default_location_activity = existing_activities.select { |a| a.default_location && (a.date < activity.date) }.first
       if last_default_location_activity
         return last_default_location_activity.date
       else
@@ -813,7 +813,7 @@ module Friends
     end
 
     def next_activity_date_with_different_default_location(activity, existing_activities)
-      next_default_location_activity = existing_activities.select {|a| a.default_location && (a.date > activity.date) }.first
+      next_default_location_activity = existing_activities.select { |a| a.default_location && (a.date > activity.date) }.first
       if next_default_location_activity
         return next_default_location_activity.date
       else
@@ -838,6 +838,5 @@ module Friends
     # def no_previous_default_locations?(existing_activities)
     #   existing_activities.none?(&:default_location)
     # end
-
   end
 end
