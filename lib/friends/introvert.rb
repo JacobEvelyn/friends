@@ -783,43 +783,43 @@ module Friends
     def decide_default_location_output(activity)
       @activities = stable_sort(@activities)
       existing_activities = @activities - [activity]
+
       str = "Default location "
-
-
-      if @activities.first == activity
-        if last_default_location_same_as_current_default_location?(activity, existing_activities)
-          str += "already "
-        end
-      else
-        if existing_activities.none?(&:default_location)
-          str += "from #{activity.date} to present "
-        elsif is_default_location_before_added_same?(activity, existing_activities) 
-          str += "from #{get_last_default_location_activity(activity, existing_activities).date} to present already "    
-        end
+      if activity != @activities.first
+        str += "from #{earliest_default_activity_date(activity, existing_activities)} to present "
       end
-
+      str += "already " if last_default_location_same_as_added_default_location?(activity, existing_activities)
       str += "set to: \"#{activity.default_location}\""
 
       @output << str
     end
 
-    def last_default_location_same_as_current_default_location?(activity, existing_activities)
-      last_default_location_activity = existing_activities.select {|a| a.default_location }.first
-      if last_default_location_activity
-        last_default_location_activity.default_location == activity.default_location
-      end
-    end
-
-    def is_default_location_before_added_same?(activity, existing_activities)
+    def last_default_location_same_as_added_default_location?(activity, existing_activities)
       last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
       if last_default_location_activity
         last_default_location_activity.default_location == activity.default_location
       end
     end
 
-    def get_last_default_location_activity(activity, existing_activities)
+    def earliest_default_activity_date(activity, existing_activities)
       last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
+      if last_default_location_activity
+        return last_default_location_activity.date
+      else
+        return activity.date
+      end
     end
+
+    # def is_default_location_before_added_same?(activity, existing_activities)
+    #   last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
+    #   if last_default_location_activity
+    #     last_default_location_activity.default_location == activity.default_location
+    #   end
+    # end
+
+    # def get_last_default_location_activity(activity, existing_activities)
+    #   last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
+    # end
 
     # Check if an activity is setting a specific default location for the first time.
     # @param expected [Activity] the activity to check
