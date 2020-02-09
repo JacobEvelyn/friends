@@ -149,6 +149,31 @@ FILE
         end
 
       end
+
+      describe 'when default location is the same as the preceding default location' do
+      let(:content) do
+      <<-FILE
+### Activities:
+- 2016-01-01: Visited my favourite cafe.
+- 1980-01-01: Flew to _Paris_.
+
+### Notes:
+
+### Friends:
+
+### Locations:
+- Paris
+FILE
+      end
+
+      focus;it 'prints "Default location from [DATE] to present already set to" output message' do
+        stdout_for_testing = strip_out_activity(subject[:stdout])
+
+        stdout_for_testing.size.must_equal 1
+        value(stdout_for_testing.must_include('Default location from 1980-01-01 to present already set to: "Paris"'))
+      end
+
+      end
     end
   end
 

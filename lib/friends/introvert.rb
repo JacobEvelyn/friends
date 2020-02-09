@@ -793,6 +793,8 @@ module Friends
       else
         if existing_activities.none?(&:default_location)
           str += "from #{activity.date} to present "
+        elsif is_default_location_before_added_same?(activity, existing_activities) 
+          str += "from #{get_last_default_location_activity(activity, existing_activities).date} to present already "    
         end
       end
 
@@ -806,6 +808,17 @@ module Friends
       if last_default_location_activity
         last_default_location_activity.default_location == activity.default_location
       end
+    end
+
+    def is_default_location_before_added_same?(activity, existing_activities)
+      last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
+      if last_default_location_activity
+        last_default_location_activity.default_location == activity.default_location
+      end
+    end
+
+    def get_last_default_location_activity(activity, existing_activities)
+      last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
     end
 
     # Check if an activity is setting a specific default location for the first time.
