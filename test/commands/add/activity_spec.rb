@@ -71,10 +71,7 @@ FILE
         end
 
         it 'prints "Default location set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location set to: "Paris"'))
+          assert_default_location_output('Default location set to: "Paris"')
         end
       end
 
@@ -94,10 +91,7 @@ FILE
         end
 
         it 'prints "Default location set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location set to: "Paris"'))
+          assert_default_location_output('Default location set to: "Paris"')
         end
       end
 
@@ -117,10 +111,7 @@ FILE
         end
 
         it 'prints "Default location already set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location already set to: "Paris"'))
+          assert_default_location_output('Default location already set to: "Paris"')
         end
       end
     end
@@ -143,10 +134,7 @@ FILE
         end
 
         it 'prints "Default location from [DATE] to present set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location from 1999-01-01 to present set to: "Paris"'))
+          assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
         end
       end
 
@@ -167,10 +155,7 @@ FILE
         end
 
         it 'prints "Default location from [DATE] to present already set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location from 1980-01-01 to present already set to: "Paris"'))
+          assert_default_location_output('Default location from 1980-01-01 to present already set to: "Paris"')
         end
       end
 
@@ -190,10 +175,7 @@ FILE
         end
 
         it 'prints "Default location from [DATE] to [DATE] set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"'))
+          assert_default_location_output('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"')
         end
       end
 
@@ -214,10 +196,7 @@ FILE
         end
 
         it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
-          stdout_for_testing = strip_out_activity(subject[:stdout])
-
-          stdout_for_testing.size.must_equal 1
-          value(stdout_for_testing.must_include('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"'))
+          assert_default_location_output('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"')
         end
       end
     end
@@ -227,8 +206,16 @@ FILE
 
   private
 
-  def strip_out_activity(output)
+  def assert_default_location_output(expected_output)
+    output = select_default_activity_output(subject[:stdout])
+
+    output.size.must_equal(1)
+    output.must_include(expected_output)
+  end
+
+  def select_default_activity_output(output)
     lines = output.split("\n")
     lines.select { |line| line.include?("Default") }
   end
+
 end
