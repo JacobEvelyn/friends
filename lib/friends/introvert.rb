@@ -804,7 +804,7 @@ module Friends
     end
 
     def earliest_default_activity_date(activity, existing_activities)
-      last_default_location_activity = existing_activities.select { |a| a.default_location && (a.date < activity.date) }.first
+      last_default_location_activity = existing_activities.select { |a| a.default_location && (a.default_location == activity.default_location) && (a.date < activity.date) }.first
       if last_default_location_activity
         return last_default_location_activity.date
       else
@@ -814,7 +814,7 @@ module Friends
 
     def next_activity_date_with_different_default_location(activity, existing_activities)
       next_default_location_activity = existing_activities.select { |a| a.default_location && (a.date > activity.date) }.first
-      if next_default_location_activity
+      if next_default_location_activity && (next_default_location_activity.default_location != activity.default_location)
         return next_default_location_activity.date
       else
         return nil
