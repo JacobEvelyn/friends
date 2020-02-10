@@ -240,6 +240,27 @@ FILE
           assert_default_location_output('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"')
         end
       end
+
+      describe "when default location precedes a different default location and preceeds the same default location" do
+        let(:content) do
+          <<-FILE
+### Activities:
+- 2016-01-01: Flew to _Berlin_.
+- 2015-01-01: Flew to _Paris_.
+
+### Notes:
+
+### Friends:
+
+### Locations:
+- Berlin
+FILE
+        end
+
+        focus; it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
+          assert_default_location_output('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"')
+        end
+      end
     end
   end
 
