@@ -162,7 +162,7 @@ FILE
 
         end
 
-        describe "when multiple consecutive preceding activity default locations are same" do
+        describe "when multiple preceding activity default locations are same and consecutive" do
           let(:preceeding_activity) { "1999-01-01: Went to _Paris_"}
           let(:content) do
             <<-FILE
@@ -179,8 +179,32 @@ FILE
 FILE
           end
 
-          focus; it 'prints "Default location from [EARLIEST DEAFULAT LOCATION ACTIVITY DATE] to present already set to" output message' do
+          focus; it 'prints "Default location from [EARLIEST CONSECUTIVE DEFAULT LOCATION ACTIVITY DATE] to present already set to" output message' do
             assert_default_location_output('Default location from 1989-01-01 to present already set to: "Paris"')
+          end
+
+        end
+
+        describe "when multiple preceding activity default locations are the same but not consecutive" do
+          let(:preceeding_activity) { "1999-01-01: Went to _Paris_"}
+          let(:content) do
+            <<-FILE
+### Activities:
+- 2019-01-01: Vistied a cafe
+- 1999-01-01: Went to _Paris_
+- 1989-01-01: Went to _Berlin_
+- 1979-01-01: Relocated to _Paris_
+
+### Notes:
+
+### Friends:
+
+### Locations:
+FILE
+          end
+
+          focus; it 'prints "Default location from [EARLIEST CONSECUTIVE DEFAULT LOCATION ACTIVITY DATE] to present already set to" output message' do
+            assert_default_location_output('Default location from 1999-01-01 to present already set to: "Paris"')
           end
 
         end
