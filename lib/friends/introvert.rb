@@ -820,9 +820,9 @@ module Friends
     end
 
     def next_activity_date_with_different_default_location(activity, existing_activities)
-      next_default_location_activity = existing_activities.select { |a| a.default_location && (a.date > activity.date) }.first
-      if next_default_location_activity && (next_default_location_activity.default_location != activity.default_location)
-        return next_default_location_activity.date
+      next_activity_with_different_default_location = existing_activities.select { |a| a.default_location && (a.date > activity.date) && a.default_location != activity.default_location }.first
+      if next_activity_with_different_default_location
+        return next_activity_with_different_default_location.date
       else
         return nil
       end
