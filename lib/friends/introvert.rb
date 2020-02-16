@@ -786,7 +786,7 @@ module Friends
 
       str = "Default location"
       if activity != @activities.first
-        str += " from #{earliest_default_activity_date(activity, existing_activities)} to"
+        str += " from #{earliest_consecutive_default_location_activity_date(activity, existing_activities)} to"
         str += " #{next_activity_date_with_different_default_location(activity, existing_activities) || 'present'}"
       end
 
@@ -803,10 +803,17 @@ module Friends
       end
     end
 
-    def earliest_default_activity_date(activity, existing_activities)
-      last_default_location_activity = existing_activities.select { |a| a.default_location && (a.default_location == activity.default_location) && (a.date < activity.date) }.first
-      if last_default_location_activity
-        return last_default_location_activity.date
+    def earliest_consecutive_default_location_activity_date(activity, existing_activities)
+      # binding.pry
+      earlier_default_location_activities = existing_activities.select { |a| a.default_location && (a.date < activity.date) }
+      consecutively_earliest_activity_with_same_default_location = nil
+      earlier_default_location_activities.each do |act|
+        break if act.default_location != activity.default_location
+        consecutively_earliest_activity_with_same_default_location = act if act.default_location == activity.default_location
+      end
+      # last_default_location_activity = existing_activities.select { |a| a.default_location && (a.default_location == activity.default_location) && (a.date < activity.date) }.first
+      if consecutively_earliest_activity_with_same_default_location
+        return consecutively_earliest_activity_with_same_default_location.date
       else
         return activity.date
       end

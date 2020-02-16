@@ -70,12 +70,12 @@ FILE
 FILE
         end
 
-        focus; it 'prints "Default location set to" output message' do
+        it 'prints "Default location set to" output message' do
           assert_default_location_output('Default location set to: "Paris"')
         end
       end
 
-      describe "when default location is different to the last default location" do
+      describe "when default location is different to preceding default location" do
         let(:content) do
           <<-FILE
 ### Activities:
@@ -90,12 +90,12 @@ FILE
 FILE
         end
 
-        focus; it 'prints "Default location set to" output message' do
+        it 'prints "Default location set to" output message' do
           assert_default_location_output('Default location set to: "Paris"')
         end
       end
 
-      describe "when default location is the same as the last default location" do
+      describe "when default location is the same as preceding location" do
         let(:content) do
           <<-FILE
 ### Activities:
@@ -110,20 +110,19 @@ FILE
 FILE
         end
 
-        focus; it 'prints "Default location already set to" output message' do
+        it 'prints "Default location already set to" output message' do
           assert_default_location_output('Default location already set to: "Paris"')
         end
       end
     end
 
     describe "when it is not the latest activity" do
-      subject { run_cmd("add activity 1999-01-01: Moved to _Paris_") }
-
-      describe "when default location has never been set before" do
-        let(:content) do
-          <<-FILE
+      subject { run_cmd("add activity 2009-01-01: Moved to _Paris_") }
+      let(:content) do
+  <<-FILE
 ### Activities:
-- 2016-01-01: Visited my favourite cafe.
+- #{proceeding_activity}
+- #{preceeding_activity}
 
 ### Notes:
 
@@ -131,136 +130,207 @@ FILE
 
 ### Locations:
 FILE
-        end
-
-        focus; it 'prints "Default location from [DATE] to present set to" output message' do
-          assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
-        end
       end
 
-      describe "when default location is the same as the preceding default location" do
-        let(:content) do
-          <<-FILE
+      describe "when proceeding activities have no default location" do
+        let(:proceeding_activity) { "2019-01-01: Vistied a cafe"}
+
+        describe "when preceding activities have no default location" do
+          let(:preceeding_activity) { "1999-01-01: Vistied a library"}
+
+          focus; it 'prints "Default location from [SUBJECT DATE] to present set to" output message' do
+            assert_default_location_output('Default location from 2009-01-01 to present set to: "Paris"')
+          end
+
+        end
+
+        describe "when preceding activity default location is different" do
+          let(:preceeding_activity) { "1999-01-01: Went to _Berlin_"}
+
+          focus; it 'prints "Default location from [SUBJECT DATE] to present set to" output message' do
+            assert_default_location_output('Default location from 2009-01-01 to present set to: "Paris"')
+          end
+
+        end
+
+        describe "when preceding activity default location is same" do
+          let(:preceeding_activity) { "1999-01-01: Went to _Paris_"}
+
+          focus; it 'prints "Default location from [PRECEDING ACTIVITY DATE] to present already set to" output message' do
+            assert_default_location_output('Default location from 1999-01-01 to present already set to: "Paris"')
+          end
+
+        end
+
+        describe "when multiple consecutive preceding activity default locations are same" do
+          let(:preceeding_activity) { "1999-01-01: Went to _Paris_"}
+          let(:content) do
+            <<-FILE
 ### Activities:
-- 2016-01-01: Visited my favourite cafe.
-- 1980-01-01: Flew to _Paris_.
+- 2019-01-01: Vistied a cafe
+- 1999-01-01: Went to _Paris_
+- 1989-01-01: Relocated to _Paris_
 
 ### Notes:
 
 ### Friends:
 
 ### Locations:
-- Paris
 FILE
+          end
+
+          focus; it 'prints "Default location from [EARLIEST DEAFULAT LOCATION ACTIVITY DATE] to present already set to" output message' do
+            assert_default_location_output('Default location from 1989-01-01 to present already set to: "Paris"')
+          end
+
         end
 
-        focus; it 'prints "Default location from [DATE] to present already set to" output message' do
-          assert_default_location_output('Default location from 1980-01-01 to present already set to: "Paris"')
-        end
       end
 
-      describe 'when default location is different to preceding default location' do
-        let(:content) do
-          <<-FILE
-### Activities:
-- 2016-01-01: Visited my favourite cafe.
-- 1980-01-01: Flew to _Berlin_.
 
-### Notes:
 
-### Friends:
+#       describe "when default location has never been set before" do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Visited my favourite cafe.
 
-### Locations:
-- Berlin
-FILE
-        end
+# ### Notes:
 
-        focus; it 'prints "Default location from [DATE] to present set to" output message' do
-          assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
-        end
-      end
+# ### Friends:
 
-      describe "when default location precedes the same default location" do
-        let(:content) do
-          <<-FILE
-### Activities:
-- 2016-01-01: Flew to _Paris_.
+# ### Locations:
+# FILE
+#         end
 
-### Notes:
+#         focus; it 'prints "Default location from [DATE] to present set to" output message' do
+#           assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
+#         end
+#       end
 
-### Friends:
+#       describe "when default location is the same as the preceding default location" do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Visited my favourite cafe.
+# - 1980-01-01: Flew to _Paris_.
 
-### Locations:
-- Paris
-FILE
-        end
+# ### Notes:
 
-        focus; it 'prints "Default location from [DATE] to present set to" output message' do
-          assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
-        end
-      end
+# ### Friends:
 
-      describe "when default location precedes a different default location" do
-        let(:content) do
-          <<-FILE
-### Activities:
-- 2016-01-01: Flew to _Berlin_.
+# ### Locations:
+# - Paris
+# FILE
+#         end
 
-### Notes:
+#         focus; it 'prints "Default location from [DATE] to present already set to" output message' do
+#           assert_default_location_output('Default location from 1980-01-01 to present already set to: "Paris"')
+#         end
+#       end
 
-### Friends:
+#       describe 'when default location is different to preceding default location' do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Visited my favourite cafe.
+# - 1980-01-01: Flew to _Berlin_.
 
-### Locations:
-- Berlin
-FILE
-        end
+# ### Notes:
 
-        focus; it 'prints "Default location from [DATE] to [DATE] set to" output message' do
-          assert_default_location_output('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"')
-        end
-      end
+# ### Friends:
 
-      describe "when default location precedes a different default location and proceeds the same default location" do
-        let(:content) do
-          <<-FILE
-### Activities:
-- 2016-01-01: Flew to _Berlin_.
-- 1980-01-01: Flew to _Paris_.
+# ### Locations:
+# - Berlin
+# FILE
+#         end
 
-### Notes:
+#         focus; it 'prints "Default location from [DATE] to present set to" output message' do
+#           assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
+#         end
+#       end
 
-### Friends:
+#       describe "when default location precedes the same default location" do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Flew to _Paris_.
 
-### Locations:
-- Berlin
-FILE
-        end
+# ### Notes:
 
-        focus; it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
-          assert_default_location_output('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"')
-        end
-      end
+# ### Friends:
 
-      describe "when default location precedes a different default location and preceeds the same default location" do
-        let(:content) do
-          <<-FILE
-### Activities:
-- 2016-01-01: Flew to _Berlin_.
-- 2015-01-01: Flew to _Paris_.
+# ### Locations:
+# - Paris
+# FILE
+#         end
 
-### Notes:
+#         focus; it 'prints "Default location from [DATE] to present set to" output message' do
+#           assert_default_location_output('Default location from 1999-01-01 to present set to: "Paris"')
+#         end
+#       end
 
-### Friends:
+#       describe "when default location precedes a different default location" do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Flew to _Berlin_.
 
-### Locations:
-- Berlin
-FILE
-        end
+# ### Notes:
 
-        focus; it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
-          assert_default_location_output('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"')
-        end
-      end
+# ### Friends:
+
+# ### Locations:
+# - Berlin
+# FILE
+#         end
+
+#         focus; it 'prints "Default location from [DATE] to [DATE] set to" output message' do
+#           assert_default_location_output('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"')
+#         end
+#       end
+
+#       describe "when default location precedes a different default location and proceeds the same default location" do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Flew to _Berlin_.
+# - 1980-01-01: Flew to _Paris_.
+
+# ### Notes:
+
+# ### Friends:
+
+# ### Locations:
+# - Berlin
+# FILE
+#         end
+
+#         focus; it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
+#           assert_default_location_output('Default location from 1980-01-01 to 2016-01-01 already set to: "Paris"')
+#         end
+#       end
+
+#       describe "when default location precedes a different default location and preceeds the same default location" do
+#         let(:content) do
+#           <<-FILE
+# ### Activities:
+# - 2016-01-01: Flew to _Berlin_.
+# - 2015-01-01: Flew to _Paris_.
+
+# ### Notes:
+
+# ### Friends:
+
+# ### Locations:
+# - Berlin
+# FILE
+#         end
+
+#         focus; it 'prints "Default location from [DATE] to [DATE] already set to" output message' do
+#           assert_default_location_output('Default location from 1999-01-01 to 2016-01-01 set to: "Paris"')
+#         end
+#       end
     end
   end
 
