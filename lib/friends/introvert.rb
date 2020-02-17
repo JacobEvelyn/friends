@@ -811,7 +811,6 @@ module Friends
         break if act.default_location != activity.default_location
         consecutively_earliest_activity_with_same_default_location = act if act.default_location == activity.default_location
       end
-      # last_default_location_activity = existing_activities.select { |a| a.default_location && (a.default_location == activity.default_location) && (a.date < activity.date) }.first
       if consecutively_earliest_activity_with_same_default_location
         return consecutively_earliest_activity_with_same_default_location.date
       else
@@ -827,23 +826,5 @@ module Friends
         return nil
       end
     end
-
-    # def is_default_location_before_added_same?(activity, existing_activities)
-    #   last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
-    #   if last_default_location_activity
-    #     last_default_location_activity.default_location == activity.default_location
-    #   end
-    # end
-
-    # def get_last_default_location_activity(activity, existing_activities)
-    #   last_default_location_activity = existing_activities.select {|a| a.default_location && (a.date < activity.date) }.first
-    # end
-
-    # Check if an activity is setting a specific default location for the first time.
-    # @param expected [Activity] the activity to check
-    # @return [Boolean]
-    # def no_previous_default_locations?(existing_activities)
-    #   existing_activities.none?(&:default_location)
-    # end
   end
 end
