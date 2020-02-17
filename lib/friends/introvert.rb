@@ -398,6 +398,42 @@ module Friends
                  "#{Paint[close_friend_names.sample || 'None found', :bold, :magenta]}"
     end
 
+    def neglected
+      if @friends.empty?
+        @output << "No friends found"
+        return
+      end
+
+      today = Date.today
+
+      most_recent_activity_by_friend = @activities.each_with_object({}) do |activity, output|
+        activity.friend_names.each do |friend_name|
+          output[friend_name] = (today - activity.date).to_i unless output.key?(friend_name)
+        end
+      end
+
+      with_activities, without_activities = @friends.partition do |friend|
+        most_recent_activity_by_friend.key?(friend.name)
+      end
+
+      max_name_size = @friends.max_by { |f| f.name.size }.name.size
+      max_n_days_size = most_recent_activity_by_friend.values.max.to_s.size
+      max_n_activities_size = @friends.max_by(&:n_activities).n_activities.to_s.size
+
+      with_activities.sort_by do |friend|
+        -friend.n_activities * most_recent_activity_by_friend[friend.name]
+      end.each do |friend|
+        @output << Paint[friend.name.ljust(max_name_size), :bold] + " " +
+                   Paint[most_recent_activity_by_friend[friend.name].to_s.ljust(max_n_days_size), :bold, :magenta] +
+                   " days since most recent of " +
+                   Paint[friend.n_activities.to_s.ljust(max_n_activities_size), :bold, :green] + " activities"
+      end
+
+      without_activities.sort_by(&:name).each do |friend|
+        @output << Paint[friend.name.ljust(max_name_size), :bold] + " no activities"
+      end
+    end
+
     ###################################################################
     # Methods below this are only used internally and are not tested. #
     ###################################################################
