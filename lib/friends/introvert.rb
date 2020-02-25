@@ -662,6 +662,7 @@ module Friends
 
     def set_implicit_locations!
       implicit_location = nil
+      #reverse_each here moves through the activities in chronological order
       @activities.reverse_each do |activity|
         implicit_location = activity.default_location if activity.default_location
         activity.implicit_location = implicit_location if activity.description_location_names.empty?
