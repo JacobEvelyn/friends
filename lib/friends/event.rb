@@ -139,7 +139,7 @@ module Friends
     end
 
     def default_location
-      @description[/(?<=to _)\w[^_]*(?=_)/]
+      @default_location ||= @description[/(?<=to _)\w[^_]*(?=_)/]
     end
 
     # @param friend [Friend] the friend to test
