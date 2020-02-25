@@ -111,7 +111,7 @@ module Friends
 
         @output << "Activity added: \"#{activity}\""
 
-        decide_default_location_output(activity) if activity.default_location
+        @output << default_location_output(activity) if activity.default_location
       end
     end
 
@@ -781,7 +781,10 @@ module Friends
       raise FriendsError, "Expected \"#{expected}\" on line #{line_num}"
     end
 
-    def decide_default_location_output(activity)
+    # Return a string specifying what default location was set and its time range
+    # @param [Activity] the activity that was added by the user
+    # @return [String] specifying default location and its time range
+    def default_location_output(activity)
       @activities = stable_sort(@activities)
       existing_activities = @activities - [activity]
 
