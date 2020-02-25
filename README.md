@@ -426,13 +426,14 @@ Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
 When an activity includes the phrase to \_LOCATION\_ (e.g., Took a plane to \_Paris\_), all future activities that have no explicit location will be associated with that location:
 
 ```bash
-$ friends add activity Took a plane to _Paris_
+$ friends add activity Took a plane to Paris
 Activity added: "2020-01-04: Took a plane to Paris"
 Default location set to: "Paris"
 $ friends add activity Ate lunch at a charming café
 Activity added: "2020-01-04: Ate lunch at a charming café"
-$ friends add activity Left the city to go to _Chamonix_
+$ friends add activity Left the city to go to Chamonix
 Activity added: "2020-01-04: Left the city to go to Chamonix"
+Default location set to: "Chamonix"
 ```
 
 ```bash
