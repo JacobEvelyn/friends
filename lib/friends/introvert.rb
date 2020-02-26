@@ -416,14 +416,17 @@ module Friends
         most_recent_activity_by_friend.key?(friend.name)
       end
 
+      sorted_n_activities = @friends.map(&:n_activities).sort
+      cutoff = sorted_n_activities[(sorted_n_activities.size * 0.85).floor]
+
       max_name_size = @friends.max_by { |f| f.name.size }.name.size
       max_n_days_size = most_recent_activity_by_friend.values.max.to_s.size
-      max_n_activities_size = @friends.max_by(&:n_activities).n_activities.to_s.size
+      max_n_activities_size = sorted_n_activities.last.to_s.size
 
       with_activities.sort_by do |friend|
-        -friend.n_activities * most_recent_activity_by_friend[friend.name]
+        (cutoff - friend.n_activities).abs * most_recent_activity_by_friend[friend.name]
       end.each do |friend|
-        @output << Paint[friend.name.ljust(max_name_size), :bold] + " " +
+        @output << Paint[friend.name.ljust(max_name_size, "."), :bold] + " " +
                    Paint[most_recent_activity_by_friend[friend.name].to_s.ljust(max_n_days_size), :bold, :magenta] +
                    " days since most recent of " +
                    Paint[friend.n_activities.to_s.ljust(max_n_activities_size), :bold, :green] + " activities"
