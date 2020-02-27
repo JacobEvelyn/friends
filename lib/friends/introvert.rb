@@ -398,8 +398,23 @@ module Friends
                  "#{Paint[close_friend_names.sample || 'None found', :bold, :magenta]}"
     end
 
-    def neglected
-      if @friends.empty?
+    def neglected(location_name:, tagged:)
+      fs = @friends
+
+      # Filter by location if a name is passed.
+      if location_name
+        location = thing_with_name_in(:location, location_name)
+        fs = fs.select { |friend| friend.location_name == location.name }
+      end
+
+      # Filter by tag if param is passed.
+      unless tagged.empty?
+        fs = fs.select do |friend|
+          tagged.all? { |tag| friend.tags.map(&:downcase).include? tag.downcase }
+        end
+      end
+
+      if fs.empty?
         @output << "No friends found"
         return
       end
@@ -412,14 +427,14 @@ module Friends
         end
       end
 
-      with_activities, without_activities = @friends.partition do |friend|
+      with_activities, without_activities = fs.partition do |friend|
         most_recent_activity_by_friend.key?(friend.name)
       end
 
-      sorted_n_activities = @friends.map(&:n_activities).sort
+      sorted_n_activities = fs.map(&:n_activities).sort
       cutoff = sorted_n_activities[(sorted_n_activities.size * 0.85).floor]
 
-      max_name_size = @friends.max_by { |f| f.name.size }.name.size
+      max_name_size = fs.max_by { |f| f.name.size }.name.size
       max_n_days_size = most_recent_activity_by_friend.values.max.to_s.size
       max_n_activities_size = sorted_n_activities.last.to_s.size
 
