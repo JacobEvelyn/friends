@@ -67,8 +67,8 @@ FILE
 FILE
       end
 
-      describe "when a default location has never been set before" do
-        let(:preceding_activity) { "2016-01-01: Had dinner in _Berlin_." }
+      describe "when there is no preceding default location" do
+        let(:preceding_activity) { "2016-01-01: Went to the library." }
 
 
         it 'prints "Default location set to" output message' do
@@ -108,10 +108,10 @@ FILE
 FILE
       end
 
-      describe "when proceeding activities have no default location" do
+      describe "when there is no following default location" do
         let(:following_activity) { "2019-01-01: Visited a cafe"}
 
-        describe "when preceding activities have no default location" do
+        describe "when there is no preceding default location" do
           let(:preceding_activity) { "1999-01-01: Visited a library"}
 
           it 'prints "Default location from [ADDED ACTIVITY DATE] to present set to" output message' do
@@ -132,14 +132,13 @@ FILE
         describe "when preceding default location is same" do
           let(:preceding_activity) { "1999-01-01: Went to _Paris_"}
 
-          it 'prints "Default location from [PRECEDING ACTIVITY DATE] to present already set to" output message' do
+          it 'prints "Default location from [PRECEDING DEFAULT LOCATION ACTIVITY DATE] to present already set to" output message' do
             assert_default_location_output('Default location from 1999-01-01 to present already set to: "Paris"')
           end
 
         end
 
         describe "when multiple preceding default locations are same and consecutive" do
-          let(:preceding_activity) { "1999-01-01: Went to _Paris_"}
           let(:content) do
             <<-FILE
 ### Activities:
@@ -186,10 +185,10 @@ FILE
 
       end
 
-      describe 'when preceding activities have no default locations' do
+      describe 'when there are no preceding default locations' do
         let(:preceding_activity) { "1999-01-01: Visited a cafe"}
 
-        describe 'when single proceeding default location is the same' do
+        describe 'when following default location is the same' do
           let(:following_activity) { "2019-01-01: Went to _Paris_"}
 
           it 'prints "Default location from [ADDED ACTIVITY DATE] to present set to" output message' do
@@ -198,16 +197,16 @@ FILE
 
         end
 
-        describe 'when proceeding default location is different' do
+        describe 'when following default location is different' do
           let(:following_activity) { "2019-01-01: Went to _Berlin_"}
 
-          it 'prints "Default location from [ADDED ACTIVITY DATE] to [DIFFERENT DEFAULT LOCATION ACTIVITY DATE] set to" output message' do
+          it 'prints "Default location from [ADDED ACTIVITY DATE] to [NEXT DIFFERENT DEFAULT LOCATION ACIVITY DATE] set to" output message' do
             assert_default_location_output('Default location from 2009-01-01 to 2019-01-01 set to: "Paris"')
           end
 
         end
 
-        describe "when multiple proceeding default locations are the same and consecutive" do
+        describe "when multiple following default locations are the same and consecutive" do
           let(:content) do
             <<-FILE
 ### Activities:
@@ -228,7 +227,7 @@ FILE
 
         end
 
-        describe "when multiple proceeding default locations are the same but not consecutive" do
+        describe "when multiple following default locations are the same but not consecutive" do
           let(:content) do
             <<-FILE
 ### Activities:
@@ -255,19 +254,19 @@ FILE
       describe 'when preceding default location is the same' do
         let(:preceding_activity) { "1999-01-01: Went to _Paris_"}
         
-        describe 'when proceeding default location is the same' do
+        describe 'when following default location is the same' do
           let(:following_activity) { "2019-01-01: Relocated to _Paris_"}
 
-          it 'prints "Default location from [PRECEDING ACTIVITY DATE] to present set to" output message' do
+          it 'prints "Default location from [PRECEDING ACTIVITY DATE] to present already set to" output message' do
             assert_default_location_output('Default location from 1999-01-01 to present already set to: "Paris"')
           end
 
         end  
 
-        describe 'when proceeding default location is different' do
+        describe 'when following default location is different' do
           let(:following_activity) { "2019-01-01: Relocated to _Berlin_"}
 
-          it 'prints "Default location from [PRECEDING ACTIVITY DATE] to [PROCEEDING ACTIVITY DATE] set to" output message' do
+          it 'prints "Default location from [PRECEDING ACTIVITY DATE] to [FOLLOWING ACTIVITY DATE] set to" output message' do
             assert_default_location_output('Default location from 1999-01-01 to 2019-01-01 already set to: "Paris"')
           end
 
@@ -278,7 +277,7 @@ FILE
       describe 'when preceding default location is different' do
         let(:preceding_activity) { "1999-01-01: Went to _Berlin_"}
         
-        describe 'when proceeding default location is the same' do
+        describe 'when following default location is the same' do
           let(:following_activity) { "2019-01-01: Relocated to _Paris_"}
 
           it 'prints "Default location from [ADDED ACTIVITY DATE] to present set to" output message' do
@@ -287,10 +286,10 @@ FILE
 
         end  
 
-        describe 'when proceeding default location is different' do
+        describe 'when following default location is different' do
           let(:following_activity) { "2019-01-01: Relocated to _Berlin_"}
 
-          it 'prints "Default location from [ADDED ACTIVITY DATE] to [PROCEEDING ACTIVITY DATE] set to" output message' do
+          it 'prints "Default location from [ADDED ACTIVITY DATE] to [FOLLOWING ACTIVITY DATE] set to" output message' do
             assert_default_location_output('Default location from 2009-01-01 to 2019-01-01 set to: "Paris"')
           end
         end

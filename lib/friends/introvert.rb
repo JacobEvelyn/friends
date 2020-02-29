@@ -107,11 +107,11 @@ module Friends
 
         activity.highlight_description(introvert: self)
 
-        @activities.unshift(activity)
-
         @output << "Activity added: \"#{activity}\""
-
+        
         @output << default_location_output(activity) if activity.default_location
+
+        @activities.unshift(activity)
       end
     end
 
@@ -785,50 +785,37 @@ module Friends
     # @param [Activity] the activity that was added by the user
     # @return [String] specifying default location and its time range
     def default_location_output(activity)
+      #sort the activities from earliest to latest, in case friends.md has been corrupted
       @activities = stable_sort(@activities)
-      existing_activities = @activities - [activity]
-
+      
       str = "Default location"
-      if activity != @activities.first
-        str += " from #{earliest_consecutive_default_location_activity_date(activity, existing_activities)} to"
-        str += " #{next_activity_date_with_different_default_location(activity, existing_activities) || 'present'}"
+      
+      earlier_activities, later_activities = @activities.partition { |a| a.date <= activity.date }
+      
+      earlier_activity_with_default_location = activity
+      
+      earlier_activities.each do |a|
+        
+        next unless a.default_location
+        
+        break unless a.default_location == activity.default_location
+        
+        earlier_activity_with_default_location = a
+      end
+      
+      if !later_activities.empty?
+        str += " from #{Paint[earlier_activity_with_default_location.date, :bold]}"
+        
+        later_activity = later_activities.find do |a|    
+          a.default_location && a.default_location != activity.default_location
+        end
+        
+        str += " to #{Paint[later_activity&.date || 'present', :bold]}"        
       end
 
-      str += " already" if last_default_location_same_as_added_default_location?(activity, existing_activities)
-      str += " set to: \"#{activity.default_location}\""
-
-      @output << str
-    end
-
-    def last_default_location_same_as_added_default_location?(activity, existing_activities)
-      last_default_location_activity = existing_activities.select { |a| a.default_location && (a.date < activity.date) }.first
-      if last_default_location_activity
-        last_default_location_activity.default_location == activity.default_location
-      end
-    end
-
-    def earliest_consecutive_default_location_activity_date(activity, existing_activities)
-      # binding.pry
-      earlier_default_location_activities = existing_activities.select { |a| a.default_location && (a.date < activity.date) }
-      consecutively_earliest_activity_with_same_default_location = nil
-      earlier_default_location_activities.each do |act|
-        break if act.default_location != activity.default_location
-        consecutively_earliest_activity_with_same_default_location = act if act.default_location == activity.default_location
-      end
-      if consecutively_earliest_activity_with_same_default_location
-        return consecutively_earliest_activity_with_same_default_location.date
-      else
-        return activity.date
-      end
-    end
-
-    def next_activity_date_with_different_default_location(activity, existing_activities)
-      next_activity_with_different_default_location = existing_activities.select { |a| a.default_location && (a.date > activity.date) && a.default_location != activity.default_location }.first
-      if next_activity_with_different_default_location
-        return next_activity_with_different_default_location.date
-      else
-        return nil
-      end
+      str += " already" if earlier_activity_with_default_location != activity
+      
+      "#{str} set to: \"#{activity.default_location}\""
     end
   end
 end
