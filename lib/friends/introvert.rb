@@ -688,7 +688,7 @@ module Friends
         # Parse the line and update the parsing state.
         state = parse_line!(line, line_num: line_num, state: state)
       end
-
+      #sort the activities from earliest to latest, in case friends.md has been corrupted
       @activities = stable_sort(@activities)
 
       set_implicit_locations!
@@ -787,9 +787,6 @@ module Friends
     # @param [Activity] the activity that was added by the user
     # @return [String] specifying default location and its time range
     def default_location_output(activity)
-      #sort the activities from earliest to latest, in case friends.md has been corrupted
-      @activities = stable_sort(@activities)
-      
       str = "Default location"
       
       earlier_activities, later_activities = @activities.partition { |a| a.date <= activity.date }

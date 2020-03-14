@@ -106,7 +106,7 @@ clean_describe "list activities" do
             FILE
           end
 
-          focus;it "matches location case-insensitively" do
+          it "matches location case-insensitively" do
             stdout_only <<-OUTPUT
 2000-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2000-01-02: Went to Atlantis.

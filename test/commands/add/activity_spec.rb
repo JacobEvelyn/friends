@@ -294,6 +294,27 @@ FILE
           end
         end
       end
+
+      describe 'when activities are out of order' do
+        let(:content) do
+      <<-FILE
+### Activities:
+- 2018-01-01: Went to _Berlin_
+- 2019-01-01: Went to _Paris_
+
+
+### Notes:
+
+### Friends:
+
+### Locations:
+FILE
+        end
+
+        it 'prints "Default location from [ADDED ACTIVITY DATE] to [FOLLOWING ACTIVITY DATE] set to" output message' do
+          assert_default_location_output('Default location from 2009-01-01 to 2018-01-01 set to: "Paris"')
+        end
+      end
     end
   end
 
