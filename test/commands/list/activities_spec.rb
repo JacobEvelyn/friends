@@ -55,15 +55,16 @@ clean_describe "list activities" do
 
       describe "when implicit location is set" do
         let(:location_name) { "atlantis" }
-        let(:content) do
-          <<-FILE
+        describe 'when activities are in order' do
+          let(:content) do
+            <<-FILE
 ### Activities:
-- 2015-01-30: Went to a museum with **George Washington Carver**.
-- 2015-01-29: Moved to _Paris_.
-- 2015-01-01: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
-- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
-- 2014-12-30: Went to _Atlantis_.
-- 2014-12-29: Talked to **George Washington Carver** on the phone for an hour.
+- 2000-01-06: Went to a museum with **George Washington Carver**.
+- 2000-01-05: Moved to _Paris_.
+- 2000-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2000-01-03: Celebrated my birthday in _Paris_ with **Marie Curie**. @partying @food
+- 2000-01-02: Went to _Atlantis_.
+- 2000-01-01: Talked to **George Washington Carver** on the phone for an hour.
 
 ### Friends:
 - George Washington Carver
@@ -73,14 +74,44 @@ clean_describe "list activities" do
 ### Locations:
 - Atlantis
 - Paris
-          FILE
-        end
+            FILE
+          end
 
-        it "matches location case-insensitively" do
-          stdout_only <<-OUTPUT
-2015-01-01: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-12-30: Went to Atlantis.
-        OUTPUT
+          it "matches location case-insensitively" do
+            stdout_only <<-OUTPUT
+2000-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2000-01-02: Went to Atlantis.
+          OUTPUT
+          end
+        end
+        describe 'when activities are not in order' do
+          let(:content) do
+            <<-FILE
+### Activities:
+- 2000-01-06: Went to a museum with **George Washington Carver**.
+- 2000-01-02: Went to _Atlantis_.
+- 2000-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2000-01-03: Celebrated my birthday in _Paris_ with **Marie Curie**. @partying @food
+- 2000-01-05: Moved to _Paris_.
+- 2000-01-01: Talked to **George Washington Carver** on the phone for an hour.
+
+### Friends:
+- George Washington Carver
+- Marie Curie [Atlantis] @science
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+
+### Locations:
+- Atlantis
+- Paris
+            FILE
+          end
+
+          focus;it "matches location case-insensitively" do
+            stdout_only <<-OUTPUT
+2000-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2000-01-02: Went to Atlantis.
+          OUTPUT
+          end
         end
       end
     end

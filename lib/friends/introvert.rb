@@ -688,6 +688,9 @@ module Friends
         # Parse the line and update the parsing state.
         state = parse_line!(line, line_num: line_num, state: state)
       end
+
+      @activities = stable_sort(@activities)
+
       set_implicit_locations!
 
       set_n_activities!(:friend)
