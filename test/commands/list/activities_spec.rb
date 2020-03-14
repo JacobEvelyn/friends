@@ -55,7 +55,7 @@ clean_describe "list activities" do
 
       describe "when implicit location is set" do
         let(:location_name) { "atlantis" }
-        describe 'when activities are in order' do
+        describe "when activities are in order" do
           let(:content) do
             <<-FILE
 ### Activities:
@@ -84,7 +84,7 @@ clean_describe "list activities" do
           OUTPUT
           end
         end
-        describe 'when activities are not in order' do
+        describe "when activities are not in order" do
           let(:content) do
             <<-FILE
 ### Activities:
