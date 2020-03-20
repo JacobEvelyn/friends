@@ -26,13 +26,13 @@ clean_describe "list activities" do
     # only reads from the (usually-sorted) file.
     let(:content) { SCRAMBLED_CONTENT }
 
-    it "lists activities in file order" do
+    it "lists activities in sorted order" do
       stdout_only <<-OUTPUT
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2015-11-01: Grace Hopper and I went to Martha's Vineyard. George had to cancel at the last minute.
 2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
+2015-11-01: Grace Hopper and I went to Martha's Vineyard. George had to cancel at the last minute.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
       OUTPUT
     end
 
@@ -191,7 +191,7 @@ FILE
     describe "--since" do
       subject { run_cmd("list activities --since 'January 4th 2015'") }
 
-      it "lists activities on and after the specified date" do
+      it "lists activities on and after the specified date in order" do
         stdout_only <<-OUTPUT
 2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
 2015-11-01: Grace Hopper and I went to Martha's Vineyard. George had to cancel at the last minute.
@@ -203,7 +203,7 @@ FILE
     describe "--until" do
       subject { run_cmd("list activities --until 'January 4th 2015'") }
 
-      it "lists activities before and on the specified date" do
+      it "lists activities before and on the specified date in order" do
         stdout_only <<-OUTPUT
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
