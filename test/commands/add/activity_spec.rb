@@ -323,8 +323,7 @@ FILE
 FILE
         end
 
-        it  "prints 'Default location from " \
-            "[ADDED ACTIVITY DATE] to [FOLLOWING ACTIVITY DATE] set to [LOCATION]'" do
+        it  "uses the sorted order for determining output" do
           output = 'Default location from 2009-01-01 to 2018-01-01 set to: "Paris"'
           assert_default_location_output(output)
         end
