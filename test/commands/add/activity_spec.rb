@@ -315,7 +315,6 @@ FILE
 - 2018-01-01: Went to _Berlin_
 - 2019-01-01: Went to _Paris_
 
-
 ### Notes:
 
 ### Friends:
