@@ -37,6 +37,7 @@ lots of help), and give feedback! This project is
       - [`add tag`](#add-tag)
       - [`add location`](#add-location)
       - [`add nickname`](#add-nickname)
+      - [Adding a default location](#adding-a-default-location)
     - [`clean`](#clean)
     - [`graph`](#graph)
     - [`help`](#help)
@@ -131,7 +132,7 @@ FRIENDS_PAGER="less -RF"
 - **Friends**: The people you do _activities_ with. Each friend has a name and,
   optionally, one or several nicknames. (Examples: `John`, `Grace Hopper`)
 - **Locations**: The places in which _activities_ happen. (Examples: `Paris`,
-  `Marie's Diner`)
+  `Martha's Vineyard`)
 - **Tags**: A way to categorize your _activities_ with tags of your
   choosing. Tags may contain colons and hyphens inside them. (Examples: `@exercise:running`, `@school`, `@science:indoors:agronomy-with-hydroponics`)
 - **Notes**: Any additional information you want to record about a _friend_
@@ -145,7 +146,7 @@ The `friends.md` Markdown file that stores all of your data contains:
 ### Locations:
 
 - Atlantis
-- Marie's Diner
+- Martha's Vineyard
 - Paris
 ```
 
@@ -164,7 +165,7 @@ The `friends.md` Markdown file that stores all of your data contains:
 ```markdown
 ### Activities:
 
-- 2018-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute.
+- 2018-11-01: **Grace Hopper** and I went to _Martha's Vineyard_. George had to cancel at the last minute.
 - 2018-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**.
 - 2017-12-31: Celebrated the new year in _Paris_ with **Marie Curie**.
 - 2017-11-15: Talked to **George Washington Carver** on the phone for an hour.
@@ -329,8 +330,8 @@ $ friends add activity last Monday
 You can escape the names of friends you don't want `friends` to match with a backslash:
 
 ```bash
-$ friends add activity "2018-11-01: Grace and I went to \Marie's Diner. \George had to cancel at the last minute."
-Activity added: "2018-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute."
+$ friends add activity "2018-11-01: Grace and I went to \Martha's Vineyard. \George had to cancel at the last minute."
+Activity added: "2018-11-01: Grace Hopper and I went to Martha's Vineyard. George had to cancel at the last minute."
 ```
 
 And if an activity contains friends or locations you haven't yet added, you can simply
@@ -408,6 +409,27 @@ $ friends add nickname "Grace Hopper" "The Admiral"
 Nickname added: "Grace Hopper (a.k.a. The Admiral)
 $ friends add nickname "Grace Hopper" "Amazing Grace"
 Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
+```
+
+#### Setting a default location
+
+When an activity includes the phrase to \_LOCATION\_ (e.g., Took a plane to \_Paris\_), all future activities that have no explicit location will be associated with that location:
+
+```bash
+$ friends add activity Took a plane to Paris
+Activity added: "2020-01-04: Took a plane to Paris"
+Default location set to: "Paris"
+$ friends add activity Ate lunch at a charming café
+Activity added: "2020-01-04: Ate lunch at a charming café"
+$ friends add activity Left the city to go to Chamonix
+Activity added: "2020-01-04: Left the city to go to Chamonix"
+Default location set to: "Chamonix"
+```
+
+```bash
+$ friends list activities --in Paris
+2019-01-04: Ate lunch at a charming café
+2019-01-04: Took a plane to Paris
 ```
 
 #### `clean`

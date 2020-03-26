@@ -107,9 +107,11 @@ module Friends
 
         activity.highlight_description(introvert: self)
 
-        @activities.unshift(activity)
-
         @output << "Activity added: \"#{activity}\""
+
+        @output << default_location_output(activity) if activity.default_location
+
+        @activities.unshift(activity)
       end
     end
 
@@ -660,8 +662,9 @@ module Friends
 
     def set_implicit_locations!
       implicit_location = nil
+      # reverse_each here moves through the activities in chronological order
       @activities.reverse_each do |activity|
-        implicit_location = activity.moved_to_location if activity.moved_to_location
+        implicit_location = activity.default_location if activity.default_location
         activity.implicit_location = implicit_location if activity.description_location_names.empty?
       end
     end
@@ -685,6 +688,9 @@ module Friends
         # Parse the line and update the parsing state.
         state = parse_line!(line, line_num: line_num, state: state)
       end
+      # sort the activities from earliest to latest, in case friends.md has been corrupted
+      @activities = stable_sort(@activities)
+
       set_implicit_locations!
 
       set_n_activities!(:friend)
@@ -719,7 +725,7 @@ module Friends
 
       begin
         instance_variable_get("@#{stage.id}") << stage.klass.deserialize(line)
-      rescue => ex # rubocop:disable Style/RescueStandardError
+      rescue StandardError => ex
         bad_line(ex, line_num)
       end
 
@@ -776,6 +782,38 @@ module Friends
     # @raise [FriendsError] with a constructed message
     def bad_line(expected, line_num)
       raise FriendsError, "Expected \"#{expected}\" on line #{line_num}"
+    end
+
+    # @param [Activity] the activity that was added by the user
+    # @return [String] specifying default location and its time range
+    def default_location_output(activity)
+      str = "Default location"
+
+      earlier_activities, later_activities = @activities.partition { |a| a.date <= activity.date }
+
+      earlier_activity_with_default_location = activity
+
+      earlier_activities.each do |a|
+        next unless a.default_location
+
+        break unless a.default_location == activity.default_location
+
+        earlier_activity_with_default_location = a
+      end
+
+      unless later_activities.empty?
+        str += " from #{Paint[earlier_activity_with_default_location.date, :bold]}"
+
+        later_activity = later_activities.find do |a|
+          a.default_location && a.default_location != activity.default_location
+        end
+
+        str += " to #{Paint[(later_activity.date if later_activity) || 'present', :bold]}"
+      end
+
+      str += " already" if earlier_activity_with_default_location != activity
+
+      "#{str} set to: \"#{activity.default_location}\""
     end
   end
 end

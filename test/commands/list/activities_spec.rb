@@ -26,13 +26,13 @@ clean_describe "list activities" do
     # only reads from the (usually-sorted) file.
     let(:content) { SCRAMBLED_CONTENT }
 
-    it "lists activities in file order" do
+    it "lists activities in sorted order" do
       stdout_only <<-OUTPUT
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
 2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
+2015-11-01: Grace Hopper and I went to Martha's Vineyard. George had to cancel at the last minute.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
       OUTPUT
     end
 
@@ -55,15 +55,16 @@ clean_describe "list activities" do
 
       describe "when implicit location is set" do
         let(:location_name) { "atlantis" }
-        let(:content) do
-          <<-FILE
+        describe "when activities are in order" do
+          let(:content) do
+            <<-FILE
 ### Activities:
-- 2015-01-30: Went to a museum with **George Washington Carver**.
-- 2015-01-29: moved to _Paris_.
-- 2015-01-01: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
-- 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
-- 2014-12-30: Moved to _Atlantis_.
-- 2014-12-29: Talked to **George Washington Carver** on the phone for an hour.
+- 2000-01-06: Went to a museum with **George Washington Carver**.
+- 2000-01-05: Moved to _Paris_.
+- 2000-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2000-01-03: Celebrated my birthday in _Paris_ with **Marie Curie**. @partying @food
+- 2000-01-02: Went to _Atlantis_.
+- 2000-01-01: Talked to **George Washington Carver** on the phone for an hour.
 
 ### Friends:
 - George Washington Carver
@@ -73,14 +74,44 @@ clean_describe "list activities" do
 ### Locations:
 - Atlantis
 - Paris
-          FILE
-        end
+            FILE
+          end
 
-        it "matches location case-insensitively" do
-          stdout_only <<-OUTPUT
-2015-01-01: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-12-30: Moved to Atlantis.
-        OUTPUT
+          it "matches location case-insensitively" do
+            stdout_only <<-OUTPUT
+2000-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2000-01-02: Went to Atlantis.
+          OUTPUT
+          end
+        end
+        describe "when activities are not in order" do
+          let(:content) do
+            <<-FILE
+### Activities:
+- 2000-01-06: Went to a museum with **George Washington Carver**.
+- 2000-01-02: Went to _Atlantis_.
+- 2000-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
+- 2000-01-03: Celebrated my birthday in _Paris_ with **Marie Curie**. @partying @food
+- 2000-01-05: Moved to _Paris_.
+- 2000-01-01: Talked to **George Washington Carver** on the phone for an hour.
+
+### Friends:
+- George Washington Carver
+- Marie Curie [Atlantis] @science
+- Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
+
+### Locations:
+- Atlantis
+- Paris
+            FILE
+          end
+
+          it "matches location case-insensitively" do
+            stdout_only <<-OUTPUT
+2000-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
+2000-01-02: Went to Atlantis.
+          OUTPUT
+          end
         end
       end
     end
@@ -127,7 +158,6 @@ clean_describe "list activities" do
       it "matches tag case-insensitively" do
         stdout_only <<-OUTPUT
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
         OUTPUT
       end
 
@@ -139,7 +169,7 @@ clean_describe "list activities" do
           <<-FILE
 ### Activities:
 - 2015-01-04: Got lunch with **Grace Hopper** and **George Washington Carver**. @food
-- 2015-11-01: **Grace Hopper** and I went to _Marie's Diner_. George had to cancel at the last minute. @food
+- 2015-11-01: **Grace Hopper** and I went to _Martha's Vineyard_. George had to cancel at the last minute.
 - 2014-11-15: Talked to **George Washington Carver** on the phone for an hour.
 - 2014-12-31: Celebrated the new year in _Paris_ with **Marie Curie**. @partying @food
 
@@ -161,11 +191,11 @@ FILE
     describe "--since" do
       subject { run_cmd("list activities --since 'January 4th 2015'") }
 
-      it "lists activities on and after the specified date" do
+      it "lists activities on and after the specified date in order" do
         stdout_only <<-OUTPUT
-2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2015-11-01: Grace Hopper and I went to Marie's Diner. George had to cancel at the last minute. @food
 2018-02-06: @science:indoors:agronomy-with-hydroponics: Norman Borlaug and George Washington Carver scored a tour of Atlantis' hydroponics gardens through wetplants@example.org and they took me along.
+2015-11-01: Grace Hopper and I went to Martha's Vineyard. George had to cancel at the last minute.
+2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
         OUTPUT
       end
     end
@@ -173,11 +203,11 @@ FILE
     describe "--until" do
       subject { run_cmd("list activities --until 'January 4th 2015'") }
 
-      it "lists activities before and on the specified date" do
+      it "lists activities before and on the specified date in order" do
         stdout_only <<-OUTPUT
 2015-01-04: Got lunch with Grace Hopper and George Washington Carver. @food
-2014-11-15: Talked to George Washington Carver on the phone for an hour.
 2014-12-31: Celebrated the new year in Paris with Marie Curie. @partying
+2014-11-15: Talked to George Washington Carver on the phone for an hour.
         OUTPUT
       end
     end

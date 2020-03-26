@@ -138,8 +138,8 @@ module Friends
       location_in_description?(location) || location_is_implicit?(location)
     end
 
-    def moved_to_location
-      @description[/(?<=[mM]oved to _)\w[^_]*(?=_)/]
+    def default_location
+      @default_location ||= @description[/(?<=to _)\w[^_]*(?=_)/]
     end
 
     # @param friend [Friend] the friend to test
