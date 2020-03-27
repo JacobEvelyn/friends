@@ -338,8 +338,8 @@ FILE
   def assert_default_location_output(expected_output)
     output = select_default_activity_output(subject[:stdout])
 
-    output.size.must_equal(1)
-    output.must_include(expected_output)
+    value(output.size).must_equal(1)
+    value(output).must_include(expected_output)
   end
 
   def select_default_activity_output(output)
