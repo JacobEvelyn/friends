@@ -4,6 +4,23 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.48](https://github.com/JacobEvelyn/friends/tree/v0.48) (2020-03-27)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.47...v0.48)
+
+**Implemented enhancements:**
+
+- Change trigger for implicit location from `moved to \_LOCATION\_` to `to \_LOCATION\_` [\#245](https://github.com/JacobEvelyn/friends/pull/245) ([shen-sat](https://github.com/shen-sat))
+
+**Closed issues:**
+
+- Fix minitest deprecation warnings [\#249](https://github.com/JacobEvelyn/friends/issues/249)
+
+**Merged pull requests:**
+
+- Fix minitest deprecation warnings [\#250](https://github.com/JacobEvelyn/friends/pull/250) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Bump simplecov from cb968abf857a704364283b5dec4d9fa3d096287e to 0.18.0 [\#248](https://github.com/JacobEvelyn/friends/pull/248) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [v0.47](https://github.com/JacobEvelyn/friends/tree/v0.47) (2019-12-11)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.46...v0.47)
