@@ -36,6 +36,37 @@ clean_describe "edit" do
     end
   end
 
+  describe "when editor is multiple words" do
+    let(:editor) { "'cat -u'" }
+
+    describe "when output is quieted" do
+      let(:quiet) { "--quiet" }
+
+      it 'opens the file in the "editor"' do
+        stdout_only content
+      end
+
+      it "cleans the file" do
+        file_equals CONTENT # File is cleaned (no longer scrambled).
+      end
+    end
+
+    describe "when output is not quieted" do
+      let(:quiet) { nil }
+
+      # Since our "editor" is just `cat -u`, our STDOUT output will include both the opening
+      # message and the contents of the file.
+      it 'prints a message and opens the file in the "editor"' do
+        stdout_only "Opening \"#{filename}\" with \"#{editor.tr("'", '')}\""\
+                    "\n#{content}File cleaned: \"#{filename}\""
+      end
+
+      it "cleans the file" do
+        file_equals CONTENT # File is cleaned (no longer scrambled).
+      end
+    end
+  end
+
   describe "when editor does not exit successfully" do
     let(:editor) { "'exit 1 #'" }
 
