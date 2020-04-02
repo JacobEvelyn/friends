@@ -9,7 +9,7 @@ command :edit do |edit|
     puts "Opening \"#{filename}\" with \"#{editor}\"" unless global_options[:quiet]
 
     # Mark the file for cleaning once the editor was closed correctly.
-    if Kernel.system(editor, filename)
+    if Kernel.system("#{editor} #{filename}")
       @introvert = Friends::Introvert.new(filename: filename)
       @clean_command = true
       @dirty = true
