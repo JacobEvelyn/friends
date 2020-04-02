@@ -117,6 +117,60 @@ def description_parsing_specs(test_stdout: true)
           it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper at 12.\"" }
         end
       end
+
+      describe "when followed by a period and a comma" do
+        let(:description) { "Met grace h., and others, at 12." }
+
+        it { line_added "- #{date}: Met **Grace Hopper**, and others, at 12." }
+        if test_stdout
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper, and others, at 12.\"" } # rubocop:disable Metrics/LineLength
+        end
+      end
+
+      describe "when followed by a period, a comma, and a proper noun" do
+        let(:description) { "Met grace h., King James, and others at 12." }
+
+        it { line_added "- #{date}: Met **Grace Hopper**, King James, and others at 12." }
+        if test_stdout
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper, King James, and others at 12.\"" } # rubocop:disable Metrics/LineLength
+        end
+      end
+
+      describe "when followed by a period and a complex series of sentence-ending punctuation" do
+        let(:description) { "Met someone—grace h.?! At 12." }
+
+        it { line_added "- #{date}: Met someone—**Grace Hopper**?! At 12." }
+        if test_stdout
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met someone—Grace Hopper?! At 12.\"" } # rubocop:disable Metrics/LineLength
+        end
+      end
+
+      describe "when followed by a period and a complex series of mid-sentence punctuation" do
+        let(:description) { "Met someone {grace h.}—at 12." }
+
+        it { line_added "- #{date}: Met someone {**Grace Hopper**}—at 12." }
+        if test_stdout
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met someone {Grace Hopper}—at 12.\"" } # rubocop:disable Metrics/LineLength
+        end
+      end
+
+      describe "when followed by a period as part of a sentence-ending ellipsis" do
+        let(:description) { "Met grace h... Great!" }
+
+        it { line_added "- #{date}: Met **Grace Hopper**... Great!" }
+        if test_stdout
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper... Great!\"" }
+        end
+      end
+
+      describe "when followed by a period as part of a mid-sentence ellipsis" do
+        let(:description) { "Met grace h... at 12." }
+
+        it { line_added "- #{date}: Met **Grace Hopper**... at 12." }
+        if test_stdout
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper... at 12.\"" }
+        end
+      end
     end
 
     describe "when description includes a friend's nickname (case insensitive)" do
