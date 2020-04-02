@@ -4,6 +4,20 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.49](https://github.com/JacobEvelyn/friends/tree/v0.49) (2020-04-02)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.48...v0.49)
+
+**Fixed bugs:**
+
+- Multi-word editors no longer work with `friends edit` [\#251](https://github.com/JacobEvelyn/friends/issues/251)
+- Punctuation swallowed after friend name with last initial [\#235](https://github.com/JacobEvelyn/friends/issues/235)
+
+**Merged pull requests:**
+
+- Improve name matching to not swallow punctuation [\#253](https://github.com/JacobEvelyn/friends/pull/253) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix `friends edit` for multi-word EDITORs [\#252](https://github.com/JacobEvelyn/friends/pull/252) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.48](https://github.com/JacobEvelyn/friends/tree/v0.48) (2020-03-27)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.47...v0.48)
