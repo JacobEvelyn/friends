@@ -135,7 +135,7 @@ def line_added(expected)
   n_initial_lines = File.read(filename).split("\n").size
   subject
   lines = File.read(filename).split("\n")
-  value(lines.index(expected)).must_be_kind_of Numeric # Not nil, so we know `expected` was found.
+  value(lines).must_include expected # Output includes our line
   value(lines.size).must_equal(n_initial_lines + 1) # Line was added, not changed.
 end
 

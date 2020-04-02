@@ -16,9 +16,7 @@ module Friends
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex
       # Note: this regex must be on one line because whitespace is important
-      # rubocop:disable Metrics/LineLength
-      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[@]*[^\(\[@\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<tags_str>(#{TAG_REGEX}\s*)+))?/
-      # rubocop:enable Metrics/LineLength
+      /(#{SERIALIZATION_PREFIX})?(?<name>[^\(\[@]*[^\(\[@\s])(\s+\(#{NICKNAME_PREFIX}(?<nickname_str>.+)\))?(\s+\[(?<location_name>[^\]]+)\])?(\s+(?<tags_str>(#{TAG_REGEX}\s*)+))?/ # rubocop:disable Metrics/LineLength
     end
 
     # @return [Regexp] the string of what we expected during deserialization
@@ -134,12 +132,23 @@ module Friends
         chunks, # Match a full name with the highest priority.
         *@nicknames.map { |n| [n] },
 
-        # Match a first name followed by a last name initial, period, and then
-        # (via lookahead) spacing followed by a lowercase letter. This matches
-        # the "Jake E." part of something like "Jake E. and I went skiing." This
+        # Match a first name followed by a last name initial, period (that via
+        # lookahead is *NOT* a part of an ellipsis), and then (via lookahead)
+        # either:
+        # - other punctuation that would indicate we want to swallow the period
+        #   (note that we do not include closing parentheses in this list because
+        #   they could be part of an offset sentence), OR
+        # - anything, so long as the first alphabetical character afterwards is
+        #   lowercase.
+        # This matches the "Jake E." part of something like "Jake E. and I went
+        # skiing." or "Jake E., Marie Curie, and I studied science." This
         # allows us to correctly count the period as part of the name when it's
         # in the middle of a sentence.
-        ([chunks.first, "#{chunks.last[0]}\.(?=#{splitter}(?-i)[a-z])"] if chunks.size > 1),
+        (
+          if chunks.size > 1
+            [chunks.first, "#{chunks.last[0]}\\.(?!\\.\\.)(?=([,!?;:—]+|(?-i)[^A-Z]+[a-z]))"]
+          end
+        ),
 
         # If the above doesn't match, we check for just the first name and then
         # a last name initial. This matches the "Jake E" part of something like
