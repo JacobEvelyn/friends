@@ -4,6 +4,18 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.50](https://github.com/JacobEvelyn/friends/tree/v0.50) (2020-04-03)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.49...v0.50)
+
+**Implemented enhancements:**
+
+- Add support for Ruby 2.7 [\#254](https://github.com/JacobEvelyn/friends/issues/254)
+
+**Merged pull requests:**
+
+- Add Travis tests for Ruby 2.7 [\#255](https://github.com/JacobEvelyn/friends/pull/255) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.49](https://github.com/JacobEvelyn/friends/tree/v0.49) (2020-04-02)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.48...v0.49)
