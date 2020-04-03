@@ -26,7 +26,7 @@ module Serializable
            reduce(:merge).
            reject { |_, v| v.nil? }
 
-    new(args)
+    new(**args)
   end
 
   class SerializationError < StandardError
