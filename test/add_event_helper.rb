@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def date_parsing_specs(test_stdout: true)
   describe "date parsing" do
     let(:description) { "Test." }
@@ -123,7 +125,7 @@ def description_parsing_specs(test_stdout: true)
 
         it { line_added "- #{date}: Met **Grace Hopper**, and others, at 12." }
         if test_stdout
-          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper, and others, at 12.\"" } # rubocop:disable Metrics/LineLength
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper, and others, at 12.\"" } # rubocop:disable Layout/LineLength
         end
       end
 
@@ -132,7 +134,7 @@ def description_parsing_specs(test_stdout: true)
 
         it { line_added "- #{date}: Met **Grace Hopper**, King James, and others at 12." }
         if test_stdout
-          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper, King James, and others at 12.\"" } # rubocop:disable Metrics/LineLength
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met Grace Hopper, King James, and others at 12.\"" } # rubocop:disable Layout/LineLength
         end
       end
 
@@ -141,7 +143,7 @@ def description_parsing_specs(test_stdout: true)
 
         it { line_added "- #{date}: Met someone—**Grace Hopper**?! At 12." }
         if test_stdout
-          it { stdout_only "#{capitalized_event} added: \"#{date}: Met someone—Grace Hopper?! At 12.\"" } # rubocop:disable Metrics/LineLength
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met someone—Grace Hopper?! At 12.\"" } # rubocop:disable Layout/LineLength
         end
       end
 
@@ -150,7 +152,7 @@ def description_parsing_specs(test_stdout: true)
 
         it { line_added "- #{date}: Met someone {**Grace Hopper**}—at 12." }
         if test_stdout
-          it { stdout_only "#{capitalized_event} added: \"#{date}: Met someone {Grace Hopper}—at 12.\"" } # rubocop:disable Metrics/LineLength
+          it { stdout_only "#{capitalized_event} added: \"#{date}: Met someone {Grace Hopper}—at 12.\"" } # rubocop:disable Layout/LineLength
         end
       end
 

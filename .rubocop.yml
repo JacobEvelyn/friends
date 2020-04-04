@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
 
 Gemspec/RequiredRubyVersion:
   Enabled: false
@@ -10,8 +10,17 @@ Layout/ClosingHeredocIndentation:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
+
+Layout/LineLength:
+  Max: 100
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
 
 Metrics/AbcSize:
   Enabled: false
@@ -28,9 +37,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Metrics/LineLength:
-  Max: 100
-
 Metrics/MethodLength:
   Enabled: false
 
@@ -45,6 +51,15 @@ Naming/AccessorMethodName:
 
 Style/Documentation:
   Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
 Style/MultilineBlockChain:
   Enabled: false

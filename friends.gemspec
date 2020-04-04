@@ -23,17 +23,15 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  # We need Ruby 2.1's default-less keyword arguments and default UTF-8
-  # encoding.
-  spec.required_ruby_version = ">= 2.1"
+  # We need Ruby 2.3's safe navigation operator.
+  spec.required_ruby_version = ">= 2.3"
 
   spec.add_dependency "chronic", "~> 0.10"
   spec.add_dependency "gli", "~> 2.14"
   spec.add_dependency "paint", "~> 2.0"
-  spec.add_dependency "semverse", ">= 2", "< 4"
   spec.add_dependency "tty-pager", "~> 0.11"
 
   spec.add_development_dependency "minitest", "~> 5.5"
   spec.add_development_dependency "minitest-proveit", "~> 1.0"
-  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "rake", "~> 13.0"
 end

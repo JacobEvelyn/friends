@@ -12,7 +12,6 @@ end
 require "gli"
 require "paint"
 require "readline"
-require "semverse"
 
 require "friends/introvert"
 require "friends/version"
@@ -48,10 +47,7 @@ class Stripped; end
 accept(Stripped, &:strip)
 
 class InputDate; end
-accept(InputDate) do |value|
-  time = Chronic.parse(value)
-  time && time.to_date
-end
+accept(InputDate) { |value| Chronic.parse(value)&.to_date }
 
 switch [:quiet],
        negatable: false,
@@ -102,7 +98,7 @@ post do
     rescue Errno::ENOENT
       # If the pager is not installed, just print the output.
       puts @introvert.output
-    rescue Errno::EPIPE # rubocop:disable Lint/HandleExceptions
+    rescue Errno::EPIPE
       # Occurs when quitting the pager.
     end
   end
