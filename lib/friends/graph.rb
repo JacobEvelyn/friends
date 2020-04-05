@@ -4,7 +4,7 @@
 
 module Friends
   class Graph
-    DATE_FORMAT = "%b %Y".freeze
+    DATE_FORMAT = "%b %Y"
     SCALED_SIZE = 20
 
     # @param filtered_activities [Array<Friends::Activity>] a list of activities to highlight in

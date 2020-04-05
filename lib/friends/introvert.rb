@@ -16,10 +16,10 @@ require "friends/friends_error"
 
 module Friends
   class Introvert
-    ACTIVITIES_HEADER = "### Activities:".freeze
-    NOTES_HEADER = "### Notes:".freeze
-    FRIENDS_HEADER = "### Friends:".freeze
-    LOCATIONS_HEADER = "### Locations:".freeze
+    ACTIVITIES_HEADER = "### Activities:"
+    NOTES_HEADER = "### Notes:"
+    FRIENDS_HEADER = "### Friends:"
+    LOCATIONS_HEADER = "### Locations:"
 
     # @param filename [String] the name of the friends Markdown file
     def initialize(filename:)
@@ -725,8 +725,8 @@ module Friends
 
       begin
         instance_variable_get("@#{stage.id}") << stage.klass.deserialize(line)
-      rescue StandardError => ex
-        bad_line(ex, line_num)
+      rescue StandardError => e
+        bad_line(e, line_num)
       end
 
       state
@@ -808,7 +808,7 @@ module Friends
           a.default_location && a.default_location != activity.default_location
         end
 
-        str += " to #{Paint[(later_activity.date if later_activity) || 'present', :bold]}"
+        str += " to #{Paint[later_activity&.date || 'present', :bold]}"
       end
 
       str += " already" if earlier_activity_with_default_location != activity

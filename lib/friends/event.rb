@@ -14,8 +14,8 @@ module Friends
   class Event
     extend Serializable
 
-    SERIALIZATION_PREFIX = "- ".freeze
-    DATE_PARTITION = ": ".freeze
+    SERIALIZATION_PREFIX = "- "
+    DATE_PARTITION = ": "
 
     # @return [Regexp] the regex for capturing groups in deserialization
     def self.deserialization_regex

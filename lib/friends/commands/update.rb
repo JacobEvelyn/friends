@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "friends/post_install_message"
+require "friends/sem_ver_comparator"
 
 desc "Updates the `friends` program"
 command :update do |update|
@@ -9,8 +10,7 @@ command :update do |update|
     if match = `gem search friends`.match(/^friends\s\(([^\)]+)\)$/)
       # rubocop:enable Lint/AssignmentInCondition
       remote_version = match[1]
-      if Semverse::Version.coerce(remote_version) >
-         Semverse::Version.coerce(Friends::VERSION)
+      if Friends::SemVerComparator.greater?(remote_version, Friends::VERSION)
         `gem update friends && gem cleanup friends`
 
         unless global_options[:quiet]
