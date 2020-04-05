@@ -4,6 +4,22 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.51](https://github.com/JacobEvelyn/friends/tree/v0.51) (2020-04-05)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.50...v0.51)
+
+**Implemented enhancements:**
+
+- Drop Semverse dependency [\#256](https://github.com/JacobEvelyn/friends/issues/256)
+
+**Closed issues:**
+
+- Drop support for Ruby \<2.3 [\#257](https://github.com/JacobEvelyn/friends/issues/257)
+
+**Merged pull requests:**
+
+- Remove Semverse dependency, and require Ruby 2.3+ [\#258](https://github.com/JacobEvelyn/friends/pull/258) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.50](https://github.com/JacobEvelyn/friends/tree/v0.50) (2020-04-03)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.49...v0.50)
