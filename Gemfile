@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 group :development, :test do
-  gem "rubocop", "0.67"
+  gem "rubocop", "0.81.0"
 end
 
 group :test do
