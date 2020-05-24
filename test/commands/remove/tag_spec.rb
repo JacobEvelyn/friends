@@ -7,6 +7,14 @@ clean_describe "remove tag" do
 
   let(:content) { CONTENT }
 
+  describe "when friend name and tag are blank" do
+    subject { run_cmd("remove tag") }
+
+    it "prints an error message" do
+      stderr_only 'Error: No friend found for ""'
+    end
+  end
+
   describe "when friend name has no matches" do
     let(:friend_name) { "Garbage" }
     let(:tag) { "science" }
