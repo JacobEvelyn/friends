@@ -14,7 +14,7 @@ matrix:
       gemfile: Gemfile
       script:
         - bundle exec rake test
-        - gem install --no-document rubocop && rubocop
+        - bundle exec rubocop
       env:
         - CODE_COVERAGE=true
 branches:
