@@ -8,7 +8,8 @@ clean_describe "remove tag" do
   let(:content) { CONTENT }
 
   describe "when friend name and tag are blank" do
-    subject { run_cmd("remove tag") }
+    let(:friend_name) { nil }
+    let(:tag) { nil }
 
     it "prints an error message" do
       stderr_only 'Error: No friend found for ""'
