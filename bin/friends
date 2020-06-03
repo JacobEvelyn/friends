@@ -34,7 +34,7 @@ class Tag
   # conversions for arguments.
   # See: https://github.com/davetron5000/gli/issues/241
   def self.convert_to_tag(str)
-    str = str.strip
+    str = str.to_s.strip
     !str.empty? && str[0] == "@" ? str : "@#{str}"
   end
 end
