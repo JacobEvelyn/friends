@@ -4,6 +4,25 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.52](https://github.com/JacobEvelyn/friends/tree/v0.52) (2020-06-03)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.51...v0.52)
+
+**Fixed bugs:**
+
+- undefined method error occurred when "remove tag" is executed with no arguments [\#262](https://github.com/JacobEvelyn/friends/issues/262)
+
+**Closed issues:**
+
+- Try using bundler caching in Travis [\#260](https://github.com/JacobEvelyn/friends/issues/260)
+
+**Merged pull requests:**
+
+- Use correct RuboCop version in Travis [\#264](https://github.com/JacobEvelyn/friends/pull/264) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix convert\_to\_tag for the case of str is nil [\#263](https://github.com/JacobEvelyn/friends/pull/263) ([m-t-a-n-a-k-a](https://github.com/m-t-a-n-a-k-a))
+- Cache bundler directory in Travis [\#261](https://github.com/JacobEvelyn/friends/pull/261) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Update rubocop requirement from 0.67 to 0.81.0 [\#259](https://github.com/JacobEvelyn/friends/pull/259) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [v0.51](https://github.com/JacobEvelyn/friends/tree/v0.51) (2020-04-05)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.50...v0.51)
