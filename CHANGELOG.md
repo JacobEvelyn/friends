@@ -92,7 +92,7 @@ show you appreciate its continued development.
 
 **Fixed bugs:**
 
-- Tests are failing in `master` [\#238](https://github.com/JacobEvelyn/friends/issues/238)
+- Tests are failing in `main` [\#238](https://github.com/JacobEvelyn/friends/issues/238)
 
 **Merged pull requests:**
 
@@ -645,7 +645,7 @@ show you appreciate its continued development.
 **Merged pull requests:**
 
 - Highlight multiple occurrences [\#70](https://github.com/JacobEvelyn/friends/pull/70) ([GuruKhalsa](https://github.com/GuruKhalsa))
-- Fix Travis badge \(master only\) [\#67](https://github.com/JacobEvelyn/friends/pull/67) ([JacobEvelyn](https://github.com/JacobEvelyn))
+- Fix Travis badge \(main only\) [\#67](https://github.com/JacobEvelyn/friends/pull/67) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Move activity prompt to bin/friends [\#64](https://github.com/JacobEvelyn/friends/pull/64) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Adds the --debug flag for printing backtraces on error [\#63](https://github.com/JacobEvelyn/friends/pull/63) ([JacobEvelyn](https://github.com/JacobEvelyn))
 - Move file writes to end of command actions [\#61](https://github.com/JacobEvelyn/friends/pull/61) ([JacobEvelyn](https://github.com/JacobEvelyn))

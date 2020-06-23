@@ -2,7 +2,7 @@
 
 These are steps for the maintainer to take to release a new version of this gem.
 
-1.  On the `master` branch, update the `VERSION` constant in
+1.  On the `main` branch, update the `VERSION` constant in
     `lib/friends/version.rb`.
 2.  Commit the change (`git add -A && git commit -m 'Bump to vX.X'`).
 3.  Add a tag (`git tag -am "vX.X" vX.X`).

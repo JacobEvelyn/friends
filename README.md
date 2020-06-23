@@ -1,6 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/friends.svg)](https://badge.fury.io/rb/friends)
-[![Code Coverage](https://codecov.io/gh/JacobEvelyn/friends/branch/master/graph/badge.svg)](https://codecov.io/gh/JacobEvelyn/friends)
-[![Build Status](https://travis-ci.com/JacobEvelyn/friends.svg?branch=master)](https://travis-ci.com/JacobEvelyn/friends)
+[![Code Coverage](https://codecov.io/gh/JacobEvelyn/friends/branch/main/graph/badge.svg)](https://codecov.io/gh/JacobEvelyn/friends)
+[![Build Status](https://travis-ci.com/JacobEvelyn/friends.svg?branch=main)](https://travis-ci.com/JacobEvelyn/friends)
 [![Readme Score](http://readme-score-api.herokuapp.com/score.svg?url=JacobEvelyn/friends&bust=1)](http://clayallsopp.github.io/readme-score?url=JacobEvelyn/friends)
 [![Inline docs](http://inch-ci.org/github/JacobEvelyn/friends.png)](http://inch-ci.org/github/JacobEvelyn/friends)
 [![Gem](https://img.shields.io/gem/dt/friends.svg)](https://rubygems.org/gems/friends)
@@ -181,7 +181,7 @@ The `friends.md` Markdown file that stores all of your data contains:
 ```
 
 See the example
-[`friends.md`](https://github.com/JacobEvelyn/friends/blob/master/friends.md)
+[`friends.md`](https://github.com/JacobEvelyn/friends/blob/main/friends.md)
 file for more information.
 
 ### Global flags
@@ -956,7 +956,7 @@ If you have an idea,
 [make a GitHub issue](https://github.com/JacobEvelyn/friends/issues/new)!
 Suggestions are very very welcome, and usually are implemented very
 quickly. And if you'd like to do the implementing yourself, see the
-[contributing guide](https://github.com/JacobEvelyn/friends/blob/master/.github/CONTRIBUTING.md).
+[contributing guide](https://github.com/JacobEvelyn/friends/blob/main/.github/CONTRIBUTING.md).
 
 A big big thanks to all of this project's lovely
 [contributors](https://github.com/JacobEvelyn/friends/graphs/contributors):
@@ -988,10 +988,10 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 
 ## Code of Conduct
 
-Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/master/CODE_OF_CONDUCT.md).
+Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/main/CODE_OF_CONDUCT.md).
 If you're a polite, reasonable person you won't have any issues!
 
 ## License
 
 Friends is released under the
-[MIT License](https://github.com/JacobEvelyn/friends/blob/master/LICENSE.txt).
+[MIT License](https://github.com/JacobEvelyn/friends/blob/main/LICENSE.txt).

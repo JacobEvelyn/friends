@@ -55,7 +55,7 @@ promise I don't bite. 😊
 
 ## Code of Conduct
 
-Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/master/CODE_OF_CONDUCT.md).
+Note that this project follows a [Code of Conduct](https://github.com/JacobEvelyn/friends/blob/main/CODE_OF_CONDUCT.md).
 If you're a polite, reasonable person you won't have any issues!
 
 ## Financial contributions

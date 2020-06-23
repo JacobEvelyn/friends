@@ -19,6 +19,6 @@ matrix:
         - CODE_COVERAGE=true
 branches:
   only:
-    - master # Always run on the master branch
+    - main # Always run on the main branch
 notifications:
   email: false
