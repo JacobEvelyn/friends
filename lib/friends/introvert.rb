@@ -204,9 +204,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     def add_nickname(name:, nickname:)
       if nickname.empty?
-        if name.empty?
-          raise FriendsError, "Expected \"[Friend Name]\" \"[Nickname]\""
-        end
+        raise FriendsError, "Expected \"[Friend Name]\" \"[Nickname]\"" if name.empty?
 
         raise FriendsError, "Nickname cannot be blank"
       end
@@ -223,9 +221,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     def add_tag(name:, tag:)
       if tag == "@"
-        if name.empty?
-          raise FriendsError, "Expected \"[Friend Name]\" \"[Tag]\""
-        end
+        raise FriendsError, "Expected \"[Friend Name]\" \"[Tag]\"" if name.empty?
 
         raise FriendsError, "Tag cannot be blank"
       end
