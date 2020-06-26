@@ -7,6 +7,15 @@ clean_describe "add tag" do
 
   let(:content) { CONTENT }
 
+  describe "when friend name and tag are blank" do
+    let(:friend_name) { nil }
+    let(:tag) { nil }
+
+    it "prints an error message" do
+      stderr_only 'Error: Expected "[Friend Name]" "[Tag]"'
+    end
+  end
+
   describe "when friend name has no matches" do
     let(:friend_name) { "Garbage" }
     let(:tag) { "school" }

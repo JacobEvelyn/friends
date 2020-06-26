@@ -7,6 +7,15 @@ clean_describe "add nickname" do
 
   let(:content) { CONTENT }
 
+  describe "when friend name and nickname are blank" do
+    let(:friend_name) { nil }
+    let(:nickname) { nil }
+
+    it "prints an error message" do
+      stderr_only 'Error: Expected "[Friend Name]" "[Nickname]"'
+    end
+  end
+
   describe "when friend name has no matches" do
     let(:friend_name) { "Garbage" }
     let(:nickname) { "Georgie" }
