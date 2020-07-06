@@ -4,6 +4,18 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.53](https://github.com/JacobEvelyn/friends/tree/v0.53) (2020-07-06)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.52...v0.53)
+
+**Fixed bugs:**
+
+- undefined method error occurred when “add tag" or “add nickname” executed with no arguments [\#265](https://github.com/JacobEvelyn/friends/issues/265)
+
+**Merged pull requests:**
+
+- Fix for the case of add tag or add nickname args are nill [\#266](https://github.com/JacobEvelyn/friends/pull/266) ([m-t-a-n-a-k-a](https://github.com/m-t-a-n-a-k-a))
+
 ## [v0.52](https://github.com/JacobEvelyn/friends/tree/v0.52) (2020-06-03)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.51...v0.52)
