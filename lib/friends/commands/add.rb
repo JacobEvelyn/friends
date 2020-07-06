@@ -35,7 +35,7 @@ command :add do |add|
   add.arg_name "NAME NICKNAME"
   add.command :nickname do |add_nickname|
     add_nickname.action do |_, _, args|
-      @introvert.add_nickname(name: args.first.strip, nickname: args[1].strip)
+      @introvert.add_nickname(name: args.first.to_s.strip, nickname: args[1].to_s.strip)
       @dirty = true # Mark the file for cleaning.
     end
   end
@@ -46,7 +46,7 @@ command :add do |add|
     add_tag.action do |_, _, args|
       @introvert.add_tag(
         name: args[0..-2].join(" "),
-        tag: Tag.convert_to_tag(args.last.strip)
+        tag: Tag.convert_to_tag(args.last.to_s.strip)
       )
       @dirty = true # Mark the file for cleaning.
     end

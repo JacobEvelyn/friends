@@ -203,6 +203,7 @@ module Friends
     # @param nickname [String] the nickname to add to the friend
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     def add_nickname(name:, nickname:)
+      raise FriendsError, "Expected \"[Friend Name]\" \"[Nickname]\"" if name.empty?
       raise FriendsError, "Nickname cannot be blank" if nickname.empty?
 
       friend = thing_with_name_in(:friend, name)
@@ -216,6 +217,7 @@ module Friends
     # @param tag [String] the tag to add to the friend, of the form: "@tag"
     # @raise [FriendsError] if 0 or 2+ friends match the given name
     def add_tag(name:, tag:)
+      raise FriendsError, "Expected \"[Friend Name]\" \"[Tag]\"" if name.empty?
       raise FriendsError, "Tag cannot be blank" if tag == "@"
 
       friend = thing_with_name_in(:friend, name)
