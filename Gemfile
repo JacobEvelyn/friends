@@ -9,6 +9,6 @@ group :development, :test do
 end
 
 group :test do
-  gem "codecov", "~> 0.1.14"
+  gem "codecov", "~> 0.2.0"
   gem "simplecov"
 end
