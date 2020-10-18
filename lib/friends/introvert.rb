@@ -212,6 +212,27 @@ module Friends
       @output << "Nickname added: \"#{friend}\""
     end
 
+    # Add an alias to an existing location.
+    # @param name [String] the name of the location
+    # @param nickname [String] the alias to add to the location
+    # @raise [FriendsError] if 0 or 2+ location match the given name
+    # @raise [FriendsError] if the alias is already taken
+    def add_location_alias(name:, nickname:)
+      raise FriendsError, "Expected \"[Location Name]\" \"[Alias]\"" if name.empty?
+      raise FriendsError, "Alias cannot be blank" if nickname.empty?
+
+      if @locations.any? { |location| location.nicknames.include?(nickname) }
+        raise FriendsError,
+              "The location alias \"#{nickname}\" is already taken by "\
+              "\"#{@locations.select { |loc| loc.nicknames.include?(nickname) }.first.name}\""
+      end
+
+      location = thing_with_name_in(:location, name)
+      location.add_alias(nickname)
+
+      @output << "Alias added: \"#{location}\""
+    end
+
     # Add a tag to an existing friend.
     # @param name [String] the name of the friend
     # @param tag [String] the tag to add to the friend, of the form: "@tag"
@@ -248,6 +269,18 @@ module Friends
       friend.remove_nickname(nickname)
 
       @output << "Nickname removed: \"#{friend}\""
+    end
+
+    # Remove an alias from an existing location.
+    # @param name [String] the name of the location
+    # @param nickname [String] the alias to remove from the location
+    # @raise [FriendsError] if 0 or 2+ location match the given name
+    # @raise [FriendsError] if the location does not have the given alias
+    def remove_location_alias(name:, nickname:)
+      location = thing_with_name_in(:location, name)
+      location.remove_alias(nickname)
+
+      @output << "Alias removed: \"#{location}\""
     end
 
     # List all friend names in the friends file.
@@ -298,7 +331,7 @@ module Friends
 
     # List all location names in the friends file.
     def list_locations
-      @locations.each { |location| @output << location.name }
+      @locations.each { |location| @output << location }
     end
 
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
@@ -429,7 +462,7 @@ module Friends
     #
     # The returned hash uses the following format:
     #   {
-    #     /regex/ => [list of friends matching regex]
+    #     /regex/ => [list of locations matching regex]
     #   }
     #
     # This hash is sorted (because Ruby's hashes are ordered) by decreasing
@@ -437,8 +470,10 @@ module Friends
     #
     # @return [Hash{Regexp => Array<Friends::Location>}]
     def regex_location_map
-      @locations.each_with_object({}) do |location, hash|
-        hash[location.regex_for_name] = location
+      @locations.each_with_object(Hash.new { |h, k| h[k] = [] }) do |location, hash|
+        location.regexes_for_name.each do |regex|
+          hash[regex] << location
+        end
       end.sort_by { |k, _| -k.to_s.size }.to_h
     end
 
@@ -751,11 +786,7 @@ module Friends
     # @raise [FriendsError] if 0 or 2+ friends match the given text
     def thing_with_name_in(type, text)
       things = instance_variable_get("@#{type}s").select do |thing|
-        if type == :friend
-          thing.regexes_for_name.any? { |regex| regex.match(text) }
-        else
-          thing.regex_for_name.match(text)
-        end
+        thing.regexes_for_name.any? { |regex| regex.match(text) }
       end
 
       # If there's more than one match with fuzzy regexes but exactly one thing

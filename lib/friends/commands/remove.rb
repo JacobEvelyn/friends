@@ -11,6 +11,15 @@ command :remove do |remove|
     end
   end
 
+  remove.desc "Removes an alias from a location"
+  remove.arg_name "LOCATION ALIAS"
+  remove.command :alias do |remove_location_alias|
+    remove_location_alias.action do |_, _, args|
+      @introvert.remove_location_alias(name: args.first, nickname: args[1])
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
   remove.desc "Removes a tag from a friend"
   remove.arg_name "NAME @TAG"
   remove.command :tag do |remove_tag|

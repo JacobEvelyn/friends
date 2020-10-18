@@ -31,6 +31,7 @@ clean_describe "list locations" do
 Paris
 Atlantis
 Martha's Vineyard
+New York City (a.k.a. NYC a.k.a. NY)
       OUTPUT
     end
   end

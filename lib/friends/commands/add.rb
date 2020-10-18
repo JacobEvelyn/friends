@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-desc "Adds a friend (or nickname), activity, note, or location"
+desc "Adds a friend (or nickname), activity, note, or location (or alias)"
 command :add do |add|
   add.desc "Adds a friend"
   add.arg_name "NAME"
@@ -36,6 +36,15 @@ command :add do |add|
   add.command :nickname do |add_nickname|
     add_nickname.action do |_, _, args|
       @introvert.add_nickname(name: args.first.to_s.strip, nickname: args[1].to_s.strip)
+      @dirty = true # Mark the file for cleaning.
+    end
+  end
+
+  add.desc "Adds an alias to a location"
+  add.arg_name "LOCATION ALIAS"
+  add.command :alias do |add_location_alias|
+    add_location_alias.action do |_, _, args|
+      @introvert.add_location_alias(name: args.first.to_s.strip, nickname: args[1].to_s.strip)
       @dirty = true # Mark the file for cleaning.
     end
   end

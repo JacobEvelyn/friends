@@ -134,6 +134,7 @@ Not cleaning file: "#{filename}" ("exit 1 #" did not exit successfully)
 - Atlantis
 - Martha's Vineyard
 - Mysterious Mountains
+- New York City (a.k.a. NYC a.k.a. NY)
 - Paris
       EXPECTED_CONTENT
     end
