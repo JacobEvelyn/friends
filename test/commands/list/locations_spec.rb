@@ -31,8 +31,21 @@ clean_describe "list locations" do
 Paris
 Atlantis
 Martha's Vineyard
-New York City (a.k.a. NYC a.k.a. NY)
+New York City
       OUTPUT
+    end
+
+    describe "--verbose" do
+      subject { run_cmd("list locations --verbose") }
+
+      it "lists locations in file order with details" do
+        stdout_only <<-OUTPUT
+Paris
+Atlantis
+Martha's Vineyard
+New York City (a.k.a. NYC a.k.a. NY)
+        OUTPUT
+      end
     end
   end
 end

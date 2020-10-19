@@ -330,8 +330,8 @@ module Friends
     end
 
     # List all location names in the friends file.
-    def list_locations
-      @locations.each { |location| @output << location }
+    def list_locations(verbose:)
+      (verbose ? @locations.map(&:to_s) : @locations.map(&:name)).each { |line| @output << line }
     end
 
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
