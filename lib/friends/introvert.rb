@@ -222,7 +222,7 @@ module Friends
       raise FriendsError, "Alias cannot be blank" if nickname.empty?
 
       collision = @locations.find do |loc|
-        loc.name.casecmp?(nickname) || loc.aliases.any? { |a| a.casecmp?(nickname) }
+        loc.name.casecmp(nickname).zero? || loc.aliases.any? { |a| a.casecmp(nickname).zero? }
       end
 
       if collision
