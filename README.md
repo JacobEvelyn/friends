@@ -293,12 +293,12 @@ $ friends add activity Got lunch with Earnest H and Earnest S. in the park. Man,
 Activity added: "2017-05-01: Got lunch with Earnest Hemingway and Earnest Shackleton in the park. Man, I like Earnest Hemingway but really love Earnest Shackleton."
 ```
 
-And locations or their alias will be matched as well:
+And locations or their aliases will be matched as well:
 
 ```bash
 $ friends add activity Went swimming near atlantis with George.
 Activity added: "2017-01-06: Went swimming near Atlantis with George Washington Carver."
-$ friends add activity Had lunch in NYC with George.
+$ friends add activity Had lunch in nyc with George.
 Activity added: "2017-01-06: Had lunch in New York City with George Washington Carver."
 ```
 
@@ -891,7 +891,7 @@ Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
 
 #### `remove alias`
 
-Removes an specific alias from a location:
+Removes a specific alias from a location:
 
 ```bash
 $ friends remove alias "New York City" "Big Apple"

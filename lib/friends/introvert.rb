@@ -215,16 +215,20 @@ module Friends
     # Add an alias to an existing location.
     # @param name [String] the name of the location
     # @param nickname [String] the alias to add to the location
-    # @raise [FriendsError] if 0 or 2+ location match the given name
+    # @raise [FriendsError] if 0 or 2+ locations match the given name
     # @raise [FriendsError] if the alias is already taken
-    def add_location_alias(name:, nickname:)
+    def add_alias(name:, nickname:)
       raise FriendsError, "Expected \"[Location Name]\" \"[Alias]\"" if name.empty?
       raise FriendsError, "Alias cannot be blank" if nickname.empty?
 
-      if @locations.any? { |location| location.nicknames.include?(nickname) }
+      collision = @locations.find do |loc|
+        loc.name.casecmp?(nickname) || loc.aliases.any? { |a| a.casecmp?(nickname) }
+      end
+
+      if collision
         raise FriendsError,
               "The location alias \"#{nickname}\" is already taken by "\
-              "\"#{@locations.select { |loc| loc.nicknames.include?(nickname) }.first.name}\""
+              "\"#{collision.name}\""
       end
 
       location = thing_with_name_in(:location, name)
@@ -274,9 +278,12 @@ module Friends
     # Remove an alias from an existing location.
     # @param name [String] the name of the location
     # @param nickname [String] the alias to remove from the location
-    # @raise [FriendsError] if 0 or 2+ location match the given name
+    # @raise [FriendsError] if 0 or 2+ locations match the given name
     # @raise [FriendsError] if the location does not have the given alias
-    def remove_location_alias(name:, nickname:)
+    def remove_alias(name:, nickname:)
+      raise FriendsError, "Expected \"[Location Name]\" \"[Alias]\"" if name.empty?
+      raise FriendsError, "Alias cannot be blank" if nickname.empty?
+
       location = thing_with_name_in(:location, name)
       location.remove_alias(nickname)
 
@@ -462,18 +469,16 @@ module Friends
     #
     # The returned hash uses the following format:
     #   {
-    #     /regex/ => [list of locations matching regex]
+    #     location.name => [list of locations matching regex]
     #   }
     #
     # This hash is sorted (because Ruby's hashes are ordered) by decreasing
     # regex key length, so the key /Paris, France/ appears before /Paris/.
     #
-    # @return [Hash{Regexp => Array<Friends::Location>}]
+    # @return [Hash{String => Array<Regexp>}]
     def regex_location_map
-      @locations.each_with_object(Hash.new { |h, k| h[k] = [] }) do |location, hash|
-        location.regexes_for_name.each do |regex|
-          hash[regex] << location
-        end
+      @locations.each_with_object({}) do |location, hash|
+        hash[location.name] = location.regexes_for_name
       end.sort_by { |k, _| -k.to_s.size }.to_h
     end
 

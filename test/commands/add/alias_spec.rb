@@ -49,20 +49,20 @@ clean_describe "add alias" do
       end
     end
 
+    describe "when alias is nil" do
+      let(:nickname) { nil }
+
+      it "prints an error message" do
+        stderr_only "Error: Alias cannot be blank"
+      end
+    end
+
     describe "when alias is not blank" do
       let(:nickname) { "'Big Apple'" }
 
       it "adds alias to location" do
         line_changed "- New York City (a.k.a. NYC a.k.a. NY)",
                      "- New York City (a.k.a. NYC a.k.a. NY a.k.a. Big Apple)"
-      end
-
-      it "updates parenthetical in file when friend has existing alias" do
-        run_cmd("add alias 'New York City' 'Gotham'")
-        line_changed(
-          "- New York City (a.k.a. NYC a.k.a. NY a.k.a. Gotham)",
-          "- New York City (a.k.a. NYC a.k.a. NY a.k.a. Gotham a.k.a. Big Apple)"
-        )
       end
 
       it "prints an output message" do

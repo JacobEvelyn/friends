@@ -13,9 +13,9 @@ command :remove do |remove|
 
   remove.desc "Removes an alias from a location"
   remove.arg_name "LOCATION ALIAS"
-  remove.command :alias do |remove_location_alias|
-    remove_location_alias.action do |_, _, args|
-      @introvert.remove_location_alias(name: args.first, nickname: args[1])
+  remove.command :alias do |remove_alias|
+    remove_alias.action do |_, _, args|
+      @introvert.remove_alias(name: args.first.to_s.strip, nickname: args[1].to_s.strip)
       @dirty = true # Mark the file for cleaning.
     end
   end

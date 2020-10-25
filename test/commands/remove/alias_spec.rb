@@ -7,6 +7,15 @@ clean_describe "remove alias" do
 
   let(:content) { CONTENT }
 
+  describe "when location and nickname are nil" do
+    let(:location_name) { nil }
+    let(:nickname) { nil }
+
+    it "prints an error message" do
+      stderr_only 'Error: Expected "[Location Name]" "[Alias]"'
+    end
+  end
+
   describe "when location name has no matches" do
     let(:location_name) { "Garbage" }
     let(:nickname) { "'Big Apple Pie'" }
@@ -18,6 +27,13 @@ clean_describe "remove alias" do
 
   describe "when location name has one match" do
     let(:location_name) { "'New York City'" }
+
+    describe "when alias is nil" do
+      let(:nickname) { nil }
+      it "prints an error message" do
+        stderr_only "Error: Alias cannot be blank"
+      end
+    end
 
     describe "when alias is not present on location" do
       let(:nickname) { "Gotham" }
@@ -36,7 +52,7 @@ clean_describe "remove alias" do
         )
       end
 
-      it "removes parenthetical from file when friend has no more nicknames" do
+      it "removes parenthetical from file when location has no more nicknames" do
         run_cmd("remove alias #{location_name} 'NY'")
         line_changed(
           "- New York City (a.k.a. NYC)",

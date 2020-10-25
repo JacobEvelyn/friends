@@ -42,9 +42,9 @@ command :add do |add|
 
   add.desc "Adds an alias to a location"
   add.arg_name "LOCATION ALIAS"
-  add.command :alias do |add_location_alias|
-    add_location_alias.action do |_, _, args|
-      @introvert.add_location_alias(name: args.first.to_s.strip, nickname: args[1].to_s.strip)
+  add.command :alias do |add_alias|
+    add_alias.action do |_, _, args|
+      @introvert.add_alias(name: args.first.to_s.strip, nickname: args[1].to_s.strip)
       @dirty = true # Mark the file for cleaning.
     end
   end
