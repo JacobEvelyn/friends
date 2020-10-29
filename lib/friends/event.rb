@@ -183,13 +183,11 @@ module Friends
     # @param introvert [Introvert] used to access internal data structures to
     #   perform location matching
     def highlight_locations(introvert:)
-      introvert.regex_location_map.each do |location, regex_list|
+      introvert.regex_location_map.each do |regex, location|
         # If we find a match, replace all instances of the matching text with
         # the location's name. We use single-underscores to indicate locations.
-        regex_list.each do |regex|
-          description_matches(regex: regex, replace: true, indicator: "_") do
-            location
-          end
+        description_matches(regex: regex, replace: true, indicator: "_") do
+          location.name
         end
       end
     end

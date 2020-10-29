@@ -34,7 +34,8 @@ clean_describe "add alias" do
     end
 
     it "prints an error message" do
-      stderr_only 'Error: The location alias "Big Apple" is already taken by "Manhattan"'
+      stderr_only "Error: The location alias "\
+                  '"Big Apple" is already taken by "Manhattan (a.k.a. Big Apple)"'
     end
   end
 

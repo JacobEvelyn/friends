@@ -228,7 +228,7 @@ module Friends
       if collision
         raise FriendsError,
               "The location alias \"#{nickname}\" is already taken by "\
-              "\"#{collision.name}\""
+              "\"#{collision}\""
       end
 
       location = thing_with_name_in(:location, name)
@@ -469,16 +469,16 @@ module Friends
     #
     # The returned hash uses the following format:
     #   {
-    #     location.name => [list of locations matching regex]
+    #     /regex/ => location
     #   }
     #
     # This hash is sorted (because Ruby's hashes are ordered) by decreasing
     # regex key length, so the key /Paris, France/ appears before /Paris/.
     #
-    # @return [Hash{String => Array<Regexp>}]
+    # @return [Hash{Regexp => location}]
     def regex_location_map
       @locations.each_with_object({}) do |location, hash|
-        hash[location.name] = location.regexes_for_name
+        location.regexes_for_name.each { |regex| hash[regex] = location }
       end.sort_by { |k, _| -k.to_s.size }.to_h
     end
 
