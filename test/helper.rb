@@ -48,6 +48,7 @@ CONTENT = <<-FILE
 ### Locations:
 - Atlantis
 - Martha's Vineyard
+- New York City (a.k.a. NYC a.k.a. NY)
 - Paris
 FILE
 
@@ -77,6 +78,7 @@ SCRAMBLED_CONTENT = <<-FILE
 - Paris
 - Atlantis
 - Martha's Vineyard
+- New York City (a.k.a. NYC a.k.a. NY)
 FILE
 
 # Define these methods so they can be referenced in the methods below. They'll be overridden in

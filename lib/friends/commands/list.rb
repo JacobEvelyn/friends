@@ -73,8 +73,11 @@ command :list do |list|
 
   list.desc "List all locations"
   list.command :locations do |list_locations|
-    list_locations.action do
-      @introvert.list_locations
+    list_locations.switch [:verbose],
+                          negatable: false,
+                          desc: "Output location aliases"
+    list_locations.action do |_, options|
+      @introvert.list_locations(verbose: options[:verbose])
     end
   end
 

@@ -37,6 +37,7 @@ lots of help), and give feedback! This project is
       - [`add tag`](#add-tag)
       - [`add location`](#add-location)
       - [`add nickname`](#add-nickname)
+      - [`add alias`](#add-alias)
       - [Adding a default location](#adding-a-default-location)
     - [`clean`](#clean)
     - [`graph`](#graph)
@@ -54,6 +55,7 @@ lots of help), and give feedback! This project is
     - `remove`
       - [`remove tag`](#remove-tag)
       - [`remove nickname`](#remove-nickname)
+      - [`remove alias`](#remove-alias)
     - `rename`
       - [`rename friend`](#rename-friend)
       - [`rename location`](#rename-location)
@@ -291,11 +293,13 @@ $ friends add activity Got lunch with Earnest H and Earnest S. in the park. Man,
 Activity added: "2017-05-01: Got lunch with Earnest Hemingway and Earnest Shackleton in the park. Man, I like Earnest Hemingway but really love Earnest Shackleton."
 ```
 
-And locations will be matched as well:
+And locations or their aliases will be matched as well:
 
 ```bash
 $ friends add activity Went swimming near atlantis with George.
 Activity added: "2017-01-06: Went swimming near Atlantis with George Washington Carver."
+$ friends add activity Had lunch in nyc with George.
+Activity added: "2017-01-06: Had lunch in New York City with George Washington Carver."
 ```
 
 Tags will be colored if they're provided (though this README can't display
@@ -409,6 +413,15 @@ $ friends add nickname "Grace Hopper" "The Admiral"
 Nickname added: "Grace Hopper (a.k.a. The Admiral)
 $ friends add nickname "Grace Hopper" "Amazing Grace"
 Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
+```
+
+#### `add alias`
+
+```bash
+$ friends add alias "New York City" "NYC"
+Alias added: "New York City (a.k.a. NYC)
+$ friends add alias "New York City" "Big Apple"
+Alias added: "New York City (a.k.a. NYC a.k.a. Big Apple)"
 ```
 
 #### Setting a default location
@@ -874,6 +887,15 @@ Removes a specific nickname from a friend:
 ```bash
 $ friends remove nickname "Grace Hopper" "The Admiral"
 Nickname removed: "Grace Hopper (a.k.a. Amazing Grace)"
+```
+
+#### `remove alias`
+
+Removes a specific alias from a location:
+
+```bash
+$ friends remove alias "New York City" "Big Apple"
+Alias removed: "New York City (a.k.a. NYC)"
 ```
 
 #### `rename friend`
