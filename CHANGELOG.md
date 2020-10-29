@@ -4,6 +4,19 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.54](https://github.com/JacobEvelyn/friends/tree/v0.54) (2020-10-29)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.53...v0.54)
+
+**Implemented enhancements:**
+
+- Add location nicknames [\#242](https://github.com/JacobEvelyn/friends/issues/242)
+
+**Merged pull requests:**
+
+- Add location alias [\#269](https://github.com/JacobEvelyn/friends/pull/269) ([RenCloud](https://github.com/RenCloud))
+- Update codecov requirement from ~\> 0.1.14 to ~\> 0.2.0 [\#267](https://github.com/JacobEvelyn/friends/pull/267) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
 ## [v0.53](https://github.com/JacobEvelyn/friends/tree/v0.53) (2020-07-06)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.52...v0.53)
@@ -83,7 +96,7 @@ show you appreciate its continued development.
 
 **Implemented enhancements:**
 
-- Change trigger for implicit location from `moved to \_LOCATION\_` to `to \_LOCATION\_` [\#245](https://github.com/JacobEvelyn/friends/pull/245) ([shen-sat](https://github.com/shen-sat))
+- Change trigger for implicit location from `moved to _LOCATION_` to `to _LOCATION_` [\#245](https://github.com/JacobEvelyn/friends/pull/245) ([shen-sat](https://github.com/shen-sat))
 
 **Closed issues:**
 
@@ -368,7 +381,7 @@ show you appreciate its continued development.
 
 **Implemented enhancements:**
 
-- Add `--since \<date\>` and `--until \<date\>` flags, and remove extraneous months from `graph` [\#153](https://github.com/JacobEvelyn/friends/issues/153)
+- Add `--since <date>` and `--until <date>` flags, and remove extraneous months from `graph` [\#153](https://github.com/JacobEvelyn/friends/issues/153)
 - Add integration tests for bin/friends? [\#127](https://github.com/JacobEvelyn/friends/issues/127)
 
 **Merged pull requests:**
