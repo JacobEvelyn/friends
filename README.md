@@ -32,13 +32,13 @@ lots of help), and give feedback! This project is
   - [Command reference](#command-reference)
     - `add`
       - [`add activity`](#add-activity)
+        - [Setting a default location](#setting-a-default-location)
       - [`add note`](#add-note)
       - [`add friend`](#add-friend)
       - [`add tag`](#add-tag)
       - [`add location`](#add-location)
       - [`add nickname`](#add-nickname)
       - [`add alias`](#add-alias)
-      - [Adding a default location](#adding-a-default-location)
     - [`clean`](#clean)
     - [`graph`](#graph)
     - [`help`](#help)
@@ -354,6 +354,27 @@ This is really handy for when you have an activity involving a friend or locatio
 you can't remember if you've already added. Just use the signifiers and
 they'll be added if necessary!
 
+##### Setting a default location
+
+When an activity includes the phrase to \_LOCATION\_ (e.g., Took a plane to \_Paris\_), all future activities that have no explicit location will be associated with that location:
+
+```bash
+$ friends add activity Took a plane to Paris
+Activity added: "2020-01-04: Took a plane to Paris"
+Default location set to: "Paris"
+$ friends add activity Ate lunch at a charming café
+Activity added: "2020-01-04: Ate lunch at a charming café"
+$ friends add activity Left the city to go to Chamonix
+Activity added: "2020-01-04: Left the city to go to Chamonix"
+Default location set to: "Chamonix"
+```
+
+```bash
+$ friends list activities --in Paris
+2019-01-04: Ate lunch at a charming café
+2019-01-04: Took a plane to Paris
+```
+
 #### `add note`
 
 Notes can be added exactly like activities, either on one line:
@@ -422,27 +443,6 @@ $ friends add alias "New York City" "NYC"
 Alias added: "New York City (a.k.a. NYC)
 $ friends add alias "New York City" "Big Apple"
 Alias added: "New York City (a.k.a. NYC a.k.a. Big Apple)"
-```
-
-#### Setting a default location
-
-When an activity includes the phrase to \_LOCATION\_ (e.g., Took a plane to \_Paris\_), all future activities that have no explicit location will be associated with that location:
-
-```bash
-$ friends add activity Took a plane to Paris
-Activity added: "2020-01-04: Took a plane to Paris"
-Default location set to: "Paris"
-$ friends add activity Ate lunch at a charming café
-Activity added: "2020-01-04: Ate lunch at a charming café"
-$ friends add activity Left the city to go to Chamonix
-Activity added: "2020-01-04: Left the city to go to Chamonix"
-Default location set to: "Chamonix"
-```
-
-```bash
-$ friends list activities --in Paris
-2019-01-04: Ate lunch at a charming café
-2019-01-04: Took a plane to Paris
 ```
 
 #### `clean`
