@@ -121,6 +121,17 @@ def stderr_only(expected)
   value(subject[:status]).must_be :>, 0
 end
 
+def stdout_only_regexes(regexes)
+  puts subject[:stderr] unless subject[:stderr] == ""
+  lines = subject[:stdout].split("\n")
+  regexes.each_with_index do |regex, index|
+    value(lines[index]).must_match regex
+  end
+  assert_nil(lines[regexes.size])
+  value(subject[:stderr]).must_equal ""
+  value(subject[:status]).must_equal 0
+end
+
 def file_equals(expected)
   subject
   value(File.read(filename)).must_equal expected

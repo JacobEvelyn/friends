@@ -45,9 +45,6 @@ lots of help), and give feedback! This project is
     - `list`
       - [`list activities`](#list-activities)
       - [`list notes`](#list-notes)
-      - `list favorite`
-        - [`list favorite friends`](#list-favorite-friends)
-        - [`list favorite locations`](#list-favorite-locations)
       - [`list friends`](#list-friends)
       - [`list tags`](#list-tags)
       - [`list locations`](#list-locations)
@@ -431,7 +428,7 @@ Location added: "Atlantis"
 
 ```bash
 $ friends add nickname "Grace Hopper" "The Admiral"
-Nickname added: "Grace Hopper (a.k.a. The Admiral)
+Nickname added: "Grace Hopper (a.k.a. The Admiral)"
 $ friends add nickname "Grace Hopper" "Amazing Grace"
 Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
 ```
@@ -440,7 +437,7 @@ Nickname added: "Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace)"
 
 ```bash
 $ friends add alias "New York City" "NYC"
-Alias added: "New York City (a.k.a. NYC)
+Alias added: "New York City (a.k.a. NYC)"
 $ friends add alias "New York City" "Big Apple"
 Alias added: "New York City (a.k.a. NYC a.k.a. Big Apple)"
 ```
@@ -711,30 +708,6 @@ $ friends list notes --tagged school --with Marie
 2015-06-06: Marie Curie just got accepted into a PhD program in Paris. @school
 ```
 
-#### `list favorite friends`
-
-Lists your "favorite" friends (by total number of activities):
-
-```bash
-$ friends list favorite friends
-Your favorite friends:
-1. George Washington Carver (2 activities)
-2. Grace Hopper             (1)
-3. Marie Curie              (0)
-```
-
-#### `list favorite locations`
-
-Lists your "favorite" locations (by total number of activities):
-
-```bash
-$ friends list favorite locations
-Your favorite locations:
-1. Atlantis (2 activities)
-2. Paris    (1)
-3. London   (0)
-```
-
 #### `list friends`
 
 Lists all of your friends in alphabetical order:
@@ -744,6 +717,33 @@ $ friends list friends
 George Washington Carver
 Grace Hopper
 Marie Curie
+```
+
+Or you can choose to sort by number of activities:
+
+```bash
+$ friends list friends --sort n-activities
+2 activities: George Washington Carver
+2 activities: Grace Hopper
+1 activity: Marie Curie
+```
+
+Or by most recent activity:
+
+```bash
+$ friends list friends --sort recency               
+7 days ago: Grace Hopper
+308 days ago: George Washington Carver
+312 days ago: Marie Curie
+```
+
+And you can reverse the sorting at any time:
+
+```bash
+$ friends list friends --sort n-activities --reverse
+1 activity: Marie Curie
+2 activities: Grace Hopper
+2 activities: George Washington Carver
 ```
 
 You can also include friend nicknames, locations, and tags:
@@ -833,6 +833,42 @@ Lists all of the locations you've added, in alphabetical order::
 $ friends list locations
 Atlantis
 New York City
+Paris
+```
+
+Or you can choose to sort by number of activities:
+
+```bash
+$ friends list locations --sort n-activities
+1 activity: New York City
+1 activity: Paris
+0 activities: Atlantis
+```
+
+Or by most recent activity:
+
+```bash
+$ friends list locations --sort recency  
+N/A days ago: Atlantis
+7 days ago: New York City
+312 days ago: Paris
+```
+
+And you can reverse the sorting at any time:
+
+```bash
+$ friends list friends --sort n-activities --reverse
+0 activities: Atlantis
+1 activity: Paris
+1 activity: New York City
+```
+
+You can also include location aliases:
+
+```bash
+$ friends list locations --verbose
+Atlantis
+New York City (a.k.a. NYC)
 Paris
 ```
 

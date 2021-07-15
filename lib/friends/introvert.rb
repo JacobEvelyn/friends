@@ -297,7 +297,11 @@ module Friends
     #   unfiltered
     # @param verbose [Boolean] true iff we should output friend names with
     #   nicknames, locations, and tags; false for names only
-    def list_friends(location_name:, tagged:, verbose:)
+    # @param sort [String] one of:
+    #   ["alphabetical", "n-activities", "recency"]
+    # @param reverse [Boolean] true iff we should reverse the sorted order of
+    #   our output
+    def list_friends(location_name:, tagged:, verbose:, sort:, reverse:)
       fs = @friends
 
       # Filter by location if a name is passed.
@@ -313,18 +317,11 @@ module Friends
         end
       end
 
-      (verbose ? fs.map(&:to_s) : fs.map(&:name)).each { |line| @output << line }
+      list_things(type: :friend, arr: fs, verbose: verbose, sort: sort, reverse: reverse)
     end
 
-    # List your favorite friends.
-    def list_favorite_friends
-      list_favorite_things(:friend)
-    end
-
-    # List your favorite friends.
-    def list_favorite_locations
-      list_favorite_things(:location)
-    end
+    NA_STR = "N/A"
+    private_constant :NA_STR
 
     # See `list_events` for all of the parameters we can pass.
     def list_activities(**args)
@@ -337,8 +334,14 @@ module Friends
     end
 
     # List all location names in the friends file.
-    def list_locations(verbose:)
-      (verbose ? @locations.map(&:to_s) : @locations.map(&:name)).each { |line| @output << line }
+    # @param verbose [Boolean] true iff we should output location names with
+    #   aliases; false for names only
+    # @param sort [String] one of:
+    #   ["alphabetical", "n-activities", "recency"]
+    # @param reverse [Boolean] true iff we should reverse the sorted order of
+    #   our output
+    def list_locations(verbose:, sort:, reverse:)
+      list_things(type: :location, verbose: verbose, sort: sort, reverse: reverse)
     end
 
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
@@ -537,6 +540,49 @@ module Friends
 
     private
 
+    # List either friends or activities
+    # @param arr [Array<Friend|Activity>] a filtered list to print
+    # @param verbose [Boolean] true iff we should output names with
+    #   aliases/nicknames/etc.; false for names only
+    # @param sort [String] one of:
+    #   ["alphabetical", "n-activities", "recency"]
+    # @param reverse [Boolean] true iff we should reverse the sorted order of
+    #   our output
+    def list_things(type:, arr: instance_variable_get("@#{type}s"), verbose:, sort:, reverse:)
+      case sort
+      when "alphabetical"
+        arr = stable_sort(arr) # In case the input file was not already sorted.
+      when "n-activities"
+        arr = stable_sort_by(arr) { |thing| -thing.n_activities }
+      when "recency"
+        today = Date.today
+
+        most_recent_activity_by_thing = @activities.each_with_object({}) do |activity, output|
+          activity.send("#{type}_names").each do |thing_name|
+            output[thing_name] = (today - activity.date).to_i unless output.key?(thing_name)
+          end
+        end
+
+        arr = stable_sort_by(arr) do |thing|
+          most_recent_activity_by_thing[thing.name] || -Float::INFINITY
+        end
+      end
+
+      (reverse ? arr.reverse : arr).each do |thing|
+        case sort
+        when "n-activities"
+          prefix = "#{Paint[thing.n_activities, :bold, :red]} "\
+                   "activit#{thing.n_activities == 1 ? 'y' : 'ies'}: "
+        when "recency"
+          n_days = most_recent_activity_by_thing[thing.name] || NA_STR
+          prefix = "#{Paint[n_days, :bold, :red]} "\
+                   "day#{'s' unless n_days == 1} ago: "
+        end
+
+        @output << "#{prefix}#{verbose ? thing.to_s : thing.name}"
+      end
+    end
+
     # @param from [Array] containing any of: ["activities", "friends", "notes"]
     #   If not empty, limits the tags returned to only those from either
     #   activities, notes, or friends.
@@ -586,6 +632,13 @@ module Friends
       arr.sort_by.with_index { |x, idx| [x, idx] }
     end
 
+    # @param arr [Array] an unsorted array
+    # @param &block [block] used to return a value for each element's sort position
+    # @return [Array] a stably-sorted array
+    def stable_sort_by(arr)
+      arr.sort_by.with_index { |x, idx| [yield(x), idx] }
+    end
+
     # Filter activities by friend, location and tag
     # @param events [Array<Event>] the base events to list, either @activities or @notes
     # @param with [Array<String>] the names of friends to filter by, or empty for
@@ -626,49 +679,6 @@ module Friends
       events = events.select { |event| event.date <= until_date } unless until_date.nil?
 
       events
-    end
-
-    # @param type [Symbol] one of: [:friend, :location]
-    # @raise [ArgumentError] if type is not one of: [:friend, :location]
-    def list_favorite_things(type)
-      unless [:friend, :location].include? type
-        raise ArgumentError, "Type must be either :friend or :location"
-      end
-
-      # Sort the results, with the most favorite thing first.
-      results = instance_variable_get("@#{type}s").sort_by do |thing|
-        -thing.n_activities
-      end
-
-      @output << "Your favorite #{type}s:"
-
-      max_str_size = results.map(&:name).map(&:size).max
-
-      grouped_results = results.group_by(&:n_activities)
-
-      rank = 1
-      first = true
-      data = grouped_results.each.with_object([]) do |(n_activities, things), arr|
-        things.each do |thing|
-          name = thing.name.ljust(max_str_size)
-          if first
-            label = n_activities == 1 ? " activity" : " activities"
-            first = false
-          end
-          str = "#{name} (#{n_activities}#{label})"
-
-          arr << [rank, str]
-        end
-        rank += things.size
-      end
-
-      # We need to use `data.last.first` instead of `rank` to determine the size
-      # of the numbering prefix because `rank` will simply be the size of all
-      # elements, which may be too large if the last element in the list is a tie.
-      num_str_size = data.last.first.to_s.size + 1 unless data.empty?
-      data.each do |ranking, str|
-        @output << "#{"#{ranking}.".ljust(num_str_size)} #{str}"
-      end
     end
 
     # Sets the n_activities field on each thing.

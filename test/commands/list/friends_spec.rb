@@ -26,26 +26,26 @@ clean_describe "list friends" do
     # only reads from the (usually-sorted) file.
     let(:content) { SCRAMBLED_CONTENT }
 
-    it "lists friends in file order" do
+    it "lists friends in alphabetical order" do
       stdout_only <<-OUTPUT
 George Washington Carver
-Marie Curie
 Grace Hopper
-Stanislav Petrov
+Marie Curie
 Norman Borlaug
+Stanislav Petrov
       OUTPUT
     end
 
     describe "--verbose" do
       subject { run_cmd("list friends --verbose") }
 
-      it "lists friends in file order with details" do
+      it "lists friends in sorted order with details" do
         stdout_only <<-OUTPUT
 George Washington Carver
-Marie Curie [Atlantis] @science
 Grace Hopper (a.k.a. The Admiral a.k.a. Amazing Grace) [Paris] @navy @science
-Stanislav Petrov (a.k.a. Stan) @doesnt-trust-computers @doesnt-trust-computers:military-uses
+Marie Curie [Atlantis] @science
 Norman Borlaug (a.k.a. Norm) @science @science:outdoors @science:outdoors:agronomy
+Stanislav Petrov (a.k.a. Stan) @doesnt-trust-computers @doesnt-trust-computers:military-uses
         OUTPUT
       end
     end
@@ -73,8 +73,8 @@ Norman Borlaug (a.k.a. Norm) @science @science:outdoors @science:outdoors:agrono
 
       it "matches tag case-insensitively" do
         stdout_only <<-OUTPUT
-Marie Curie
 Grace Hopper
+Marie Curie
 Norman Borlaug
         OUTPUT
       end
@@ -111,6 +111,100 @@ Neil Armstrong
           stdout_only <<-OUTPUT
 Stanislav Petrov
           OUTPUT
+        end
+      end
+    end
+
+    describe "--sort" do
+      subject { run_cmd("list friends --sort #{sort} #{reverse}") }
+
+      let(:reverse) { nil }
+
+      # Use scrambled content to differentiate between output that is sorted and output that
+      # only reads from the (usually-sorted) file.
+      let(:content) { SCRAMBLED_CONTENT }
+
+      describe "alphabetical" do
+        let(:sort) { "alphabetical" }
+
+        it "lists friends in sorted order" do
+          stdout_only <<-OUTPUT
+George Washington Carver
+Grace Hopper
+Marie Curie
+Norman Borlaug
+Stanislav Petrov
+          OUTPUT
+        end
+
+        describe "--reverse" do
+          let(:reverse) { "--reverse" }
+
+          it "lists friends in reverse order" do
+            stdout_only <<-OUTPUT
+Stanislav Petrov
+Norman Borlaug
+Marie Curie
+Grace Hopper
+George Washington Carver
+            OUTPUT
+          end
+        end
+      end
+
+      describe "n-activities" do
+        let(:sort) { "n-activities" }
+
+        it "lists friends in sorted order" do
+          stdout_only <<-OUTPUT
+3 activities: George Washington Carver
+2 activities: Grace Hopper
+1 activity: Marie Curie
+1 activity: Norman Borlaug
+0 activities: Stanislav Petrov
+          OUTPUT
+        end
+
+        describe "--reverse" do
+          let(:reverse) { "--reverse" }
+
+          it "lists friends in reverse order" do
+            stdout_only <<-OUTPUT
+0 activities: Stanislav Petrov
+1 activity: Norman Borlaug
+1 activity: Marie Curie
+2 activities: Grace Hopper
+3 activities: George Washington Carver
+            OUTPUT
+          end
+        end
+      end
+
+      describe "recency" do
+        let(:sort) { "recency" }
+
+        it "lists friends in sorted order" do
+          stdout_only_regexes [
+            "N/A days ago: Stanislav Petrov",
+            /\d+ days ago: George Washington Carver/,
+            /\d+ days ago: Norman Borlaug/,
+            /\d+ days ago: Grace Hopper/,
+            /\d+ days ago: Marie Curie/
+          ]
+        end
+
+        describe "--reverse" do
+          let(:reverse) { "--reverse" }
+
+          it "lists friends in reverse order" do
+            stdout_only_regexes [
+              /\d+ days ago: Marie Curie/,
+              /\d+ days ago: Grace Hopper/,
+              /\d+ days ago: Norman Borlaug/,
+              /\d+ days ago: George Washington Carver/,
+              "N/A days ago: Stanislav Petrov"
+            ]
+          end
         end
       end
     end

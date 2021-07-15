@@ -19,11 +19,23 @@ command :list do |list|
                         negatable: false,
                         desc: "Output friend nicknames, locations, and tags"
 
+    list_friends.flag :sort,
+                      default_value: "alphabetical",
+                      arg_name: "ATTRIBUTE",
+                      must_match: %w[alphabetical n-activities recency],
+                      desc: "Sort output by one of: alphabetical, n-activities, recency"
+
+    list_friends.switch :reverse,
+                        negatable: false,
+                        desc: "Reverse the sort order"
+
     list_friends.action do |_, options|
       @introvert.list_friends(
         location_name: options[:in],
         tagged: options[:tagged],
-        verbose: options[:verbose]
+        verbose: options[:verbose],
+        sort: options[:sort],
+        reverse: options[:reverse]
       )
     end
   end
@@ -76,8 +88,23 @@ command :list do |list|
     list_locations.switch [:verbose],
                           negatable: false,
                           desc: "Output location aliases"
+
+    list_locations.flag :sort,
+                        default_value: "alphabetical",
+                        arg_name: "ATTRIBUTE",
+                        must_match: %w[alphabetical n-activities recency],
+                        desc: "Sort output by one of: alphabetical, n-activities, recency"
+
+    list_locations.switch :reverse,
+                          negatable: false,
+                          desc: "Reverse the sort order"
+
     list_locations.action do |_, options|
-      @introvert.list_locations(verbose: options[:verbose])
+      @introvert.list_locations(
+        verbose: options[:verbose],
+        sort: options[:sort],
+        reverse: options[:reverse]
+      )
     end
   end
 
@@ -90,23 +117,6 @@ command :list do |list|
                    multiple: true
     list_tags.action do |_, options|
       @introvert.list_tags(from: options[:from])
-    end
-  end
-
-  list.desc "List favorite friends and locations"
-  list.command :favorite do |list_favorite|
-    list_favorite.desc "List favorite friends"
-    list_favorite.command :friends do |list_favorite_friends|
-      list_favorite_friends.action do
-        @introvert.list_favorite_friends
-      end
-    end
-
-    list_favorite.desc "List favorite locations"
-    list_favorite.command :locations do |list_favorite_locations|
-      list_favorite_locations.action do
-        @introvert.list_favorite_locations
-      end
     end
   end
 end
