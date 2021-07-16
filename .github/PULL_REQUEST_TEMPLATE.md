@@ -8,9 +8,9 @@ merge this change:
 - [ ] The code in these changes works correctly.
 - [ ] Code has tests as appropriate.
 - [ ] Code has been reviewed by @JacobEvelyn.
-- [ ] All tests pass on Travis CI.
+- [ ] All tests pass on GitHub.
 - [ ] Code coverage remains high.
-- [ ] Rubocop reports no issues on Travis CI.
+- [ ] RuboCop reports no issues on GitHub.
 - [ ] The `README.md` file is updated as appropriate.
 
 Don't worry—this list will get checked off in no time!

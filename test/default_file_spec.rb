@@ -4,7 +4,7 @@ require "./test/helper"
 
 # Since this touches the ~/friends.md file instead of a temp
 # one, we only want to run it on our CI servers.
-if ENV["TRAVIS"] == "true"
+if ENV["CI"] == "true"
   describe "default filename behavior" do
     let(:filename) { File.expand_path("~/friends.md") }
 
