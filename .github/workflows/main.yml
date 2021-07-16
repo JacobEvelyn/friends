@@ -1,0 +1,36 @@
+name: Main
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+jobs:
+  ci:
+    name: CI
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.3, 2.4, 2.5, 2.6, 2.7, 3.0]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    # Conditionally configure bundler via environment variables as advised
+    #   * https://github.com/ruby/setup-ruby#bundle-config
+    - name: Set code coverage environment variable
+      run: echo "CODE_COVERAGE=true" >> $GITHUB_ENV
+      if: matrix.ruby == 3.0
+
+    # Use 'bundler-cache: true' instead of actions/cache as advised:
+    #   * https://github.com/actions/cache/blob/main/examples.md#ruby---bundler
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+
+    - run: bundle exec rake test
+
+    - run: bundle exec rubocop
+      if: matrix.ruby == 3.0
