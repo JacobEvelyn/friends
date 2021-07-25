@@ -4,6 +4,25 @@
 making a small donation (🙏) with the **Sponsor** button at the top of this page to
 show you appreciate its continued development.
 
+## [v0.55](https://github.com/JacobEvelyn/friends/tree/v0.55) (2021-07-25)
+
+[Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.54...v0.55)
+
+**Implemented enhancements:**
+
+- Add --sort flag to list friends/locations [\#276](https://github.com/JacobEvelyn/friends/pull/276) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
+**Closed issues:**
+
+- Add tests for Ruby 3.0 [\#279](https://github.com/JacobEvelyn/friends/issues/279)
+- Switch from Travis to GitHub Actions [\#277](https://github.com/JacobEvelyn/friends/issues/277)
+- Add new list command to log any activity or note related to specified friend [\#270](https://github.com/JacobEvelyn/friends/issues/270)
+- Replace `favorites` commands with more flexible `--sort` options [\#247](https://github.com/JacobEvelyn/friends/issues/247)
+
+**Merged pull requests:**
+
+- Move CI from Travis to GitHub Actions [\#278](https://github.com/JacobEvelyn/friends/pull/278) ([JacobEvelyn](https://github.com/JacobEvelyn))
+
 ## [v0.54](https://github.com/JacobEvelyn/friends/tree/v0.54) (2020-10-29)
 
 [Full Changelog](https://github.com/JacobEvelyn/friends/compare/v0.53...v0.54)
